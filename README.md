@@ -14,7 +14,7 @@ PayStell is a payment solution that enables merchants to accept payments on the 
 
 ## 🛠️ Technologies
 
-- Stellar
+- Frontend: HTML, CSS, JavaScript, TypeScript
 
 ## 🏁 Quick Start
 
