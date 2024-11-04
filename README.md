@@ -11,6 +11,8 @@ PayStell is a payment solution that enables merchants to accept payments on the 
 - Support for multiple Stellar assets
 - Intuitive admin dashboard
 - Minimal transaction fees
+- Payment links with fixed amounts or variable amounts
+- Integration with local and online payments
 
 ## 🛠️ Technologies
 
