@@ -9,6 +9,9 @@ Provide a brief overview of what this PR accomplishes.
 ## 🔄 Changes Made
 Please provide a general description of your changes. Include any relevant background information or context that may help reviewers understand the purpose of this PR.
 
+## 🖼️ Current Output
+Give evidence like screenshots of what your job looks like.
+
 ## 🧪 Testing
 If applicable, describe the tests performed. Provide screenshots, test outputs, or any resources that can help reviewers understand how the changes were tested.
 
