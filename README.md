@@ -37,11 +37,11 @@ npm run start
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please read our [contribution guidelines](CONTRIBUTING.md) before submitting PRs.
+Contributions are welcome! Please read our [CONTRIBUTING GUIDE](https://github.com/PayStell/paystell-website/blob/main/CONTRIBUTORS_GUIDE.md) before submitting PRs.
 
 1. Fork the project
 2. Create your feature branch (`git checkout -b feat/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Feat: some amazing feature'`)
+3. Commit your changes (`git commit -m 'feat: some amazing feature'`)
 4. Push to the branch (`git push origin feat/AmazingFeature`)
 5. Open a Pull Request
 
