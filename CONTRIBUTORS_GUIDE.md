@@ -14,6 +14,8 @@ We're really glad you're reading this, because we need volunteer developers to h
 
 The best way to contribute to our projects is to apply to the issues <a href="https://github.com/PayStell/paystell-website/issues" target="_blank">here</a> .
 
+PRs are not allowed; all PRs must originate from an assigned issue.
+
 
 ---
 
@@ -58,21 +60,21 @@ The best way to contribute to our projects is to apply to the issues <a href="ht
 
    ```bash
    git add .
-   git commit -m "[type] description"
+   git commit -m "type: description"
    ```
 
    > Types and when to use them:
 
-   - `[feat]` A new feature
-   - `[fix]` A bug fix
-   - `[docs]` Documentation changes
-   - `[style]` Changes that do not affect the meaning of the code (formatting, etc.)
-   - `[refactor]` Code changes that neither fix a bug nor add a feature
-   - `[perf]` Changes that improve performance
-   - `[test]` Adding missing tests or correcting existing tests
-   - `[build]` Changes that affect the build system or external dependencies
-   - `[ci]` Changes to CI configuration files and scripts
-   - `[chore]` Maintenance changes that do not fall into any of the other categories
+   - `feat:` A new feature
+   - `fix:` A bug fix
+   - `docs:` Documentation changes
+   - `style:` Changes that do not affect the meaning of the code (formatting, etc.)
+   - `refactor:` Code changes that neither fix a bug nor add a feature
+   - `perf:` Changes that improve performance
+   - `test:` Adding missing tests or correcting existing tests
+   - `build:` Changes that affect the build system or external dependencies
+   - `ci:` Changes to CI configuration files and scripts
+   - `chore:` Maintenance changes that do not fall into any of the other categories
 
 ---
 
