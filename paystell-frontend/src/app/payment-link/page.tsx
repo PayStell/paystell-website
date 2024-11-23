@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Copy, Code } from "lucide-react";
+import { FaFacebook, FaTwitter, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
 
 const PaymentLinkShare = () => {
   const Link = "https://link.paystell.com/11aa22";
@@ -63,6 +64,29 @@ const PaymentLinkShare = () => {
             <span>Copy Embed Code</span>
           </button>
           {embedCopyMessage && <p className="text-green-500 transition-opacity duration-500 ease-in-out">{embedCopyMessage}</p>}
+        </div>
+      </div>
+
+      {/* Social Sharing Section */}
+      <div className="p-6 mx-auto bg-white rounded shadow-md max-w-full mt-6" style={{ width: '100%', maxWidth: '1117px', height: 'auto', borderRadius: '8px' }}>
+        <h2 className="text-lg font-semibold mb-4" style={{ fontSize: '24px' }}>Share on Social Media</h2>
+        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
+          <button className="w-full md:w-auto bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95">
+            <FaFacebook className="w-4 h-4" />
+            <span>Facebook</span>
+          </button>
+          <button className="w-full md:w-auto bg-blue-400 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95">
+            <FaTwitter className="w-4 h-4" />
+            <span>Twitter</span>
+          </button>
+          <button className="w-full md:w-auto bg-green-500 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95">
+            <FaWhatsapp className="w-4 h-4" />
+            <span>WhatsApp</span>
+          </button>
+          <button className="w-full md:w-auto bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95">
+            <FaLinkedin className="w-4 h-4" />
+            <span>LinkedIn</span>
+          </button>
         </div>
       </div>
     </>
