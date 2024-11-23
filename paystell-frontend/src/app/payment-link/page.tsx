@@ -20,21 +20,21 @@ const PaymentLinkShare = () => {
 
   return (
     <>
-      <div className="p-6 mx-auto bg-white rounded shadow-md mb-6" style={{ maxWidth: '100%', width: '1117px', height: '159px', borderRadius: '8px' }}>
-        <h1 className="text-xl font-bold mb-4">Share Your Payment Link</h1>
+      {/* Payment Link Section */}
+      <div className="p-6 mx-auto bg-white rounded shadow-md mb-6 max-w-full" style={{ width: '100%', maxWidth: '1117px', height: 'auto', borderRadius: '8px' }}>
+        <h1 className="text-xl font-bold mb-4" style={{ fontSize: '24px' }}>Now share your payment link as you prefer</h1>
         
-        <div className="mb-4 flex items-center space-x-2">
+        <div className="mb-4 flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
           <input
             type="text"
             value={Link}
             readOnly
-            unselectable="on"
-            className="w-3/5 border px-4 py-2 rounded"
+            className="w-full md:w-3/5 border px-4 py-2 rounded-lg"
             style={{ userSelect: 'none' }}
           />
           <button
             onClick={() => copyToClipboard(Link, setLinkCopyMessage)}
-            className="bg-[#009EFF] text-white px-4 py-2 rounded flex items-center space-x-2 transition-transform transform hover:scale-105 active:scale-95"
+            className="w-full md:w-auto bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95"
           >
             <Copy className="w-4 h-4" />
             <span>Copy Link</span>
@@ -43,19 +43,21 @@ const PaymentLinkShare = () => {
         </div>
       </div>
       
-      <div className="p-6 mx-auto bg-white rounded shadow-md" style={{ maxWidth: '100%', width: '1117px', height: '159px', borderRadius: '8px' }}>
-        <h2 className="text-lg font-semibold mb-2">Embed Code</h2>
-        <div className="flex items-center space-x-2">
+      {/* Embed Code Section */}
+      <div className="p-6 mx-auto bg-white rounded shadow-md max-w-full" style={{ width: '100%', maxWidth: '1117px', height: 'auto', borderRadius: '8px 0px 0px 0px' }}>
+        <h2 className="text-lg font-semibold mb-4" style={{ fontSize: '24px' }}>Or charge for a payment button on your website</h2>
+        <p className="text-sm mb-4 mt-4">Copy the code and paste in your site</p>
+        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
           <textarea
             readOnly
             unselectable="on"
             value={embedCode}
-            className="w-3/5 border px-4 py-2 rounded resize-none"
+            className="w-full md:w-3/5 border px-4 py-2 rounded-lg resize-none outline-none"
             style={{ userSelect: 'none' }}
           />
           <button
             onClick={() => copyToClipboard(embedCode, setEmbedCopyMessage)}
-            className="bg-[#009EFF] text-white px-4 py-2 rounded flex items-center space-x-2 transition-transform transform hover:scale-105 active:scale-95"
+            className="w-full md:w-auto bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95"
           >
             <Code className="w-4 h-4" />
             <span>Copy Embed Code</span>
