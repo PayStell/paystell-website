@@ -2,7 +2,9 @@
 
 import { useState } from 'react';
 import { Copy, Code } from "lucide-react";
-import { FaFacebook, FaTwitter, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
+import { FaFacebook, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
 
 const PaymentLinkShare = () => {
   const Link = "https://link.paystell.com/11aa22";
@@ -61,7 +63,7 @@ const PaymentLinkShare = () => {
               type="text"
               value={Link}
               readOnly
-              className="w-full md:w-3/5 border px-4 py-2 rounded-lg"
+              className="w-full md:w-3/5 border px-4 py-2 rounded-lg focus:outline-none"
               style={{ userSelect: 'none' }}
             />
             <button
@@ -106,8 +108,8 @@ const PaymentLinkShare = () => {
               <FaFacebook className="w-4 h-4" />
               <span>Facebook</span>
             </button>
-            <button className="w-full md:w-auto bg-blue-400 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95">
-              <FaTwitter className="w-4 h-4" />
+            <button className="w-full md:w-auto bg-black text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95">
+              <FontAwesomeIcon icon={faXTwitter} className="w-4 h-4" />
               <span>Twitter</span>
             </button>
             <button className="w-full md:w-auto bg-green-500 text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95">
