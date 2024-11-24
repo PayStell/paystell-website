@@ -18,12 +18,42 @@ const PaymentLinkShare = () => {
   
 
   const copyToClipboard = (text: string, setMessage: (message: string) => void) => {
-    navigator.clipboard.writeText(text);
-    setMessage("Copied!");
-    setTimeout(() => {
-      setMessage("");
-    }, 2000);
-  }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => {
+        setMessage("Copied!");
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        setMessage("Failed to copy");
+        setTimeout(() => {
+          setMessage("");
+        }, 2000);
+      });
+    } else {
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        const success = document.execCommand('copy');
+        if (success) {
+          setMessage("Copied!");
+        } else {
+          setMessage("Failed to copy");
+        }
+      } catch (err) {
+        console.error('Fallback: Oops, unable to copy', err);
+        setMessage("Failed to copy");
+      }
+      document.body.removeChild(textArea);
+      setTimeout(() => {
+        setMessage("");
+      }, 2000);
+    }
+  };
 
   return (
     <>
@@ -90,7 +120,7 @@ const PaymentLinkShare = () => {
         {/* Payment Link Section */}
         <div className="p-6 mx-auto bg-white rounded shadow-md mb-6 max-w-full flex flex-col gap-4" style={{ width: '100%', maxWidth: '1117px', borderRadius: '8px', textAlign: 'left' }}>
           <h1 className="text-xl font-bold mb-4" style={{ fontSize: '24px' }}>Now share your payment link as you prefer</h1>
-          <div className="mb-4 flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-2">
+          <div className="mb-4 flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-2">
             <input
               type="text"
               value={Link}
