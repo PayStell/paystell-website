@@ -78,25 +78,28 @@ const PaymentLinkShare = () => {
         </div>
         
         {/* Embed Code Section */}
-      <div className="p-6 mx-auto bg-white rounded shadow-md max-w-full" style={{ width: '100%', maxWidth: '1117px', height: 'auto', borderRadius: '8px 0px 0px 0px' }}>
-        <h2 className="text-lg font-semibold mb-4" style={{ fontSize: '24px' }}>Or charge for a payment button on your website</h2>
-        <p className="text-sm mb-4 mt-4">Copy the code and paste in your site</p>
-        <div className="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-2">
-          <textarea
-            readOnly
-            unselectable="on"
-            value={embedCode}
-            className="w-full md:w-3/5 border px-4 py-2 rounded-lg resize-none outline-none"
-            style={{ userSelect: 'none' }}
-          />
-          <button
-            onClick={() => copyToClipboard(embedCode, setEmbedCopyMessage)}
-            className="w-full md:w-auto bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95"
-          >
-            <Code className="w-4 h-4" />
-            <span>Copy Embed Code</span>
-          </button>
-          {embedCopyMessage && <p className="text-green-500 transition-opacity duration-500 ease-in-out">{embedCopyMessage}</p>}
+        <div className="p-6 mx-auto bg-white rounded shadow-md max-w-full" style={{ width: '100%', maxWidth: '1117px', borderRadius: '8px', textAlign: 'left' }}>
+          <h2 className="text-lg font-semibold mb-4" style={{ fontSize: '24px' }}>Or charge for a payment button on your website</h2>
+          <p className="text-sm mb-4 mt-4">Copy the code and paste in your site</p>
+          <div className="flex flex-col md:flex-row items-start md:items-center space-y-2 md:space-y-0 md:space-x-2">
+            <textarea
+              readOnly
+              unselectable="on"
+              value={embedCode}
+              className="w-full md:w-3/5 border px-4 py-2 rounded-lg resize-none outline-none"
+              style={{ userSelect: 'none', height: 'auto', minHeight: '100px' }}
+              rows={4}
+            />
+            <div className="flex items-center w-full md:w-auto">
+              <button
+                onClick={() => copyToClipboard(embedCode, setEmbedCopyMessage)}
+                className="w-full md:w-auto bg-[#009EFF] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 transition-transform transform hover:scale-105 active:scale-95"
+              >
+                <Code className="w-4 h-4" />
+                <span>Copy Embed Code</span>
+              </button>
+            </div>
+            {embedCopyMessage && <p className="text-green-500 transition-opacity duration-500 ease-in-out">{embedCopyMessage}</p>}
           </div>
         </div>
 
