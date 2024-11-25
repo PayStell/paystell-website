@@ -87,8 +87,8 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
                             <TableCell className="text-center">
                                 <Badge
                                     className={`inline-block px-3 py-1 rounded text-sm ${item.state === "Active"
-                                            ? "bg-green-100 text-green-700"
-                                            : "bg-red-100 text-red-700"
+                                        ? "bg-green-100 text-green-700"
+                                        : "bg-red-100 text-red-700"
                                         }`}
                                 >
                                     {item.state}
@@ -135,16 +135,15 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
                 {[...Array(totalSteps)].map((_, index) => (
                     <Button
                         key={index}
-                        className={`${currentPage === index + 1
-                                ? "bg-blue-500 text-white" 
-                                : "bg-white border border-blue-500 text-blue-500"
-                            } hover:bg-white hover:text-blue-500 hover:border-blue-500`} 
+                        variant={currentPage === index + 1
+                            ? "default"
+                            : "outline"
+                        }
                         size="icon"
                         onClick={() => paginate(index + 1)}
                     >
                         {index + 1}
                     </Button>
-
                 ))}
                 <Button
                     variant="ghost"
