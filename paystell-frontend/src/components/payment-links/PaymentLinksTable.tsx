@@ -12,6 +12,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { Badge } from "../ui/badge";
 
 export interface PaymentLinkType {
     id: number;
@@ -84,14 +85,14 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
                             <TableCell className="text-center">{item.sku}</TableCell>
                             <TableCell className="text-center">{item.price}</TableCell>
                             <TableCell className="text-center">
-                                <span
+                                <Badge
                                     className={`inline-block px-3 py-1 rounded text-sm ${item.state === "Active"
                                             ? "bg-green-100 text-green-700"
                                             : "bg-red-100 text-red-700"
                                         }`}
                                 >
                                     {item.state}
-                                </span>
+                                </Badge>
                             </TableCell>
                             <TableCell className="text-center">
                                 <div className="flex items-center justify-center gap-2">

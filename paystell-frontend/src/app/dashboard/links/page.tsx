@@ -17,7 +17,7 @@ export default function PaymentLinkScreen(): JSX.Element {
         <div className="flex flex-col p-4">
             <div className="flex items-center justify-between gap-4">
                 <h1 className="text-xl font-semibold">Payment Links</h1>
-                <Button size="lg" className="bg-blue-500 text-[16px] text-white hover:bg-blue-600">
+                <Button size="lg">
                     + New Payment
                 </Button>
             </div>
