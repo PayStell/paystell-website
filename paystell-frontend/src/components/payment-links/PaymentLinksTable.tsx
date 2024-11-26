@@ -86,10 +86,7 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
                             <TableCell className="text-center">{item.price}</TableCell>
                             <TableCell className="text-center">
                                 <Badge
-                                    className={`inline-block px-3 py-1 rounded text-sm ${item.state === "Active"
-                                        ? "bg-green-100 text-green-700"
-                                        : "bg-red-100 text-red-700"
-                                        }`}
+                                    variant={item.state === "Active" ? "active" : "default"}
                                 >
                                     {item.state}
                                 </Badge>
