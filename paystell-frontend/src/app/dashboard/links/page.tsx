@@ -1,4 +1,4 @@
-import { PaymentLinkType, PaymentLinksTable } from "@/components/payment-links/PaymentLinksTable";
+import { PaymentLinkType, PaymentLinksTable } from "@/components/dashboard/links/PaymentLinksTable";
 import { Button } from "@/components/ui/button";
 
 const paymentLinksData: PaymentLinkType[] = [
