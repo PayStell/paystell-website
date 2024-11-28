@@ -1,6 +1,6 @@
 'use client';
 
-import { Nav as DashboardNav } from "@/components/dashboard/nav";
+import { Nav } from "@/components/dashboard/nav";
 import { dashboardNavItems } from "@/config/dashboard/nav";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -14,7 +14,15 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen">
-      <DashboardNav items={dashboardNavItems} isOpen={isNavOpen} onOpenChange={setIsNavOpen} />
+      <Nav 
+        items={dashboardNavItems} 
+        isOpen={isNavOpen} 
+        onOpenChange={setIsNavOpen}
+        brand={{
+          title: "PayStell",
+          // logo: <YourLogoComponent /> 
+        }}
+      />
       <main 
         className={cn(
           "flex-1 p-4 md:p-8 w-full mt-14 md:mt-0 transition-all duration-200",
