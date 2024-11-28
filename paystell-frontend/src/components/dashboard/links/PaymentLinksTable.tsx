@@ -12,7 +12,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Badge } from "../ui/badge";
+import { Badge } from "@/components/ui/badge";
 
 export interface PaymentLinkType {
     id: number;
