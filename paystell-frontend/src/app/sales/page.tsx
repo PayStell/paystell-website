@@ -1,6 +1,6 @@
-import Header from "@/components/salesComponents/Header"
-import Cards from "@/components/salesComponents/Cards"
-import SalesHistory from "@/components/salesComponents/SalesHistory"
+import Header from "@/components/dashboard/sales/Header"
+import Cards from "@/components/dashboard/sales/Cards"
+import SalesHistory from "@/components/dashboard/sales/SalesHistory"
 
 const SalesPage = () => {
   return (
