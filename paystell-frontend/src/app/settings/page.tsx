@@ -59,7 +59,7 @@ const SettingsScreen: React.FC = () => {
                 onClick={() =>
                   document.getElementById("logoInput")?.click()
                 }
-                className="absolute bottom-0 right-0 bg-blue-500 text-white p-2 rounded-full"
+                className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full"
               >
                 <Edit/>
               </button>
