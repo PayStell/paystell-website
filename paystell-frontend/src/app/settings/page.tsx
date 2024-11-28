@@ -113,7 +113,7 @@ const SettingsScreen: React.FC = () => {
                 </Button>
                 <Button
                   type="submit"
-                  className="bg-blue-500"
+                  variant="default"
                 >
                   Save
                 </Button>
