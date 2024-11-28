@@ -106,7 +106,7 @@ const SettingsScreen: React.FC = () => {
               <>
                 <Button
                   type="button"
-                  className="bg-gray-500"
+                  variant="destructive"
                   onClick={() => setIsEditing(false)}
                 >
                   Cancel
