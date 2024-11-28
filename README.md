@@ -25,14 +25,14 @@ PayStell is a payment solution that enables merchants to accept payments on the 
 git clone https://github.com/yourorganization/paystell.git
 
 # Install dependencies
-cd paystell
+cd paystell/paystell-frontend
 npm install
 
 # Set up environment variables
 cp .env.example .env
 
 # Start development server
-npm run start
+npm run dev
 ```
 
 ## 🤝 Contributing
