@@ -66,10 +66,10 @@ const NewLinks: React.FC = () => {
               Title
             </Form.Label>
             <Form.Control asChild>
-              <input
-                className="box-border h-[40px] w-full rounded-lg bg-white px-4 text-[15px] text-gray-900 shadow-lg border-2 outline-none focus:ring focus:ring-[#009EFF]"
+              <Input
                 type="text"
                 placeholder="T-shirt"
+                className="mt-2"
                 required
               />
             </Form.Control>
