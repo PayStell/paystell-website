@@ -8,6 +8,7 @@ import Product from './Images/Product.png';
 export default function PaymentLinkScreen() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-start bg-white p-4 sm:p-0">
+      
       {/* Header */}
       <header className="sticky top-0 w-full bg-white px-6 py-4 flex flex-col items-center justify-center">
         <div className="absolute left-0 flex items-center ml-5 mt-[-60px]">
@@ -18,7 +19,6 @@ export default function PaymentLinkScreen() {
             height={40}
           />
         </div>
-
         <div className="flex items-center mb-2">
           <Image
             src={Logo_Company} // Relative path
@@ -28,12 +28,36 @@ export default function PaymentLinkScreen() {
           />
           <h1 className="text-lg font-semibold">Online Store</h1>
         </div>
-
         <div className="text-center flex-grow">
           <h2 className="text-sm font-semibold text-[#2C384F]">Make payments with PayStell</h2>
           <p className="text-xs text-[#2C384F]">Your fastest Decentralized payment gateway</p>
         </div>
       </header>
-      </main>
+
+      {/* Main container */}
+      <div className="w-full max-w-[750px] mx-auto bg-white rounded-lg shadow-lg p-6 sm:p-8 space-y-6">
+        {/* Product Information Container */}
+        <div className="flex flex-col space-y-2 bg-white border-b border-gray-300 p-4">
+          <div className="flex justify-between text-sm items-center">
+            <div className="flex items-center space-x-2">
+              <Image
+                src={Product}  // Relative path
+                alt="Product Image"
+                width={80} 
+                height={80} 
+              />
+              <div className="flex flex-col">
+                <span className="text-[14px]">Product Name:</span>
+                <span className="font-semibold text-[14px]">SKU/ID:</span>
+              </div>
+            </div>
+            <div className="flex flex-col items-end">
+              <span className="text-[14px]">Trouser</span>
+              <span className="font-semibold text-[16px]">17639041</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
   );
 }
