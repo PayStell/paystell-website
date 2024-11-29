@@ -8,7 +8,7 @@ import Product from './Images/Product.png';
 export default function PaymentLinkScreen() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-start bg-white p-4 sm:p-0">
-      
+
       {/* Header */}
       <header className="sticky top-0 w-full bg-white px-6 py-4 flex flex-col items-center justify-center">
         <div className="absolute left-0 flex items-center ml-5 mt-[-60px]">
@@ -36,6 +36,7 @@ export default function PaymentLinkScreen() {
 
       {/* Main container */}
       <div className="w-full max-w-[750px] mx-auto bg-white rounded-lg shadow-lg p-6 sm:p-8 space-y-6">
+
         {/* Product Information Container */}
         <div className="flex flex-col space-y-2 bg-white border-b border-gray-300 p-4">
           <div className="flex justify-between text-sm items-center">
@@ -58,6 +59,28 @@ export default function PaymentLinkScreen() {
           </div>
         </div>
       </div>
+
+      {/* Subtotal Container and Gas Fee */}
+      <div className="flex flex-col space-y-2 bg-white border-b border-gray-300 p-4">
+        
+          {/* Sub Total */}
+          <div className="flex justify-between text-sm">
+            <span className="font-semibold text-[16px]">Sub Total:</span>
+            <span className="font-semibold text-[16px]">0.8 XML</span>
+          </div>
+
+          {/* Gas Fee */}
+          <div className="flex items-center justify-between text-xs">
+            <div className="flex items-center">
+              <span className="">Gas Fee</span>
+              <button className="ml-1 w-4 h-4 flex items-center justify-center rounded-full text-black text-xs border-2 border-black">
+                !
+              </button>
+            </div>
+            <span className="font-semibold text-[#FF3131] text-[12px]">0.2 XML</span>
+          </div>
+        </div>
+
     </main>
   );
 }
