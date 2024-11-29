@@ -10,10 +10,11 @@
   },
   "dependencies": {
     "@radix-ui/react-avatar": "^1.1.1",
+    "@radix-ui/react-dropdown-menu": "^2.1.2",
+    "@radix-ui/react-form": "^0.1.0",
+    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-menubar": "^1.1.2",
     "@radix-ui/react-popover": "^1.1.2",
-    "@radix-ui/react-dropdown-menu": "^2.1.2",
-    "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/themes": "^3.1.5",
     "@react-icons/all-files": "^4.1.0",
