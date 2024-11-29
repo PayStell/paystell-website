@@ -58,11 +58,10 @@ export default function PaymentLinkScreen() {
             </div>
           </div>
         </div>
-      </div>
 
       {/* Subtotal Container and Gas Fee */}
       <div className="flex flex-col space-y-2 bg-white border-b border-gray-300 p-4">
-        
+
           {/* Sub Total */}
           <div className="flex justify-between text-sm">
             <span className="font-semibold text-[16px]">Sub Total:</span>
@@ -81,6 +80,30 @@ export default function PaymentLinkScreen() {
           </div>
         </div>
 
+        {/* Total Amount Container */}
+        <div className="flex justify-between text-lg font-semibold bg-white border-b border-gray-300 p-4">
+          <span className="text-[16px]">Total Amount:</span>
+          <span className="text-[36px]">1 XML</span>
+        </div>
+
+        {/* Container for the payment button and the instruction */}
+        <div className="flex flex-col items-center w-full mt-10 space-y-2">
+          {/* Payment button */}
+          <Dialog.Root>
+            <Dialog.Trigger asChild>
+              <button className="w-[300px] h-[60px] sm:w-[300px] bg-[#009EFF] text-white px-8 py-3 rounded-md hover:bg-[#007ACC] transition-colors duration-300">
+                Pay
+              </button>
+            </Dialog.Trigger>
+          </Dialog.Root>
+
+          {/* Instruction */}
+          <p className="text-center text-xs text-gray-500">
+            You have to connect your Stellar wallet to pay
+          </p>
+        </div>
+      </div>
+      
     </main>
   );
 }
