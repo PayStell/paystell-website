@@ -1,5 +1,5 @@
-import NewLinks from "@/components/newLink/page";
-// import Image from "next/image";
+import NewLinks from "@/components/dashboard/links/newLink/page";
+
 
 export default function Home() {
   return (
