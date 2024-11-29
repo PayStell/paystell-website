@@ -116,7 +116,7 @@ const PaymentLinkShare = () => {
         style={{ width: '100%', maxWidth: '1117px', borderRadius: '8px', textAlign: 'left' }}
       >
         <h2 className="text-lg font-semibold mb-4" style={{ fontSize: '24px' }}>Share on Social Media</h2>
-        <div className="flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-4">
+        <div className="flex flex-col md:flex-row items-start md:space-x-4">
           <Button
             type="button"
             size="lg"
