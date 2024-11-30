@@ -6,7 +6,7 @@ import { FaFacebook, FaWhatsapp, FaLinkedin } from 'react-icons/fa';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faXTwitter } from '@fortawesome/free-brands-svg-icons';
 
-import { Textarea, Input, Button } from '../../components/ui';
+import { Textarea, Input, Button } from '../../ui';
 
 const PaymentLinkShare = () => {
   const Link = "https://link.paystell.com/11aa22";
