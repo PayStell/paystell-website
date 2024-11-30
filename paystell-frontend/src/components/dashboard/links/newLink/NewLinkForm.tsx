@@ -42,8 +42,8 @@ const NewLinks: React.FC = () => {
   };
 
   return (
-    <div className="p-4 flex items-center justify-center bg-gray-50">
-      <div className="max-w-4xl w-full bg-white rounded-lg shadow-lg p-6 overflow-y-auto max-h-[80vh]">
+    <div className="p-4 flex items-center justify-center">
+      <div className="max-w-4xl w-full rounded-lg p-6 overflow-y-auto max-h-[80vh]">
         <Form.Root
           className="w-full max-w-lg mx-auto flex flex-col space-y-4"
           onSubmit={handleSubmit(onSubmit)}

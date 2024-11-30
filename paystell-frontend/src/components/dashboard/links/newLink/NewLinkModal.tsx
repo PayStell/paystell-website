@@ -13,7 +13,6 @@ export function NewLinkModal({ isOpen, onClose }: NewLinkModalProps) {
         <DialogHeader>
           <DialogTitle>Create New Payment Link</DialogTitle>
         </DialogHeader>
-        {/* Here component of newlink */}
         <NewLinkForm />
       </DialogContent>
     </Dialog>
