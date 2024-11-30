@@ -1,5 +1,8 @@
+"use client"
 import { PaymentLinkType, PaymentLinksTable } from "@/components/dashboard/links/PaymentLinksTable";
 import { Button } from "@/components/ui/button";
+import { NewLinkModal } from "@/components/dashboard/links/newLink/NewLinkModal";
+import { useState } from "react";
 
 const paymentLinksData: PaymentLinkType[] = [
     { id: 1, name: "Product 1", sku: "SKU12345", price: "$20.00", state: "Active" },
@@ -13,15 +16,21 @@ const paymentLinksData: PaymentLinkType[] = [
 ];
 
 export default function PaymentLinkScreen(): JSX.Element {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
     return (
         <div className="flex flex-col p-4">
             <div className="flex items-center justify-between gap-4">
                 <h1 className="text-xl font-semibold">Payment Links</h1>
-                <Button size="lg">
+                <Button size="lg" onClick={() => setIsModalOpen(true)}>
                     + New Payment
                 </Button>
             </div>
             <PaymentLinksTable data={paymentLinksData} />
+            <NewLinkModal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)} 
+            />
         </div>
     )
 }
