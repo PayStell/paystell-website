@@ -4,6 +4,7 @@ import Logo_PayStell from './Images/Logo_PayStell.png';
 import Logo_Company from './Images/Logo_Company.png';
 import Logo_PayStell_P from './Images/Logo_PayStell_P.png';
 import Product from './Images/Product.png';
+import { Button } from "@/components/ui/button";
 
 export default function PaymentLinkScreen() {
   return (
