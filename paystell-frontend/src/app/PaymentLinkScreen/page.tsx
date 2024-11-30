@@ -92,9 +92,9 @@ export default function PaymentLinkScreen() {
           {/* Payment button */}
           <Dialog.Root>
             <Dialog.Trigger asChild>
-              <button className="w-[300px] h-[60px] sm:w-[300px] bg-[#009EFF] text-white px-8 py-3 rounded-md hover:bg-[#007ACC] transition-colors duration-300">
-                Pay
-              </button>
+                <Button size="xl" >
+                    Pay
+                </Button>
             </Dialog.Trigger>
           </Dialog.Root>
 
