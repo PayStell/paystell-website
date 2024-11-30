@@ -79,10 +79,9 @@ const NewLinks: React.FC = () => {
                 <option value="" disabled>
                   Select Currency
                 </option>
-                <option value="USD">USD</option>
+                <option value="USD">XLM</option>
                 <option value="USDC">USDC</option>
-                <option value="EUR">EUR</option>
-                <option value="ETH">ETH</option>
+
               </Select>
             </Form.Control>
             {errors.currency && (
