@@ -52,6 +52,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 💬 Community
 
 - [Telegram](https://t.me/paystelldev)
+- [x.com](https://x.com/paystell)
 
 ## 🧑‍💻 Authors
 - [MPSxDev](https://github.com/MPSxDev)
