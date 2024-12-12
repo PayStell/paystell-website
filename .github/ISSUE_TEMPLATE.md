@@ -1,7 +1,7 @@
-# 📘 Issue Description
+## 📘 Issue Description
 
 
-## 🔍 Steps to Reproduce
+## 🔍 Steps
 
 
 ## ✅ Acceptance Criteria
