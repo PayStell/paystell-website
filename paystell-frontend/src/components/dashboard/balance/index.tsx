@@ -24,7 +24,7 @@ const Balance = ({
   };
 
   return (
-    <Card className="min-w-[25%]">
+    <Card>
       <CardHeader>
         <CardTitle className="text-base font-semibold text-gray-500">
           {title}
@@ -32,7 +32,7 @@ const Balance = ({
       </CardHeader>
       <CardContent>
         <div className="flex flex-row items-center gap-3">
-          <p className="text-xl font-bold">
+          <p className="text-3xl font-bold">
             {`${formatPrice(balance, currency)}`}
           </p>
           <BalanceStat balance={balance} lastBalance={lastBalance} />
