@@ -5,6 +5,7 @@ import { NavProps } from "./types";
 import { MobileTrigger } from "./mobile-trigger";
 import { NavItem } from "./nav-item";
 import { navStyles } from "./styles";
+import { Logo } from "@/components/dashboard/nav/Logo";
 
 export function Nav({ 
   items, 
@@ -38,11 +39,7 @@ export function Nav({
         )}
         {...props}
       >
-        <div className="mb-8 text-center">
-          {brand.logo}
-          <h1 className="text-xl font-semibold">{brand.title}</h1>
-        </div>
-
+        <div className="mb-8 flex justify-center">{brand.logo || <Logo />}</div>
         <div className="space-y-1">
           {items.map((item) => (
             <NavItem
