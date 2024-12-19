@@ -4,6 +4,7 @@ import { Nav } from "@/components/dashboard/nav";
 import { dashboardNavItems } from "@/config/dashboard/nav";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
+import { Logo } from "@/components/dashboard/nav/Logo";
 
 export default function DashboardLayout({
   children,
@@ -20,7 +21,7 @@ export default function DashboardLayout({
         onOpenChange={setIsNavOpen}
         brand={{
           title: "PayStell",
-          // logo: <YourLogoComponent /> 
+          logo: <Logo />,
         }}
       />
       <main 
