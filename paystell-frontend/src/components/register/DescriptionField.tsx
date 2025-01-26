@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface DescriptionFieldProps {
-  register: UseFormRegisterReturn; // Cambiamos el tipo para que coincida con el objeto esperado
+  register: UseFormRegisterReturn;
   error?: string;
 }
 
@@ -19,7 +19,7 @@ const DescriptionField: React.FC<DescriptionFieldProps> = ({ register, error }) 
       <Textarea
         id="description"
         placeholder="Describe your business"
-        {...register} // Directamente utilizamos el objeto recibido
+        {...register}
       />
       {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>

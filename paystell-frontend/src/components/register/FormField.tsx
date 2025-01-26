@@ -10,7 +10,7 @@ interface FormFieldProps {
   label: string;
   placeholder: string;
   type?: string;
-  register: UseFormRegisterReturn; // Cambiamos aquí
+  register: UseFormRegisterReturn; 
   error?: string;
 }
 

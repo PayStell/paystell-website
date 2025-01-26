@@ -93,7 +93,6 @@ const RegisterForm = () => {
                     <SubmitButton label="Register" />
                 </form>
 
-                {/* Radix UI Dialog for Feedback */}
                 <Dialog.Root open={dialogState.open} onOpenChange={(open) => setDialogState({ ...dialogState, open })}>
                     <Dialog.Portal>
                         <Dialog.Overlay className="fixed inset-0 bg-black/50" />
