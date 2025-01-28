@@ -12,12 +12,13 @@ import * as Dialog from "@radix-ui/react-dialog";
 interface FormData {
     businessName: string;
     password: string;
+    confirmPassword: string;
     description: string;
     profilePicture: File | null;
 }
 
 const RegisterForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+    const { register, handleSubmit, formState: { errors }, watch } = useForm<FormData>();
     const [previewImage, setPreviewImage] = useState<string | undefined>("/default-image.jpg");
     const [dialogState, setDialogState] = useState<{ open: boolean; title: string; description: string }>({
         open: false,
@@ -38,20 +39,21 @@ const RegisterForm = () => {
     };
 
     const handleRegistration = (data: FormData) => {
-        if (errors.businessName || errors.password || errors.description) {
+        if (data.password !== data.confirmPassword) {
             setDialogState({
                 open: true,
-                title: "Validation Error",
-                description: "Please fill out all required fields correctly."
+                title: "Password Mismatch",
+                description: "The passwords do not match. Please try again."
             });
-        } else {
-            console.log("Registering user:", data);
-            setDialogState({
-                open: true,
-                title: "Registration Successful",
-                description: "Your registration has been completed successfully."
-            });
+            return;
         }
+
+        console.log("Registering user:", data);
+        setDialogState({
+            open: true,
+            title: "Registration Successful",
+            description: "Your registration has been completed successfully."
+        });
     };
 
     return (
@@ -60,36 +62,40 @@ const RegisterForm = () => {
                 <CardTitle className="text-center text-2xl font-bold mb-4">Complete Your Registration</CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit(handleRegistration)} className="space-y-6" noValidate>
+                <form onSubmit={handleSubmit(handleRegistration)} className="space-y-4" noValidate>
                     <ProfileImageUpload previewImage={previewImage} onImageUpload={handleImageUpload} />
 
-                    <div className="flex space-x-4">
-                        <FormField
-                            id="businessName"
-                            label="Business Name"
-                            placeholder="Business Name"
-                            register={register("businessName", { required: "Business name is required" })}
-                            error={errors.businessName?.message}
-                            aria-invalid={!!errors.businessName}
-                            aria-describedby={errors.businessName ? "businessName-error" : undefined}
-                        />
-                        <FormField
-                            id="password"
-                            type="password"
-                            label="Password"
-                            placeholder="Password"
-                            register={register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })}
-                            error={errors.password?.message}
-                            aria-invalid={!!errors.password}
-                            aria-describedby={errors.password ? "password-error" : undefined}
-                        />
-                    </div>
+                    <FormField
+                        id="businessName"
+                        label="Business Name"
+                        placeholder="Business Name"
+                        register={register("businessName", { required: "Business name is required" })}
+                        error={errors.businessName?.message}
+                    />
+
+                    <FormField
+                        id="password"
+                        type="password"
+                        label="Password"
+                        placeholder="Enter your password"
+                        register={register("password", { required: "Password is required", minLength: { value: 6, message: "Password must be at least 6 characters" } })}
+                        error={errors.password?.message}
+                    />
+
+                    <FormField
+                        id="confirmPassword"
+                        type="password"
+                        label="Confirm Password"
+                        placeholder="Confirm your password"
+                        register={register("confirmPassword", { required: "Please confirm your password" })}
+                        error={errors.confirmPassword?.message}
+                    />
+
                     <DescriptionField
                         register={register("description", { required: "Description is required" })}
                         error={errors.description?.message}
-                        aria-invalid={!!errors.description}
-                        aria-describedby={errors.description ? "description-error" : undefined}
                     />
+
                     <SubmitButton label="Register" />
                 </form>
 
