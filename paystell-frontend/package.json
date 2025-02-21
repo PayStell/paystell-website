@@ -28,6 +28,7 @@
     "icons": "^1.0.0",
     "lucide-react": "^0.456.0",
     "next": "14.2.17",
+    "prettier": "^3.5.1",
     "react": "^18.3.1",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18",
