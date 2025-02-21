@@ -1,12 +1,22 @@
-import * as Dialog from '@radix-ui/react-dialog';
+import * as Dialog from "@radix-ui/react-dialog";
 import { Button } from "@/components/ui/button";
 
-export const PaymentButton = () => {
+interface PaymentButtonProps {
+  variant?:
+    | "default"
+    | "link"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "ghost";
+}
+
+export const PaymentButton = ({ variant }: PaymentButtonProps) => {
   return (
     <div className="flex flex-col items-center w-full mt-10 space-y-2">
       <Dialog.Root>
         <Dialog.Trigger asChild>
-          <Button size="xl">
+          <Button size="xl" variant={variant ? variant : "default"}>
             Pay
           </Button>
         </Dialog.Trigger>
