@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { cn } from "@/lib/utils";
 import { NavProps } from "./types";
@@ -7,35 +7,29 @@ import { NavItem } from "./nav-item";
 import { navStyles } from "./styles";
 import { Logo } from "@/components/dashboard/nav/Logo";
 
-export function Nav({ 
-  items, 
-  className, 
-  isOpen, 
+export function Nav({
+  items,
+  className,
+  isOpen,
   onOpenChange,
   brand = { title: "PayStell" },
-  ...props 
+  ...props
 }: NavProps) {
   const handleMobileNavClose = () => onOpenChange(false);
 
   return (
     <>
-      <MobileTrigger 
-        isOpen={isOpen} 
-        onToggle={() => onOpenChange(!isOpen)} 
-      />
-      
+      <MobileTrigger isOpen={isOpen} onToggle={() => onOpenChange(!isOpen)} />
+
       {isOpen && (
-        <div
-          className={navStyles.overlay}
-          onClick={handleMobileNavClose}
-        />
+        <div className={navStyles.overlay} onClick={handleMobileNavClose} />
       )}
-      
+
       <nav
         className={cn(
           navStyles.base,
           isOpen ? navStyles.open : navStyles.closed,
-          className
+          className,
         )}
         {...props}
       >
@@ -54,4 +48,4 @@ export function Nav({
   );
 }
 
-export type { NavProps, NavItem } from './types';
+export type { NavProps, NavItem } from "./types";

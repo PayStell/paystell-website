@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 export const formatPrice = (
   amount: number,
   currency = "USD",
-  locale = "US"
+  locale = "US",
 ): string => {
   return Intl.NumberFormat(locale, {
     style: "currency",

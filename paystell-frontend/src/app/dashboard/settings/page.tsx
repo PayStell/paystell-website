@@ -1,9 +1,13 @@
 "use client";
 import React from "react";
-import  ProfileForm  from "@/components/dashboard/settings/ProfileForm";
+import ProfileForm from "@/components/dashboard/settings/ProfileForm";
 
 const SettingsScreen: React.FC = () => {
-  const handleProfileSubmit = (data: { name: string; logo: string | null; description: string }) => {
+  const handleProfileSubmit = (data: {
+    name: string;
+    logo: string | null;
+    description: string;
+  }) => {
     console.log("Form is valid:", data);
   };
 

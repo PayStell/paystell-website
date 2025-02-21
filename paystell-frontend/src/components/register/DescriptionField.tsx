@@ -10,7 +10,10 @@ interface DescriptionFieldProps {
   error?: string;
 }
 
-const DescriptionField: React.FC<DescriptionFieldProps> = ({ register, error }) => {
+const DescriptionField: React.FC<DescriptionFieldProps> = ({
+  register,
+  error,
+}) => {
   return (
     <div>
       <Label htmlFor="description" className="font-medium">

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { Nav } from "@/components/dashboard/nav";
 import { dashboardNavItems } from "@/config/dashboard/nav";
@@ -15,19 +15,21 @@ export default function DashboardLayout({
 
   return (
     <div className="flex min-h-screen">
-      <Nav 
-        items={dashboardNavItems} 
-        isOpen={isNavOpen} 
+      <Nav
+        items={dashboardNavItems}
+        isOpen={isNavOpen}
         onOpenChange={setIsNavOpen}
         brand={{
           title: "PayStell",
           logo: <Logo />,
         }}
       />
-      <main 
+      <main
         className={cn(
           "flex-1 p-4 md:p-8 w-full mt-14 md:mt-0 transition-all duration-200",
-          isNavOpen ? "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto" : "opacity-100 pointer-events-auto"
+          isNavOpen
+            ? "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
+            : "opacity-100 pointer-events-auto",
         )}
       >
         {children}
