@@ -11,7 +11,6 @@ const config: StorybookConfig = {
     "@storybook/addon-onboarding",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
-    "@storybook/addon-postcss",
     "@chromatic-com/storybook",
   ],
 };
