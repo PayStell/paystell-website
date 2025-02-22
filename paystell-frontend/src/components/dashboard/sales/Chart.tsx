@@ -1,31 +1,25 @@
 "use client";
 
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
-import { ChartTooltip, ChartTooltipContent ,ChartLegend, ChartLegendContent} from "@/components/ui/chart"
+import {
+  ChartTooltip,
+  ChartTooltipContent,
+  ChartLegend,
+  ChartLegendContent,
+} from "@/components/ui/chart";
 import { ChartContainer } from "@/components/ui/chart";
 import { type ChartConfig } from "@/components/ui/chart";
 
-const Chart = () => {
-  const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-    { month: "July", desktop: 214, mobile: 140 },
-  ];
-  const chartConfig = {
-    desktop: {
-      label: "Snacks",
-      color: "#2563eb",
-    },
-    mobile: {
-      label: "drinks",
-      color: "#60a5fa",
-    },
-  } satisfies ChartConfig;
+export interface ChartProps {
+  chartData: {
+    month: string;
+    desktop: number;
+    mobile: number;
+  }[];
+  chartConfig: ChartConfig;
+}
 
+const Chart = ({ chartData, chartConfig }: ChartProps) => {
   return (
     <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
       <BarChart accessibilityLayer data={chartData}>

@@ -9,7 +9,11 @@ interface Errors {
 }
 
 interface ProfileFormProps {
-  onSubmit: (data: { name: string; logo: string | null; description: string }) => void;
+  onSubmit: (data: {
+    name: string;
+    logo: string | null;
+    description: string;
+  }) => void;
 }
 
 const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit }) => {
@@ -44,91 +48,84 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Avatar Section */}
-          <div className="flex flex-col items-center">
-            <div className="relative">
-              <Image
-                src={logo || "/default-avatar.png"}
-                alt="Profile Picture"
-                width={120}
-                height={120}
-                className="rounded-full border"
-              />
-              <button
-                type="button"
-                onClick={() =>
-                  document.getElementById("logoInput")?.click()
-                }
-                className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full"
-              >
-                <Edit/>
-              </button>
-            </div>
-            <input
-              id="logoInput"
-              type="file"
-              className="hidden"
-              onChange={handleLogoChange}
-            />
-          </div>
+      {/* Avatar Section */}
+      <div className="flex flex-col items-center">
+        <div className="relative">
+          <Image
+            src={logo || "/default-avatar.png"}
+            alt="Profile Picture"
+            width={120}
+            height={120}
+            className="rounded-full border"
+          />
+          <button
+            type="button"
+            onClick={() => document.getElementById("logoInput")?.click()}
+            className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full"
+          >
+            <Edit />
+          </button>
+        </div>
+        <input
+          id="logoInput"
+          type="file"
+          className="hidden"
+          onChange={handleLogoChange}
+        />
+      </div>
 
-          {/* Name Input */}
-          <div>
-            <Label htmlFor="name">Name</Label>
-            <Input
-              id="name"
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="Enter your name"
-              className="mt-2"
-            />
-            {errors.name && (
-              <p className="text-red-500 text-sm">{errors.name}</p>
-            )}
-          </div>
+      {/* Name Input */}
+      <div>
+        <Label htmlFor="name">Name</Label>
+        <Input
+          id="name"
+          type="text"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          placeholder="Enter your name"
+          className="mt-2"
+        />
+        {errors.name && <p className="text-red-500 text-sm">{errors.name}</p>}
+      </div>
 
-          {/* Description */}
-          <div>
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              placeholder="Write something about yourself"
-              className="mt-2"
-            />
-          </div>
+      {/* Description */}
+      <div>
+        <Label htmlFor="description">Description</Label>
+        <Textarea
+          id="description"
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          placeholder="Write something about yourself"
+          className="mt-2"
+        />
+      </div>
 
-          {/* Buttons */}
-          <div className="flex justify-between">
-            {isEditing ? (
-              <>
-                <Button
-                  type="button"
-                  variant="destructive"
-                  onClick={() => setIsEditing(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  type="submit"
-                  variant="default"
-                >
-                  Save
-                </Button>
-              </>
-            ) : (
-              <Button
-                type="button"
-                variant="default"
-                onClick={() => setIsEditing(true)}
-              >
-                Edit Profile
-              </Button>
-            )}
-          </div>
-        </form>
+      {/* Buttons */}
+      <div className="flex justify-between">
+        {isEditing ? (
+          <>
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => setIsEditing(false)}
+            >
+              Cancel
+            </Button>
+            <Button type="submit" variant="default">
+              Save
+            </Button>
+          </>
+        ) : (
+          <Button
+            type="button"
+            variant="default"
+            onClick={() => setIsEditing(true)}
+          >
+            Edit Profile
+          </Button>
+        )}
+      </div>
+    </form>
   );
 };
 

@@ -8,7 +8,10 @@ interface ProfileImageUploadProps {
   onImageUpload: (file: File | null) => void;
 }
 
-const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({ previewImage, onImageUpload }) => {
+const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({
+  previewImage,
+  onImageUpload,
+}) => {
   return (
     <div className="relative flex flex-col items-center">
       <img

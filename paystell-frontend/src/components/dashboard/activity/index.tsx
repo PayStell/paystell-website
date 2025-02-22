@@ -27,8 +27,12 @@ const Activity = ({ data }: ActivityProps) => {
           <TableBody>
             {data.map((item) => (
               <TableRow key={item.id} className="h-[50px]">
-                <TableCell className="font-semibold min-w-[100px]">{item.name}</TableCell>
-                <TableCell className="font-semibold min-w-[100px]">{item.sku}</TableCell>
+                <TableCell className="font-semibold min-w-[100px]">
+                  {item.name}
+                </TableCell>
+                <TableCell className="font-semibold min-w-[100px]">
+                  {item.sku}
+                </TableCell>
                 <TableCell className="font-semibold min-w-[140px]">
                   {item.date.toDateString()}
                 </TableCell>

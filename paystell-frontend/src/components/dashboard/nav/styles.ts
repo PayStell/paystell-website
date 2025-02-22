@@ -5,14 +5,15 @@ export const navItemVariants = cva(
   {
     variants: {
       variant: {
-        default: "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
+        default:
+          "text-muted-foreground hover:bg-accent hover:text-accent-foreground",
         active: "bg-primary text-primary-foreground",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 export const navStyles = {
@@ -20,5 +21,5 @@ export const navStyles = {
   open: "translate-x-0",
   closed: "-translate-x-full",
   overlay: "fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden",
-  trigger: "fixed top-4 left-4 z-50 p-2 rounded-lg hover:bg-accent md:hidden"
+  trigger: "fixed top-4 left-4 z-50 p-2 rounded-lg hover:bg-accent md:hidden",
 };

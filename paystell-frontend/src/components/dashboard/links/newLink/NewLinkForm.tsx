@@ -81,7 +81,6 @@ const NewLinks: React.FC = () => {
                 </option>
                 <option value="USD">XLM</option>
                 <option value="USDC">USDC</option>
-
               </Select>
             </Form.Control>
             {errors.currency && (

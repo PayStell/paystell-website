@@ -10,11 +10,18 @@ interface FormFieldProps {
   label: string;
   placeholder: string;
   type?: string;
-  register: UseFormRegisterReturn; 
+  register: UseFormRegisterReturn;
   error?: string;
 }
 
-const FormField: React.FC<FormFieldProps> = ({ id, label, placeholder, type = "text", register, error }) => {
+const FormField: React.FC<FormFieldProps> = ({
+  id,
+  label,
+  placeholder,
+  type = "text",
+  register,
+  error,
+}) => {
   return (
     <div className="flex-1">
       <Label htmlFor={id} className="font-medium">

@@ -1,5 +1,5 @@
-import Image from 'next/image';
-import Logo_PayStell from '../Images/Logo_PayStell.png';
+import Image from "next/image";
+import Logo_PayStell from "../Images/Logo_PayStell.png";
 
 export const Footer = () => {
   return (
@@ -16,8 +16,12 @@ export const Footer = () => {
             />
           </div>
           <nav className="flex space-x-4">
-            <a href="/terms" className="text-xs text-black hover:underline">Terms</a>
-            <a href="/privacy" className="text-xs text-black hover:underline">Privacy</a>
+            <a href="/terms" className="text-xs text-black hover:underline">
+              Terms
+            </a>
+            <a href="/privacy" className="text-xs text-black hover:underline">
+              Privacy
+            </a>
           </nav>
         </div>
       </div>
