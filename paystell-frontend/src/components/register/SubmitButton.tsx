@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@/components/ui/button";
 
-interface SubmitButtonProps {
+export interface SubmitButtonProps {
   label: string;
 }
 
