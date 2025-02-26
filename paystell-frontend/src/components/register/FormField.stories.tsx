@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { useForm } from "react-hook-form";
+import { useForm,  } from "react-hook-form";
 import FormField from "./FormField";
 
 const meta: Meta<typeof FormField> = {
@@ -25,7 +25,8 @@ export default meta;
 
 type Story = StoryObj<typeof FormField>;
 
-const Template = (args: any) => {
+
+const Template = (args: React.ComponentProps<typeof FormField>) => {
   const { register } = useForm();
   return <FormField {...args} register={register(args.id)} />;
 };

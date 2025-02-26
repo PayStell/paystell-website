@@ -22,7 +22,6 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
   } = useForm<FormData>();
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     "/default-image.jpg",

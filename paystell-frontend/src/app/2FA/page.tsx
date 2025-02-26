@@ -45,7 +45,7 @@ export default function TwoFactorAuthPage() {
             </Button>
             <div className="text-sm text-muted-foreground text-center space-y-2">
               <div>
-                Didn't receive the code?{" "}
+                Didn&apos;t receive the code?{" "}
                 <Button variant="link" className="p-0 h-auto font-normal">
                   Resend Code
                 </Button>
