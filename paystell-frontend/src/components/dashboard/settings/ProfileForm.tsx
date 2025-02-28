@@ -52,7 +52,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit }) => {
       <div className="flex flex-col items-center">
         <div className="relative">
           <Image
-            src={logo || "/default-avatar.png"}
+            src={logo || "/default-image.jpg"}
             alt="Profile Picture"
             width={120}
             height={120}

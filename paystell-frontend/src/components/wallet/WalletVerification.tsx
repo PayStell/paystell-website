@@ -110,7 +110,7 @@ const WalletOption = ({
 const WalletVerification = () => {
   const [stage, setStage] = useState(STAGES.CONNECT);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
+  const [, setSelectedWallet] = useState<string | null>(null);
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
   const [isSignDialogOpen, setIsSignDialogOpen] = useState(false);
 

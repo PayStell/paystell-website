@@ -181,6 +181,23 @@ export default function TwoFactorAuthPage() {
             >
               Continue
             </Button>
+            <div className="text-sm text-muted-foreground text-center space-y-2">
+              <div>
+                Didn&apos;t receive the code?{" "}
+                <Button variant="link" className="p-0 h-auto font-normal">
+                  Resend Code
+                </Button>
+              </div>
+              <div>
+                <Link
+                  href="/login"
+                  className="inline-flex items-center text-primary hover:underline"
+                >
+                  <ArrowLeft className="mr-2 h-4 w-4" />
+                  Back to Login
+                </Link>
+              </div>
+            </div>
           </CardFooter>
         </Card>
       )}
