@@ -2,7 +2,7 @@ import React from 'react';
 import { QRCodeSVG } from 'qrcode.react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-interface QRCodeDisplayProps {
+export interface QRCodeDisplayProps {
   otpAuthUrl: string;
   secret: string;
 }
