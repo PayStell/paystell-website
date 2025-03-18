@@ -1,5 +1,6 @@
 import { Meta, StoryFn } from "@storybook/react";
 import Chart from "./Chart";
+import { ChartProps } from "./Chart";
 
 export default {
   title: "Components/Chart",
@@ -10,7 +11,6 @@ export default {
   },
 } as Meta;
 
-import { ChartProps } from "./Chart";
 
 const Template: StoryFn<ChartProps> = (args) => <Chart {...args} />;
 
