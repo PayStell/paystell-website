@@ -17,7 +17,7 @@ export const navItemVariants = cva(
 );
 
 export const navStyles = {
-  base: "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r bg-background p-4 transition-transform duration-200 md:static md:translate-x-0",
+  base: "fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r bg-background p-4 transition-transform duration-200 md:translate-x-0",
   open: "translate-x-0",
   closed: "-translate-x-full",
   overlay: "fixed inset-0 bg-background/80 backdrop-blur-sm md:hidden",

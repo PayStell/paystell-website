@@ -1,15 +1,10 @@
-import { Home, DollarSign, Link, HandCoins, Settings } from "lucide-react";
+import { Home, Link, HandCoins, Settings } from "lucide-react";
 
 export const dashboardNavItems = [
   {
     title: "Dashboard",
     href: "/dashboard",
     icon: Home,
-  },
-  {
-    title: "Your Money",
-    href: "/dashboard/money",
-    icon: DollarSign,
   },
   {
     title: "Payment Links",

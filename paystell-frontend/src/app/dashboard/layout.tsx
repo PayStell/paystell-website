@@ -26,7 +26,7 @@ export default function DashboardLayout({
       />
       <main
         className={cn(
-          "flex-1 p-4 md:p-8 w-full mt-14 md:mt-0 transition-all duration-200",
+          "flex-1 p-4 md:p-8 w-full mt-14 md:mt-0 md:ml-64 transition-all duration-200",
           isNavOpen
             ? "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
             : "opacity-100 pointer-events-auto",
