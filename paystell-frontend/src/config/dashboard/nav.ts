@@ -7,11 +7,6 @@ export const dashboardNavItems = [
     icon: Home,
   },
   {
-    title: "Your Money",
-    href: "/dashboard/money",
-    icon: DollarSign,
-  },
-  {
     title: "Payment Links",
     href: "/dashboard/links",
     icon: Link,
