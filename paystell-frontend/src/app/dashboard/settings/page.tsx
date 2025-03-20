@@ -5,7 +5,7 @@ import WalletVerificationSection from "@/components/dashboard/settings/WalletVer
 
 const SettingsScreen: React.FC = () => {
   const [isWalletVerified, setIsWalletVerified] = useState(false);
-  const [isEmailVerified, setIsEmailVerified] = useState(true);
+  const isEmailVerified = true; // Changed to constant since it's not being modified
   
   // Mock wallet address - replace with actual wallet address from your system
   const walletAddress = "GABC...XYZ";
@@ -19,17 +19,15 @@ const SettingsScreen: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col p-8">
-      <h1 className="text-2xl font-semibold">Settings</h1>
-      <div className="flex min-h-screen flex-col p-8">
-        <div className="bg-white rounded-lg w-full p-8">
-          <ProfileForm onSubmit={handleProfileSubmit} />
-        </div>
-        
+    <div className="container mx-auto py-8">
+      <h1 className="text-2xl font-bold mb-6">Settings</h1>
+      <div className="grid gap-6">
+        <ProfileForm onSubmit={handleProfileSubmit} />
         <WalletVerificationSection
           walletAddress={walletAddress}
           isWalletVerified={isWalletVerified}
           isEmailVerified={isEmailVerified}
+          onVerificationComplete={() => setIsWalletVerified(true)}
         />
       </div>
     </div>

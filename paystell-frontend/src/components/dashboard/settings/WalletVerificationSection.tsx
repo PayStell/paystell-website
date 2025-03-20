@@ -33,7 +33,15 @@ const WalletVerificationSection: React.FC<WalletVerificationSectionProps> = ({
               <p className="font-mono text-sm">{walletAddress}</p>
             </div>
           </div>
-          <Dialog open={isVerificationOpen} onOpenChange={setIsVerificationOpen}>
+          <Dialog 
+            open={isVerificationOpen} 
+            onOpenChange={(open) => {
+              setIsVerificationOpen(open);
+              if (!open) {
+                onVerificationComplete?.();
+              }
+            }}
+          >
             <DialogTrigger asChild>
               <Button variant="outline">
                 {isWalletVerified ? "Verified" : "Verify Wallet"}
