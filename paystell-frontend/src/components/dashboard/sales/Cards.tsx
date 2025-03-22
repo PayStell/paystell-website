@@ -18,14 +18,14 @@ const Cards: React.FC<CardsProps> = ({ data }) => {
       {data.map((card, index) => (
         <Card key={index}>
           <CardHeader>
-            <CardTitle className="flex flex-row justify-between">
+            <CardTitle className="flex flex-row justify-between text-card-foreground">
               <h2>{card.title}</h2>
               <span>{card.icon}</span>
             </CardTitle>
           </CardHeader>
           <CardContent>
             <div className="text-3xl font-bold">{card.value}</div>
-            <p className="text-base font-normal mt-2">
+            <p className="text-base font-normal mt-2 text-card-foreground">
               {card.percentage} from last month
             </p>
           </CardContent>
