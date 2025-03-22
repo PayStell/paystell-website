@@ -64,7 +64,7 @@ body {
     --destructive: 3.36 91.24% 73.14%;
     --destructive-foreground: 0 0% 100%;
     --border: 224.21 18.81% 19.8%;
-    --input: var(--secondary);
+    --input: var(--background);
     --input-foreground: var(--secondary-foreground);
     --ring: 240 4.9% 83.9%;
     --chart-1: 220 70% 50%;
