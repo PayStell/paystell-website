@@ -18,7 +18,7 @@ body {
     --foreground: 224 28.3% 10.39%;
     --card: 0 0 100%;
     --card-foreground: 234.55 7.8% 72.35%;
-    --popover: 0 0% 100%;
+    --popover: var(--card);
     --popover-foreground: 240 10% 3.9%;
     --primary: 211.29 100% 50%;
     --primary-foreground: 212.31 100% 92.35%;
@@ -51,7 +51,7 @@ body {
     --foreground: 210,8.33%,95.29%;
     --card: 222.86 28% 14.71%;
     --card-foreground: 180 1.01% 80.59%;
-    --popover: 240 10% 3.9%;
+    --popover: var(--card);
     --popover-foreground: 0 0% 98%;
     --primary: 211.29 100% 50%;
     --primary-foreground: 212.31 100% 92.35%;
