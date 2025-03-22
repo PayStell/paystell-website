@@ -41,9 +41,12 @@ const config: Config = {
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
+        },  
+        input: {
+          DEFAULT: "hsl(var(--input))",
+          foreground: "hsl(var(--input-foreground))",
         },
         border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         chart: {
           "1": "hsl(var(--chart-1))",
@@ -52,8 +55,6 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
-        button: "hsl(var(--button))",
-        "button-text": "hsl(var(--button-text))",
       },
       borderRadius: {
         lg: "var(--radius)",
