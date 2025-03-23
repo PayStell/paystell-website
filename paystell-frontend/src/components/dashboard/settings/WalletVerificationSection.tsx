@@ -45,7 +45,7 @@ const WalletVerificationSection: React.FC<WalletVerificationSectionProps> = ({
             }}
           >
             <DialogTrigger asChild>
-              <Button variant="outline">
+              <Button variant="secondary">
                 {isWalletVerified ? "Verified" : "Verify Wallet"}
               </Button>
             </DialogTrigger>
