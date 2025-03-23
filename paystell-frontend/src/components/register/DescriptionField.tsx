@@ -24,7 +24,7 @@ const DescriptionField: React.FC<DescriptionFieldProps> = ({
         placeholder="Describe your business"
         {...register}
       />
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <p className="text-destructive text-sm mt-1">{error}</p>}
     </div>
   );
 };

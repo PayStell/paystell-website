@@ -58,6 +58,10 @@ const config: Config = {
         green: {
           DEFAULT: "hsl(var(--green))",
           foreground: "hsl(var(--green-foreground))",
+        },
+        amber: {
+          DEFAULT: "hsl(var(--amber))",
+          foreground: "hsl(var(--amber-foreground))",
         }
       },
       borderRadius: {

@@ -118,7 +118,7 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Trash2 className="h-4 w-4 mr-2 text-red-500" />
+                        <Trash2 className="h-4 w-4 mr-2 text-destructive" />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
