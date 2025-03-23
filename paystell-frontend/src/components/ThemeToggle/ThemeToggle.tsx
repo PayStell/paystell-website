@@ -1,34 +1,26 @@
-"use client";
-
+import { useState, useEffect } from "react";
+import { ButtonTheme } from "./ThemeButton";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
-import { Button } from "../ui/button";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else setTheme("light");
     setMounted(true);
-  }, []);
+  }, [theme]);
 
   if (!mounted) return null;
 
-  return (
-    <Button
-      variant={"outline"}
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-    >
-      {theme === "dark" ? (
-        <FontAwesomeIcon icon={faSun} />
-      ) : (
-        <FontAwesomeIcon icon={faMoon} />
-      )}
-      <span className="ml-2">
-        {theme === "dark" ? "Light Mode" : "Dark Mode"}
-      </span>
-    </Button>
-  );
+  const handleThemeToggle = () => {
+    const newTheme = theme === "dark" ? "light" : "dark";
+    setTheme(newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
+  return <ButtonTheme theme={theme ?? "light"} onClick={handleThemeToggle} />;
 }
