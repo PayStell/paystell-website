@@ -20,6 +20,19 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    backgrounds: {
+      default: 'background',
+      values: [
+        {
+          name: 'card background',
+          value: 'hsl(var(--card))', 
+        },
+        {
+          name: 'background',
+          value: 'hsl(var(--background))', 
+        },
+      ],
+    },
   },
 
   tags: ["autodocs"]
