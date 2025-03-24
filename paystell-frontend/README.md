@@ -116,4 +116,10 @@ backgrounds: {
 
 Watch this video to see the global theme switcher and background options in the storybook:
 
+
+
+https://github.com/user-attachments/assets/bf536f98-7b0b-4aaf-9094-62eb1a44cbfc
+
+
+
 ---
