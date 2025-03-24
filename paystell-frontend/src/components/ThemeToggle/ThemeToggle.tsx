@@ -7,14 +7,8 @@ export function ThemeToggle() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else setTheme("light");
     setMounted(true);
-  }, [theme]);
-
-  if (!mounted) return null;
+  }, []);
 
   const handleThemeToggle = () => {
     const newTheme = theme === "dark" ? "light" : "dark";
@@ -22,5 +16,7 @@ export function ThemeToggle() {
     localStorage.setItem("theme", newTheme);
   };
 
-  return <ButtonTheme theme={theme ?? "light"} onClick={handleThemeToggle} />;
+  if (!mounted || !theme) return null;
+
+  return <ButtonTheme theme={theme} onClick={handleThemeToggle} />;
 }
