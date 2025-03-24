@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Balance from ".";
 
 const meta: Meta<typeof Balance> = {
-  title: "Components/Balance",
+  title: "Dashboard/Dashboard/Balance",
   component: Balance,
   tags: ["autodocs"],
   argTypes: {
