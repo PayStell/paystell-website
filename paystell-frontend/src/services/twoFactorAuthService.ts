@@ -5,16 +5,10 @@
  */
 export const enableTwoFactorAuth = async (): Promise<{ qrCode: string, secret: string }> => {
   try {
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      throw new Error('Authentication required');
-    }
-    
+    // No authentication required for 2FA setup as per requirements
     const response = await fetch('/api/auth/enable-2fa', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
@@ -36,10 +30,40 @@ export const enableTwoFactorAuth = async (): Promise<{ qrCode: string, secret: s
 };
 
 /**
- * Verifies the 2FA token provided by the user
- * Note: Since there's no dedicated verification endpoint, we're assuming a custom endpoint
- * has been created for this purpose. In the backend, verification logic is handled in
- * validateTwoFactorAuthentication function, which is used during login-2fa.
+ * Verifies the 2FA token during the initial setup process
+ * Endpoint: /api/auth/verify-2fa-setup (POST)
+ * 
+ * @param token The 6-digit verification code
+ * @param secret The secret provided during the enable-2fa step
+ * @returns Promise resolving to success status
+ */
+export const verifyTwoFactorSetup = async (token: string, secret: string): Promise<boolean> => {
+  try {
+    // No authentication required for 2FA setup verification as per requirements
+    const response = await fetch('/api/auth/verify-2fa-setup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ token, secret })
+    });
+    
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to verify 2FA code');
+    }
+    
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error('Error verifying 2FA setup:', error);
+    throw error;
+  }
+};
+
+/**
+ * Verifies the 2FA token provided by the user during login
+ * Endpoint: /api/auth/login-2fa (POST)
  * 
  * @param token The 6-digit verification code
  * @returns Promise resolving to success status
@@ -52,9 +76,8 @@ export const verifyTwoFactorCode = async (token: string): Promise<boolean> => {
       throw new Error('Authentication required');
     }
     
-    // This endpoint would need to be created in the backend
-    // Current backend only has this logic in the login-2fa endpoint
-    const response = await fetch('/api/auth/verify-2fa', {
+    // This endpoint is specifically for verifying during login process
+    const response = await fetch('/api/auth/login-2fa', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authToken}`,

@@ -29,6 +29,7 @@
     "icons": "^1.0.0",
     "lucide-react": "^0.456.0",
     "next": "14.2.17",
+    "otpauth": "^9.3.6",
     "prettier": "^3.5.1",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
