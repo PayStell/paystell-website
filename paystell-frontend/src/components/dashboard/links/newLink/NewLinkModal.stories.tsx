@@ -7,7 +7,7 @@ export default {
   component: NewLinkModal,
 } as Meta<typeof NewLinkModal>;
 
-const Template: StoryFn<typeof NewLinkModal> = (args) => {
+const Template: StoryFn<typeof NewLinkModal> = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleClose = () => setIsOpen(false);
