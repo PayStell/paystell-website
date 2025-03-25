@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
+    "@fortawesome/free-solid-svg-icons": "^6.7.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@radix-ui/react-avatar": "^1.1.1",
     "@radix-ui/react-dropdown-menu": "^2.1.2",
@@ -22,6 +23,7 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/themes": "^3.1.5",
     "@react-icons/all-files": "^4.1.0",
+    "@storybook/addon-themes": "^8.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "css-loader": "^6.11.0",
@@ -30,6 +32,7 @@
     "lucide-react": "^0.456.0",
     "next": "14.2.17",
     "otpauth": "^9.3.6",
+    "next-themes": "^0.4.6",
     "prettier": "^3.5.1",
     "qrcode.react": "^4.2.0",
     "react": "^18.3.1",

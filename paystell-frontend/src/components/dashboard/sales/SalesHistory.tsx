@@ -33,7 +33,7 @@ const SalesHistory = () => {
   } satisfies ChartConfig;
 
   return (
-    <div className="mt-6 flex flex-col  md:flex-row">
+    <div className="mt-6 flex flex-col  md:flex-row bg-card rounded-lg w-full p-8">
       <Table className="md:w-[90%]">
         <TableCaption>A list of your recent invoices.</TableCaption>
         <TableHeader>
