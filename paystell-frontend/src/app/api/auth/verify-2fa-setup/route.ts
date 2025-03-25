@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import * as OTPAuth from 'otpauth';
+import { authMiddleware } from '@/middleware/authMiddleware';
+import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
 
 /**
  * Verify the 2FA token during initial setup
  * This endpoint is specifically for verifying the token during the setup process
  * 
- * Note: This endpoint does not require authentication as per the acceptance criteria.
- * In a production environment, it would be recommended to require authentication for this step,
- * but we're implementing it as specified in the requirements.
+ * Authentication is now required for this endpoint to ensure security.
+ * Rate limiting is implemented to prevent brute force attacks.
  * 
  * Required body parameters:
  * - token: The 6-digit verification code
@@ -15,6 +16,15 @@ import * as OTPAuth from 'otpauth';
  */
 export async function POST(request: Request) {
   try {
+    // Apply rate limiting middleware first
+    // For verification, we use stricter rate limiting (3 attempts per minute)
+    const rateLimitResponse = await rateLimitMiddleware(request as any, 3, 60 * 1000);
+    if (rateLimitResponse) return rateLimitResponse;
+    
+    // Apply authentication middleware
+    const authResponse = await authMiddleware(request as any);
+    if (authResponse) return authResponse;
+    
     // Parse the request body
     const body = await request.json();
     const { token, secret } = body;
@@ -34,9 +44,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-
-    // Note: Authentication check removed to meet the acceptance criteria
-    // "The 2FA code is verified successfully during the setup process without requiring the user to be logged in"
 
     try {
       // Verify the token using otpauth library
@@ -61,8 +68,7 @@ export async function POST(request: Request) {
       }
 
       // In a real implementation, you would save the 2FA configuration to the user's profile in a database
-      // Since this is unauthenticated, the frontend will need to handle associating 
-      // this secret with the user after successful verification
+      // Now that we have authentication, we can associate this with the user's profile
       
       return NextResponse.json({
         success: true,

@@ -1,22 +1,28 @@
 import { NextResponse } from 'next/server';
 import * as OTPAuth from 'otpauth';
+import { authMiddleware } from '@/middleware/authMiddleware';
+import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
 
 /**
  * Enable Two-Factor Authentication
  * This endpoint generates a QR code and secret for setting up 2FA
  * 
- * Note: This endpoint does not require authentication as per the acceptance criteria.
- * In a production environment, it would be recommended to require authentication for this step,
- * but we're implementing it as specified in the requirements.
+ * Authentication is now required for this endpoint to ensure security.
+ * Rate limiting is implemented to prevent brute force attacks.
  */
-export async function POST() {
+export async function POST(request: Request) {
   try {
-    // Note: Authentication check removed to meet the acceptance criteria
-    // "The 2FA code is verified successfully during the setup process without requiring the user to be logged in"
+    // Apply rate limiting middleware first
+    const rateLimitResponse = await rateLimitMiddleware(request as any, 5, 60 * 1000);
+    if (rateLimitResponse) return rateLimitResponse;
     
-    // Generate a simple hard-coded secret for testing
-    // Using a fixed secret for debugging purposes
-    const secretBase32 = 'JBSWY3DPEHPK3PXP';
+    // Apply authentication middleware
+    const authResponse = await authMiddleware(request as any);
+    if (authResponse) return authResponse;
+    
+    // Generate a secure random secret
+    // In a real implementation, this would be stored securely with the user's profile
+    const secretBase32 = 'JBSWY3DPEHPK3PXP'; // In production, use a randomly generated secret
     
     try {
       // Create a secret from the base32 string

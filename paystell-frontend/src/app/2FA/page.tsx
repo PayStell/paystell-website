@@ -8,8 +8,9 @@ import {
   resendTwoFactorCode 
 } from '@/services/twoFactorAuthService';
 import { TwoFactorSetup } from './TwoFactorSetup';
+import { withAuth } from '@/components/Auth/withAuth';
 
-export default function TwoFactorAuthPage() {
+function TwoFactorAuthPage() {
   const router = useRouter();
   const [qrCodeUrl, setQrCodeUrl] = useState<string | null>(null);
   const [secret, setSecret] = useState<string | null>(null);
@@ -104,3 +105,6 @@ export default function TwoFactorAuthPage() {
     />
   );
 }
+
+// Wrap the component with authentication protection
+export default withAuth(TwoFactorAuthPage);

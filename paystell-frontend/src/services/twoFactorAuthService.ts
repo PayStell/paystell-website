@@ -5,15 +5,24 @@
  */
 export const enableTwoFactorAuth = async (): Promise<{ qrCode: string, secret: string }> => {
   try {
-    // No authentication required for 2FA setup as per requirements
+    const token = localStorage.getItem('token');
+
+    if (!token) {
+      throw new Error('Authentication required');
+    }
+
     const response = await fetch('/api/auth/enable-2fa', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${token}`,
         'Content-Type': 'application/json'
       }
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many attempts. Please try again later.');
+      }
       const errorData = await response.json();
       throw new Error(errorData.message || 'Failed to enable 2FA');
     }
@@ -39,16 +48,25 @@ export const enableTwoFactorAuth = async (): Promise<{ qrCode: string, secret: s
  */
 export const verifyTwoFactorSetup = async (token: string, secret: string): Promise<boolean> => {
   try {
-    // No authentication required for 2FA setup verification as per requirements
+    const authToken = localStorage.getItem('token');
+    
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    
     const response = await fetch('/api/auth/verify-2fa-setup', {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${authToken}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({ token, secret })
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many verification attempts. Please try again later.');
+      }
       const errorData = await response.json();
       throw new Error(errorData.message || 'Failed to verify 2FA code');
     }
@@ -87,6 +105,9 @@ export const verifyTwoFactorCode = async (token: string): Promise<boolean> => {
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many verification attempts. Please try again later.');
+      }
       const errorData = await response.json();
       throw new Error(errorData.message || 'Failed to verify 2FA code');
     }
@@ -134,6 +155,9 @@ export const disableTwoFactorAuth = async (): Promise<{ message: string }> => {
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many attempts. Please try again later.');
+      }
       const errorData = await response.json();
       throw new Error(errorData.message || 'Failed to disable 2FA');
     }
