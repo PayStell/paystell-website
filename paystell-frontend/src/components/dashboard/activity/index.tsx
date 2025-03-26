@@ -18,26 +18,20 @@ const Activity = ({ data }: ActivityProps) => {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle className="text-base font-semibold text-gray-500">
-          Last Activity
-        </CardTitle>
+        <CardTitle className="text-base font-semibold">Last Activity</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
-          <TableBody>
+          <TableBody className="text-card-foreground">
             {data.map((item) => (
               <TableRow key={item.id} className="h-[50px]">
-                <TableCell className="font-semibold min-w-[100px]">
-                  {item.name}
-                </TableCell>
-                <TableCell className="font-semibold min-w-[100px]">
-                  {item.sku}
-                </TableCell>
-                <TableCell className="font-semibold min-w-[140px]">
+                <TableCell className="min-w-[100px]">{item.name}</TableCell>
+                <TableCell className="min-w-[100px]">{item.sku}</TableCell>
+                <TableCell className="min-w-[140px]">
                   {item.date.toDateString()}
                 </TableCell>
-                <TableCell className="font-semibold text-center min-w-[100px]">
-                  <p className="bg-slate-100 py-1 px-2 rounded-sm">
+                <TableCell className="text-center min-w-[100px]">
+                  <p className="bg-background text-foreground py-1 px-2 rounded-sm">
                     {item.value > 0 ? "+" : "-"}
                     {item.value} {item.currency}
                   </p>

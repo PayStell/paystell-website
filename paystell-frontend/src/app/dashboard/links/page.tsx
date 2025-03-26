@@ -63,7 +63,7 @@ export default function PaymentLinkScreen(): JSX.Element {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <div className="flex flex-col p-4">
+    <div className="flex flex-col bg-card rounded-lg w-full p-8 mt-8">
       <div className="flex items-center justify-between gap-4">
         <h1 className="text-xl font-semibold">Payment Links</h1>
         <Button size="lg" onClick={() => setIsModalOpen(true)}>

@@ -23,7 +23,7 @@ const Balance = ({ balance, lastBalance }: BalanceStatProps) => {
       )}
       <span
         className={`text-[10px] ${
-          diff < 0 ? "text-red-700" : "text-green-700"
+          diff < 0 ? "text-destructive" : "text-green-foreground"
         }`}
       >{`${((diff / lastBalance) * 100).toFixed(2)}%`}</span>
     </div>

@@ -9,7 +9,7 @@ export const ProductInfo = ({
   sku: string;
 }) => {
   return (
-    <div className="flex flex-col space-y-2 bg-white border-b border-gray-300 p-4 ">
+    <div className="flex flex-col space-y-2 bg-card border-b border-border text-card-foreground p-4 ">
       <div className="flex justify-between text-sm items-center">
         <div className="flex items-center space-x-2">
           <Image src={Product} alt="Product Image" width={80} height={80} />
