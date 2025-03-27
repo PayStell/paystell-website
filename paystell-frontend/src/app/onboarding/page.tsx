@@ -1,14 +1,10 @@
-"use client"
-import { OnboardingProvider } from "@/components/onboarding/onboarding-context"
-import OnboardingFlow from "@/components/onboarding/onboarding-flow"
+import { OnboardingFlow } from "@/components/onboarding/onboarding-flow"
 
-export default function OnboardingPage() {
+export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-background to-background/80 flex items-center justify-center p-4">
-      <OnboardingProvider>
-        <OnboardingFlow />
-      </OnboardingProvider>
-    </div>
+    <main className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 flex items-center justify-center p-4">
+      <OnboardingFlow />
+    </main>
   )
 }
 

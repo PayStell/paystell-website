@@ -1,80 +1,141 @@
 "use client"
 
-import { useOnboarding } from "../onboarding-context"
 import { Button } from "@/components/ui/button"
 import { CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2 } from "lucide-react"
 import Link from "next/link"
+import { motion } from "framer-motion"
 
-export default function CompleteStep() {
-  const { businessInfo, paymentInfo } = useOnboarding()
+interface SuccessStepProps {
+  formData: Record<string, any>
+}
+
+export function CompleteStep({ formData }: SuccessStepProps) {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.3,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  }
+
+  const checkmarkVariants = {
+    hidden: { scale: 0 },
+    show: {
+      scale: 1,
+      transition: {
+        type: "spring",
+        stiffness: 260,
+        damping: 20,
+        delay: 0.1,
+      },
+    },
+  }
+
+  const listItemVariants = {
+    hidden: { opacity: 0, x: -20 },
+    show: {
+      opacity: 1,
+      x: 0,
+      transition: {
+        duration: 0.3,
+      },
+    },
+  }
 
   const handleSubmit = () => {
-    // In a real application, this would submit all the collected data to your API
-    console.log("Submitting registration data:", {
-      businessInfo,
-      paymentInfo,
-    })
-
-    // Redirect to dashboard or login page
+    // Redirect to dashboard
     window.location.href = "/dashboard"
   }
 
   return (
-    <div className="space-y-6">
+    <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="show">
       <CardHeader className="text-center p-0">
-        <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+        <motion.div
+          className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4"
+          variants={checkmarkVariants}
+        >
           <CheckCircle2 className="h-8 w-8 text-primary" />
-        </div>
-        <CardTitle className="text-2xl sm:text-3xl">Setup Complete!</CardTitle>
-        <CardDescription className="text-base mt-2">
-          You're all set to start accepting Stellar payments with PayStell
-        </CardDescription>
+        </motion.div>
+        <motion.div variants={itemVariants}>
+          <CardTitle className="text-2xl sm:text-3xl">Setup Complete!</CardTitle>
+          <CardDescription className="text-base mt-2">
+            You're all set to start accepting Stellar payments with PayStell
+          </CardDescription>
+        </motion.div>
       </CardHeader>
 
-      <div className="space-y-4">
+      <motion.div className="space-y-4" variants={itemVariants}>
         <div className="bg-muted/50 p-4 rounded-lg">
           <h3 className="font-medium mb-2">Account Summary</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-            <div>
+            <motion.div variants={listItemVariants}>
               <p className="text-muted-foreground">Business Name:</p>
-              <p className="font-medium">{businessInfo.businessName}</p>
-            </div>
-            <div>
+              <p className="font-medium">{formData.businessName}</p>
+            </motion.div>
+            <motion.div variants={listItemVariants}>
               <p className="text-muted-foreground">Business Type:</p>
-              <p className="font-medium">{businessInfo.businessType}</p>
-            </div>
-            <div>
+              <p className="font-medium">{formData.businessType}</p>
+            </motion.div>
+            <motion.div variants={listItemVariants}>
               <p className="text-muted-foreground">Stellar Address:</p>
-              <p className="font-medium truncate">{paymentInfo.stellarAddress}</p>
-            </div>
-            <div>
+              <p className="font-medium truncate">{formData.stellarAddress}</p>
+            </motion.div>
+            <motion.div variants={listItemVariants}>
               <p className="text-muted-foreground">Accepted Assets:</p>
-              <p className="font-medium">{paymentInfo.acceptedAssets.join(", ")}</p>
-            </div>
+              <p className="font-medium">{formData.acceptedAssets?.join(", ") || "XLM"}</p>
+            </motion.div>
           </div>
         </div>
 
         <div className="bg-muted/50 p-4 rounded-lg">
           <h3 className="font-medium mb-2">Next Steps</h3>
-          <ul className="list-disc list-inside space-y-2 text-sm">
-            <li>Access your merchant dashboard to view transactions</li>
-            <li>Create your first payment link to share with customers</li>
-            <li>Set up your point-of-sale system if applicable</li>
-            <li>Customize your payment page with your branding</li>
-          </ul>
+          <motion.ul className="list-disc list-inside space-y-2 text-sm" variants={containerVariants}>
+            <motion.li variants={listItemVariants}>Access your merchant dashboard to view transactions</motion.li>
+            <motion.li variants={listItemVariants}>Create your first payment link to share with customers</motion.li>
+            <motion.li variants={listItemVariants}>Set up your point-of-sale system if applicable</motion.li>
+            <motion.li variants={listItemVariants}>Customize your payment page with your branding</motion.li>
+          </motion.ul>
         </div>
-      </div>
+      </motion.div>
 
       <CardFooter className="flex flex-col sm:flex-row justify-between gap-4 p-0 pt-4">
-        <Button variant="outline" asChild className="w-full sm:w-auto">
-          <Link href="/help">View Documentation</Link>
-        </Button>
-        <Button onClick={handleSubmit} className="w-full sm:w-auto">
-          Go to Dashboard
-        </Button>
+        <motion.div variants={itemVariants} className="w-full sm:w-auto">
+          <Button variant="outline" asChild className="w-full">
+            <Link href="/help">View Documentation</Link>
+          </Button>
+        </motion.div>
+        <motion.div variants={itemVariants} className="w-full sm:w-auto">
+          <Button onClick={handleSubmit} className="w-full group">
+            Go to Dashboard
+            <motion.span
+              initial={{ x: 0 }}
+              animate={{ x: [0, 5, 0] }}
+              transition={{
+                repeat: Number.POSITIVE_INFINITY,
+                repeatType: "mirror",
+                duration: 1,
+                repeatDelay: 1,
+              }}
+            ></motion.span>
+          </Button>
+        </motion.div>
       </CardFooter>
-    </div>
+    </motion.div>
   )
 }
 

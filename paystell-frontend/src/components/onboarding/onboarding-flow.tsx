@@ -1,50 +1,123 @@
 "use client"
 
-import { useOnboarding } from "./onboarding-context"
+import { useState } from "react"
+import { WelcomeStep } from "./steps/WelcomeStep"
+import { BasicInfoStep } from "./steps/BasicInfoStep"
+import { BusinessDetailsStep } from "./steps/BusinessDetailsStep"
+import { PaymentDetailsStep } from "./steps/PaymentDetailsStep"
+import { SuccessStep } from "./steps/SuccessStep"
+import { Progress } from "../progress"
 import { Card, CardContent } from "@/components/ui/card"
-import OnboardingProgress from "./onboarding-progress"
-import WelcomeStep from "./steps/WelcomeStep"
-import BusinessInfoStep from "./steps/BusinessInfoStep"
-import PaymentDetailsStep from "./steps/PaymentDetailsStep"
-import CompleteStep from "./steps/CompleteStep"
+import { Button } from "@/components/ui/button"
+import { ArrowLeft } from "lucide-react"
+import { ProgressProvider, useProgress } from "@/hooks/use-progress"
 import { AnimatePresence, motion } from "framer-motion"
+import { Toaster } from "sonner"
 
-export default function OnboardingFlow() {
-  const { currentStep } = useOnboarding()
+const TOTAL_STEPS = 5
+
+export function OnboardingFlow() {
+  return (
+    <ProgressProvider initialStep={0} steps={TOTAL_STEPS}>
+      <OnboardingFlowContent />
+      <Toaster />
+    </ProgressProvider>
+  )
+}
+
+function OnboardingFlowContent() {
+  const { progress, prevStep } = useProgress()
+  const [formData, setFormData] = useState({
+    businessName: "",
+    fullName: "",
+    email: "",
+    phone: "",
+    businessType: "",
+    businessCategory: "",
+    country: "",
+    address: "",
+    taxId: "",
+    stellarAddress: "",
+    acceptTerms: false,
+  })
+
+  const updateFormData = (data: Partial<typeof formData>) => {
+    setFormData((prev) => ({ ...prev, ...data }))
+  }
 
   const renderStep = () => {
-    switch (currentStep) {
-      case "welcome":
+    switch (progress) {
+      case 0:
         return <WelcomeStep />
-      case "business-info":
-        return <BusinessInfoStep />
-      case "payment-details":
-        return <PaymentDetailsStep />
-      case "complete":
-        return <CompleteStep />
+      case 1:
+        return <BasicInfoStep formData={formData} updateFormData={updateFormData} />
+      case 2:
+        return <BusinessDetailsStep formData={formData} updateFormData={updateFormData} />
+      case 3:
+        return <PaymentDetailsStep formData={formData} updateFormData={updateFormData} />
+      case 4:
+        return <SuccessStep formData={formData} />
       default:
         return <WelcomeStep />
     }
   }
 
+  const pageVariants = {
+    initial: {
+      opacity: 0,
+      y: 10,
+    },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.3,
+        ease: "easeOut",
+      },
+    },
+    exit: {
+      opacity: 0,
+      y: -10,
+      transition: {
+        duration: 0.2,
+      },
+    },
+  }
+
   return (
-    <Card className="w-full max-w-4xl shadow-lg rounded-xl overflow-hidden">
-      <OnboardingProgress />
-      <CardContent className="p-0">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentStep}
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.3 }}
-            className="p-6"
-          >
-            {renderStep()}
-          </motion.div>
-        </AnimatePresence>
-      </CardContent>
-    </Card>
+    <div className="w-full max-w-4xl mx-auto">
+      {progress > 0 && progress < TOTAL_STEPS + 1 && <Progress />}
+
+      <Card className="w-full shadow-lg border-0 overflow-hidden">
+        <CardContent className="p-0">
+          {progress > 0 && progress < TOTAL_STEPS + 1 && (
+            <div className="p-4 border-b">
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={prevStep}
+                className="flex items-center text-muted-foreground transition-all hover:text-primary"
+              >
+                <ArrowLeft className="mr-2 h-4 w-4" />
+                Back
+              </Button>
+            </div>
+          )}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={progress}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              variants={pageVariants}
+              className="p-6"
+            >
+              {renderStep()}
+            </motion.div>
+          </AnimatePresence>
+        </CardContent>
+      </Card>
+    </div>
   )
 }
 
