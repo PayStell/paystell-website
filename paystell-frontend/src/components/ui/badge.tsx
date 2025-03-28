@@ -10,14 +10,14 @@ const badgeVariants = cva(
       variant: {
         default:
           "border-transparent bg-secondary text-secondary-foreground shadow",
-        active: "border-transparent bg-green-100 text-green-700 shadow",
+        active: "border-transparent bg-green text-green-foreground shadow",
         inactive: "border-transparent bg-red-100 text-red-700 shadow",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  },
+  }
 );
 
 export interface BadgeProps
