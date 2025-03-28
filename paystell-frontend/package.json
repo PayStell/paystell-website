@@ -23,12 +23,14 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/themes": "^3.1.5",
     "@react-icons/all-files": "^4.1.0",
+    "@stellar/freighter-api": "^4.1.0",
     "@storybook/addon-themes": "^8.6.8",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "css-loader": "^6.11.0",
     "date-fns": "^3.6.0",
     "icons": "^1.0.0",
+    "jose": "^6.0.10",
     "lucide-react": "^0.456.0",
     "next": "14.2.17",
     "next-themes": "^0.4.6",
@@ -41,6 +43,7 @@
     "react-icons": "^5.3.0",
     "recharts": "^2.13.3",
     "shadcn-ui": "^0.2.3",
+    "stellar-sdk": "^13.1.0",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7"
   },
@@ -66,5 +69,6 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
