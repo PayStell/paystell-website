@@ -6,8 +6,14 @@ import { CheckCircle2 } from "lucide-react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 
+interface FormData {
+  businessName: string;
+  businessType: string;
+  stellarAddress: string;
+  acceptedAssets: string[];
+}
 interface SuccessStepProps {
-  formData: Record<string, any>
+  formData: FormData;
 }
 
 export function CompleteStep({ formData }: SuccessStepProps) {
@@ -74,7 +80,7 @@ export function CompleteStep({ formData }: SuccessStepProps) {
         <motion.div variants={itemVariants}>
           <CardTitle className="text-2xl sm:text-3xl">Setup Complete!</CardTitle>
           <CardDescription className="text-base mt-2">
-            You're all set to start accepting Stellar payments with PayStell
+            You&apos;re all set to start accepting Stellar payments with PayStell
           </CardDescription>
         </motion.div>
       </CardHeader>

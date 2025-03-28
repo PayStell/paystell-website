@@ -137,7 +137,7 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
         })
         nextStep()
       } catch (error) {
-        toast.error("Error", {
+        toast.error(`Error: ${error}`, {
           description:"There was a problem saving your business details. Please try again."
         })
       } finally {

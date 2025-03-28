@@ -76,7 +76,7 @@ export function WelcomeStep() {
         </div>
         <h1 className="text-3xl font-bold tracking-tight">Welcome to PayStell</h1>
         <p className="text-muted-foreground max-w-md mx-auto">
-          Start accepting payments on the Stellar network in just a few minutes. Let's set up your merchant account.
+          Start accepting payments on the Stellar network in just a few minutes. Let&apos;s set up your merchant account.
         </p>
       </motion.div>
 

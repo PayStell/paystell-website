@@ -5,7 +5,11 @@ import { Card, CardContent } from "@/components/ui/card"
 import { motion } from "framer-motion"
 
 interface SuccessStepProps {
-  formData: Record<string, any>
+  formData: {
+    fullName: string
+    businessName: string
+    [key: string]: unknown
+  }
 }
 
 export function SuccessStep({ formData }: SuccessStepProps) {

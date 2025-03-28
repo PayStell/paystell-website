@@ -15,8 +15,18 @@ import { toast } from "sonner"
 import { useProgress } from "@/hooks/use-progress"
 
 interface PaymentSetupStepProps {
-  formData: Record<string, any>
-  updateFormData: (data: Record<string, any>) => void
+  formData: {
+    stellarAddress?: string
+    acceptedAssets?: string[]
+    paymentTypes?: string[]
+    [key: string]: unknown
+  }
+  updateFormData: (data: {
+    stellarAddress: string
+    acceptedAssets: string[]
+    paymentTypes: string[]
+    [key: string]: unknown
+  }) => void
 }
 
 export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupStepProps) {
@@ -78,7 +88,7 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
       })
       nextStep()
     } catch (error) {
-      toast.error("Error", {
+      toast.error(`Error: ${error}`, {
         description: "There was a problem saving your payment settings. Please try again.",
       })
     } finally {
@@ -116,7 +126,7 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
       <CardHeader className="p-0">
         <motion.div variants={itemVariants}>
           <CardTitle className="text-2xl">Payment Settings</CardTitle>
-          <CardDescription>Configure how you'll receive payments on the Stellar network</CardDescription>
+          <CardDescription>Configure how you&apos;ll receive payments on the Stellar network</CardDescription>
         </motion.div>
       </CardHeader>
 
@@ -130,7 +140,7 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
                   <HelpCircle className="h-4 w-4 text-muted-foreground" />
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Your Stellar wallet address where you'll receive payments</p>
+                  <p>Your Stellar wallet address where you&apos;ll receive payments</p>
                 </TooltipContent>
               </Tooltip>
             </div>
@@ -141,7 +151,7 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
               onChange={(e) => setStellarAddress(e.target.value)}
             />
             <p className="text-xs text-muted-foreground">
-              Don't have a Stellar address?{" "}
+              Don&apos;t have a Stellar address?{" "}
               <a href="#" className="text-primary inline-flex items-center">
                 Create one <ExternalLink className="h-3 w-3 ml-1" />
               </a>
@@ -218,8 +228,8 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
         <motion.div variants={itemVariants}>
           <Alert variant="default" className="bg-muted/50 border-muted">
             <AlertDescription>
-              PayStell automatically converts between assets at the best available rate. You'll always receive the
-              assets you've selected above.
+              PayStell automatically converts between assets at the best available rate. You&apos;ll always receive the
+              assets you&apos;ve selected above.
             </AlertDescription>
           </Alert>
         </motion.div>

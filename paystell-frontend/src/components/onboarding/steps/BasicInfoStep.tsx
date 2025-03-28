@@ -119,7 +119,7 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
         })
         nextStep()
       } catch (error) {
-        toast.error("Error", {
+        toast.error(`Error: ${error}`, {
           description:"There was a problem saving your information. Please try again."
         })
       } finally {
@@ -156,7 +156,7 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Basic Information</h2>
-        <p className="text-muted-foreground">Let's start with some basic information about you and your business.</p>
+        <p className="text-muted-foreground">Let&apos;s start with some basic information about you and your business.</p>
       </div>
 
       <motion.form
