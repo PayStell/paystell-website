@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Skeleton from "react-loading-skeleton";
-import "react-loading-skeleton/dist/skeleton.css";
 import Balance from "@/components/dashboard/balance";
 import Activity, { UserActivity } from "@/components/dashboard/activity";
+import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
@@ -44,27 +43,16 @@ export default function DashboardPage() {
       <h1 className="text-2xl font-semibold">Dashboard</h1>
       <div className="flex flex-col gap-8 mt-5 items-start md:flex-row">
         {loading ? (
-          <BalanceSkeleton />
+          <LoadingSkeleton type="card" width={400} height="150px" />
         ) : (
           <Balance balance={balance} lastBalance={lastBalance} />
         )}
-        {loading ? <ActivitySkeleton /> : <Activity data={activityData} />}
+        {loading ? (
+          <LoadingSkeleton type="table" rows={3} width="100%" />
+        ) : (
+          <Activity data={activityData} />
+        )}
       </div>
     </main>
   );
 }
-
-const BalanceSkeleton = () => (
-  <div className="w-[300px] h-[150px] p-4 bg-white rounded-lg shadow-md">
-    <Skeleton height={20} width={100} className="mb-2" />
-    <Skeleton height={36} width={150} className="mb-4" />
-    <Skeleton height={30} width={100} />
-  </div>
-);
-
-const ActivitySkeleton = () => (
-  <div className="w-full h-[200px] p-4 bg-white rounded-lg shadow-md">
-    <Skeleton height={20} width={150} className="mb-4" />
-    <Skeleton count={3} height={30} className="mb-2" />
-  </div>
-);
