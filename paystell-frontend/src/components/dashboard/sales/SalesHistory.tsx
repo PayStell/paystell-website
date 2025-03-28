@@ -47,38 +47,64 @@ const SalesHistory = () => {
       {loading ? (
         <LoadingSkeleton type="table" rows={4} width="90%" />
       ) : (
-        <Table className="md:w-[90%]">
-          <TableCaption>A list of your recent invoices.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Invoice</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Method</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {[...Array(3)].map((_, index) => (
-              <TableRow key={index}>
-                <TableCell className="font-medium flex flex-row items-center justify-between">
-                  <Avatar className="w-[2rem]">
-                    <AvatarImage src="https://github.com/shadcn.png" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <div className="ml-2">
-                    <h2 className="text-base font-medium">Olivia Chioma</h2>
-                    <span className="text-xs">victorjames408@gmail.com</span>
-                  </div>
-                </TableCell>
-                <TableCell>{index === 2 ? "Pending" : "Paid"}</TableCell>
-                <TableCell>Credit Card</TableCell>
-                <TableCell className="text-right">$250.00</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      )}
-
+      <Table className="md:w-[90%]">
+        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Invoice</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Method</TableHead>
+            <TableHead className="text-right">Amount</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          <TableRow>
+            <TableCell className="font-medium flex flex-row items-center justify-between">
+              <Avatar className="w-[2rem]">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="ml-2">
+                <h2 className="text-base font-medium">Olivia chioma</h2>
+                <span className="text-xs">victorjames408@gmail.com</span>
+              </div>
+            </TableCell>
+            <TableCell>Paid</TableCell>
+            <TableCell>Credit Card</TableCell>
+            <TableCell className="text-right">$250.00</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium flex flex-row items-center justify-between">
+              <Avatar className="w-[2rem]">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="ml-2">
+                <h2 className="text-base font-medium">Olivia chioma</h2>
+                <span className="text-xs">victorjames408@gmail.com</span>
+              </div>
+            </TableCell>
+            <TableCell>Paid</TableCell>
+            <TableCell>Credit Card</TableCell>
+            <TableCell className="text-right">$250.00</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell className="font-medium flex flex-row items-center justify-between">
+              <Avatar className="w-[2rem]">
+                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <div className="ml-2">
+                <h2 className="text-base font-medium">Olivia chioma</h2>
+                <span className="text-xs">victorjames408@gmail.com</span>
+              </div>
+            </TableCell>
+            <TableCell>Pending</TableCell>
+            <TableCell>Credit Card</TableCell>
+            <TableCell className="text-right">$250.00</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
       <div className="mt-5 md:w-[40%]">
         {loading ? (
           <LoadingSkeleton type="chart" height="250px" width="100%" />

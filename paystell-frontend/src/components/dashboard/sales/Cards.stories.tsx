@@ -3,7 +3,7 @@ import { FaArrowUp, FaArrowDown } from "react-icons/fa";
 import Cards, { CardData } from "./Cards";
 
 const meta: Meta<typeof Cards> = {
-  title: "Shared/Cards",
+  title: "Dashboard/Sales/Cards",
   component: Cards,
   tags: ["autodocs"],
   argTypes: {
