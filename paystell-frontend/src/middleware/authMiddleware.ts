@@ -1,22 +1,29 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+interface AuthErrorResponse {
+  success: false;
+  message: string;
+}
+
 /**
  * Authentication middleware to verify the user's session
  * 
  * This middleware checks for a valid authentication token in the request
  * and rejects unauthenticated requests.
  * 
- * @param request The incoming request
+ * @param request - The incoming request
  * @returns Either the response object with an error or undefined to continue
  */
-export async function authMiddleware(request: NextRequest) {
+export async function authMiddleware(
+  request: NextRequest
+): Promise<NextResponse<AuthErrorResponse> | undefined> {
   // Get the token from the Authorization header or cookies
   const authHeader = request.headers.get('Authorization');
   const token = authHeader ? authHeader.replace('Bearer ', '') : null;
   
   // If no token is found, reject the request
   if (!token) {
-    return NextResponse.json(
+    return NextResponse.json<AuthErrorResponse>(
       { success: false, message: 'Authentication required' },
       { status: 401 }
     );

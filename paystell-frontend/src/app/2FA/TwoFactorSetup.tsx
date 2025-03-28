@@ -14,16 +14,32 @@ import {
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { QRCodeDisplay } from '@/components/TwoFactorAuth/QRCodeDisplay';
 
+type SetupStep = 'setup' | 'verify';
+
 export interface TwoFactorSetupProps {
+  /** The URL for the QR code to be displayed */
   qrCodeUrl: string | null;
+  /** The secret key for manual entry */
   secret: string | null;
+  /** Loading state indicator */
   isLoading: boolean;
+  /** Error message to display */
   error: string | null;
+  /** Success message to display */
   success: string | null;
+  /** Handler for verification code submission */
   onVerify: (code: string) => Promise<void>;
+  /** Handler for requesting a new QR code */
   onRequestNewQR: () => Promise<void>;
+  /** Handler for navigation back */
   onBack: () => void;
+  /** Handler for continuing to next step */
   onContinue: () => void;
+}
+
+interface VerificationState {
+  code: string;
+  isLoading: boolean;
 }
 
 export function TwoFactorSetup({
@@ -36,33 +52,35 @@ export function TwoFactorSetup({
   onRequestNewQR,
   onBack,
 }: TwoFactorSetupProps) {
-  const [step, setStep] = useState<'setup' | 'verify'>('setup');
-  const [verificationCode, setVerificationCode] = useState('');
-  const [verifyLoading, setVerifyLoading] = useState(false);
+  const [step, setStep] = useState<SetupStep>('setup');
+  const [verification, setVerification] = useState<VerificationState>({
+    code: '',
+    isLoading: false
+  });
 
-  const handleVerify = async (e: React.FormEvent) => {
+  const handleVerify = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    if (!verificationCode) {
+    if (!verification.code || verification.isLoading) {
       return;
     }
     
-    if (verificationCode.length !== 6 || !/^\d+$/.test(verificationCode)) {
+    if (verification.code.length !== 6 || !/^\d+$/.test(verification.code)) {
       return;
     }
 
-    setVerifyLoading(true);
+    setVerification(prev => ({ ...prev, isLoading: true }));
     try {
-      await onVerify(verificationCode);
+      await onVerify(verification.code);
     } finally {
-      setVerifyLoading(false);
+      setVerification(prev => ({ ...prev, isLoading: false }));
     }
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\D/g, '');
     if (value.length <= 6) {
-      setVerificationCode(value);
+      setVerification(prev => ({ ...prev, code: value }));
     }
   };
 
@@ -87,7 +105,7 @@ export function TwoFactorSetup({
             )}
             
             {success && (
-              <Alert variant="default" className="w-full bg-green-50 border-green-200">
+              <Alert variant="default" className="w-full bg-success/10 border-success/20">
                 <AlertTitle>Success</AlertTitle>
                 <AlertDescription>{success}</AlertDescription>
               </Alert>
@@ -148,7 +166,7 @@ export function TwoFactorSetup({
               )}
               
               {success && (
-                <Alert variant="default" className="bg-green-50 border-green-200">
+                <Alert variant="default" className="bg-success/10 border-success/20">
                   <AlertTitle>Success</AlertTitle>
                   <AlertDescription>{success}</AlertDescription>
                 </Alert>
@@ -163,10 +181,12 @@ export function TwoFactorSetup({
                   required
                   maxLength={6}
                   className="text-center text-2xl tracking-widest"
-                  value={verificationCode}
+                  value={verification.code}
                   onChange={handleInputChange}
-                  disabled={verifyLoading}
+                  disabled={verification.isLoading}
                   autoComplete="one-time-code"
+                  inputMode="numeric"
+                  pattern="\d{6}"
                 />
                 <p className="text-xs text-muted-foreground mt-1">
                   Enter the 6-digit code from your authentication app
@@ -177,9 +197,9 @@ export function TwoFactorSetup({
               <Button 
                 type="submit" 
                 className="w-full" 
-                disabled={verifyLoading || verificationCode.length !== 6}
+                disabled={verification.isLoading || verification.code.length !== 6}
               >
-                {verifyLoading ? (
+                {verification.isLoading ? (
                   <>
                     <span className="mr-2 h-4 w-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
                     Verifying...
@@ -194,7 +214,7 @@ export function TwoFactorSetup({
                     variant="link" 
                     className="p-0 h-auto font-normal" 
                     onClick={() => setStep('setup')}
-                    disabled={verifyLoading}
+                    disabled={verification.isLoading}
                   >
                     &larr; Back to QR code
                   </Button>
@@ -207,7 +227,7 @@ export function TwoFactorSetup({
                     variant="link" 
                     className="p-0 h-auto font-normal" 
                     onClick={onRequestNewQR}
-                    disabled={verifyLoading}
+                    disabled={verification.isLoading}
                   >
                     Generate a new one
                   </Button>
@@ -219,7 +239,7 @@ export function TwoFactorSetup({
                     variant="link"
                     className="p-0 h-auto font-normal flex items-center"
                     onClick={onBack}
-                    disabled={verifyLoading}
+                    disabled={verification.isLoading}
                   >
                     <ArrowLeft className="mr-2 h-4 w-4" />
                     Back
