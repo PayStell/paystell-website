@@ -73,14 +73,12 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Update form data
     updateFormData({
       stellarAddress,
       acceptedAssets,
       paymentTypes: paymentTypesState,
     })
 
-    // Simulate API call
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000))
       toast.success("Payment settings saved", {

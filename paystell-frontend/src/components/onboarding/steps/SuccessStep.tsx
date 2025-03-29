@@ -13,7 +13,6 @@ interface SuccessStepProps {
 }
 
 export function SuccessStep({ formData }: SuccessStepProps) {
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
