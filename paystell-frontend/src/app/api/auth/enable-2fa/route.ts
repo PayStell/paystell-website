@@ -1,7 +1,9 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import * as OTPAuth from 'otpauth';
 import { authMiddleware } from '@/middleware/authMiddleware';
 import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
+import { MOCK_2FA } from '@/mocks/2fa';
+import { generateSecureSecret } from '@/utils/auth';
 
 /**
  * Enable Two-Factor Authentication
@@ -10,19 +12,21 @@ import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
  * Authentication is now required for this endpoint to ensure security.
  * Rate limiting is implemented to prevent brute force attacks.
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     // Apply rate limiting middleware first
-    const rateLimitResponse = await rateLimitMiddleware(request as any, 5, 60 * 1000);
+    const rateLimitResponse = await rateLimitMiddleware(request, 5, 60 * 1000);
     if (rateLimitResponse) return rateLimitResponse;
     
     // Apply authentication middleware
-    const authResponse = await authMiddleware(request as any);
+    const authResponse = await authMiddleware(request);
     if (authResponse) return authResponse;
     
     // Generate a secure random secret
     // In a real implementation, this would be stored securely with the user's profile
-    const secretBase32 = 'JBSWY3DPEHPK3PXP'; // In production, use a randomly generated secret
+    const secretBase32 = process.env.NODE_ENV === 'production' 
+      ? generateSecureSecret()
+      : MOCK_2FA.SECRET_KEY;
     
     try {
       // Create a secret from the base32 string

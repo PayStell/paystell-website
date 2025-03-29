@@ -1,7 +1,12 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import * as OTPAuth from 'otpauth';
 import { authMiddleware } from '@/middleware/authMiddleware';
 import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
+
+interface VerifySetupRequest {
+  token: string;
+  secret: string;
+}
 
 /**
  * Verify the 2FA token during initial setup
@@ -14,19 +19,19 @@ import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
  * - token: The 6-digit verification code
  * - secret: The secret provided during the enable-2fa step
  */
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     // Apply rate limiting middleware first
     // For verification, we use stricter rate limiting (3 attempts per minute)
-    const rateLimitResponse = await rateLimitMiddleware(request as any, 3, 60 * 1000);
+    const rateLimitResponse = await rateLimitMiddleware(request, 3, 60 * 1000);
     if (rateLimitResponse) return rateLimitResponse;
     
     // Apply authentication middleware
-    const authResponse = await authMiddleware(request as any);
+    const authResponse = await authMiddleware(request);
     if (authResponse) return authResponse;
     
     // Parse the request body
-    const body = await request.json();
+    const body: VerifySetupRequest = await request.json();
     const { token, secret } = body;
 
     // Validate the required parameters
