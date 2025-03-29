@@ -48,7 +48,7 @@ const LoadingSkeleton: React.FC<SkeletonProps> = ({
 
     case "chart":
       return (
-        <div className="flex items-end space-x-2 w-full h-40 animate-pulse">
+        <div className="flex items-end space-x-2 h-fit animate-pulse bg-gray-200 dark:bg-gray-700 rounded-md p-4 pt-6" style={{ width }}>
           {[...Array(9)].map((_, i) => (
             <div
               key={i}

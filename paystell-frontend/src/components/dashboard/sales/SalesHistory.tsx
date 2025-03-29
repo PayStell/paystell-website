@@ -15,10 +15,23 @@ import { useState, useEffect } from "react";
 
 const SalesHistory = () => {
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<null | string>("Failed to load data. Please try again.");
 
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 2000); // Simulating loading state
-    return () => clearTimeout(timer);
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        // Simulating loading state
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+      } catch (err) {
+        setError("Failed to load data. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchData();
   }, []);
 
   const chartData = [
@@ -41,6 +54,10 @@ const SalesHistory = () => {
       color: "#60a5fa",
     },
   } satisfies ChartConfig;
+
+  if (error) {
+    return <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">{error}</div>;
+  }
 
   return (
     <div className="mt-6 flex flex-col md:flex-row bg-card rounded-lg w-full p-8 gap-x-6">
