@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
 import React from "react";
 
 export interface CardData {
@@ -10,11 +11,16 @@ export interface CardData {
 
 interface CardsProps {
   data: CardData[];
+  loading: boolean;
 }
 
-const Cards: React.FC<CardsProps> = ({ data }) => {
+const Cards: React.FC<CardsProps> = ({ data, loading }) => {
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mt-10">
+      {loading &&
+        Array.from({ length: 4 }).map((_, i) => (
+          <LoadingSkeleton key={i} type="card" width="100%" height="160px" />
+        ))}
       {data.map((card, index) => (
         <Card key={index}>
           <CardHeader>
