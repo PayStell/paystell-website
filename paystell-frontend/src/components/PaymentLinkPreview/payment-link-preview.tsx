@@ -3,7 +3,8 @@
 import { useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
-import { Check, CreditCard, Loader2, Lock } from "lucide-react"
+import { FaCheck, FaCreditCard, FaLock } from "react-icons/fa"
+import { CgSpinner } from "react-icons/cg"
 import { Button } from "@/components/ui/button"
 import { SuccessMessage } from "./success-message"
 
@@ -64,7 +65,7 @@ export default function PaymentPreview({ product }: PaymentPreviewProps) {
                         <ul className="space-y-2">
                             {product.features.map((feature, index) => (
                                 <li key={index} className="flex items-center">
-                                    <Check className="h-5 w-5 text-green-500 mr-2" />
+                                    <FaCheck className="h-5 w-5 text-green-500 mr-2" />
                                     <span className="text-gray-600">{feature}</span>
                                 </li>
                             ))}
@@ -93,17 +94,17 @@ export default function PaymentPreview({ product }: PaymentPreviewProps) {
                     >
                         {isLoading ? (
                             <>
-                                <Loader2 className="mr-2 h-5 w-5 animate-spin" /> Processing...
+                                <CgSpinner className="mr-2 h-5 w-5 animate-spin" /> Processing...
                             </>
                         ) : (
                             <>
-                                <CreditCard className="mr-2 h-5 w-5" /> Pay ${total.toFixed(2)}
+                                <FaCreditCard className="mr-2 h-5 w-5" /> Pay ${total.toFixed(2)}
                             </>
                         )}
                     </Button>
 
                     <div className="flex items-center justify-center text-gray-500 text-sm mb-6">
-                        <Lock className="h-4 w-4 mr-1" /> Secure payment powered by PayStell
+                        <FaLock className="h-4 w-4 mr-1" /> Secure payment powered by PayStell
                     </div>
 
                     <div className="text-center text-gray-500 text-sm">

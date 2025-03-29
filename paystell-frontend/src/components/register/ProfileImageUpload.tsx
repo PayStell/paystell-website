@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { UploadCloud } from "lucide-react";
+import { MdCloudUpload } from "react-icons/md";
 import Image from 'next/image';
 
 interface ProfileImageUploadProps {
@@ -26,7 +26,7 @@ const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({
         type="button"
         className="absolute bottom-2 right-1/2 translate-x-1/2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition hover:scale-110"
       >
-        <UploadCloud className="w-5 h-5" />
+        <MdCloudUpload className="w-5 h-5" />
       </button>
       <input
         type="file"

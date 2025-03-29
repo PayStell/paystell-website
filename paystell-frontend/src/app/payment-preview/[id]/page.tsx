@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 import PaymentPreview, { type ProductData } from "@/components/PaymentLinkPreview/payment-link-preview"
 import Image from "next/image"
 

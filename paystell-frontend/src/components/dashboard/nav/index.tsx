@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { NavProps } from "./types";
+import type { NavProps } from "./types";
 import { MobileTrigger } from "./mobile-trigger";
 import { NavItem } from "./nav-item";
 import { navStyles } from "./styles";
@@ -19,10 +19,16 @@ export function Nav({
 
   return (
     <>
-      <MobileTrigger isOpen={isOpen} onToggle={() => onOpenChange(!isOpen)} />
+      <MobileTrigger open={isOpen} setOpen={onOpenChange} />
 
       {isOpen && (
-        <div className={navStyles.overlay} onClick={handleMobileNavClose} />
+        <div 
+          className={navStyles.overlay} 
+          onClick={handleMobileNavClose}
+          onKeyUp={(e) => e.key === "Escape" && handleMobileNavClose()}
+          role="button"
+          tabIndex={0}
+        />
       )}
 
       <nav

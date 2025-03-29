@@ -3,15 +3,15 @@ import React, { ReactNode, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  CheckCircle2,
-  Wallet,
-  Key,
-  Mail,
-  Loader2,
-  ChevronRight,
-  Shield,
-  AlertCircle,
-} from "lucide-react";
+  MdCheckCircle,
+  MdAccountBalanceWallet,
+  MdKey,
+  MdMail,
+  MdOutlineSync,
+  MdChevronRight,
+  MdShield,
+  MdWarning
+} from "react-icons/md";
 import {
   Dialog,
   DialogContent,
@@ -45,7 +45,7 @@ const VerificationStep = ({
 }: verificationStepProps) => {
   const getStepIcon = () => {
     if (status === "completed") {
-      return <CheckCircle2 className="w-4 h-4 text-green-foreground" />;
+      return <MdCheckCircle className="w-4 h-4 text-green-foreground" />;
     }
     return <span className="text-sm">{numberlabel}</span>;
   };
@@ -103,7 +103,7 @@ const WalletOption = ({
         <p className="text-sm text-card-foreground">Connect using {name}</p>
       </div>
     </div>
-    <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-muted-foreground/50 transition-colors" />
+    <MdChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-muted-foreground/50 transition-colors" />
   </button>
 );
 
@@ -156,7 +156,7 @@ const WalletVerification = () => {
     if (isLoading) {
       return (
         <Button disabled className="w-full">
-          <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...
+          <MdOutlineSync className="w-4 h-4 mr-2 animate-spin" /> Processing...
         </Button>
       );
     }
@@ -170,7 +170,7 @@ const WalletVerification = () => {
             >
               <DialogTrigger asChild>
                 <Button className="w-full">
-                  <Wallet className="w-4 h-4 mr-2" /> Connect Wallet
+                  <MdAccountBalanceWallet className="w-4 h-4 mr-2" /> Connect Wallet
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
@@ -185,17 +185,17 @@ const WalletVerification = () => {
                 <div className="mt-6">
                   <WalletOption
                     name="Stellar Wallet"
-                    icon={<Wallet className="w-5 h-5 text-blue-500" />}
+                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-blue-500" />}
                     onClick={() => selectWallet("Stellar Wallet")}
                   />
                   <WalletOption
                     name="Freighter"
-                    icon={<Wallet className="w-5 h-5 text-purple-500" />}
+                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-purple-500" />}
                     onClick={() => selectWallet("Freighter")}
                   />
                   <WalletOption
                     name="LOBSTR"
-                    icon={<Wallet className="w-5 h-5 text-orange-500" />}
+                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-orange-500" />}
                     onClick={() => selectWallet("LOBSTR")}
                   />
                   <p className="text-xs text-muted-foreground text-center mt-4">
@@ -212,13 +212,13 @@ const WalletVerification = () => {
             <Dialog open={isSignDialogOpen} onOpenChange={setIsSignDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="w-full">
-                  <Key className="w-4 h-4 mr-2" /> Sign Message
+                  <MdKey className="w-4 h-4 mr-2" /> Sign Message
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-blue-500" />
+                    <MdShield className="w-5 h-5 text-blue-500" />
                     <DialogTitle className="text-xl font-semibold">
                       Sign Message
                     </DialogTitle>
@@ -240,7 +240,7 @@ const WalletVerification = () => {
                   </div>
 
                   <div className="flex items-start gap-2 text-sm text-amber-foreground bg-amber p-3 rounded-lg">
-                    <AlertCircle className="w-4 h-4 mt-0.5" />
+                    <MdWarning className="w-4 h-4 mt-0.5" />
                     <p>
                       This signature request will not trigger any blockchain
                       transaction or incur any fees.
@@ -276,7 +276,7 @@ const WalletVerification = () => {
             onClick={() => mockProcess(STAGES.CONFIRMED)}
             className="w-full"
           >
-            <Mail className="w-4 h-4 mr-2" /> Check Email
+            <MdMail className="w-4 h-4 mr-2" /> Check Email
           </Button>
         );
       default:

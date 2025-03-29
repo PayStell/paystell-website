@@ -1,7 +1,9 @@
-import React, { useState, ChangeEvent, FormEvent } from "react";
+"use client";
+import { useState } from "react";
+import type { ChangeEvent, FormEvent } from "react";
 import { Input, Label, Textarea, Button } from "@/components/ui";
 import Image from "next/image";
-import { Edit } from "lucide-react";
+import { Edit2 } from "lucide-react";
 
 interface Errors {
   name?: string;
@@ -16,7 +18,7 @@ interface ProfileFormProps {
   }) => void;
 }
 
-const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit }) => {
+const ProfileForm = ({ onSubmit }: ProfileFormProps) => {
   const [name, setName] = useState<string>("");
   const [logo, setLogo] = useState<string | null>(null);
   const [description, setDescription] = useState<string>("");
@@ -65,7 +67,7 @@ const ProfileForm: React.FC<ProfileFormProps> = ({ onSubmit }) => {
               onClick={() => document.getElementById("logoInput")?.click()}
               className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full"
             >
-              <Edit />
+              <Edit2 />
             </button>
           </div>
           <input

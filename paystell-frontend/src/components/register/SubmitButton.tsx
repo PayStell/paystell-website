@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 
 export interface SubmitButtonProps {
   label: string;
+  disabled?: boolean;
 }
 
 const SubmitButton = React.forwardRef<HTMLButtonElement, SubmitButtonProps>(
