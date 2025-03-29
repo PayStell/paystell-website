@@ -42,6 +42,7 @@ export default function DashboardPage() {
         setLastBalance(1800);
       } catch (err) {
         setError("Failed to load data. Please try again.");
+        console.log(err)
       } finally {
         setLoading(false);
       }

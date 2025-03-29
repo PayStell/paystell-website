@@ -50,6 +50,7 @@ const SalesPage = () => {
       } catch (err) {
         setError("Failed to load sales data. Please try again.");
         setLoading(false);
+        console.log(err)
       }
     };
 
