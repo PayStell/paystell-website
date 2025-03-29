@@ -1,3 +1,4 @@
+
 import Header from "@/components/dashboard/sales/Header";
 import Cards from "@/components/dashboard/sales/Cards";
 import SalesHistory from "@/components/dashboard/sales/SalesHistory";
