@@ -26,9 +26,7 @@ const Balance = ({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base font-semibold text-gray-500">
-          {title}
-        </CardTitle>
+        <CardTitle className="text-base font-semibold">{title}</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="flex flex-row items-center gap-3">
@@ -38,9 +36,10 @@ const Balance = ({
           <BalanceStat balance={balance} lastBalance={lastBalance} />
         </div>
         <Button
-          className="mt-4 text-xs text-black font-semibold bg-slate-200"
+          className="mt-4 text-xs font-semibold"
           size={"sm"}
           onClick={handleWithdraw}
+          variant="secondary"
         >
           Withdraw
         </Button>

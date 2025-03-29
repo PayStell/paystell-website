@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react";
 import Activity, { UserActivity } from ".";
 
 const meta: Meta<typeof Activity> = {
-  title: "Shared/Activity",
+  title: "Dashboard/Dashboard/Activity",
   component: Activity,
   tags: ["autodocs"],
   argTypes: {

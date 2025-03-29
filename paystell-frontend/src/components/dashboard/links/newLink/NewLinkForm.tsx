@@ -49,7 +49,7 @@ const NewLinks: React.FC = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Form.Field className="grid" name="title">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Title
             </Form.Label>
             <Form.Control asChild>
@@ -61,14 +61,14 @@ const NewLinks: React.FC = () => {
               />
             </Form.Control>
             {errors.title && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.title.message}
               </p>
             )}
           </Form.Field>
 
           <Form.Field className="grid" name="currency">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Currency
             </Form.Label>
             <Form.Control asChild>
@@ -84,14 +84,14 @@ const NewLinks: React.FC = () => {
               </Select>
             </Form.Control>
             {errors.currency && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.currency.message}
               </p>
             )}
           </Form.Field>
 
           <Form.Field className="grid" name="price">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Price
             </Form.Label>
             <Form.Control asChild>
@@ -108,14 +108,14 @@ const NewLinks: React.FC = () => {
               />
             </Form.Control>
             {errors.price && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.price.message}
               </p>
             )}
           </Form.Field>
 
           <Form.Field className="grid" name="sku">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               SKU (Optional)
             </Form.Label>
             <Form.Control asChild>
@@ -129,7 +129,7 @@ const NewLinks: React.FC = () => {
           </Form.Field>
 
           <Form.Field className="grid" name="image">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Upload Image
             </Form.Label>
             <Form.Control asChild>
@@ -152,7 +152,7 @@ const NewLinks: React.FC = () => {
               />
             </Form.Control>
             {errors.image && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.image.message}
               </p>
             )}
