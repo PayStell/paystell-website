@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { 
@@ -13,7 +15,7 @@ import UserList from "@/components/admin/UserList";
 import WithAuth from "@/lib/middleware/withAuth";
 import { useAuth } from "@/lib/context/AuthContext";
 import { Permission, UserRole } from "@/lib/types/user";
-import { Shield } from "lucide-react";
+import { MdShield } from "react-icons/md";
 
 export default function AdminUsersPage() {
   const { user, isLoading } = useAuth();
@@ -34,7 +36,7 @@ export default function AdminUsersPage() {
       <div className="container mx-auto py-8 px-4">
         <div className="flex items-center gap-4 mb-8">
           <div className="bg-primary/10 p-3 rounded-full">
-            <Shield className="h-6 w-6 text-primary" />
+            <MdShield className="h-6 w-6 text-primary" />
           </div>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">User Management</h1>

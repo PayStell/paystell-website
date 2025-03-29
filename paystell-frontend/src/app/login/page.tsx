@@ -1,7 +1,9 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import Link from "next/link";
-import { Eye, EyeOff } from "lucide-react";
+import { MdVisibility, MdVisibilityOff, MdWarning } from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,7 +19,6 @@ import { useAuth } from "@/lib/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
 
 export default function LoginPage() {
   const { login, error: authError } = useAuth();
@@ -81,7 +82,7 @@ export default function LoginPage() {
           <CardContent className="space-y-4">
             {(error || authError) && (
               <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
+                <MdWarning className="h-4 w-4" />
                 <AlertTitle>Error</AlertTitle>
                 <AlertDescription>
                   {error || authError}
@@ -118,9 +119,9 @@ export default function LoginPage() {
                   onClick={toggleShowPassword}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
+                    <MdVisibilityOff className="h-4 w-4" />
                   ) : (
-                    <Eye className="h-4 w-4" />
+                    <MdVisibility className="h-4 w-4" />
                   )}
                   <span className="sr-only">
                     {showPassword ? "Hide password" : "Show password"}

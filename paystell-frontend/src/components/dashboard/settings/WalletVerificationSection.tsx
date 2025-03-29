@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+"use client";
+
+import { useState } from "react";
 import WalletVerification from "@/components/wallet/WalletVerification";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { CheckCircle2, XCircle, Wallet } from "lucide-react";
+import { MdCheckCircle, MdCancel, MdAccountBalanceWallet } from "react-icons/md";
 
 interface WalletVerificationSectionProps {
   walletAddress: string;
@@ -11,12 +13,12 @@ interface WalletVerificationSectionProps {
   onVerificationComplete?: () => void;
 }
 
-const WalletVerificationSection: React.FC<WalletVerificationSectionProps> = ({
+const WalletVerificationSection = ({
   walletAddress,
   isWalletVerified,
   isEmailVerified,
   onVerificationComplete,
-}) => {
+}: WalletVerificationSectionProps) => {
   const [isVerificationOpen, setIsVerificationOpen] = useState(false);
 
   return (
@@ -27,7 +29,7 @@ const WalletVerificationSection: React.FC<WalletVerificationSectionProps> = ({
         {/* Wallet Address Display */}
         <div className="flex items-center justify-between p-4 bg-button rounded-lg border">
           <div className="flex items-center gap-3">
-            <Wallet className="w-5 h-5" />
+            <MdAccountBalanceWallet className="w-5 h-5" />
             <div>
               <p className="text-sm text-foreground">Wallet Address</p>
               <p className="font-mono text-sm text-muted-foreground">
@@ -60,9 +62,9 @@ const WalletVerificationSection: React.FC<WalletVerificationSectionProps> = ({
           <div className="flex items-center justify-between p-4 bg-button rounded-lg border">
             <div className="flex items-center gap-3">
               {isEmailVerified ? (
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <MdCheckCircle className="w-5 h-5 text-green-500" />
               ) : (
-                <XCircle className="w-5 h-5 text-red-500" />
+                <MdCancel className="w-5 h-5 text-red-500" />
               )}
               <div>
                 <p className="font-medium">Email Verification</p>
@@ -76,9 +78,9 @@ const WalletVerificationSection: React.FC<WalletVerificationSectionProps> = ({
           <div className="flex items-center justify-between p-4 bg-button rounded-lg border">
             <div className="flex items-center gap-3">
               {isWalletVerified ? (
-                <CheckCircle2 className="w-5 h-5 text-green-500" />
+                <MdCheckCircle className="w-5 h-5 text-green-500" />
               ) : (
-                <XCircle className="w-5 h-5 text-red-500" />
+                <MdCancel className="w-5 h-5 text-red-500" />
               )}
               <div>
                 <p className="font-medium">Wallet Verification</p>

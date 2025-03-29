@@ -1,5 +1,7 @@
 "use client";
 
+export const dynamic = 'force-dynamic';
+
 import { Nav } from "@/components/dashboard/nav";
 import { dashboardNavItems } from "@/config/dashboard/nav";
 import { useState, useMemo, useEffect } from "react";
