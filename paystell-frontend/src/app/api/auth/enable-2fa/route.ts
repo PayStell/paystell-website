@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import * as OTPAuth from 'otpauth';
 import { authMiddleware } from '@/middleware/authMiddleware';
 import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
-import { MOCK_2FA } from '@/mocks/2fa';
+import { MOCK_2FA } from '@/mock/2fa';
 import { generateSecureSecret } from '@/utils/auth';
 
 /**
