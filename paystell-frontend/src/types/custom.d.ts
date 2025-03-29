@@ -232,7 +232,7 @@ declare module '@/components/ui/badge' {
 // FontAwesome declarations
 declare module '@fortawesome/react-fontawesome' {
   import type React from 'react';
-  import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+  import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
   
   export interface FontAwesomeIconProps {
     icon: IconDefinition;
@@ -245,14 +245,14 @@ declare module '@fortawesome/react-fontawesome' {
 }
 
 declare module '@fortawesome/free-solid-svg-icons' {
-  import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+  import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
   
   export const faSun: IconDefinition;
   export const faMoon: IconDefinition;
 }
 
 declare module '@fortawesome/free-brands-svg-icons' {
-  import { IconDefinition } from '@fortawesome/fontawesome-svg-core';
+  import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
   
   export const faXTwitter: IconDefinition;
 }
