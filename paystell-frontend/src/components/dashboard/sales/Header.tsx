@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Menubar, MenubarMenu, MenubarTrigger } from "@/components/ui/menubar";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon } from "lucide-react";
+import { MdCalendarMonth } from "react-icons/md";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -40,7 +40,7 @@ const Header = () => {
               !date && "bg-muted text-muted-foreground"
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <MdCalendarMonth className="mr-2 h-4 w-4" />
             {date ? format(date, "PPP") : <span>Pick a date</span>}
           </Button>
         </PopoverTrigger>

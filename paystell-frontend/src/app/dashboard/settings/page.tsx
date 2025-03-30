@@ -1,4 +1,7 @@
 "use client";
+
+export const dynamic = 'force-dynamic';
+
 import React, { useState } from "react";
 import ProfileForm from "@/components/dashboard/settings/ProfileForm";
 import WalletVerificationSection from "@/components/dashboard/settings/WalletVerificationSection";

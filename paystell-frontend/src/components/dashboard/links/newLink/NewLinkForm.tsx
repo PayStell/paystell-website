@@ -1,10 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Form from "@radix-ui/react-form";
 import Image from "next/image";
 import { Button, Input } from "@/components/ui";
-import { Select } from "@/components/ui/select";
 
 type FormData = {
   title: string;
@@ -14,7 +13,7 @@ type FormData = {
   image: File | null;
 };
 
-const NewLinks: React.FC = () => {
+const NewLinks = () => {
   const {
     register,
     handleSubmit,
@@ -72,16 +71,16 @@ const NewLinks: React.FC = () => {
               Currency
             </Form.Label>
             <Form.Control asChild>
-              <Select
-                className="mt-2"
+              <select
+                className="mt-2 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 {...register("currency", { required: "Currency is required" })}
               >
                 <option value="" disabled>
                   Select Currency
                 </option>
-                <option value="USD">XLM</option>
+                <option value="XLM">XLM</option>
                 <option value="USDC">USDC</option>
-              </Select>
+              </select>
             </Form.Control>
             {errors.currency && (
               <p className="text-destructive text-sm mt-1">
