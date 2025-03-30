@@ -8,12 +8,17 @@ import SubmitButton from "@/components/register/SubmitButton";
 import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import * as Dialog from "@radix-ui/react-dialog";
+import { UserRole } from "@/lib/types/user";
+import { Label } from "@/components/ui/label";
+import { useAuth } from "@/lib/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface FormData {
   businessName: string;
   password: string;
   confirmPassword: string;
   description: string;
+  role: UserRole;
   profilePicture: File | null;
 }
 
@@ -21,8 +26,17 @@ const RegisterForm = () => {
   const {
     register,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
-  } = useForm<FormData>();
+  } = useForm<FormData>({
+    defaultValues: {
+      role: UserRole.USER,
+    }
+  });
+
+  const { register: registerUser } = useAuth();
+  const router = useRouter();
   const [previewImage, setPreviewImage] = useState<string | undefined>(
     "/default-image.jpg",
   );
@@ -35,6 +49,7 @@ const RegisterForm = () => {
     title: "",
     description: "",
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleImageUpload = (file: File | null) => {
     if (file) {
@@ -48,7 +63,13 @@ const RegisterForm = () => {
     }
   };
 
-  const handleRegistration = (data: FormData) => {
+  const handleRoleChange = (value: UserRole) => {
+    setValue('role', value);
+  };
+
+  const currentRole = watch('role');
+
+  const handleRegistration = async (data: FormData) => {
     if (data.password !== data.confirmPassword) {
       setDialogState({
         open: true,
@@ -58,12 +79,39 @@ const RegisterForm = () => {
       return;
     }
 
-    console.log("Registering user:", data);
-    setDialogState({
-      open: true,
-      title: "Registration Successful",
-      description: "Your registration has been completed successfully.",
-    });
+    try {
+      setIsSubmitting(true);
+      
+      // Call register from auth context
+      await registerUser({
+        name: data.businessName,
+        businessName: data.businessName,
+        role: data.role,
+        // Add other fields as needed
+      }, data.password);
+      
+      // Success dialog
+      setDialogState({
+        open: true,
+        title: "Registration Successful",
+        description: "Your registration has been completed successfully.",
+      });
+      
+      // Redirect to dashboard after dialog is closed
+      setTimeout(() => {
+        router.push('/dashboard');
+      }, 2000);
+    } catch (error) {
+      console.error("Registration error:", error);
+      
+      setDialogState({
+        open: true,
+        title: "Registration Failed",
+        description: "There was an error during registration. Please try again.",
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -96,6 +144,19 @@ const RegisterForm = () => {
             })}
             error={errors.businessName?.message}
           />
+
+          <div className="space-y-2">
+            <Label htmlFor="role">Account Type</Label>
+            <select
+              id="role"
+              className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              value={currentRole}
+              onChange={(e) => handleRoleChange(e.target.value as UserRole)}
+            >
+              <option value={UserRole.USER}>User</option>
+              <option value={UserRole.MERCHANT}>Merchant</option>
+            </select>
+          </div>
 
           <FormField
             id="password"
@@ -130,7 +191,7 @@ const RegisterForm = () => {
             error={errors.description?.message}
           />
 
-          <SubmitButton label="Register" />
+          <SubmitButton label={isSubmitting ? "Registering..." : "Register"} disabled={isSubmitting} />
         </form>
 
         <Dialog.Root
@@ -146,6 +207,7 @@ const RegisterForm = () => {
               <Dialog.Description className="text-gray-700 mb-4">
                 {dialogState.description}
               </Dialog.Description>
+              {/* biome-ignore lint/a11y/useButtonType: <explanation> */}
               <button
                 className="w-full py-2 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
                 onClick={() => setDialogState({ ...dialogState, open: false })}

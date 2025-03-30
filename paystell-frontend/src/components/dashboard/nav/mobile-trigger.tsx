@@ -1,19 +1,24 @@
-import { Menu, X } from "lucide-react";
+import { MdMenu, MdClose } from "react-icons/md";
 import { navStyles } from "./styles";
 
 interface MobileTriggerProps {
-  isOpen: boolean;
-  onToggle: () => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
 }
 
-export function MobileTrigger({ isOpen, onToggle }: MobileTriggerProps) {
+export function MobileTrigger({ open, setOpen }: MobileTriggerProps) {
   return (
-    <button
-      onClick={onToggle}
+<button
+      type="button"
       className={navStyles.trigger}
-      aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+      onClick={() => setOpen(!open)}
+      aria-label={open ? "Close menu" : "Open menu"}
     >
-      {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+      {open ? (
+        <MdClose className="h-6 w-6" />
+      ) : (
+        <MdMenu className="h-6 w-6" />
+      )}
     </button>
   );
 }

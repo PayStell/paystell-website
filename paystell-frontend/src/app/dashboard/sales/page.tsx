@@ -1,4 +1,7 @@
 "use client";
+
+export const dynamic = 'force-dynamic';
+
 import Header from "@/components/dashboard/sales/Header";
 import Cards, { CardData } from "@/components/dashboard/sales/Cards";
 import SalesHistory from "@/components/dashboard/sales/SalesHistory";
@@ -50,12 +53,25 @@ const SalesPage = () => {
       } catch (err) {
         setError("Failed to load sales data. Please try again.");
         setLoading(false);
-        console.log(err)
+        console.log(err);
       }
     };
 
     fetchData();
   }, []);
+
+  return (
+    <div>
+      <Header />
+      <Cards data={cardData} loading={loading} />
+      {error && <p className="text-red-500">{error}</p>}
+      <SalesHistory />
+    </div>
+  );
+};
+
+export default SalesPage;
+
 
   return (
     <div className="py-10 px-8">

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Copy, Code } from "lucide-react";
+import { MdContentCopy, MdCode } from "react-icons/md";
 import { FaFacebook, FaWhatsapp, FaLinkedin } from "react-icons/fa";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXTwitter } from "@fortawesome/free-brands-svg-icons";
@@ -19,7 +19,7 @@ const PaymentLinkShare = () => {
     text: string,
     setMessage: (message: string) => void,
   ) => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
+    if (navigator?.clipboard?.writeText) {
       navigator.clipboard
         .writeText(text)
         .then(() => {
@@ -79,7 +79,7 @@ const PaymentLinkShare = () => {
             variant="default"
             onClick={() => copyToClipboard(Link, setLinkCopyMessage)}
           >
-            <Copy className="w-4 h-4" />
+            <MdContentCopy className="w-4 h-4" />
             <span>Copy Link</span>
           </Button>
           {linkCopyMessage && (
@@ -122,7 +122,7 @@ const PaymentLinkShare = () => {
             variant="default"
             onClick={() => copyToClipboard(embedCode, setEmbedCopyMessage)}
           >
-            <Code className="w-4 h-4" />
+            <MdCode className="w-4 h-4" />
             <span>Copy Embed Code</span>
           </Button>
           {embedCopyMessage && (

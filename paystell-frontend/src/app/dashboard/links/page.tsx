@@ -1,4 +1,7 @@
 "use client";
+
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from "react";
 import {
   PaymentLinkType,
@@ -9,8 +12,8 @@ import { NewLinkModal } from "@/components/dashboard/links/newLink/NewLinkModal"
 import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
 
 export default function PaymentLinkScreen(): JSX.Element {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [paymentLinksData, setPaymentLinksData] = useState<PaymentLinkType[]>(
     []
   );
