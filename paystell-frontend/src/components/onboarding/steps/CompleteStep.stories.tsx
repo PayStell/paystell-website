@@ -63,6 +63,7 @@ export const MinimalData: Story = {
       businessName: 'Small Business',
       businessType: 'Sole Proprietorship',
       stellarAddress: 'GACEHZFGDTCPOFVWVPXKFNWBCFCVVQZQRWEPGXQSJM2NCGDXVOW47SEN',
+      acceptedAssets: ['XLM', 'USDC', 'BTC'],
     },
   },
 };

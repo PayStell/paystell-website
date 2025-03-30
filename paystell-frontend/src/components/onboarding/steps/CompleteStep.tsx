@@ -11,6 +11,8 @@ interface FormData {
   businessType: string;
   stellarAddress: string;
   acceptedAssets: string[];
+  businessCategory?: string;
+  country?: string;
 }
 interface SuccessStepProps {
   formData: FormData;
