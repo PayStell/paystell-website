@@ -27,6 +27,56 @@ declare module 'lucide-react' {
   export const Search: LucideIcon;
   export const UserCheck: LucideIcon;
   export const AlertCircle: LucideIcon;
+  export const Info: LucideIcon;
+  export const Check: LucideIcon;
+  export const CheckCircle: LucideIcon;
+  export const X: LucideIcon;
+  export const XCircle: LucideIcon;
+  export const ArrowRight: LucideIcon;
+  export const CreditCard: LucideIcon;
+  export const Building2: LucideIcon;
+  export const User: LucideIcon;
+  export const Mail: LucideIcon;
+  export const Phone: LucideIcon;
+  export const MapPin: LucideIcon;
+  export const Calendar: LucideIcon;
+  export const Loader2: LucideIcon;
+  export const ChevronRight: LucideIcon;
+  export const ChevronLeft: LucideIcon;
+  export const Circle: LucideIcon;
+  export const CircleDot: LucideIcon;
+  export const Wallet: LucideIcon;
+  export const Building: LucideIcon;
+  export const FileText: LucideIcon;
+  export const CheckCircle2: LucideIcon;
+  export const AlertTriangle: LucideIcon;
+  export const HelpCircle: LucideIcon;
+  export const ExternalLink: LucideIcon;
+  export const Copy: LucideIcon;
+  export const CheckSquare: LucideIcon;
+  export const Square: LucideIcon;
+  export const Radio: LucideIcon;
+  export const Bell: LucideIcon;
+  export const BellOff: LucideIcon;
+  export const Menu: LucideIcon;
+  export const Close: LucideIcon;
+  export const MoreVertical: LucideIcon;
+  export const Share: LucideIcon;
+  export const Trash2: LucideIcon;
+  export const CalendarDays: LucideIcon;
+  export const Code: LucideIcon;
+  export const WalletCards: LucideIcon;
+  export const ChevronsLeft: LucideIcon;
+  export const ChevronsRight: LucideIcon;
+  export const LineChart: LucideIcon;
+  export const Upload: LucideIcon;
+  export const Key: LucideIcon;
+  export const Mail2: LucideIcon;
+  export const RefreshCw: LucideIcon;
+  export const Warning: LucideIcon;
+  export const Visibility: LucideIcon;
+  export const VisibilityOff: LucideIcon;
+  export const Globe: LucideIcon;
 }
 
 // For react-icons modules
@@ -193,6 +243,15 @@ declare module '@radix-ui/react-dialog' {
 declare module '@/components/ui/select' {
   import type React from 'react';
   
+  export const Select: React.FC<{
+    children?: React.ReactNode;
+    value?: string;
+    onValueChange?: (value: string) => void;
+    defaultValue?: string;
+    disabled?: boolean;
+    onOpenChange?: (open: boolean) => void;
+  }>;
+  
   export const SelectContent: React.FC<{
     children?: React.ReactNode;
     position?: string;
@@ -208,6 +267,7 @@ declare module '@/components/ui/select' {
   export const SelectTrigger: React.FC<{
     className?: string;
     children?: React.ReactNode;
+    id?: string;
   }>;
   
   export const SelectValue: React.FC<{
