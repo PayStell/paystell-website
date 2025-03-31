@@ -1,16 +1,15 @@
 import { Meta, StoryFn } from "@storybook/react";
 import Chart from "./Chart";
+import { ChartProps } from "./Chart";
 
 export default {
-  title: "Components/Chart",
+  title: "Dashboard/Sales/Chart",
   component: Chart,
   argTypes: {
     chartData: { control: "object" },
     chartConfig: { control: "object" },
   },
 } as Meta;
-
-import { ChartProps } from "./Chart";
 
 const Template: StoryFn<ChartProps> = (args) => <Chart {...args} />;
 

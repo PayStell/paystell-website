@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
-import {
-  ChevronLeft,
-  ChevronRight,
-  MoreVertical,
-  Share2,
-  Edit,
-  Trash2,
-} from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { 
+  MdChevronLeft, 
+  MdChevronRight,
+  MdMoreVert,
+  MdShare,
+  MdEdit,
+  MdDeleteOutline
+} from "react-icons/md";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -24,7 +24,30 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
+
+// Temporary Badge replacement until UI components are fixed
+const Badge = ({ 
+  children, 
+  variant = "default", 
+  className = "" 
+}: { 
+  children: ReactNode; 
+  variant?: string; 
+  className?: string;
+}) => {
+  const variantClasses = {
+    default: "bg-blue-100 text-blue-800",
+    destructive: "bg-red-100 text-red-800",
+    secondary: "bg-gray-100 text-gray-800",
+    outline: "border border-gray-200 text-gray-800"
+  };
+  
+  return (
+    <span className={`px-2.5 py-0.5 text-xs font-medium rounded-md inline-flex items-center ${variantClasses[variant as keyof typeof variantClasses]} ${className}`}>
+      {children}
+    </span>
+  );
+};
 
 export interface PaymentLinkType {
   id: number;
@@ -104,21 +127,21 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
               <TableCell className="text-center">
                 <div className="flex items-center justify-center gap-2">
                   <Button variant="ghost" size="icon">
-                    <Share2 className="h-4 w-4" />
+                    <MdShare className="h-4 w-4" />
                   </Button>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="ghost" size="icon">
-                        <MoreVertical className="h-4 w-4" />
+                        <MdMoreVert className="h-4 w-4" />
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
                       <DropdownMenuItem>
-                        <Edit className="h-4 w-4 mr-2" />
+                        <MdEdit className="h-4 w-4 mr-2" />
                         Edit
                       </DropdownMenuItem>
                       <DropdownMenuItem>
-                        <Trash2 className="h-4 w-4 mr-2 text-red-500" />
+                        <MdDeleteOutline className="h-4 w-4 mr-2 text-destructive" />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -137,14 +160,14 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
           onClick={() => paginate(currentPage - 1)}
           disabled={currentPage === 1}
         >
-          <ChevronLeft />
+          <MdChevronLeft />
         </Button>
         {[...Array(totalSteps)].map((_, index) => (
           <Button
-            key={index}
+            key={`page-${index + 1}`}
             variant={currentPage === index + 1 ? "default" : "outline"}
-            size="icon"
-            onClick={() => paginate(index + 1)}
+            className="w-8 h-8 p-0"
+            onClick={() => setCurrentPage(index + 1)}
           >
             {index + 1}
           </Button>
@@ -155,7 +178,7 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
           onClick={() => paginate(currentPage + 1)}
           disabled={currentPage === totalSteps}
         >
-          <ChevronRight />
+          <MdChevronRight />
         </Button>
       </div>
     </div>

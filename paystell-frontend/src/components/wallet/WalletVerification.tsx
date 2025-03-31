@@ -3,15 +3,15 @@ import React, { ReactNode, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import {
-  CheckCircle2,
-  Wallet,
-  Key,
-  Mail,
-  Loader2,
-  ChevronRight,
-  Shield,
-  AlertCircle,
-} from "lucide-react";
+  MdCheckCircle,
+  MdAccountBalanceWallet,
+  MdKey,
+  MdMail,
+  MdOutlineSync,
+  MdChevronRight,
+  MdShield,
+  MdWarning
+} from "react-icons/md";
 import {
   Dialog,
   DialogContent,
@@ -45,15 +45,15 @@ const VerificationStep = ({
 }: verificationStepProps) => {
   const getStepIcon = () => {
     if (status === "completed") {
-      return <CheckCircle2 className="w-4 h-4 text-green-500" />;
+      return <MdCheckCircle className="w-4 h-4 text-green-foreground" />;
     }
     return <span className="text-sm">{numberlabel}</span>;
   };
 
   const getStepStyle = () => {
-    if (status === "completed") return "bg-green-100";
+    if (status === "completed") return "bg-green";
     if (currentStep === numberlabel) return "bg-[#2196f3] text-white";
-    return "bg-gray-100 text-gray-400";
+    return "bg-secondary text-secondary-foreground";
   };
 
   return (
@@ -69,13 +69,13 @@ const VerificationStep = ({
             currentStep === numberlabel
               ? "text-blue-500"
               : status === "completed"
-                ? "text-gray-900"
-                : "text-gray-400"
+                ? "text-foreground"
+                : "text-secondary-foreground"
           }`}
         >
           {title}
         </h3>
-        <p className="text-gray-500 text-sm mt-1">{description}</p>
+        <p className="text-muted-foreground text-sm mt-1">{description}</p>
       </div>
     </div>
   );
@@ -92,18 +92,18 @@ const WalletOption = ({
 }) => (
   <button
     onClick={onClick}
-    className="w-full flex items-center justify-between p-4 hover:bg-gray-50 rounded-lg border border-gray-200 mb-3 group transition-colors"
+    className="w-full flex items-center justify-between p-4 bg-transparent text-secondary-foreground hover:bg-secondary/50 rounded-lg border border-border mb-3 group transition-colors"
   >
     <div className="flex items-center gap-3">
-      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center">
+      <div className="w-10 h-10 rounded-full bg-muted border-border flex items-center justify-center">
         {icon}
       </div>
       <div className="text-left">
-        <h3 className="font-medium text-gray-900">{name}</h3>
-        <p className="text-sm text-gray-500">Connect using {name}</p>
+        <h3 className="font-medium text-foreground">{name}</h3>
+        <p className="text-sm text-card-foreground">Connect using {name}</p>
       </div>
     </div>
-    <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition-colors" />
+    <MdChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-muted-foreground/50 transition-colors" />
   </button>
 );
 
@@ -156,7 +156,7 @@ const WalletVerification = () => {
     if (isLoading) {
       return (
         <Button disabled className="w-full">
-          <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processing...
+          <MdOutlineSync className="w-4 h-4 mr-2 animate-spin" /> Processing...
         </Button>
       );
     }
@@ -170,7 +170,7 @@ const WalletVerification = () => {
             >
               <DialogTrigger asChild>
                 <Button className="w-full">
-                  <Wallet className="w-4 h-4 mr-2" /> Connect Wallet
+                  <MdAccountBalanceWallet className="w-4 h-4 mr-2" /> Connect Wallet
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
@@ -178,27 +178,27 @@ const WalletVerification = () => {
                   <DialogTitle className="text-xl font-semibold">
                     Connect Your Wallet
                   </DialogTitle>
-                  <p className="text-gray-500 text-sm mt-1">
+                  <p className="text-card-foreground text-sm mt-1">
                     Choose a wallet to connect with our service
                   </p>
                 </DialogHeader>
                 <div className="mt-6">
                   <WalletOption
                     name="Stellar Wallet"
-                    icon={<Wallet className="w-5 h-5 text-blue-500" />}
+                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-blue-500" />}
                     onClick={() => selectWallet("Stellar Wallet")}
                   />
                   <WalletOption
                     name="Freighter"
-                    icon={<Wallet className="w-5 h-5 text-purple-500" />}
+                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-purple-500" />}
                     onClick={() => selectWallet("Freighter")}
                   />
                   <WalletOption
                     name="LOBSTR"
-                    icon={<Wallet className="w-5 h-5 text-orange-500" />}
+                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-orange-500" />}
                     onClick={() => selectWallet("LOBSTR")}
                   />
-                  <p className="text-xs text-gray-500 text-center mt-4">
+                  <p className="text-xs text-muted-foreground text-center mt-4">
                     By connecting a wallet, you agree to our Terms of Service
                   </p>
                 </div>
@@ -212,35 +212,35 @@ const WalletVerification = () => {
             <Dialog open={isSignDialogOpen} onOpenChange={setIsSignDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="w-full">
-                  <Key className="w-4 h-4 mr-2" /> Sign Message
+                  <MdKey className="w-4 h-4 mr-2" /> Sign Message
                 </Button>
               </DialogTrigger>
               <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <div className="flex items-center gap-2">
-                    <Shield className="w-5 h-5 text-blue-500" />
+                    <MdShield className="w-5 h-5 text-blue-500" />
                     <DialogTitle className="text-xl font-semibold">
                       Sign Message
                     </DialogTitle>
                   </div>
-                  <p className="text-gray-500 text-sm mt-1">
+                  <p className="text-card-foreground text-sm mt-1">
                     Verify ownership of your wallet by signing this message
                   </p>
                 </DialogHeader>
 
                 <div className="my-6 space-y-4">
-                  <div className="bg-gray-50 p-4 rounded-lg border border-gray-200">
-                    <h4 className="text-sm font-medium text-gray-700 mb-2">
+                  <div className="bg-muted p-4 rounded-lg border border-border">
+                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
                       Message to sign:
                     </h4>
-                    <p className="text-sm text-gray-600 font-mono bg-white p-3 rounded border border-gray-200">
+                    <p className="text-sm text-card-foreground font-mono bg-card p-3 rounded border border-border">
                       Verify wallet ownership for account registration at{" "}
                       {new Date().toISOString().split("T")[0]}
                     </p>
                   </div>
 
-                  <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 p-3 rounded-lg">
-                    <AlertCircle className="w-4 h-4 mt-0.5" />
+                  <div className="flex items-start gap-2 text-sm text-amber-foreground bg-amber p-3 rounded-lg">
+                    <MdWarning className="w-4 h-4 mt-0.5" />
                     <p>
                       This signature request will not trigger any blockchain
                       transaction or incur any fees.
@@ -276,7 +276,7 @@ const WalletVerification = () => {
             onClick={() => mockProcess(STAGES.CONFIRMED)}
             className="w-full"
           >
-            <Mail className="w-4 h-4 mr-2" /> Check Email
+            <MdMail className="w-4 h-4 mr-2" /> Check Email
           </Button>
         );
       default:
@@ -290,7 +290,7 @@ const WalletVerification = () => {
         <CardTitle className="text-2xl font-semibold">
           Wallet Verification
         </CardTitle>
-        <p className="text-gray-500 text-sm mt-2">
+        <p className="text-card-foreground text-sm mt-2">
           Complete these steps to verify your wallet
         </p>
       </CardHeader>

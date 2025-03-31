@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic';
+
 export default function MoneyPage() {
   return (
     <div className="flex min-h-screen flex-col p-8">

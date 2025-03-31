@@ -1,110 +1,134 @@
 # 🌟 Contributing Guide | PayStell
 
-We’re excited you’re interested in contributing! Please follow these steps to ensure a smooth and efficient collaboration process.
+## Welcome Contributors! 🚀
 
-🎉 Thank you for being interested in contributing to the PayStell project! 🎉
+We're thrilled you're interested in helping build PayStell! 🎉 Your passion and expertise can make a significant difference in our project's success. 👏
 
-Feel welcome and read the following sections in order to know how to ask questions and how to work on something.
+## Why Contribute? 💡
 
-Please make sure you are welcoming and friendly in all of our spaces.
+PayStell is an open-source project that thrives on community collaboration. By contributing, you:
+- Gain real-world development experience
+- Build your portfolio
+- Help solve interesting technical challenges
+- Connect with a global community of developers
 
-We're really glad you're reading this, because we need volunteer developers to help this project come to fruition. 👏
+## Contribution Workflow 🌊
 
-## 👨🏻‍💻 Issues
+### 1️⃣ Explore Open Issues 🔍
 
-The best way to contribute to our projects is to apply to the issues <a href="https://github.com/PayStell/paystell-website/issues" target="_blank">here</a> .
+- Visit our [GitHub Issues Page](https://github.com/PayStell/paystell-website/issues)
+- Look for issues tagged with:
+  - `good first issue` (perfect for new contributors)
+  - `help wanted`
+  - Match your skill level and interests
 
-PRs are not allowed; all PRs must originate from an assigned issue.
+### 2️⃣ Issue Application Guidelines 📝
 
+**What to Include in Your Issue Comment:**
+- Brief introduction about yourself
+- Your relevant skills
+- Proposed approach to solving the issue
+- Estimated time to complete
 
----
+**⚠️ Avoid Generic Comments:**
+- 🚫 "I want to help"
+- 🚫 "Can I work on this?"
+- 🚫 Vague or non-specific responses
 
-## 1️⃣ Fork the Repository
+**Important Note:** 
+- All Pull Requests must originate from an assigned issue
+- Direct PRs without issue assignment are not accepted
 
-- Click the **Fork** button in the top-right corner to create a copy of the repository under your account.
+### 3️⃣ Fork the Repository 🍴
 
----
+- Navigate to the PayStell repository
+- Click the **Fork** button in the top-right corner
+- Create a copy of the repository under your GitHub account
 
-## 2️⃣ Clone the Fork
+### 4️⃣ Clone Your Fork 💻
 
-- Clone the forked repository to your local machine by running the following command:
+```bash
+git clone https://github.com/YOUR_USERNAME/paystell-website.git
+```
+- Replace `YOUR_USERNAME` with your actual GitHub username
 
-   ```bash
-   git clone https://github.com/YOUR_USERNAME/REPOSITORY_NAME.git
-   ```
+### 5️⃣ Create a Branch 🌿
 
-- Replace `YOUR_USERNAME` and `REPOSITORY_NAME` with your GitHub username and the repository name.
+Branch Naming Conventions:
+```bash
+git checkout -b type/descriptive-name
+```
 
----
+Examples:
+- `feat/user-authentication`
+- `fix/login-bug`
+- `docs/update-readme`
+- `refactor/code-cleanup`
 
-## 3️⃣ Create a new branch or use the main branch
+### 6️⃣ Make Atomic Commits 🧩
 
-- Create a branch name based on the type of change (e.g., `feat/name-related-issue`, `docs/name-related-issue`).
+**Commit Message Format:**
+```bash
+git add path/file_name
+git commit -m "type: concise description of change"
+```
 
-   ```bash
-   git checkout -b branch-name
-   ```
+**Commit Types:**
+- `feat:` New feature
+- `fix:` Bug fix
+- `docs:` Documentation updates
+- `style:` Formatting changes
+- `refactor:` Code restructuring
+- `perf:` Performance improvements
+- `test:` Test-related changes
+- `build:` Build system updates
+- `ci:` CI configuration changes
+- `chore:` Maintenance tasks
 
-   > Example: `docs/update-readme` or `fix/bottom-bug`.
+**Commit Principles:**
+- Address a single, logical change
+- Write clear, descriptive messages
+- Avoid bundling unrelated changes
 
----
+### 7️⃣ Local Testing 🔬
 
-## 4️⃣ Make Changes and Write Atomic Commits
+- Set up the project locally
+- Run all relevant tests
+- Ensure your changes don't break existing functionality
+- Follow project-specific setup instructions
 
-- Make changes in your local repository
-- Follow **atomic commit principles**:
+### 8️⃣ Push Changes 🚀
 
-   - Each commit should address a single, logical change.
-   - Avoid bundling unrelated changes in a single commit. In case you want to add additional items, please ask the mainteiners first.
-   - Write clear and descriptive commit messages using the format:
+```bash
+git push origin your-branch-name
+```
 
-   ```bash
-   git add .
-   git commit -m "type: description"
-   ```
+### 9️⃣ Create a Pull Request 📤
 
-   > Types and when to use them:
+- Navigate to your forked repository
+- Click **New Pull Request**
+- Select your branch to merge into the main repository
+- Provide a detailed description of your changes
+- Link the related issue
 
-   - `feat:` A new feature
-   - `fix:` A bug fix
-   - `docs:` Documentation changes
-   - `style:` Changes that do not affect the meaning of the code (formatting, etc.)
-   - `refactor:` Code changes that neither fix a bug nor add a feature
-   - `perf:` Changes that improve performance
-   - `test:` Adding missing tests or correcting existing tests
-   - `build:` Changes that affect the build system or external dependencies
-   - `ci:` Changes to CI configuration files and scripts
-   - `chore:` Maintenance changes that do not fall into any of the other categories
+## Contribution Guidelines 📋
 
----
+**Code of Conduct:**
+- Be respectful and inclusive
+- Provide constructive feedback
+- Collaborate with a positive attitude
 
-## 5️⃣ Run the Project Locally
+**Technical Expectations:**
+- Follow existing code style and conventions
+- Write clean, documented code
+- Maintain high test coverage
+- Comment complex logic
 
-- Ensure the project runs correctly after making your changes.
-- Follow the project-specific setup instructions to test your changes locally.
+## Need Help? 🆘
 
----
+- Review project documentation
+- Check our [GitHub Issues](https://github.com/PayStell/paystell-website/issues)
+- Join our community discussions
+- Email: contributors@paystell.com
 
-## 6️⃣ Push Your Changes
-
-- Push your changes to your forked repository:
-
-   ```bash
-   git push origin your-branch-name
-   ```
-   > - Replace `your-branch-name` with the name of your branch.
----
-
-## 7️⃣ Create a Pull Request (PR)
-
-- Navigate to your forked repository on GitHub.
-- Click **New Pull Request** and select your branch to merge into the `main` of the original repository.
-
----
-
-## 📝 Additional Notes
-
-- Make sure your code adheres to the repository’s coding standards.
-- Respect the project maintainers' feedback and requested changes.
-
-Thank you for contributing! 🤝🏼
+**Thank you for helping make PayStell even better!** 🌈🤖

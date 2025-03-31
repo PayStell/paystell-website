@@ -1,10 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Form from "@radix-ui/react-form";
 import Image from "next/image";
 import { Button, Input } from "@/components/ui";
-import { Select } from "@/components/ui/select";
 
 type FormData = {
   title: string;
@@ -14,7 +13,7 @@ type FormData = {
   image: File | null;
 };
 
-const NewLinks: React.FC = () => {
+const NewLinks = () => {
   const {
     register,
     handleSubmit,
@@ -49,7 +48,7 @@ const NewLinks: React.FC = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <Form.Field className="grid" name="title">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Title
             </Form.Label>
             <Form.Control asChild>
@@ -61,37 +60,37 @@ const NewLinks: React.FC = () => {
               />
             </Form.Control>
             {errors.title && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.title.message}
               </p>
             )}
           </Form.Field>
 
           <Form.Field className="grid" name="currency">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Currency
             </Form.Label>
             <Form.Control asChild>
-              <Select
-                className="mt-2"
+              <select
+                className="mt-2 flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
                 {...register("currency", { required: "Currency is required" })}
               >
                 <option value="" disabled>
                   Select Currency
                 </option>
-                <option value="USD">XLM</option>
+                <option value="XLM">XLM</option>
                 <option value="USDC">USDC</option>
-              </Select>
+              </select>
             </Form.Control>
             {errors.currency && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.currency.message}
               </p>
             )}
           </Form.Field>
 
           <Form.Field className="grid" name="price">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Price
             </Form.Label>
             <Form.Control asChild>
@@ -108,14 +107,14 @@ const NewLinks: React.FC = () => {
               />
             </Form.Control>
             {errors.price && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.price.message}
               </p>
             )}
           </Form.Field>
 
           <Form.Field className="grid" name="sku">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               SKU (Optional)
             </Form.Label>
             <Form.Control asChild>
@@ -129,7 +128,7 @@ const NewLinks: React.FC = () => {
           </Form.Field>
 
           <Form.Field className="grid" name="image">
-            <Form.Label className="text-sm font-medium text-gray-800">
+            <Form.Label className="text-sm font-medium text-foreground">
               Upload Image
             </Form.Label>
             <Form.Control asChild>
@@ -152,7 +151,7 @@ const NewLinks: React.FC = () => {
               />
             </Form.Control>
             {errors.image && (
-              <p className="text-red-600 text-sm mt-1">
+              <p className="text-destructive text-sm mt-1">
                 {errors.image.message}
               </p>
             )}

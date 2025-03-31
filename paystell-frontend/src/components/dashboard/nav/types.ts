@@ -1,9 +1,12 @@
-import { LucideIcon } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
+import type { Permission, UserRole } from "@/lib/types/user";
 
 export interface NavItem {
   title: string;
   href: string;
   icon: LucideIcon;
+  requiredRoles?: UserRole[];
+  requiredPermissions?: Permission[];
 }
 
 export interface NavProps extends React.HTMLAttributes<HTMLElement> {

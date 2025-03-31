@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { CircleArrowDown, CircleChevronUp } from "lucide-react";
+import { MdKeyboardArrowDown, MdKeyboardArrowUp } from "react-icons/md";
 
 interface BalanceStatProps {
   balance: number;
@@ -17,15 +17,17 @@ const Balance = ({ balance, lastBalance }: BalanceStatProps) => {
   return (
     <div className="flex flex-row items-center">
       {diff < 0 ? (
-        <CircleArrowDown size={12} color="white" fill="red" strokeWidth={1} />
+        <MdKeyboardArrowDown size={12} style={{ color: "red" }} />
       ) : (
-        <CircleChevronUp size={12} color="white" fill="green" strokeWidth={1} />
+        <MdKeyboardArrowUp size={12} style={{ color: "green" }} />
       )}
       <span
-        className={`text-[10px] ${
-          diff < 0 ? "text-red-700" : "text-green-700"
+        className={`text-xs font-semibold ml-1 ${
+          diff < 0 ? "text-red-500" : "text-green-500"
         }`}
-      >{`${((diff / lastBalance) * 100).toFixed(2)}%`}</span>
+      >
+        {Math.abs(diff).toFixed(2)}
+      </span>
     </div>
   );
 };
