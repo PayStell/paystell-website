@@ -71,19 +71,3 @@ const SalesPage = () => {
 };
 
 export default SalesPage;
-
-
-  return (
-    <div className="py-10 px-8">
-      <Header />
-      {error ? (
-        <div className="text-red-400 font-bold text-center my-4 p-3 rounded-md shadow-md w-fit mx-auto">{error}</div>
-      ) : (
-        <Cards data={cardData} loading={loading} />
-      )}
-      <SalesHistory />
-    </div>
-  );
-};
-
-export default SalesPage;
