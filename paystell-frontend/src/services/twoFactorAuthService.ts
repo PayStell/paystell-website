@@ -6,11 +6,11 @@
 export const enableTwoFactorAuth = async (): Promise<{ qrCode: string, secret: string }> => {
   try {
     const token = localStorage.getItem('token');
-    
+
     if (!token) {
       throw new Error('Authentication required');
     }
-    
+
     const response = await fetch('/api/auth/enable-2fa', {
       method: 'POST',
       headers: {
@@ -20,6 +20,9 @@ export const enableTwoFactorAuth = async (): Promise<{ qrCode: string, secret: s
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many attempts. Please try again later.');
+      }
       const errorData = await response.json();
       throw new Error(errorData.message || 'Failed to enable 2FA');
     }
@@ -36,10 +39,49 @@ export const enableTwoFactorAuth = async (): Promise<{ qrCode: string, secret: s
 };
 
 /**
- * Verifies the 2FA token provided by the user
- * Note: Since there's no dedicated verification endpoint, we're assuming a custom endpoint
- * has been created for this purpose. In the backend, verification logic is handled in
- * validateTwoFactorAuthentication function, which is used during login-2fa.
+ * Verifies the 2FA token during the initial setup process
+ * Endpoint: /api/auth/verify-2fa-setup (POST)
+ * 
+ * @param token The 6-digit verification code
+ * @param secret The secret provided during the enable-2fa step
+ * @returns Promise resolving to success status
+ */
+export const verifyTwoFactorSetup = async (token: string, secret: string): Promise<boolean> => {
+  try {
+    const authToken = localStorage.getItem('token');
+    
+    if (!authToken) {
+      throw new Error('Authentication required');
+    }
+    
+    const response = await fetch('/api/auth/verify-2fa-setup', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ token, secret })
+    });
+    
+    if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many verification attempts. Please try again later.');
+      }
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Failed to verify 2FA code');
+    }
+    
+    const data = await response.json();
+    return data.success;
+  } catch (error) {
+    console.error('Error verifying 2FA setup:', error);
+    throw error;
+  }
+};
+
+/**
+ * Verifies the 2FA token provided by the user during login
+ * Endpoint: /api/auth/login-2fa (POST)
  * 
  * @param token The 6-digit verification code
  * @returns Promise resolving to success status
@@ -52,9 +94,8 @@ export const verifyTwoFactorCode = async (token: string): Promise<boolean> => {
       throw new Error('Authentication required');
     }
     
-    // This endpoint would need to be created in the backend
-    // Current backend only has this logic in the login-2fa endpoint
-    const response = await fetch('/api/auth/verify-2fa', {
+    // This endpoint is specifically for verifying during login process
+    const response = await fetch('/api/auth/login-2fa', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${authToken}`,
@@ -64,6 +105,9 @@ export const verifyTwoFactorCode = async (token: string): Promise<boolean> => {
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many verification attempts. Please try again later.');
+      }
       const errorData = await response.json();
       throw new Error(errorData.message || 'Failed to verify 2FA code');
     }
@@ -111,6 +155,9 @@ export const disableTwoFactorAuth = async (): Promise<{ message: string }> => {
     });
     
     if (!response.ok) {
+      if (response.status === 429) {
+        throw new Error('Too many attempts. Please try again later.');
+      }
       const errorData = await response.json();
       throw new Error(errorData.message || 'Failed to disable 2FA');
     }
