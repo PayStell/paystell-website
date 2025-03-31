@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { ImagePlus, X } from "lucide-react";
+import { X } from "lucide-react";
 import { type ProductTabProps, currencyOptions } from "./types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -27,12 +27,12 @@ import {
 
 export default function ProductTab({
   control,
-  errors,
   setValue,
   watch,
 }: ProductTabProps) {
   const [dragActive, setDragActive] = useState(false);
-  const productImage = watch("product.image");
+  const product = watch("product");
+  const productImage = "image" in product ? product.image : null;
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -164,10 +164,15 @@ export default function ProductTab({
         {productImage ? (
           <div className="relative w-full h-48 rounded-md overflow-hidden border">
             <img
-              src={productImage || "/placeholder.svg"}
+              src={
+                typeof productImage === "string"
+                  ? productImage
+                  : "/placeholder.svg"
+              }
               alt="Product"
               className="w-full h-full object-cover"
             />
+
             <Button
               variant="destructive"
               size="icon"
@@ -202,7 +207,6 @@ export default function ProductTab({
               htmlFor="product-image"
               className="cursor-pointer flex flex-col items-center justify-center h-full w-full"
             >
-              <ImagePlus className="h-10 w-10 text-muted-foreground mb-2" />
               <p className="text-sm text-muted-foreground">
                 Arrastre y suelte o haga clic para cargar
               </p>

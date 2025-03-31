@@ -3,7 +3,7 @@
 import type React from "react";
 
 import { useState } from "react";
-import { ImagePlus, X } from "lucide-react";
+import { X } from "lucide-react";
 import type { BrandingTabProps } from "./types";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -19,12 +19,13 @@ import {
 
 export default function BrandingTab({
   control,
-  errors,
   setValue,
   watch,
 }: BrandingTabProps) {
   const [dragActive, setDragActive] = useState(false);
-  const brandingLogo = watch("branding.logo");
+
+  const branding = watch("branding");
+  const brandingLogo = "image" in branding ? branding.image : null;
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -73,7 +74,11 @@ export default function BrandingTab({
         {brandingLogo ? (
           <div className="relative w-full h-24 rounded-md overflow-hidden border">
             <img
-              src={brandingLogo || "/placeholder.svg"}
+              src={
+                typeof brandingLogo === "string"
+                  ? brandingLogo
+                  : "/placeholder.svg"
+              }
               alt="Logo"
               className="w-full h-full object-contain"
             />
@@ -110,7 +115,6 @@ export default function BrandingTab({
               htmlFor="logo-image"
               className="cursor-pointer flex flex-col items-center justify-center h-full w-full"
             >
-              <ImagePlus className="h-8 w-8 text-muted-foreground mb-2" />
               <p className="text-sm text-muted-foreground">
                 Arrastre y suelte o haga clic para cargar
               </p>

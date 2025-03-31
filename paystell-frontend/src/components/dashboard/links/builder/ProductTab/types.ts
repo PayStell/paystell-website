@@ -2,10 +2,12 @@ import type { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { PaymentLinkFormValues } from "../schema/schema";
 
 export interface ProductTabProps {
-  control: Control<any>;
-  errors: FieldErrors;
+  control: Control<PaymentLinkFormValues>;
+  errors: FieldErrors<PaymentLinkFormValues>;
   setValue: UseFormSetValue<PaymentLinkFormValues>;
-  watch: (name: string) => any;
+  watch: (
+    name: keyof PaymentLinkFormValues
+  ) => PaymentLinkFormValues[keyof PaymentLinkFormValues];
 }
 
 export const currencyOptions = [
