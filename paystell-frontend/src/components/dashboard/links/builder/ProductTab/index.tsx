@@ -24,6 +24,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Image from "next/image";
 
 export default function ProductTab({
   control,
@@ -163,7 +164,7 @@ export default function ProductTab({
         <Label>Imagen del Producto</Label>
         {productImage ? (
           <div className="relative w-full h-48 rounded-md overflow-hidden border">
-            <img
+            <Image
               src={
                 typeof productImage === "string"
                   ? productImage

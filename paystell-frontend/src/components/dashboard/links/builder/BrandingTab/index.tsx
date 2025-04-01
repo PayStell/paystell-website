@@ -16,6 +16,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Image from "next/image";
 
 export default function BrandingTab({
   control,
@@ -73,7 +74,7 @@ export default function BrandingTab({
         <Label>Logo</Label>
         {brandingLogo ? (
           <div className="relative w-full h-24 rounded-md overflow-hidden border">
-            <img
+            <Image
               src={
                 typeof brandingLogo === "string"
                   ? brandingLogo

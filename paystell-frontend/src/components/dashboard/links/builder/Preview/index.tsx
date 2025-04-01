@@ -4,6 +4,7 @@ import { Lock } from "lucide-react";
 import type { PreviewProps } from "./types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 
 export default function Preview({ data, isMobile }: PreviewProps) {
   const { product, branding } = data;
@@ -24,7 +25,7 @@ export default function Preview({ data, isMobile }: PreviewProps) {
       <div className="p-4 border-b">
         {branding.logo && (
           <div className="mb-4 h-8">
-            <img
+            <Image
               src={branding.logo || "/placeholder.svg"}
               alt="Company Logo"
               className="h-full object-contain"
@@ -35,7 +36,7 @@ export default function Preview({ data, isMobile }: PreviewProps) {
         <div className="space-y-4">
           {product.image && (
             <div className="w-full aspect-video rounded-md overflow-hidden bg-muted">
-              <img
+              <Image
                 src={product.image || "/placeholder.svg"}
                 alt={product.title || "Product"}
                 className="w-full h-full object-cover"
