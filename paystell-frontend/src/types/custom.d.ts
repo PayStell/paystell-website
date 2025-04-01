@@ -77,6 +77,8 @@ declare module 'lucide-react' {
   export const Visibility: LucideIcon;
   export const VisibilityOff: LucideIcon;
   export const Globe: LucideIcon;
+  export const RotateCcw: LucideIcon;
+  export const Lock: LucideIcon;
 }
 
 // For react-icons modules

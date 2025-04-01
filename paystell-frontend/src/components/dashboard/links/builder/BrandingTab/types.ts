@@ -5,7 +5,7 @@ interface ProductForm {
     title: string;
     price: string;
     currency: string;
-    image: string;
+    image: string | null;
     description?: string;
     sku?: string;
   };
