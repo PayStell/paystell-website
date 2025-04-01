@@ -1,7 +1,7 @@
-import { SignJWT, jwtVerify } from 'jose';
+import jwt from 'jsonwebtoken';
 import { randomBytes, createCipheriv, createDecipheriv } from 'crypto';
 
-const JWT_SECRET = new TextEncoder().encode(process.env.JWT_SECRET || 'your-secret-key');
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 const ENCRYPTION_KEY = process.env.ENCRYPTION_KEY || 'your-encryption-key';
 const ALGORITHM = 'aes-256-gcm';
 const IV_LENGTH = 16;
@@ -54,18 +54,15 @@ export const decryptData = (encrypted: string): string => {
     return decrypted.toString('utf8');
 };
 
-export const generateJWT = async (payload: { publicKey: string }) => {
-    return await new SignJWT(payload)
-        .setProtectedHeader({ alg: 'HS256' })
-        .setIssuedAt()
-        .setExpirationTime('24h')
-        .sign(JWT_SECRET);
+export const generateJWT = (payload: { publicKey: string }): string => {
+    return jwt.sign(payload, JWT_SECRET, {
+        expiresIn: '24h'
+    });
 };
 
-export const verifyJWT = async (token: string) => {
+export const verifyJWT = (token: string): { publicKey: string } | null => {
     try {
-        const { payload } = await jwtVerify(token, JWT_SECRET);
-        return payload;
+        return jwt.verify(token, JWT_SECRET) as { publicKey: string };
     } catch (error) {
         return null;
     }
