@@ -1,10 +1,10 @@
 export interface ProductData {
   title: string;
-  description: string;
+  description?: string;
   price: string;
   currency: string;
   image: string | null;
-  sku: string;
+  sku?: string;
 }
 
 export interface BrandingData {
