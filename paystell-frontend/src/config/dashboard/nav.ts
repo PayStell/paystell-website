@@ -21,13 +21,13 @@ export const transactionNavItems = [
     title: "Payment Links",
     href: "/dashboard/links",
     icon: Link,
-    requiredPermissions: [Permission.CREATE_TRANSACTIONS],
+    requiredPermissions: [Permission.CREATE_PAYMENT],
   },
   {
     title: "Sales",
     href: "/dashboard/sales",
     icon: HandCoins,
-    requiredPermissions: [Permission.VIEW_TRANSACTIONS],
+    requiredPermissions: [Permission.VIEW_PAYMENTS],
   },
 ];
 
@@ -37,7 +37,7 @@ export const merchantNavItems = [
     title: "Store",
     href: "/dashboard/store",
     icon: ShoppingBag,
-    requiredPermissions: [Permission.MANAGE_STORE],
+    requiredPermissions: [Permission.MANAGE_MERCHANT],
   },
 ];
 
@@ -48,14 +48,14 @@ export const adminNavItems = [
     href: "/admin/users",
     icon: Users,
     requiredRoles: [UserRole.ADMIN],
-    requiredPermissions: [Permission.MANAGE_ROLES],
+    requiredPermissions: [Permission.MANAGE_USERS],
   },
   {
     title: "Security",
     href: "/admin/security",
     icon: ShieldCheck,
     requiredRoles: [UserRole.ADMIN],
-    requiredPermissions: [Permission.MANAGE_SYSTEM],
+    requiredPermissions: [Permission.MANAGE_SETTINGS],
   },
 ];
 

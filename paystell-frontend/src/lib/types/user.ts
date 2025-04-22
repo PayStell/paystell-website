@@ -2,60 +2,31 @@
  * User role types for role-based access control
  */
 export enum UserRole {
-  ADMIN = 'admin',
-  MERCHANT = 'merchant',
-  USER = 'user',
+  USER = "USER",
+  MERCHANT = "MERCHANT",
+  ADMIN = "ADMIN",
 }
 
 /**
  * Permissions available for role-based access control
  */
 export enum Permission {
-  // User management permissions
-  VIEW_USERS = 'view_users',
-  CREATE_USERS = 'create_users',
-  EDIT_USERS = 'edit_users', 
-  DELETE_USERS = 'delete_users',
-  
-  // Transaction permissions
-  VIEW_TRANSACTIONS = 'view_transactions',
-  CREATE_TRANSACTIONS = 'create_transactions',
-  
-  // Merchant permissions
-  MANAGE_STORE = 'manage_store',
-  VIEW_ANALYTICS = 'view_analytics',
-  
-  // Admin permissions
-  MANAGE_SYSTEM = 'manage_system',
-  MANAGE_ROLES = 'manage_roles',
+  CREATE_PAYMENT = "create_payment",
+  VIEW_PAYMENTS = "view_payments",
+  MANAGE_MERCHANT = "manage_merchant",
+  MANAGE_USERS = "manage_users",
+  VIEW_REPORTS = "view_reports",
+  MANAGE_SETTINGS = "manage_settings",
+  MANAGE_ROLES = "manage_roles",
 }
 
 /**
  * Role definitions with associated permissions
  */
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
-  [UserRole.ADMIN]: [
-    Permission.VIEW_USERS,
-    Permission.CREATE_USERS,
-    Permission.EDIT_USERS,
-    Permission.DELETE_USERS,
-    Permission.VIEW_TRANSACTIONS,
-    Permission.CREATE_TRANSACTIONS,
-    Permission.MANAGE_STORE,
-    Permission.VIEW_ANALYTICS,
-    Permission.MANAGE_SYSTEM,
-    Permission.MANAGE_ROLES,
-  ],
-  [UserRole.MERCHANT]: [
-    Permission.VIEW_TRANSACTIONS,
-    Permission.CREATE_TRANSACTIONS,
-    Permission.MANAGE_STORE,
-    Permission.VIEW_ANALYTICS,
-  ],
-  [UserRole.USER]: [
-    Permission.VIEW_TRANSACTIONS,
-    Permission.CREATE_TRANSACTIONS,
-  ],
+  [UserRole.USER]: [Permission.CREATE_PAYMENT, Permission.VIEW_PAYMENTS],
+  [UserRole.MERCHANT]: [Permission.CREATE_PAYMENT, Permission.VIEW_PAYMENTS, Permission.MANAGE_MERCHANT, Permission.VIEW_REPORTS],
+  [UserRole.ADMIN]: [Permission.CREATE_PAYMENT, Permission.VIEW_PAYMENTS, Permission.MANAGE_MERCHANT, Permission.MANAGE_USERS, Permission.VIEW_REPORTS, Permission.MANAGE_SETTINGS, Permission.MANAGE_ROLES],
 };
 
 /**
@@ -67,6 +38,7 @@ export interface User {
   name: string;
   role: UserRole;
   businessName?: string;
+  description?: string;
   profileImage?: string;
   twoFactorEnabled: boolean;
 } 

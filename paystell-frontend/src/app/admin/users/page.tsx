@@ -31,7 +31,7 @@ export default function AdminUsersPage() {
   return (
     <WithAuth 
       requiredRoles={[UserRole.ADMIN]}
-      requiredPermissions={[Permission.VIEW_USERS, Permission.MANAGE_ROLES]}
+      requiredPermissions={[Permission.MANAGE_USERS, Permission.MANAGE_ROLES]}
     >
       <div className="container mx-auto py-8 px-4">
         <div className="flex items-center gap-4 mb-8">
