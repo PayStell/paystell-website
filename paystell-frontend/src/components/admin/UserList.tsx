@@ -20,7 +20,7 @@ import {
 import { Button } from "@/components/ui/button";
 import type { User } from "@/lib/types/user";
 import { UserRole } from "@/lib/types/user";
-import { useAuth } from "@/lib/context/AuthContext";
+import { useAuth } from "@/providers/AuthProvider";
 import { Edit2, Search, UserCheck } from "lucide-react";
 import { Input } from "@/components/ui/input";
 
@@ -82,7 +82,7 @@ const MOCK_USERS: User[] = [
 ];
 
 export default function UserList() {
-  const { updateUserRole } = useAuth();
+  const { } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
@@ -108,7 +108,7 @@ export default function UserList() {
 
   const handleRoleChange = async (userId: string, newRole: UserRole) => {
     try {
-      await updateUserRole(userId, newRole);
+      // await updateUserRole(userId, newRole);
       
       // Update local state
       setUsers(users.map(user => 
