@@ -3,21 +3,20 @@
 import React, { useState } from "react";
 import ProfileImageUpload from "@/components/register/ProfileImageUpload";
 import FormField from "@/components/register/FormField";
-import DescriptionField from "@/components/register/DescriptionField";
 import SubmitButton from "@/components/register/SubmitButton";
 import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import * as Dialog from "@radix-ui/react-dialog";
 import { UserRole } from "@/lib/types/user";
-import { Label } from "@/components/ui/label";
-import { useAuth } from "@/lib/context/AuthContext";
+import { Label as UILabel } from "@/components/ui/label";
+import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 
 interface FormData {
   businessName: string;
+  email: string;
   password: string;
   confirmPassword: string;
-  description: string;
   role: UserRole;
   profilePicture: File | null;
 }
@@ -32,6 +31,7 @@ const RegisterForm = () => {
   } = useForm<FormData>({
     defaultValues: {
       role: UserRole.USER,
+      email: "",
     }
   });
 
@@ -82,13 +82,8 @@ const RegisterForm = () => {
     try {
       setIsSubmitting(true);
       
-      // Call register from auth context
-      await registerUser({
-        name: data.businessName,
-        businessName: data.businessName,
-        role: data.role,
-        // Add other fields as needed
-      }, data.password);
+      // Call register from auth context with role
+      await registerUser(data.businessName, data.email, data.password, data.role);
       
       // Success dialog
       setDialogState({
@@ -137,16 +132,31 @@ const RegisterForm = () => {
 
           <FormField
             id="businessName"
-            label="Business Name"
-            placeholder="Business Name"
+            label="Name"
+            placeholder="Name"
             register={register("businessName", {
-              required: "Business name is required",
+              required: "Name is required",
             })}
             error={errors.businessName?.message}
           />
 
+          <FormField
+            id="email"
+            label="Email"
+            placeholder="Enter your email"
+            type="email"
+            register={register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+                message: "Invalid email format",
+              },
+            })}
+            error={errors.email?.message}
+          />
+
           <div className="space-y-2">
-            <Label htmlFor="role">Account Type</Label>
+            <UILabel htmlFor="role">Account Type</UILabel>
             <select
               id="role"
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -182,13 +192,6 @@ const RegisterForm = () => {
               required: "Please confirm your password",
             })}
             error={errors.confirmPassword?.message}
-          />
-
-          <DescriptionField
-            register={register("description", {
-              required: "Description is required",
-            })}
-            error={errors.description?.message}
           />
 
           <SubmitButton label={isSubmitting ? "Registering..." : "Register"} disabled={isSubmitting} />
