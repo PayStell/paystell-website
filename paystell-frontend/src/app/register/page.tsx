@@ -13,7 +13,7 @@ const RegisterPage = () => {
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-background">
-      {false ? (
+      {isVerified ? (
         <EmailVerificationForm onSuccess={handleVerificationSuccess} />
       ) : (
         <RegisterForm />
