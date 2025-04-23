@@ -20,7 +20,7 @@ const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({
           alt="Profile Preview"
           width={160}
           height={160}
-          className="rounded-full mb-4 object-cover border"
+          className="rounded-full mb-4 object-cover border aspect-square"
         />
       <button
         type="button"

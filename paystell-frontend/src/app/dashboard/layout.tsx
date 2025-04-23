@@ -7,10 +7,10 @@ import { dashboardNavItems } from "@/config/dashboard/nav";
 import { useState, useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/dashboard/nav/Logo";
-import { useAuth } from "@/lib/context/AuthContext";
+import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import type { NavItem } from "@/components/dashboard/nav/types";
-import type { Permission } from "@/lib/types/user";
+import type { Permission, UserRole } from "@/lib/types/user";
 
 export default function DashboardLayout({
   children,
@@ -40,7 +40,7 @@ export default function DashboardLayout({
 
       // Check role requirements
       const hasRequiredRole = !item.requiredRoles || 
-        item.requiredRoles.includes(user.role);
+        item.requiredRoles.includes(user.role as UserRole);
 
       // Check permission requirements
       const hasRequiredPermissions = !item.requiredPermissions || 

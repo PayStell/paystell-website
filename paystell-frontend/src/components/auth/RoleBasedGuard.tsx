@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { useAuth } from "@/lib/context/AuthContext";
+import { useAuth } from "@/providers/AuthProvider";
 import type { Permission, UserRole } from "@/lib/types/user";
 
 interface RoleBasedGuardProps {
@@ -47,7 +47,7 @@ export function RoleBasedGuard({
 
   // Check for required roles (if any)
   const hasRequiredRole = requiredRoles.length === 0 || 
-    requiredRoles.includes(user.role);
+    requiredRoles.includes(user.role as UserRole);
 
   // Check for required permissions (if any)
   const hasRequiredPermissions = requiredPermissions.length === 0 || 
