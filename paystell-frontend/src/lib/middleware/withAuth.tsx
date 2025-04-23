@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { useAuth } from "@/lib/context/AuthContext";
+import { useAuth } from "@/providers/AuthProvider";
 import type { Permission, UserRole } from "@/lib/types/user";
 
 interface WithAuthProps {
@@ -42,7 +42,7 @@ export default function WithAuth({
 
     // Check for required roles
     const hasRequiredRole = requiredRoles.length === 0 || 
-      requiredRoles.includes(user.role);
+      requiredRoles.includes(user.role as UserRole);
 
     // Check for required permissions
     const hasRequiredPermissions = requiredPermissions.length === 0 || 
@@ -69,7 +69,7 @@ export default function WithAuth({
   }
 
   // Check role and permissions
-  const hasRequiredRole = requiredRoles.length === 0 || requiredRoles.includes(user.role);
+  const hasRequiredRole = requiredRoles.length === 0 || requiredRoles.includes(user.role as UserRole);
   const hasRequiredPermissions = requiredPermissions.length === 0 || 
     requiredPermissions.every(permission => hasPermission(permission));
 
