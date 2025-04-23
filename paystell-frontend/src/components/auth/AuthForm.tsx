@@ -5,7 +5,7 @@ import * as z from 'zod';
 
 interface AuthFormProps {
   type: 'login' | 'register';
-  onSubmit: (data: any) => Promise<void>;
+  onSubmit: (data: FormData) => Promise<void>;
   error?: string;
 }
 
