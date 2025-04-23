@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card";
 import UserList from "@/components/admin/UserList";
 import WithAuth from "@/lib/middleware/withAuth";
-import { useAuth } from "@/lib/context/AuthContext";
+import { useAuth } from "@/providers/AuthProvider";
 import { Permission, UserRole } from "@/lib/types/user";
 import { MdShield } from "react-icons/md";
 
