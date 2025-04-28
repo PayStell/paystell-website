@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Balance from "@/components/dashboard/balance";
 import Activity, { UserActivity } from "@/components/dashboard/activity";
 import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
+import { StellarAnalytics } from "@/components/dashboard/analytics/StellarAnalytics";
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
@@ -69,6 +70,11 @@ export default function DashboardPage() {
         ) : (
           <Activity data={activityData} />
         )}
+      </div>
+      
+      {/* Stellar Analytics Section */}
+      <div className="mt-8">
+          <StellarAnalytics />
       </div>
     </main>
   );
