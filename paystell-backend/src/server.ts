@@ -2,6 +2,7 @@ import 'reflect-metadata'; // Required for TypeORM
 import dotenv from 'dotenv';
 import app from './app';
 import { initializeDatabase } from './utils/database';
+import { setupSwagger } from './utils/swagger';
 
 // Load environment variables
 dotenv.config();
@@ -13,10 +14,13 @@ async function startServer() {
   try {
     // Initialize database connection
     await initializeDatabase();
+
+    setupSwagger(app);
     
     // Start Express server
     app.listen(PORT, () => {
       console.log(`Server running on port ${PORT}`);
+      console.log('Swagger docs available at http://localhost:3000/api-docs');
     });
   } catch (error) {
     console.error('Failed to start server:', error);
