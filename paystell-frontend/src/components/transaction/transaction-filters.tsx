@@ -22,7 +22,6 @@ interface TransactionFiltersProps {
 
 export function TransactionFilters({ filters, onFilterChange, isLoading }: TransactionFiltersProps) {
     const [localFilters, setLocalFilters] = useState<TransactionFilter>(filters)
-    const [isAdvancedOpen, setIsAdvancedOpen] = useState(false)
     const [activeFilterCount, setActiveFilterCount] = useState(0)
 
     // Update local filters when props change
