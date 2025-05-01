@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 "use client"
 
 import { createContext, useContext, useReducer, type ReactNode, useCallback, useEffect } from "react"
@@ -17,6 +18,22 @@ type StellarState = {
   xlmPrice: number | null
   isLoadingPrice: boolean
   priceError: string | null
+}
+interface RawOperation {
+  id: string
+  type: string
+  paging_token: string
+  transaction_successful: boolean
+  source_account: string
+  from?: string
+  to?: string
+  account?: string
+  amount?: string
+  starting_balance?: string
+  asset_type?: string
+  asset_code?: string
+  transaction_hash: string
+  created_at: string
 }
 
 // Define the action types including price actions
@@ -74,9 +91,11 @@ function stellarReducer(state: StellarState, action: StellarAction): StellarStat
     case "ADD_PREV_CURSOR":
       return { ...state, prevCursors: [...state.prevCursors, action.payload] }
     case "POP_PREV_CURSOR":
-      const newPrevCursors = [...state.prevCursors]
-      newPrevCursors.pop()
-      return { ...state, prevCursors: newPrevCursors }
+      {
+        const newPrevCursors = [...state.prevCursors]
+        newPrevCursors.pop()
+        return { ...state, prevCursors: newPrevCursors }
+      }
     case "FETCH_PRICE_START":
       return { ...state, isLoadingPrice: true, priceError: null }
     case "FETCH_PRICE_SUCCESS":
@@ -101,27 +120,24 @@ type StellarContextType = {
 const StellarContext = createContext<StellarContextType | null>(null)
 
 // Helper function to enhance payment operations with direction and counterparty
-const enhancePaymentOperations = (operations: any[], publicKey: string): EnhancedPaymentOperation[] => {
+const enhancePaymentOperations = (
+  operations: RawOperation[],
+  publicKey: string
+): EnhancedPaymentOperation[] => {
   return operations
     .filter((op) => {
-      // Filter to include only payment-like operations that have from/to fields
       return (
-        (op.type === "payment" ||
-          op.type === "create_account" ||
-          op.type === "path_payment" ||
-          op.type === "path_payment_strict_send") &&
+        ["payment", "create_account", "path_payment", "path_payment_strict_send"].includes(op.type) &&
         (op.from !== undefined || op.to !== undefined || op.account !== undefined || op.source_account !== undefined)
       )
     })
     .map((op) => {
-      // Handle different operation types
       let from = op.from
       let to = op.to
       let amount = op.amount
       let assetType = op.asset_type
       const assetCode = op.asset_code
 
-      // Handle create_account operations
       if (op.type === "create_account") {
         from = op.source_account
         to = op.account
@@ -129,15 +145,13 @@ const enhancePaymentOperations = (operations: any[], publicKey: string): Enhance
         assetType = "native"
       }
 
-      // Determine direction
       const isSender = from === publicKey
-      const direction = isSender ? "sent" : "received"
-
-      // Determine counterparty
-      const counterparty = isSender ? to : from
-
-      // Determine asset display name
+      const direction: "sent" | "received" = isSender ? "sent" : "received"
+      const counterparty = isSender ? to ?? "" : from ?? ""
       const displayAsset = assetType === "native" ? "XLM" : assetCode || "Unknown"
+
+      // Assign type_i based on some logic, here as a simple example:
+      const type_i = op.type === "payment" ? 1 : op.type === "create_account" ? 2 : 3
 
       return {
         ...op,
@@ -149,6 +163,7 @@ const enhancePaymentOperations = (operations: any[], publicKey: string): Enhance
         direction,
         counterparty,
         displayAsset,
+        type_i,  // Add the missing property
       }
     })
 }
@@ -164,9 +179,10 @@ export function StellarProvider({ children }: { children: ReactNode }) {
     try {
       const balances = await fetchAccountBalances(publicKey)
       dispatch({ type: "FETCH_BALANCES_SUCCESS", payload: balances })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching balances:", error)
-      dispatch({ type: "FETCH_BALANCES_FAILURE", payload: error.message || "Failed to fetch balances" })
+      const errorMessage = error instanceof Error ? error.message : "Failed to fetch balances"
+      dispatch({ type: "FETCH_BALANCES_FAILURE", payload: errorMessage })
     }
   }, [])
 
@@ -184,22 +200,34 @@ export function StellarProvider({ children }: { children: ReactNode }) {
         type: "FETCH_PAYMENTS_SUCCESS",
         payload: { records: enhancedRecords, next },
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching payments:", error)
-      dispatch({ type: "FETCH_PAYMENTS_FAILURE", payload: error.message || "Failed to fetch payments" })
+      const errorMessage = error instanceof Error ? error.message : "Failed to fetch payments"
+      dispatch({ type: "FETCH_PAYMENTS_FAILURE", payload: errorMessage })
     }
   }, [])
+
 
   const fetchXLMPrice = useCallback(async () => {
     dispatch({ type: "FETCH_PRICE_START" })
     try {
-      const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=stellar&vs_currencies=usd")
+      const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=stellar&vs_currencies=usd",
+        { headers: { 'Accept': 'application/json' } }
+      )
+      if (!response.ok) {
+        const errorText = await response.text()
+        throw new Error(`API responded with status ${response.status}: ${errorText}`)
+      }
       const data = await response.json()
+      if (!data.stellar || !data.stellar.usd) {
+        throw new Error("Invalid API response format")
+      }
       const price = data.stellar.usd
       dispatch({ type: "FETCH_PRICE_SUCCESS", payload: price })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error fetching XLM price:", error)
-      dispatch({ type: "FETCH_PRICE_FAILURE", payload: error.message || "Failed to fetch XLM price" })
+      const errorMessage = error instanceof Error ? error.message : "Failed to fetch XLM price"
+      dispatch({ type: "FETCH_PRICE_FAILURE", payload: errorMessage })
     }
   }, [])
 

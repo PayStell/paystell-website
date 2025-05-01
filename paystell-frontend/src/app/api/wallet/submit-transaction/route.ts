@@ -3,6 +3,7 @@ import { NextResponse } from "next/server"
 const HORIZON_URL = "https://horizon-testnet.stellar.org"
 
 export async function POST(request: Request) {
+  let errorMessage = "Unknown error";
   try {
     const { signedXdr } = await request.json()
 
@@ -51,15 +52,20 @@ export async function POST(request: Request) {
       hash: result.hash,
       ledger: result.ledger,
     })
-  } catch (error: any) {
-    console.error("Error submitting transaction:", error)
+  } catch (error) {
+    if (error instanceof Error) {
+      errorMessage = error.message;
+      console.error("Error submitting transaction:", error.message);
+    } else {
+      console.error("Error submitting transaction:", error);
+    }
 
     return NextResponse.json(
       {
         error: "Failed to submit transaction",
-        message: error.message || "Unknown error",
+        message: errorMessage,
       },
       { status: 500 },
-    )
+    );
   }
 }

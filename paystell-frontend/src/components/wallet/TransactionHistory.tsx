@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { ExternalLink, ChevronLeft, ChevronRight,  ArrowRight, ArrowLeft } from "lucide-react"
 import { useWallet } from "@/providers/useWalletProvider"
 import { useStellar } from "@/hooks/use-wallet"
-import { formatDate, truncateAddress } from "@/lib/utils"
+import { formatDate, formatAddress } from "@/lib/utils"
 
 export default function TransactionHistory() {
   const { state: walletState } = useWallet()
@@ -56,12 +56,12 @@ export default function TransactionHistory() {
           </thead>
           <tbody>
             {payments.map((payment) => {
-              const txDate = payment.transaction?.created_at || payment.created_at || "Unknown"
+              const txDate = payment.created_at || "Unknown"
 
               return (
                 <tr key={payment.id} className="border-b hover:bg-muted/50">
                   <td className="px-4 py-3 font-medium">
-                    {payment.amount ? Number(payment.amount).toFixed(2) : "N/A"}
+                    {payment.amount ? Number(payment.amount).toFixed(7) : "N/A"}
                   </td>
                   <td className="px-4 py-3">{payment.displayAsset}</td>
                   <td className="px-4 py-3">
@@ -83,7 +83,7 @@ export default function TransactionHistory() {
                     </Badge>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="font-mono text-xs">{truncateAddress(payment.counterparty || "Unknown")}</span>
+                    <span className="font-mono text-xs">{formatAddress(payment.counterparty || "Unknown")}</span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
                     {txDate !== "Unknown" ? formatDate(txDate) : "Unknown"}

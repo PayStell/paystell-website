@@ -68,24 +68,33 @@ export const useWalletStore = create<WalletState>((set, get) => ({
               localStorage.setItem("stellar_wallet_connected", "true")
               localStorage.setItem("stellar_wallet_public_key", address)
             }
-          } catch (error: any) {
+          } catch (error: unknown) {
             console.error("Wallet connection error:", error)
-            set({
-              isConnected: false,
-              publicKey: null,
-              error: error.message || "Failed to connect wallet",
-              connecting: false,
-            })
+                      if (error instanceof Error) {
+              set({
+                isConnected: false,
+                publicKey: null,
+                error: error.message || "Failed to connect wallet",
+                connecting: false,
+              })
+            } else {
+              set({
+                isConnected: false,
+                publicKey: null,
+                error: "An unknown error occurred while connecting the wallet",
+                connecting: false,
+              })
+            }
           }
           return option.id
         },
-      })
-    } catch (error: any) {
+      }).finally(() => set({ connecting: false }))
+    } catch (error: unknown) {
       console.error("Wallet connection error:", error)
       set({
         isConnected: false,
         publicKey: null,
-        error: error.message || "Failed to connect wallet",
+        error: error instanceof Error ? error.message : "Failed to connect wallet",
         connecting: false,
       })
     }
@@ -108,10 +117,10 @@ export const useWalletStore = create<WalletState>((set, get) => ({
         error: null,
         connecting: false,
       })
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Wallet disconnection error:", error)
       set({
-        error: error.message || "Failed to disconnect wallet",
+        error: error instanceof Error ? error.message : "Failed to disconnect wallet",
         connecting: false,
       })
     }
@@ -128,9 +137,9 @@ export const useWalletStore = create<WalletState>((set, get) => ({
       })
 
       return signedTxXdr
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Transaction signing error:", error)
-      throw new Error(error.message || "Failed to sign transaction")
+      throw new Error(error instanceof Error ? error.message : "Failed to sign transaction")
     }
   },
 }))

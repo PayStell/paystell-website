@@ -16,7 +16,7 @@ import ConnectWalletButton from "../shared/ConnectWalletButton"
 export default function WalletDashboard() {
   const { state } = useWallet()
   const { isConnected, publicKey } = state
-  const [error, setError] = useState<string | null>(null)
+  const [error] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState("overview")
 
   useEffect(() => {

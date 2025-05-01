@@ -5,7 +5,6 @@ import { Horizon, Networks, Asset, TransactionBuilder, Memo, Operation } from "@
 // Default to testnet for development
 export const server = new Horizon.Server("https://horizon-testnet.stellar.org")
 export const networkPassphrase = Networks.TESTNET
-
 /**
  * Fetch account balances
  */

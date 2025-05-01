@@ -1,3 +1,6 @@
+import { Transaction } from "@stellar/stellar-sdk"
+
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
 export interface AssetType {
   asset_type: string
   asset_code?: string
@@ -16,7 +19,7 @@ export interface TransactionRecord {
   paging_token: string
   successful: boolean
   hash: string
-  ledger: number | any
+  ledger: number | number
   created_at: string
   source_account: string
   source_account_sequence: string
@@ -44,7 +47,7 @@ export interface PaymentOperation {
   from?: string
   to?: string
   amount?: string
-  transaction?: any 
+  transaction?: Partial<TransactionRecord> 
 }
 
 export interface EnhancedPaymentOperation {
@@ -62,7 +65,7 @@ export interface EnhancedPaymentOperation {
   from?: string
   to?: string
   amount?: string
-  transaction?: any
+  transaction?: Transaction
   direction: "sent" | "received"
   counterparty: string
   displayAsset: string

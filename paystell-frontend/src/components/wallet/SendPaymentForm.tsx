@@ -7,22 +7,21 @@ import * as z from "zod"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Loader2, Wallet } from "lucide-react"
+import { Wallet } from "lucide-react"
 import { useWallet } from "@/providers/useWalletProvider"
 import { useStellar } from "@/hooks/use-wallet"
 import { createPaymentTransaction, networkPassphrase } from "@/lib/wallet/stellar-service"
 import { toast } from "sonner"
 import { Card, CardContent } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
+import { ConfirmTransactionModal } from "./ConfirmTransactionModal"
 
 const formSchema = z.object({
-  destination: z
+  destination: z.string().regex(/^G[A-Z2-7]{55}$/, "Invalid Stellar public key"),
+  amount: z
     .string()
-    .min(56, "Stellar address must be 56 characters")
-    .max(56, "Stellar address must be 56 characters"),
-  amount: z.string().refine((val) => !isNaN(Number(val)) && Number(val) > 0, {
-    message: "Amount must be a positive number",
-  }),
+    .regex(/^\d+(\.\d{1,7})?$/, "Amount must be ≤ 7 decimals")
+    .refine((val) => Number(val) > 0, { message: "Amount must be > 0" }),
   memo: z.string().optional(),
 })
 
@@ -34,6 +33,9 @@ export default function SendPaymentForm() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [usdEquivalent, setUsdEquivalent] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [showConfirmModal, setShowConfirmModal] = useState(false)
+  const [transactionXdr, setTransactionXdr] = useState<string | undefined>(undefined)
+  const [transactionFee, setTransactionFee] = useState<string | undefined>(undefined)
 
   // Find XLM balance
   const xlmBalance = balances.find((asset) => asset.asset_type === "native")
@@ -85,7 +87,50 @@ export default function SendPaymentForm() {
     }
   }
 
+  // Handle form submission - now creates transaction and opens confirmation modal
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    if (!isConnected || !publicKey) {
+      toast.error("Wallet not connected", {
+        description: "Please connect your wallet to send payments.",
+      })
+      return
+    }
+
+    setError(null)
+
+    try {
+      const { transaction } = await createPaymentTransaction({
+        source: publicKey,
+        destination: values.destination,
+        amount: values.amount,
+        memo: values.memo,
+      })
+
+      const fee = "0.01"
+
+      // Store transaction details
+      setTransactionXdr(transaction)
+      setTransactionFee(fee)
+
+      // Show confirmation modal
+      setShowConfirmModal(true)
+    } catch (error: unknown) {
+      console.error("Failed to create transaction:", error);
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : typeof error === 'string' 
+          ? error 
+          : 'Unknown error';
+      setError(`Transaction creation error: ${errorMessage}`);
+      toast.error("Failed to create transaction", {
+        description: errorMessage,
+      });
+    }
+  }
+
+  async function processTransaction() {
+    const values = form.getValues()
+
     if (!isConnected || !publicKey) {
       toast.error("Wallet not connected", {
         description: "Please connect your wallet to send payments.",
@@ -97,7 +142,6 @@ export default function SendPaymentForm() {
     setError(null)
 
     try {
-      // Create the payment transaction (XLM only)
       const { transaction, network_passphrase } = await createPaymentTransaction({
         source: publicKey,
         destination: values.destination,
@@ -115,19 +159,23 @@ export default function SendPaymentForm() {
         })
         console.log("Transaction signed successfully")
         toast.success("Transaction successful", {
-          description:"Transaction signed successfully",
+          description: "Transaction signed successfully",
         })
-        
-      } catch (signError: any) {
+      } catch (signError: unknown) {
         // Capture and display the exact signing error
-        console.error("Transaction signing error:", signError)
-        const errorMessage = signError.message || signError.toString()
-        setError(`Signing error: ${errorMessage}`)
+        console.error("Transaction signing error:", signError);
+        
+        const errorMessage = 
+          signError instanceof Error ? signError.message :
+          typeof signError === 'string' ? signError :
+          'Unknown signing error';
+      
+        setError(`Signing error: ${errorMessage}`);
         toast.error("Failed to sign transaction", {
           description: errorMessage,
-        })
-        setIsSubmitting(false)
-        return
+        });
+        setIsSubmitting(false);
+        return;
       }
 
       console.log("Transaction signed, submitting to network...")
@@ -166,30 +214,34 @@ export default function SendPaymentForm() {
         })
 
         if (publicKey) {
-          setTimeout(() => fetchBalances(publicKey), 2000) 
+          setTimeout(() => fetchBalances(publicKey), 2000)
         }
 
         // Reset form
         form.reset()
         setUsdEquivalent(null)
-      } catch (fetchError: any) {
-        console.error("API request failed:", fetchError)
-        const errorMessage = fetchError.message || fetchError.toString()
-        setError(`API error: ${errorMessage}`)
+      } catch (fetchError) {
+        const errorMessage =
+          fetchError instanceof Error ? fetchError.message : String(fetchError);
+        console.error("API request failed:", errorMessage);
+        setError(`API error: ${errorMessage}`);
         toast.error("API request failed", {
           description: errorMessage,
-        })
+        });
       }
-    } catch (error: any) {
-      console.error("Payment process failed:", error)
-      const errorMessage = error.message || error.toString()
-      setError(errorMessage)
-      toast.error("Payment failed", {
-        description: errorMessage,
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+      } catch (error) {
+        const errorMessage =
+          error instanceof Error ? error.message : String(error);
+        console.error("Payment process failed:", errorMessage);
+        setError(errorMessage);
+        toast.error("Payment failed", {
+          description: errorMessage,
+        });
+      } finally {
+        setIsSubmitting(false);
+        setShowConfirmModal(false);
+      }
+      
   }
 
   return (
@@ -289,18 +341,25 @@ export default function SendPaymentForm() {
             )}
           />
 
-          <Button type="submit" disabled={isSubmitting} className="w-full">
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Sending XLM...
-              </>
-            ) : (
-              "Send XLM"
-            )}
+          <Button type="submit" className="w-full">
+            Review Transaction
           </Button>
         </form>
       </Form>
+
+      <ConfirmTransactionModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={processTransaction}
+        destination={form.getValues().destination}
+        amount={form.getValues().amount}
+        memo={form.getValues().memo}
+        usdEquivalent={usdEquivalent}
+        isSubmitting={isSubmitting}
+        sourceAddress={publicKey || ""}
+        transactionFee={transactionFee}
+        transactionXdr={transactionXdr}
+      />
     </div>
   )
 }
