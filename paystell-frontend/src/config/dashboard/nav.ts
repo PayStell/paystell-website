@@ -9,6 +9,11 @@ export const commonNavItems = [
     icon: Home,
   },
   {
+    title: "Webhooks",
+    href: "/dashboard/webhooks",
+    icon: Link,
+  },
+  {
     title: "Settings",
     href: "/dashboard/settings",
     icon: Settings,
