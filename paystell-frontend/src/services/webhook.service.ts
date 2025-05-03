@@ -1,11 +1,14 @@
 import axios from 'axios';
-import { WebhookConfig, WebhookDeliveryEvent, WebhookMetrics, WebhookFormData, WebhookEventType } from '@/types/webhook-types';
-import { mockWebhooks, mockDeliveryEvents, mockMetrics } from '@/mock/webhook-mock-data';
+import { WebhookConfig, WebhookDeliveryEvent, WebhookMetrics, WebhookFormData, WebhookEventType, WebhookSubscriptionRequest } from '@/types/webhook-types';
+import { mockWebhooks, mockDeliveryEvents, mockMetrics, maskSecretKey, getMockSecret, storeMockSecret } from '@/mock/webhook-mock-data';
 
 // Enable or disable mock mode (use mock data instead of real API)
 const MOCK_ENABLED = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled' || process.env.NODE_ENV === 'development';
 
-const API_BASE_URL = '/api/webhooks';
+// Updated API base URLs as per new requirements
+const WEBHOOK_REGISTER_URL = '/webhooks/register';
+const WEBHOOK_EVENTS_URL = '/api/webhook-events';
+const WEBHOOK_METRICS_URL = '/api/webhooks/metrics';
 
 /**
  * Fetch all webhooks for the current merchant
@@ -13,12 +16,13 @@ const API_BASE_URL = '/api/webhooks';
 export const fetchWebhooks = async (): Promise<WebhookConfig[]> => {
   if (MOCK_ENABLED) {
     return new Promise(resolve => {
+      // Return masked secrets in the response
       setTimeout(() => resolve(mockWebhooks), 500);
     });
   }
 
   try {
-    const response = await axios.get(API_BASE_URL);
+    const response = await axios.get(WEBHOOK_REGISTER_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching webhooks:', error);
@@ -42,8 +46,14 @@ export const fetchWebhookById = async (id: string): Promise<WebhookConfig> => {
   }
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/${id}`);
-    return response.data;
+    // In real implementation, this would be a dedicated endpoint
+    // For now, we'll simulate it by filtering the main response
+    const response = await axios.get(WEBHOOK_REGISTER_URL);
+    const webhook = response.data.find((w: WebhookConfig) => w.id === id);
+    if (!webhook) {
+      throw new Error(`Webhook with ID ${id} not found`);
+    }
+    return webhook;
   } catch (error) {
     console.error(`Error fetching webhook with ID ${id}:`, error);
     throw error;
@@ -54,6 +64,16 @@ export const fetchWebhookById = async (id: string): Promise<WebhookConfig> => {
  * Create a new webhook
  */
 export const createWebhook = async (webhookData: WebhookFormData): Promise<WebhookConfig> => {
+  // Convert WebhookFormData to WebhookSubscriptionRequest
+  const subscriptionRequest: WebhookSubscriptionRequest = {
+    url: webhookData.url,
+    secretKey: webhookData.secretKey,
+    eventTypes: webhookData.eventTypes,
+    maxRetries: webhookData.maxRetries,
+    initialRetryDelay: webhookData.initialRetryDelay,
+    maxRetryDelay: webhookData.maxRetryDelay,
+  };
+
   if (MOCK_ENABLED) {
     return new Promise(resolve => {
       const newWebhook: WebhookConfig = {
@@ -61,7 +81,7 @@ export const createWebhook = async (webhookData: WebhookFormData): Promise<Webho
         merchantId: 'mer_123456',
         url: webhookData.url,
         isActive: webhookData.isActive,
-        secretKey: webhookData.secretKey,
+        secretKey: webhookData.secretKey ? maskSecretKey(webhookData.secretKey) : undefined,
         eventTypes: webhookData.eventTypes,
         maxRetries: webhookData.maxRetries,
         initialRetryDelay: webhookData.initialRetryDelay,
@@ -69,6 +89,11 @@ export const createWebhook = async (webhookData: WebhookFormData): Promise<Webho
         createdAt: new Date(),
         updatedAt: new Date()
       };
+      
+      // Store the full secret in our mock secret store
+      if (webhookData.secretKey) {
+        storeMockSecret(newWebhook.id, webhookData.secretKey);
+      }
       
       // Add to mock webhooks (this won't persist after reload)
       mockWebhooks.push(newWebhook);
@@ -78,7 +103,7 @@ export const createWebhook = async (webhookData: WebhookFormData): Promise<Webho
   }
 
   try {
-    const response = await axios.post(API_BASE_URL, webhookData);
+    const response = await axios.post(WEBHOOK_REGISTER_URL, subscriptionRequest);
     return response.data;
   } catch (error) {
     console.error('Error creating webhook:', error);
@@ -90,10 +115,27 @@ export const createWebhook = async (webhookData: WebhookFormData): Promise<Webho
  * Update an existing webhook
  */
 export const updateWebhook = async (id: string, webhookData: Partial<WebhookFormData>): Promise<WebhookConfig> => {
+  // Convert partial WebhookFormData to WebhookSubscriptionRequest, ensuring url is present when required
+  const subscriptionRequest: Partial<WebhookSubscriptionRequest> = {};
+  
+  // Only add properties that are present in webhookData
+  if (webhookData.url) subscriptionRequest.url = webhookData.url;
+  if (webhookData.secretKey !== undefined) subscriptionRequest.secretKey = webhookData.secretKey;
+  if (webhookData.eventTypes) subscriptionRequest.eventTypes = webhookData.eventTypes;
+  if (webhookData.maxRetries !== undefined) subscriptionRequest.maxRetries = webhookData.maxRetries;
+  if (webhookData.initialRetryDelay !== undefined) subscriptionRequest.initialRetryDelay = webhookData.initialRetryDelay;
+  if (webhookData.maxRetryDelay !== undefined) subscriptionRequest.maxRetryDelay = webhookData.maxRetryDelay;
+
   if (MOCK_ENABLED) {
     return new Promise(resolve => {
       const webhookIndex = mockWebhooks.findIndex(webhook => webhook.id === id);
       if (webhookIndex !== -1) {
+        // If a new secret is provided, store it and mask it in the response
+        if (webhookData.secretKey) {
+          storeMockSecret(id, webhookData.secretKey);
+          webhookData.secretKey = maskSecretKey(webhookData.secretKey);
+        }
+        
         const updatedWebhook = {
           ...mockWebhooks[webhookIndex],
           ...webhookData,
@@ -108,7 +150,11 @@ export const updateWebhook = async (id: string, webhookData: Partial<WebhookForm
   }
 
   try {
-    const response = await axios.put(`${API_BASE_URL}/${id}`, webhookData);
+    // Include the ID in the request body for the updated endpoint structure
+    const response = await axios.put(WEBHOOK_REGISTER_URL, {
+      id,
+      ...subscriptionRequest
+    });
     return response.data;
   } catch (error) {
     console.error(`Error updating webhook with ID ${id}:`, error);
@@ -133,7 +179,7 @@ export const deleteWebhook = async (id: string): Promise<void> => {
   }
 
   try {
-    await axios.delete(`${API_BASE_URL}/${id}`);
+    await axios.delete(`${WEBHOOK_REGISTER_URL}?id=${id}`);
   } catch (error) {
     console.error(`Error deleting webhook with ID ${id}:`, error);
     throw error;
@@ -151,7 +197,7 @@ export const fetchWebhookEventTypes = async () => {
   }
 
   try {
-    const response = await axios.get('/api/webhook-events');
+    const response = await axios.get(WEBHOOK_EVENTS_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching webhook event types:', error);
@@ -198,7 +244,7 @@ export const sendTestWebhook = async (id: string) => {
   }
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/${id}/test`);
+    const response = await axios.post(`/api/webhooks/${id}/test`);
     return response.data;
   } catch (error) {
     console.error(`Error sending test webhook for ID ${id}:`, error);
@@ -217,7 +263,7 @@ export const fetchWebhookEvents = async (id: string): Promise<WebhookDeliveryEve
   }
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/${id}/events`);
+    const response = await axios.get(`/api/webhooks/${id}/events`);
     return response.data;
   } catch (error) {
     console.error(`Error fetching webhook events for webhook ID ${id}:`, error);
@@ -268,7 +314,7 @@ export const retryWebhookEvent = async (eventId: string): Promise<WebhookDeliver
   }
 
   try {
-    const response = await axios.post(`${API_BASE_URL}/events/${eventId}/retry`);
+    const response = await axios.post(`/api/webhooks/events/${eventId}/retry`);
     return response.data;
   } catch (error) {
     console.error(`Error retrying webhook event with ID ${eventId}:`, error);
@@ -287,7 +333,7 @@ export const fetchWebhookMetrics = async (): Promise<WebhookMetrics> => {
   }
 
   try {
-    const response = await axios.get(`${API_BASE_URL}/metrics`);
+    const response = await axios.get(WEBHOOK_METRICS_URL);
     return response.data;
   } catch (error) {
     console.error('Error fetching webhook metrics:', error);

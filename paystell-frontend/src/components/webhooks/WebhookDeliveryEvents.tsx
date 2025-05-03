@@ -220,6 +220,28 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
                 </div>
               )}
 
+              {selectedEvent.signature && (
+                <div>
+                  <h3 className="text-sm font-medium mb-1">Signature</h3>
+                  <div className="bg-gray-50 p-3 rounded text-sm font-mono break-all">
+                    {selectedEvent.signature}
+                  </div>
+                </div>
+              )}
+
+              {selectedEvent.headers && Object.keys(selectedEvent.headers).length > 0 && (
+                <div>
+                  <h3 className="text-sm font-medium mb-1">Request Headers</h3>
+                  <div className="bg-gray-50 p-3 rounded text-sm font-mono whitespace-pre-wrap max-h-60 overflow-y-auto">
+                    {Object.entries(selectedEvent.headers).map(([key, value]) => (
+                      <div key={key} className="mb-1">
+                        <span className="font-semibold">{key}:</span> {value}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {selectedEvent.attemptsMade > 0 && (
                 <div>
                   <h3 className="text-sm font-medium mb-2">Retry Timeline</h3>
