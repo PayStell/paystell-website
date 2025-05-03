@@ -2,6 +2,7 @@ import { WebhookConfig, WebhookDeliveryEvent, WebhookMetrics, WebhookEventType }
 
 /**
  * Mock webhook configurations
+ * Note: In real implementation, secretKey will be masked in responses from the API
  */
 export const mockWebhooks: WebhookConfig[] = [
   {
@@ -9,7 +10,7 @@ export const mockWebhooks: WebhookConfig[] = [
     merchantId: 'mer_123456',
     url: 'https://example.com/webhook-endpoint',
     isActive: true,
-    secretKey: 'whsec_123456abcdefghijklmnopqrstuvwxyz',
+    secretKey: 'whsec_12345•••••••••••••••••••••••••••', // Masked for security
     eventTypes: [
       WebhookEventType.PAYMENT_SUCCEEDED,
       WebhookEventType.PAYMENT_FAILED,
@@ -26,7 +27,7 @@ export const mockWebhooks: WebhookConfig[] = [
     merchantId: 'mer_123456',
     url: 'https://api.yourcompany.com/paymentwebhooks',
     isActive: true,
-    secretKey: 'whsec_789012abcdefghijklmnopqrstuvwxyz',
+    secretKey: 'whsec_78901•••••••••••••••••••••••••••', // Masked for security
     eventTypes: [
       WebhookEventType.PAYMENT_SUCCEEDED,
       WebhookEventType.ACCOUNT_CREATED,
@@ -43,7 +44,7 @@ export const mockWebhooks: WebhookConfig[] = [
     merchantId: 'mer_123456',
     url: 'https://webhook-relay.yourdomain.com/paystell',
     isActive: false,
-    secretKey: 'whsec_345678abcdefghijklmnopqrstuvwxyz',
+    secretKey: 'whsec_34567•••••••••••••••••••••••••••', // Masked for security
     eventTypes: [
       WebhookEventType.TEST_WEBHOOK
     ],
@@ -54,6 +55,40 @@ export const mockWebhooks: WebhookConfig[] = [
     updatedAt: new Date('2023-07-20T09:10:00Z')
   }
 ];
+
+// Keep track of full secrets in memory only for mock API functionality
+// In a real implementation, these would never be stored or exposed
+const mockSecretStore: Record<string, string> = {
+  'wh_123456': 'whsec_123456abcdefghijklmnopqrstuvwxyz',
+  'wh_789012': 'whsec_789012abcdefghijklmnopqrstuvwxyz',
+  'wh_345678': 'whsec_345678abcdefghijklmnopqrstuvwxyz',
+};
+
+/**
+ * Helper function to mask a secret key
+ * This mimics the behavior of the API which would never return full secrets
+ */
+export const maskSecretKey = (secretKey: string): string => {
+  if (!secretKey) return '';
+  // Show first 6 characters and replace the rest with bullets
+  return `${secretKey.substring(0, 6)}${'•'.repeat(30)}`;
+};
+
+/**
+ * Get a webhook secret for internal mock operations
+ * In a real implementation, the server would have this logic
+ */
+export const getMockSecret = (webhookId: string): string | undefined => {
+  return mockSecretStore[webhookId];
+};
+
+/**
+ * Store a new webhook secret
+ * In a real implementation, the server would handle secure storage
+ */
+export const storeMockSecret = (webhookId: string, secretKey: string): void => {
+  mockSecretStore[webhookId] = secretKey;
+};
 
 /**
  * Mock webhook delivery events
@@ -69,18 +104,29 @@ export const mockDeliveryEvents: Record<string, WebhookDeliveryEvent[]> = {
       attemptsMade: 1,
       maxAttempts: 3,
       payload: {
-        id: 'pmt_123456',
-        amount: 5000,
-        currency: 'USD',
+        transactionId: 'pmt_123456',
+        transactionType: 'payment',
         status: 'succeeded',
-        customer_id: 'cus_123456',
-        payment_method: 'card'
+        amount: '5000',
+        asset: 'USDC',
+        merchantId: 'mer_123456',
+        timestamp: new Date('2023-08-15T10:30:00Z').toISOString(),
+        paymentMethod: 'card',
+        eventType: 'payment.succeeded',
+        reqMethod: 'POST'
       },
       responseStatusCode: 200,
       responseBody: '{"received": true, "success": true}',
       createdAt: new Date('2023-08-15T10:30:00Z'),
       completedAt: new Date('2023-08-15T10:30:02Z'),
-      updatedAt: new Date('2023-08-15T10:30:02Z')
+      updatedAt: new Date('2023-08-15T10:30:02Z'),
+      signature: 't=1691211300,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-PayStell-Signature': 't=1691211300,v1=5257a869e7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108d8bd',
+        'User-Agent': 'PayStell-Webhook/1.0',
+        'X-Request-Id': 'req_123456789'
+      }
     },
     {
       id: 'evt_123456_2',
@@ -91,21 +137,34 @@ export const mockDeliveryEvents: Record<string, WebhookDeliveryEvent[]> = {
       attemptsMade: 3,
       maxAttempts: 3,
       payload: {
-        id: 'pmt_234567',
-        amount: 7500,
-        currency: 'USD',
+        transactionId: 'pmt_234567',
+        transactionType: 'payment',
         status: 'failed',
-        customer_id: 'cus_234567',
-        payment_method: 'card',
-        error: {
-          code: 'card_declined',
-          message: 'Card was declined'
-        }
+        amount: '7500',
+        asset: 'USDC',
+        merchantId: 'mer_123456',
+        timestamp: new Date('2023-08-16T14:20:00Z').toISOString(),
+        paymentMethod: 'card',
+        metadata: {
+          error: {
+            code: 'card_declined',
+            message: 'Card was declined'
+          }
+        },
+        eventType: 'payment.failed',
+        reqMethod: 'POST'
       },
       error: 'Connection timed out after 30 seconds',
       responseStatusCode: 504,
       createdAt: new Date('2023-08-16T14:20:00Z'),
-      updatedAt: new Date('2023-08-16T14:50:00Z')
+      updatedAt: new Date('2023-08-16T14:50:00Z'),
+      signature: 't=1691316000,v1=7a9c84d9f7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108a94f',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-PayStell-Signature': 't=1691316000,v1=7a9c84d9f7ecebeda32affa62cdca3fa51cad7e77a0e56ff536d0ce8e108a94f',
+        'User-Agent': 'PayStell-Webhook/1.0',
+        'X-Request-Id': 'req_234567890'
+      }
     },
     {
       id: 'evt_123456_3',

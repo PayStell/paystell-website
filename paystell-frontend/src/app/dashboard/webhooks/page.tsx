@@ -16,6 +16,7 @@ import WebhookList from '@/components/webhooks/WebhookList';
 import WebhookForm from '@/components/webhooks/WebhookForm';
 import WebhookDeliveryEvents from '@/components/webhooks/WebhookDeliveryEvents';
 import WebhookMetrics from '@/components/webhooks/WebhookMetrics';
+import WebhookSecurity from '@/components/webhooks/WebhookSecurity';
 import { WebhookConfig, WebhookDeliveryEvent, WebhookMetrics as WebhookMetricsType } from '@/types/webhook-types';
 import { fetchWebhooks, fetchWebhookEvents, fetchWebhookMetrics } from '@/services/webhook.service';
 
@@ -28,6 +29,7 @@ const WebhooksPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isEventsOpen, setIsEventsOpen] = useState(false);
+  const [isSecurityOpen, setIsSecurityOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -95,13 +97,25 @@ const WebhooksPage: React.FC = () => {
     }
   };
 
+  const handleOpenSecurity = () => {
+    setIsSecurityOpen(true);
+  };
+
   return (
     <div className="container py-8 space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Webhook Management</h1>
-        <Button onClick={handleCreateWebhook}>
-          Create Webhook
-        </Button>
+        <div className="flex space-x-2">
+          <Button 
+            variant="outline" 
+            onClick={handleOpenSecurity}
+          >
+            Security Guide
+          </Button>
+          <Button onClick={handleCreateWebhook}>
+            Create Webhook
+          </Button>
+        </div>
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
@@ -180,6 +194,19 @@ const WebhooksPage: React.FC = () => {
               />
             )
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Webhook Security Dialog */}
+      <Dialog open={isSecurityOpen} onOpenChange={setIsSecurityOpen}>
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Webhook Security</DialogTitle>
+            <DialogDescription>
+              Learn about webhook security best practices and implementation
+            </DialogDescription>
+          </DialogHeader>
+          <WebhookSecurity />
         </DialogContent>
       </Dialog>
     </div>

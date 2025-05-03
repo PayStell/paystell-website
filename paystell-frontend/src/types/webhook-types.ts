@@ -2,18 +2,32 @@
  * Webhook system types
  */
 
-export interface WebhookConfig {
+// Renamed from WebhookConfig to match the updated spec
+export interface MerchantWebhook {
   id: string;
   merchantId: string;
   url: string;
   isActive: boolean;
+  secretKey?: string; // Note: This will be masked in responses
+  eventTypes: WebhookEventType[];
+  maxRetries: number;
+  initialRetryDelay: number;
+  maxRetryDelay: number;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+// Keep WebhookConfig for backward compatibility
+export type WebhookConfig = MerchantWebhook;
+
+// New interface for webhook subscription requests
+export interface WebhookSubscriptionRequest {
+  url?: string; // Made optional to support partial updates
   secretKey?: string;
   eventTypes?: WebhookEventType[];
   maxRetries?: number;
   initialRetryDelay?: number;
   maxRetryDelay?: number;
-  createdAt: Date;
-  updatedAt: Date;
 }
 
 export enum WebhookEventType {
@@ -26,7 +40,24 @@ export enum WebhookEventType {
   TEST_WEBHOOK = "test.webhook"
 }
 
-export interface WebhookDeliveryEvent {
+// New interface for webhook payload
+export interface WebhookPayload {
+  transactionId: string;
+  transactionType?: string;
+  status: string;
+  amount?: string;
+  asset?: string; // This should be the coin, whether USDC or XLM etc
+  merchantId: string;
+  timestamp: string;
+  nonce?: string;
+  paymentMethod?: string;
+  metadata?: Record<string, unknown>;
+  eventType: string; // One of the WebhookEventType values
+  reqMethod: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+}
+
+// Renamed from WebhookDeliveryEvent to match the updated spec
+export interface MerchantWebhookEventEntity {
   id: string;
   jobId: string;
   webhookId: string;
@@ -34,7 +65,7 @@ export interface WebhookDeliveryEvent {
   status: 'pending' | 'completed' | 'failed';
   attemptsMade: number;
   maxAttempts: number;
-  payload: Record<string, any>;
+  payload: WebhookPayload | Record<string, any>; // Support both types for backward compatibility
   error?: string;
   responseStatusCode?: number;
   responseBody?: string;
@@ -42,7 +73,12 @@ export interface WebhookDeliveryEvent {
   createdAt: Date;
   completedAt?: Date;
   updatedAt: Date;
+  signature?: string; // Added as per updated spec
+  headers?: Record<string, string>; // Added as per updated spec
 }
+
+// Keep WebhookDeliveryEvent for backward compatibility
+export type WebhookDeliveryEvent = MerchantWebhookEventEntity;
 
 export interface WebhookMetrics {
   overall: {

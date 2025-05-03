@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
 import { toast } from 'sonner';
+import { AlertTriangle } from 'lucide-react';
 import { WebhookConfig, WebhookEventType, WebhookFormData } from '@/types/webhook-types';
 import { generateSecretKey, isValidWebhookUrl, EVENT_TYPE_INFO, EVENT_CATEGORIES, getEventTypesByCategory } from '@/utils/webhook-utils';
 import { createWebhook, updateWebhook, sendTestWebhook } from '@/services/webhook.service';
@@ -14,6 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const formSchema = z.object({
   url: z.string()
@@ -44,6 +46,7 @@ interface WebhookFormProps {
 const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
   const [testingWebhook, setTestingWebhook] = useState(false);
   const [selectedTab, setSelectedTab] = useState('basic');
+  const [showSecretWarning, setShowSecretWarning] = useState(false);
   const isEditMode = Boolean(webhook);
 
   const defaultValues: Partial<WebhookFormData> = {
@@ -64,6 +67,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
   const handleGenerateSecret = () => {
     const newSecret = generateSecretKey();
     form.setValue('secretKey', newSecret);
+    setShowSecretWarning(true);
   };
 
   const handleTestWebhook = async () => {
@@ -92,6 +96,9 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
       } else {
         await createWebhook(data);
         toast.success('Webhook created successfully');
+        if (data.secretKey) {
+          toast.warning('Please save your webhook secret key as it will not be fully visible again');
+        }
       }
       onSuccess();
     } catch (error) {
@@ -99,6 +106,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
       toast.error('Failed to save webhook');
     }
   };
+
+  const secretKeyChanged = form.watch('secretKey') !== defaultValues.secretKey;
 
   return (
     <Card className="w-full">
@@ -149,8 +158,15 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       <div className="flex space-x-2">
                         <FormControl>
                           <Input 
-                            placeholder="Webhook secret for signature verification" 
-                            {...field} 
+                            placeholder={isEditMode ? "Leave blank to keep current secret" : "Webhook secret for signature verification"}
+                            type={secretKeyChanged || !isEditMode ? "text" : "password"}
+                            {...field}
+                            onChange={(e) => {
+                              field.onChange(e);
+                              if (e.target.value) {
+                                setShowSecretWarning(true);
+                              }
+                            }}
                           />
                         </FormControl>
                         <Button
@@ -164,6 +180,19 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       <FormDescription>
                         Used to verify the webhook signature in the X-PayStell-Signature header
                       </FormDescription>
+                      {showSecretWarning && (
+                        <Alert variant="destructive" className="mt-2">
+                          <AlertTriangle className="h-4 w-4" />
+                          <AlertDescription>
+                            Warning: Your webhook secret key will be partially masked after creation and cannot be retrieved in full later. Please store it securely now if needed.
+                          </AlertDescription>
+                        </Alert>
+                      )}
+                      {isEditMode && !secretKeyChanged && (
+                        <FormDescription className="mt-2 text-amber-600">
+                          The secret key is masked for security. Enter a new value only if you want to change it.
+                        </FormDescription>
+                      )}
                       <FormMessage />
                     </FormItem>
                   )}
