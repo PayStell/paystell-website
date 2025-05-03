@@ -11,13 +11,15 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2 } from "lucide-react"
 import type { TransactionFilter, NetworkType } from "@/types/transaction-types"
+import ConnectWalletButton from "../shared/ConnectWalletButton"
 
 interface TransactionHistoryDashboardProps {
-  publicKey: string
+  publicKey: string | null
   network: NetworkType
+  isConnected: boolean
 }
 
-export function TransactionHistoryDashboard({ publicKey, network }: TransactionHistoryDashboardProps) {
+export function TransactionHistoryDashboard({ publicKey, network, isConnected }: TransactionHistoryDashboardProps) {
   const [transactions, setTransactions] = useState<Horizon.ServerApi.TransactionRecord[]>([])
   const [cursor, setCursor] = useState<string | null>(null)
   const [hasNext, setHasNext] = useState(false)
@@ -30,7 +32,7 @@ export function TransactionHistoryDashboard({ publicKey, network }: TransactionH
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage] = useState(10)
   const [prevCursors, setPrevCursors] = useState<string[]>([])
 
   // State for filters
@@ -236,8 +238,15 @@ export function TransactionHistoryDashboard({ publicKey, network }: TransactionH
           </div>
         ) : (
           <>
-            <TransactionTable transactions={transactions} onViewTransaction={handleViewTransaction} network={network} />
-
+            {isConnected && publicKey ?
+              <TransactionTable transactions={transactions} onViewTransaction={handleViewTransaction} network={network} />
+              :
+              <div className="flex justify-center py-8 flex-col items-center">
+                <ConnectWalletButton />
+                <p className="text-sm text-muted-foreground mt-2">
+                  {!isConnected ? "Wallet not connected" : "Connected but No public key available"}
+                </p>
+              </div>}
             {transactions.length > 0 && (
               <Pagination
                 currentPage={currentPage}
