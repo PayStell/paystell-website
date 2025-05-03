@@ -81,47 +81,59 @@ export const StellarAnalytics: React.FC = () => {
   }, [filteredData]);
 
   // --- Chart Data Preparation Logic ---
-   const chartData = useMemo(() => {
-    const formatTime = (date: Date): string => {
-      switch (timeFilter) {
-        case 'daily':
-          return format(date, 'HH:00'); // Group by hour for daily view
-        case 'weekly':
-           return format(date, 'EEE dd'); // Day of week for weekly view
-        case 'monthly':
-           return format(date, 'MMM dd'); // Day of month for monthly view
-         case 'all':
-         default:
+  const chartData = useMemo(() => {
+    try {
+      const formatTime = (date: Date): string => {
+        switch (timeFilter) {
+          case 'daily':
+            return format(date, 'HH:00'); // Group by hour for daily view
+          case 'weekly':
+            return format(date, 'EEE dd'); // Day of week for weekly view
+          case 'monthly':
+            return format(date, 'MMM dd'); // Day of month for monthly view
+          default:
             return format(date, 'yyyy-MM-dd'); // Full date for all/longer periods
-       }
-     };
+        }
+      };
 
-    const groupedData: { [key: string]: { date: string; timestamp: number; volume: number; count: number; failed: number } } = {};
+      const groupedData: {
+        [key: string]: {
+          date: string;
+          timestamp: number;
+          volume: number;
+          count: number;
+          failed: number;
+        };
+      } = {};
 
-    filteredData.forEach((tx: MockStellarTransaction) => {
-      const txDate = parseISO(tx.timestamp);
-      const displayDate = formatTime(txDate);
-      
-      if (!groupedData[displayDate]) {
-         groupedData[displayDate] = { 
+      filteredData.forEach((tx: MockStellarTransaction) => {
+        const txDate = parseISO(tx.timestamp);
+        const displayDate = formatTime(txDate);
+
+        if (!groupedData[displayDate]) {
+          groupedData[displayDate] = {
             date: displayDate,
             timestamp: txDate.getTime(),
-            volume: 0, 
-            count: 0, 
-            failed: 0 
-         };
-      }
-      
-      if (tx.status === 'success') {
-         groupedData[displayDate].volume += tx.amount;
-         groupedData[displayDate].count += 1;
-      } else {
-         groupedData[displayDate].failed += 1;
-      }
-    });
+            volume: 0,
+            count: 0,
+            failed: 0,
+          };
+        }
 
-    // Convert grouped data to array and sort by the stored timestamp
-    return Object.values(groupedData).sort((a, b) => a.timestamp - b.timestamp);
+        if (tx.status === 'success') {
+          groupedData[displayDate].volume += tx.amount;
+          groupedData[displayDate].count += 1;
+        } else {
+          groupedData[displayDate].failed += 1;
+        }
+      });
+
+      // Convert grouped data to array and sort by the stored timestamp
+      return Object.values(groupedData).sort((a, b) => a.timestamp - b.timestamp);
+    } catch (error) {
+      console.error('Error preparing chart data:', error);
+      return [];
+    }
   }, [filteredData, timeFilter]);
 
 
