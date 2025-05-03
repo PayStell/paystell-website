@@ -4,10 +4,9 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { mockStellarTransactions, MockStellarTransaction } from './mockData';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, TooltipProps } from 'recharts';
+import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, TooltipProps } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { subDays, startOfDay, startOfWeek, startOfMonth, format, parseISO, parse } from 'date-fns';
-import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import { subDays, format, parseISO } from 'date-fns';
 
 type TimeFilter = 'daily' | 'weekly' | 'monthly' | 'all';
 
@@ -59,7 +58,6 @@ export const StellarAnalytics: React.FC = () => {
         // Ensure we only include transactions after the calculated start date
         // For daily, weekly, monthly - we compare against the start date
         // For 'all', we use a wider range (e.g., last 90 days)
-        const dateMatch = timeFilter === 'all' ? txDate >= startDate : txDate >= startDate; 
         // Correct filtering: Ensure transaction date is ON OR AFTER the start date
         return txDate >= startDate && assetMatch;
     });
@@ -98,52 +96,32 @@ export const StellarAnalytics: React.FC = () => {
        }
      };
 
-    const groupedData: { [key: string]: { date: string; volume: number; count: number; failed: number } } = {};
+    const groupedData: { [key: string]: { date: string; timestamp: number; volume: number; count: number; failed: number } } = {};
 
     filteredData.forEach((tx: MockStellarTransaction) => {
       const txDate = parseISO(tx.timestamp);
-      // Format the date for display and use it as the group key
       const displayDate = formatTime(txDate);
-
+      
       if (!groupedData[displayDate]) {
-        groupedData[displayDate] = { date: displayDate, volume: 0, count: 0, failed: 0 };
+         groupedData[displayDate] = { 
+            date: displayDate,
+            timestamp: txDate.getTime(),
+            volume: 0, 
+            count: 0, 
+            failed: 0 
+         };
       }
-
+      
       if (tx.status === 'success') {
-        groupedData[displayDate].volume += tx.amount;
-        groupedData[displayDate].count += 1;
+         groupedData[displayDate].volume += tx.amount;
+         groupedData[displayDate].count += 1;
       } else {
-        groupedData[displayDate].failed += 1;
+         groupedData[displayDate].failed += 1;
       }
     });
 
-     // Convert grouped data to array and sort by date for the chart
-     return Object.values(groupedData).sort((a, b) => {
-        // Sort based on the time filter format
-        if (timeFilter === 'daily') {
-          // For daily view, sort by hour (HH:00 format)
-          // Simple string comparison works here as format is fixed HH:00
-          return a.date.localeCompare(b.date);
-        } else if (timeFilter === 'weekly' || timeFilter === 'monthly') {
-          // For weekly/monthly, attempt to parse back to sortable form (e.g., using a base year)
-          // This is heuristic, assumes data is within the same year primarily.
-          // A more robust solution might store the original date/timestamp alongside the formatted string.
-          try {
-            // Attempt to parse 'EEE dd' or 'MMM dd' - needs a base year to parse correctly
-            const baseYear = new Date().getFullYear();
-            const dateA = parse(a.date, timeFilter === 'weekly' ? 'EEE dd' : 'MMM dd', new Date(baseYear, 0, 1));
-            const dateB = parse(b.date, timeFilter === 'weekly' ? 'EEE dd' : 'MMM dd', new Date(baseYear, 0, 1));
-            return dateA.getTime() - dateB.getTime();
-          } catch (e) {
-             console.error("Error parsing date for sorting:", e);
-             // Fallback to string sort if parsing fails
-             return a.date.localeCompare(b.date);
-          }
-        } else { // 'all' or default
-          // For 'all' time filter (yyyy-MM-dd format)
-          return a.date.localeCompare(b.date);
-        }
-     });
+    // Convert grouped data to array and sort by the stored timestamp
+    return Object.values(groupedData).sort((a, b) => a.timestamp - b.timestamp);
   }, [filteredData, timeFilter]);
 
 
@@ -153,16 +131,21 @@ export const StellarAnalytics: React.FC = () => {
   }, []);
 
   // Explicitly type recharts tooltip props for now
+  // Use the Payload type from TooltipProps generic
+  // type TooltipPayload = TooltipProps<number, string>['payload'] // This type alias is not used
+
   const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-white p-2 border rounded-lg shadow-sm text-sm">
           <p className="label font-semibold mb-1">{`${label}`}</p>
-          {payload.map((p: any, index: number) => {
-            const name = p.name;
+          {/* Use the inferred Payload type directly */} 
+          {payload.map((p, index: number) => {
+            const name = p.name || 'Unknown'; // Handle potentially undefined name
             const value = p.value;
             // Attempt to format volume as currency if the name matches
-            const displayValue = name === 'volume' 
+            // Ensure value is treated as a number for formatting
+            const displayValue = name === 'volume' && typeof value === 'number'
                                 ? formatCurrency(value, selectedAsset === 'all' ? 'USD' : selectedAsset)
                                 : value;
 
