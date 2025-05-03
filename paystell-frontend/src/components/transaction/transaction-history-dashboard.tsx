@@ -46,7 +46,7 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
   })
 
   // Wrap loadTransactions with useCallback to prevent it from changing on every render
-  const loadTransactions = useCallback(async (resetPagination = false) => {
+  const loadTransactions = useCallback(async (resetPagination = false, targetCursor: string | null = null, direction: "next" | "prev" = "next") => {
     if (!publicKey) return;
     
     // Reset error state
@@ -62,8 +62,11 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
     try {
       setIsLoading(true);
       
+      // Use provided cursor or current cursor
+      const cursorToUse = targetCursor !== undefined ? targetCursor : cursor;
+      
       // Call fetchTransactionHistory with the correct parameter types
-      const result = await fetchTransactionHistory(publicKey, cursor);
+      const result = await fetchTransactionHistory(publicKey, cursorToUse);
       
       if (!result || !result.records || result.records.length === 0) {
         if (resetPagination) {
@@ -77,8 +80,23 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
         }
       } else {
         setTransactions(result.records);
-        setHasNext(result.next !== null);
-        setCursor(result.next);
+        
+        if (direction === "next") {
+          setHasNext(result.next !== null);
+          
+          // Push current cursor before moving forward so we can come back
+          if (cursorToUse) {
+            setPrevCursors(prev => [...prev, cursorToUse]);
+            setHasPrev(true);
+          }
+          
+          setCursor(result.next);
+        } else if (direction === "prev") {
+          // When going backwards, we don't need to modify prevCursors here
+          // as that's handled in loadPreviousPage
+          setHasNext(true); // There should be a next page when going back
+          setCursor(cursorToUse);
+        }
       }
     } catch (err) {
       console.error("Error loading transactions:", err);
@@ -91,16 +109,28 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
   // Load next/previous page
   const loadNextPage = () => {
     if (hasNext) {
-      loadTransactions(false);
+      loadTransactions(false, cursor, "next");
       setCurrentPage((prev) => prev + 1);
     }
   }
 
   const loadPreviousPage = () => {
-    if (hasPrev) {
-      const prevCursor = prevCursors.length > 0 ? prevCursors[prevCursors.length - 1] : null;
-      setCursor(prevCursor);
-      loadTransactions(false);
+    if (hasPrev && prevCursors.length > 0) {
+      // Get a copy of the array to work with
+      const prevCursorsCopy = [...prevCursors];
+      // Get the previous cursor
+      const prevCursor = prevCursorsCopy.pop() ?? null;
+      
+      // Update the prevCursors state
+      setPrevCursors(prevCursorsCopy);
+      
+      // Update hasPrev based on the new prevCursors array
+      setHasPrev(prevCursorsCopy.length > 0);
+      
+      // Load transactions with the previous cursor
+      loadTransactions(false, prevCursor, "prev");
+      
+      // Update current page
       setCurrentPage((prev) => (prev > 1 ? prev - 1 : 1));
     }
   }
