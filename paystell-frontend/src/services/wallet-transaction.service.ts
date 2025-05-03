@@ -116,7 +116,7 @@ export const fetchTransactionHistory = async (
         const query = filters.searchQuery.toLowerCase()
         records = records.filter(tx => 
           tx.id.toLowerCase().includes(query) || 
-          (tx.memo && tx.memo.toLowerCase().includes(query))
+          tx.memo?.toLowerCase().includes(query)
         )
       }
 
