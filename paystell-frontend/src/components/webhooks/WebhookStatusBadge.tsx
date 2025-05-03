@@ -6,8 +6,13 @@ interface WebhookStatusBadgeProps {
   status: WebhookDeliveryStatus | 'active' | 'inactive';
 }
 
+interface StatusStyle {
+  variant: 'outline';
+  className: string;
+}
+
 const WebhookStatusBadge: React.FC<WebhookStatusBadgeProps> = ({ status }) => {
-  const getStatusStyles = () => {
+  const getStatusStyles = (): StatusStyle => {
     switch (status) {
       case 'active':
         return { variant: 'outline', className: 'bg-green-100 text-green-800 border-green-300' };
@@ -41,7 +46,7 @@ const WebhookStatusBadge: React.FC<WebhookStatusBadgeProps> = ({ status }) => {
     }
   };
 
-  const { variant, className } = getStatusStyles() as any;
+  const { variant, className } = getStatusStyles();
 
   return (
     <Badge variant={variant} className={className}>

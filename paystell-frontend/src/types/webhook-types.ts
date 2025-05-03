@@ -28,6 +28,7 @@ export interface WebhookSubscriptionRequest {
   maxRetries?: number;
   initialRetryDelay?: number;
   maxRetryDelay?: number;
+  isActive?: boolean; // Added to support toggling webhook active state
 }
 
 export enum WebhookEventType {
@@ -45,15 +46,30 @@ export interface WebhookPayload {
   transactionId: string;
   transactionType?: string;
   status: string;
-  amount?: string;
+  amount?: string | number; // Updated to support both string and number formats
   asset?: string; // This should be the coin, whether USDC or XLM etc
   merchantId: string;
   timestamp: string;
   nonce?: string;
   paymentMethod?: string;
   metadata?: Record<string, unknown>;
-  eventType: string; // One of the WebhookEventType values
+  eventType: WebhookEventType; // Using the enum for better type safety
   reqMethod: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  // Additional fields for sample payloads
+  id?: string;
+  currency?: string;
+  created?: string;
+  customer_id?: string;
+  payment_method?: string;
+  error?: Record<string, unknown>;
+  refund_amount?: number;
+  pending_reason?: string;
+  name?: string;
+  email?: string;
+  updated?: string;
+  previous_values?: Record<string, unknown>;
+  test?: boolean;
+  message?: string;
 }
 
 // Renamed from WebhookDeliveryEvent to match the updated spec
@@ -62,10 +78,10 @@ export interface MerchantWebhookEventEntity {
   jobId: string;
   webhookId: string;
   webhookUrl: string;
-  status: 'pending' | 'completed' | 'failed';
+  status: WebhookDeliveryStatus;
   attemptsMade: number;
   maxAttempts: number;
-  payload: WebhookPayload | Record<string, any>; // Support both types for backward compatibility
+  payload: WebhookPayload | Record<string, unknown>; // Using unknown is safer than any
   error?: string;
   responseStatusCode?: number;
   responseBody?: string;
@@ -113,5 +129,5 @@ export interface WebhookEventTypeInfo {
   type: WebhookEventType;
   description: string;
   category: string;
-  samplePayload: Record<string, any>;
+  samplePayload: Partial<WebhookPayload>;
 } 

@@ -135,7 +135,11 @@ export const generateSecretKey = (): string => {
   let result = '';
   
   const randomValues = new Uint8Array(length);
-  window.crypto.getRandomValues(randomValues);
+  (typeof window !== 'undefined'
+    ? window.crypto
+    : // Node.js >=19 has globalThis.crypto; otherwise import('crypto').webcrypto
+      (globalThis.crypto ?? require('crypto').webcrypto!)
+  ).getRandomValues(randomValues);
   
   for (let i = 0; i < length; i++) {
     result += characters.charAt(randomValues[i] % characters.length);

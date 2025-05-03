@@ -9,11 +9,6 @@ export const commonNavItems = [
     icon: Home,
   },
   {
-    title: "Webhooks",
-    href: "/dashboard/webhooks",
-    icon: Link,
-  },
-  {
     title: "Settings",
     href: "/dashboard/settings",
     icon: Settings,
@@ -42,6 +37,12 @@ export const merchantNavItems = [
     title: "Store",
     href: "/dashboard/store",
     icon: ShoppingBag,
+    requiredPermissions: [Permission.MANAGE_MERCHANT],
+  },
+  {
+    title: "Webhooks",
+    href: "/dashboard/webhooks",
+    icon: Link,
     requiredPermissions: [Permission.MANAGE_MERCHANT],
   },
 ];
