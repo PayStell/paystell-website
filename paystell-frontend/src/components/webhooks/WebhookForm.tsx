@@ -36,7 +36,13 @@ const formSchema = z.object({
     .min(1000, 'Minimum max delay is 1000ms')
     .max(86400000, 'Maximum max delay is 86400000ms'),
   isActive: z.boolean().default(true),
-});
+}).refine(
+  (data) => data.maxRetryDelay >= data.initialRetryDelay,
+  {
+    message: 'Maximum retry delay must be greater than or equal to the initial delay',
+    path: ['maxRetryDelay'],
+  },
+);
 
 interface WebhookFormProps {
   webhook?: WebhookConfig;
@@ -239,8 +245,11 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                           <Input 
                             type="number" 
                             {...field}
-                            onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
-                            value={field.value}
+                            onChange={(e) => {
+                              const val = e.currentTarget.valueAsNumber;
+                              field.onChange(Number.isNaN(val) ? undefined : val);
+                            }}
+                            value={field.value ?? ''}
                           />
                         </FormControl>
                         <FormDescription>
@@ -261,8 +270,11 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                           <Input 
                             type="number" 
                             {...field}
-                            onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
-                            value={field.value}
+                            onChange={(e) => {
+                              const val = e.currentTarget.valueAsNumber;
+                              field.onChange(Number.isNaN(val) ? undefined : val);
+                            }}
+                            value={field.value ?? ''}
                           />
                         </FormControl>
                         <FormDescription>
@@ -283,8 +295,11 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                           <Input 
                             type="number" 
                             {...field}
-                            onChange={(e) => field.onChange(parseInt(e.target.value, 10))}
-                            value={field.value}
+                            onChange={(e) => {
+                              const val = e.currentTarget.valueAsNumber;
+                              field.onChange(Number.isNaN(val) ? undefined : val);
+                            }}
+                            value={field.value ?? ''}
                           />
                         </FormControl>
                         <FormDescription>

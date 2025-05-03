@@ -35,7 +35,7 @@ export const Edit: Story = {
       merchantId: 'mer_123456789',
       url: 'https://example.com/webhook',
       isActive: true,
-      secretKey: 'whsec_1234567890abcdefghijklmnopqrstuvwxyz',
+      secretKey: 'whsec_1234567890••••••••••••••••••••••••••',
       eventTypes: [
         WebhookEventType.PAYMENT_SUCCEEDED,
         WebhookEventType.PAYMENT_FAILED

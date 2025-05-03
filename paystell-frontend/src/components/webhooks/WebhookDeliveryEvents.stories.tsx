@@ -20,7 +20,7 @@ const mockWebhook = {
   merchantId: 'mer_123456',
   url: 'https://example.com/webhook',
   isActive: true,
-  secretKey: 'whsec_123456abcdef',
+  secretKey: 'whsec_123456••••••••••••••••',
   eventTypes: [WebhookEventType.PAYMENT_SUCCEEDED, WebhookEventType.PAYMENT_FAILED],
   maxRetries: 3,
   initialRetryDelay: 5000,

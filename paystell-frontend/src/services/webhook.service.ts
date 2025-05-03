@@ -119,12 +119,13 @@ export const updateWebhook = async (id: string, webhookData: Partial<WebhookForm
   const subscriptionRequest: Partial<WebhookSubscriptionRequest> = {};
   
   // Only add properties that are present in webhookData
-  if (webhookData.url) subscriptionRequest.url = webhookData.url;
-  if (webhookData.secretKey !== undefined) subscriptionRequest.secretKey = webhookData.secretKey;
-  if (webhookData.eventTypes) subscriptionRequest.eventTypes = webhookData.eventTypes;
-  if (webhookData.maxRetries !== undefined) subscriptionRequest.maxRetries = webhookData.maxRetries;
-  if (webhookData.initialRetryDelay !== undefined) subscriptionRequest.initialRetryDelay = webhookData.initialRetryDelay;
-  if (webhookData.maxRetryDelay !== undefined) subscriptionRequest.maxRetryDelay = webhookData.maxRetryDelay;
+  if ('url' in webhookData) subscriptionRequest.url = webhookData.url;
+  if ('secretKey' in webhookData) subscriptionRequest.secretKey = webhookData.secretKey;
+  if ('eventTypes' in webhookData) subscriptionRequest.eventTypes = webhookData.eventTypes;
+  if ('maxRetries' in webhookData) subscriptionRequest.maxRetries = webhookData.maxRetries;
+  if ('initialRetryDelay' in webhookData) subscriptionRequest.initialRetryDelay = webhookData.initialRetryDelay;
+  if ('maxRetryDelay' in webhookData) subscriptionRequest.maxRetryDelay = webhookData.maxRetryDelay;
+  if ('isActive' in webhookData) subscriptionRequest.isActive = webhookData.isActive;
 
   if (MOCK_ENABLED) {
     return new Promise(resolve => {
@@ -222,6 +223,12 @@ export const sendTestWebhook = async (id: string) => {
         maxAttempts: 3,
         payload: {
           id: 'evt_test_12345',
+          transactionId: 'tx_test_12345',
+          status: 'success',
+          merchantId: 'mer_123456',
+          timestamp: new Date().toISOString(),
+          eventType: WebhookEventType.TEST_WEBHOOK,
+          reqMethod: 'POST',
           test: true,
           created: new Date().toISOString(),
           message: 'This is a test webhook event'
@@ -292,12 +299,13 @@ export const retryWebhookEvent = async (eventId: string): Promise<WebhookDeliver
       
       if (foundEvent && webhookId) {
         // Create a copy with updated values
+        const success = Math.random() > 0.3;
         const updatedEvent: WebhookDeliveryEvent = {
           ...foundEvent,
-          status: Math.random() > 0.3 ? 'completed' : 'failed',
+          status: success ? 'completed' : 'failed',
           attemptsMade: foundEvent.attemptsMade + 1,
           updatedAt: new Date(),
-          completedAt: Math.random() > 0.3 ? new Date() : undefined,
+          completedAt: success ? new Date() : undefined,
         };
         
         // Replace the event in mock data
