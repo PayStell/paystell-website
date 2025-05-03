@@ -1,3 +1,4 @@
+"use client"
 import CodeExample from '@/components/CodeExample';
 import ApiPlayground from '@/components/ApiPlayground';
 

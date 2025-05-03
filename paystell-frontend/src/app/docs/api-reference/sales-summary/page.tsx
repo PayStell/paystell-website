@@ -1,3 +1,4 @@
+"use client"
 import CodeExample from '@/components/CodeExample';
 
 export default function SalesSummaryPage() {
