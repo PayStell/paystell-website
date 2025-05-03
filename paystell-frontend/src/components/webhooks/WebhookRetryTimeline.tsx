@@ -7,7 +7,8 @@ interface WebhookRetryTimelineProps {
   attemptsMade: number;
   maxAttempts: number;
   createdAt: Date;
-  updatedAt: Date;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  updatedAt: Date; // Kept for API compatibility
   completedAt?: Date;
   nextRetry?: Date;
   status: WebhookDeliveryStatus;
@@ -17,7 +18,7 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
   attemptsMade,
   maxAttempts,
   createdAt,
-  updatedAt,
+  // updatedAt is intentionally not destructured since it's not used
   completedAt,
   nextRetry,
   status,
@@ -74,7 +75,7 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
   };
 
   const getTimelineItemClasses = (index: number) => {
-    let baseClasses = "flex items-center";
+    const baseClasses = "flex items-center";
     
     // Add specific status styling
     if (index === timestamps.length - 1) {

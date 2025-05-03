@@ -18,7 +18,7 @@ export default function TransactionsPage() {
     if (isConnected && publicKey) {
       setSenderAddress(publicKey)
     }
-  }, [network, isConnected, sendAddress])
+  }, [network, isConnected, sendAddress, publicKey])
 
   return (
     <div className="container mx-auto py-8">

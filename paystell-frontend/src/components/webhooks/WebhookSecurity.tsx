@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertTriangle, ShieldCheck, Code } from 'lucide-react';
+import { AlertTriangle, ShieldCheck } from 'lucide-react';
 
 const WebhookSecurity: React.FC = () => {
   return (
@@ -26,7 +26,7 @@ const WebhookSecurity: React.FC = () => {
           <TabsContent value="verification" className="mt-6 space-y-4">
             <p>
               Webhook events sent by PayStell include a signature in the <code>X-PayStell-Signature</code> header.
-              This signature is created using your webhook's secret key and allows you to verify that the webhook was sent by PayStell.
+              This signature is created using your webhook&apos;s secret key and allows you to verify that the webhook was sent by PayStell.
             </p>
             
             <h3 className="text-lg font-medium mt-4">Signature Format</h3>
