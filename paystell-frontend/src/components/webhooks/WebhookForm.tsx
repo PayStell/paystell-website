@@ -51,6 +51,7 @@ interface WebhookFormProps {
 
 const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
   const [testingWebhook, setTestingWebhook] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [selectedTab, setSelectedTab] = useState('basic');
   const [showSecretWarning, setShowSecretWarning] = useState(false);
   const isEditMode = Boolean(webhook);
@@ -96,6 +97,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
 
   const onSubmit = async (data: WebhookFormData) => {
     try {
+      setIsSubmitting(true);
       if (isEditMode && webhook) {
         await updateWebhook(webhook.id, data);
         toast.success('Webhook updated successfully');
@@ -110,6 +112,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
     } catch (error) {
       console.error('Error saving webhook:', error);
       toast.error('Failed to save webhook');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -383,12 +387,14 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                 type="button"
                 variant="outline"
                 onClick={handleTestWebhook}
-                disabled={!isEditMode || testingWebhook}
+                disabled={!isEditMode || testingWebhook || isSubmitting}
               >
                 {testingWebhook ? 'Sending...' : 'Test Webhook'}
               </Button>
-              <Button type="submit">
-                {isEditMode ? 'Update Webhook' : 'Create Webhook'}
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting 
+                  ? (isEditMode ? 'Updating...' : 'Creating...') 
+                  : (isEditMode ? 'Update Webhook' : 'Create Webhook')}
               </Button>
             </CardFooter>
           </form>
