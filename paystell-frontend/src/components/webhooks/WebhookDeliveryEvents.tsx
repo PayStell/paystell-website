@@ -137,7 +137,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
                             onClick={() => handleRetry(event)}
                             disabled={isRetrying}
                           >
-                            Retry
+                            {isRetrying ? "Retrying..." : "Retry"}
                           </Button>
                         )}
                       </div>
@@ -285,7 +285,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
                 }}
                 disabled={isRetrying}
               >
-                Retry Webhook
+                {isRetrying ? "Retrying..." : "Retry Webhook"}
               </Button>
             )}
           </DialogFooter>
