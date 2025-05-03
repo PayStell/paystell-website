@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { WebhookConfig, WebhookDeliveryEvent, WebhookMetrics, WebhookFormData, WebhookEventType, WebhookSubscriptionRequest } from '@/types/webhook-types';
-import { mockWebhooks, mockDeliveryEvents, mockMetrics, maskSecretKey, getMockSecret, storeMockSecret } from '@/mock/webhook-mock-data';
+import { mockWebhooks, mockDeliveryEvents, mockMetrics, maskSecretKey, storeMockSecret } from '@/mock/webhook-mock-data';
 
 // Enable or disable mock mode (use mock data instead of real API)
 const MOCK_ENABLED = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled' || process.env.NODE_ENV === 'development';

@@ -16,10 +16,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { formatEventType } from '@/utils/webhook-utils';
 import { WebhookConfig } from '@/types/webhook-types';
 import WebhookStatusBadge from './WebhookStatusBadge';
 import { deleteWebhook, sendTestWebhook } from '@/services/webhook.service';
@@ -76,7 +74,7 @@ const WebhookList: React.FC<WebhookListProps> = ({
       <div className="flex flex-col items-center justify-center p-8 text-center rounded-lg border border-dashed">
         <h3 className="text-lg font-medium mb-2">No Webhooks Configured</h3>
         <p className="text-sm text-gray-500 mb-4">
-          You haven't created any webhooks yet. Create one to start receiving event notifications.
+          You haven&apos;t created any webhooks yet. Create one to start receiving event notifications.
         </p>
       </div>
     );

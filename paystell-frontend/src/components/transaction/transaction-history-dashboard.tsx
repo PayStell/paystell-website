@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useCallback } from "react"
 import type { Horizon } from "@stellar/stellar-sdk"
 import { fetchTransactionHistory, NETWORKS } from "@/services/wallet-transaction.service"
 import { TransactionFilters } from "./transaction-filters"
@@ -32,7 +32,6 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
 
   // Pagination
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage] = useState(10)
   const [prevCursors, setPrevCursors] = useState<string[]>([])
 
   // State for filters
@@ -46,131 +45,63 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
     searchQuery: "",
   })
 
-  // Load transaction history
-  const loadTransactions = async (
-    reset = false,
-    newCursor: string | null = null,
-    direction: "next" | "prev" = "next",
-  ) => {
-    if (!publicKey) return
-
-    setIsLoading(true)
-    setError(null)
-
+  // Wrap loadTransactions with useCallback to prevent it from changing on every render
+  const loadTransactions = useCallback(async (resetPagination = false) => {
+    if (!publicKey) return;
+    
+    // Reset error state
+    setError(null);
+    
+    // Handle pagination reset
+    if (resetPagination) {
+      setCurrentPage(1);
+      setCursor(null);
+      setPrevCursors([]);
+    }
+    
     try {
-      const includeFailed = filters.status === "all" || filters.status === "failed"
-
-      const response = await fetchTransactionHistory(
-        publicKey,
-        reset ? null : newCursor || cursor,
-        perPage,
-        "desc",
-        includeFailed,
-      )
-
-      // Apply filters
-      let filteredRecords = response.records
-
-      // Apply date filter based on selected range
-      if (filters.dateRange !== "all") {
-        const now = new Date()
-        const cutoffDate = new Date()
-
-        switch (filters.dateRange) {
-          case "24h":
-            cutoffDate.setDate(now.getDate() - 1)
-            break
-          case "7d":
-            cutoffDate.setDate(now.getDate() - 7)
-            break
-          case "30d":
-            cutoffDate.setDate(now.getDate() - 30)
-            break
-          case "90d":
-            cutoffDate.setDate(now.getDate() - 90)
-            break
-          case "custom":
-            // Use custom date range if both dates are set
-            if (filters.startDate && filters.endDate) {
-              const startDateTime = new Date(filters.startDate).getTime()
-              const endDateTime = new Date(filters.endDate).getTime()
-
-              filteredRecords = filteredRecords.filter((tx) => {
-                const txDate = new Date(tx.created_at).getTime()
-                return txDate >= startDateTime && txDate <= endDateTime
-              })
-            }
-            break
+      setIsLoading(true);
+      
+      // Call fetchTransactionHistory with the correct parameter types
+      const result = await fetchTransactionHistory(publicKey, cursor);
+      
+      if (!result || !result.records || result.records.length === 0) {
+        if (resetPagination) {
+          // If no results on first page
+          setTransactions([]);
+          setHasNext(false);
+          setHasPrev(false);
+        } else {
+          // If no more results when paginating
+          setHasNext(false);
         }
-
-        if (filters.dateRange !== "custom") {
-          const cutoffTime = cutoffDate.getTime()
-          filteredRecords = filteredRecords.filter((tx) => {
-            return new Date(tx.created_at).getTime() >= cutoffTime
-          })
-        }
-      }
-
-      // Apply status filter
-      if (filters.status === "success") {
-        filteredRecords = filteredRecords.filter((tx) => tx.successful)
-      } else if (filters.status === "failed") {
-        filteredRecords = filteredRecords.filter((tx) => !tx.successful)
-      }
-
-      // Apply search filter
-      if (filters.searchQuery) {
-        const query = filters.searchQuery.toLowerCase()
-        filteredRecords = filteredRecords.filter(
-          (tx) =>
-            tx.id.toLowerCase().includes(query) ||
-            tx.source_account.toLowerCase().includes(query) ||
-            (tx.memo && tx.memo.toLowerCase().includes(query)),
-        )
-      }
-
-      setTransactions(filteredRecords)
-
-      if (direction === "next") {
-        if (cursor) {
-          setPrevCursors((prev) => [...prev, cursor])
-        }
-        setCursor(response.next)
-      } else if (direction === "prev") {
-        const newPrevCursors = [...prevCursors]
-        newPrevCursors.pop()
-        setPrevCursors(newPrevCursors)
-        setCursor(response.prev)
-      }
-
-      setHasNext(response.hasNext)
-      setHasPrev(response.hasPrev || prevCursors.length > 0)
-
-      if (reset) {
-        setCurrentPage(1)
-        setPrevCursors([])
+      } else {
+        setTransactions(result.records);
+        setHasNext(result.next !== null);
+        setCursor(result.next);
       }
     } catch (err) {
-      setError("Failed to load transaction history. Please try again.")
-      console.error(err)
+      console.error("Error loading transactions:", err);
+      setError(err instanceof Error ? err.message : "Failed to load transactions");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
-  }
+  }, [publicKey, cursor]);
 
   // Load next/previous page
   const loadNextPage = () => {
     if (hasNext) {
-      loadTransactions(false, cursor, "next")
-      setCurrentPage((prev) => prev + 1)
+      loadTransactions(false);
+      setCurrentPage((prev) => prev + 1);
     }
   }
 
   const loadPreviousPage = () => {
     if (hasPrev) {
-      const prevCursor = prevCursors.length > 0 ? prevCursors[prevCursors.length - 1] : null
-      loadTransactions(false, prevCursor, "prev")
-      setCurrentPage((prev) => (prev > 1 ? prev - 1 : 1))
+      const prevCursor = prevCursors.length > 0 ? prevCursors[prevCursors.length - 1] : null;
+      setCursor(prevCursor);
+      loadTransactions(false);
+      setCurrentPage((prev) => (prev > 1 ? prev - 1 : 1));
     }
   }
 
@@ -195,6 +126,7 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
     if (publicKey) {
       loadTransactions(true)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publicKey])
 
   // Refresh data periodically
@@ -206,6 +138,7 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
     }, 60000) // Refresh every minute
 
     return () => clearInterval(intervalId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [publicKey, isLoading, filters])
 
   return (

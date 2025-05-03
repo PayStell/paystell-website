@@ -29,7 +29,7 @@ import { Badge } from '@/components/ui/badge';
 import WebhookStatusBadge from './WebhookStatusBadge';
 import WebhookRetryTimeline from './WebhookRetryTimeline';
 import { WebhookDeliveryEvent, WebhookConfig } from '@/types/webhook-types';
-import { retryWebhookEvent, fetchWebhookEvents } from '@/services/webhook.service';
+import { retryWebhookEvent } from '@/services/webhook.service';
 
 interface WebhookDeliveryEventsProps {
   webhook: WebhookConfig;

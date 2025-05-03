@@ -1,4 +1,6 @@
 import { WebhookEventType, WebhookEventTypeInfo } from '@/types/webhook-types';
+// In Node.js environments, we'll use the crypto module
+import * as crypto from 'crypto';
 
 /**
  * Webhook event type information with descriptions and sample payloads
@@ -134,12 +136,31 @@ export const generateSecretKey = (): string => {
   const length = 32;
   let result = '';
   
+  // Use the available crypto API for random values
   const randomValues = new Uint8Array(length);
-  (typeof window !== 'undefined'
-    ? window.crypto
-    : // Node.js >=19 has globalThis.crypto; otherwise import('crypto').webcrypto
-      (globalThis.crypto ?? require('crypto').webcrypto!)
-  ).getRandomValues(randomValues);
+  
+  // Browser environment
+  if (typeof window !== 'undefined' && window.crypto) {
+    window.crypto.getRandomValues(randomValues);
+  }
+  // Node.js environment
+  else if (typeof crypto !== 'undefined') {
+    try {
+      // Try to use the Node.js crypto module safely
+      crypto.webcrypto?.getRandomValues?.(randomValues);
+    } catch {
+      // Fallback to Math.random if webcrypto fails
+      for (let i = 0; i < length; i++) {
+        randomValues[i] = Math.floor(Math.random() * 256);
+      }
+    }
+  }
+  // Fallback for environments without crypto
+  else {
+    for (let i = 0; i < length; i++) {
+      randomValues[i] = Math.floor(Math.random() * 256);
+    }
+  }
   
   for (let i = 0; i < length; i++) {
     result += characters.charAt(randomValues[i] % characters.length);
@@ -177,7 +198,7 @@ export const isValidWebhookUrl = (url: string): boolean => {
   try {
     const urlObj = new URL(url);
     return urlObj.protocol === 'https:';
-  } catch (e) {
+  } catch {
     return false;
   }
 }; 
