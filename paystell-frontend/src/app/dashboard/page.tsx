@@ -74,7 +74,13 @@ export default function DashboardPage() {
       
       {/* Stellar Analytics Section */}
       <div className="mt-8">
+        {loading ? (
+          <LoadingSkeleton type="chart" height="300px" width="100%" />
+        ) : error ? (
+          <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">{error}</div>
+        ) : (
           <StellarAnalytics />
+        )}
       </div>
     </main>
   );

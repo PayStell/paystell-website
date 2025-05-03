@@ -4,16 +4,27 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { mockStellarTransactions, MockStellarTransaction } from './mockData';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, TooltipProps } from 'recharts';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { subDays, startOfDay, startOfWeek, startOfMonth, format, parseISO } from 'date-fns';
+import { subDays, startOfDay, startOfWeek, startOfMonth, format, parseISO, parse } from 'date-fns';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
 
 type TimeFilter = 'daily' | 'weekly' | 'monthly' | 'all';
 
-// Helper function to format currency (basic example)
+// Helper function to format currency with proper internationalization
 const formatCurrency = (value: number, currency = 'USD') => {
-  // In a real app, use a library like Intl.NumberFormat
-  return `${currency === 'XLM' ? '' : '$'}${value.toFixed(2)} ${currency === 'XLM' ? 'XLM' : ''}`;
+  // Currency codes to use with Intl.NumberFormat
+  const currencyCode = currency === 'XLM' ? undefined : currency;
+
+  if (currencyCode) {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: currencyCode,
+    }).format(value);
+  } else {
+    // For XLM or other non-standard currencies
+    return `${value.toFixed(2)} ${currency}`;
+  }
 };
 
 export const StellarAnalytics: React.FC = () => {
@@ -21,22 +32,19 @@ export const StellarAnalytics: React.FC = () => {
   const [selectedAsset, setSelectedAsset] = useState<string>('all'); // 'all', 'XLM', 'USDC', etc.
 
   // --- Data Filtering Logic ---
-  const filteredData = useMemo(() => {
+  const filteredData: MockStellarTransaction[] = useMemo(() => {
     const now = new Date();
     let startDate: Date;
 
     switch (timeFilter) {
       case 'daily':
-        startDate = startOfDay(subDays(now, 1)); // Last 24 hours might be better? Let's do last full day for simplicity now.
-        startDate = subDays(now, 1);
+        startDate = subDays(now, 1); // Last 24 hours
         break;
       case 'weekly':
-        startDate = startOfWeek(subDays(now, 7), { weekStartsOn: 1 }); // Start of last week (Monday)
-        startDate = subDays(now, 7);
+        startDate = subDays(now, 7); // Last 7 days
         break;
       case 'monthly':
-        startDate = startOfMonth(subDays(now, 30)); // Start of last month
-        startDate = subDays(now, 30);
+        startDate = subDays(now, 30); // Last 30 days
         break;
       case 'all':
       default:
@@ -45,7 +53,7 @@ export const StellarAnalytics: React.FC = () => {
         break;
     }
     
-    return mockStellarTransactions.filter(tx => {
+    return mockStellarTransactions.filter((tx: MockStellarTransaction) => {
         const txDate = parseISO(tx.timestamp);
         const assetMatch = selectedAsset === 'all' || tx.asset === selectedAsset;
         // Ensure we only include transactions after the calculated start date
@@ -60,10 +68,10 @@ export const StellarAnalytics: React.FC = () => {
 
   // --- Metric Calculation Logic ---
   const metrics = useMemo(() => {
-    const successfulTx = filteredData.filter(tx => tx.status === 'success');
-    const totalVolume = successfulTx.reduce((sum, tx) => sum + tx.amount, 0);
-    const successfulPayments = successfulTx.filter(tx => tx.type === 'payment').length;
-    const failedAttempts = filteredData.filter(tx => tx.status === 'failed').length;
+    const successfulTx = filteredData.filter((tx: MockStellarTransaction) => tx.status === 'success');
+    const totalVolume = successfulTx.reduce((sum: number, tx: MockStellarTransaction) => sum + tx.amount, 0);
+    const successfulPayments = successfulTx.filter((tx: MockStellarTransaction) => tx.type === 'payment').length;
+    const failedAttempts = filteredData.filter((tx: MockStellarTransaction) => tx.status === 'failed').length;
 
     return {
       totalVolume,
@@ -92,52 +100,49 @@ export const StellarAnalytics: React.FC = () => {
 
     const groupedData: { [key: string]: { date: string; volume: number; count: number; failed: number } } = {};
 
-    filteredData.forEach(tx => {
+    filteredData.forEach((tx: MockStellarTransaction) => {
       const txDate = parseISO(tx.timestamp);
-      let groupKey: string;
+      // Format the date for display and use it as the group key
+      const displayDate = formatTime(txDate);
 
-      // Determine the grouping key based on the time filter
-      switch (timeFilter) {
-        case 'daily':
-          groupKey = format(startOfDay(txDate), 'yyyy-MM-dd'); // Group by day for daily aggregate, show hours on axis
-          groupKey = format(txDate, 'yyyy-MM-dd HH:00'); 
-          break;
-        case 'weekly':
-           groupKey = format(startOfWeek(txDate, { weekStartsOn: 1 }), 'yyyy-MM-dd'); // Group by week start date
-           break;
-        case 'monthly':
-           groupKey = format(startOfMonth(txDate), 'yyyy-MM'); // Group by month
-           break;
-         case 'all':
-         default:
-            groupKey = format(startOfWeek(txDate, { weekStartsOn: 1 }), 'yyyy-MM-dd'); // Group by week for 'all' view
-           break;
-       }
-       
-       // Use a display-friendly date format for the chart label
-       const displayDate = formatTime(txDate);
-       groupKey = displayDate; // Use the formatted time directly as the key
-
-
-      if (!groupedData[groupKey]) {
-        groupedData[groupKey] = { date: displayDate, volume: 0, count: 0, failed: 0 };
+      if (!groupedData[displayDate]) {
+        groupedData[displayDate] = { date: displayDate, volume: 0, count: 0, failed: 0 };
       }
 
       if (tx.status === 'success') {
-        groupedData[groupKey].volume += tx.amount;
-        groupedData[groupKey].count += 1;
+        groupedData[displayDate].volume += tx.amount;
+        groupedData[displayDate].count += 1;
       } else {
-        groupedData[groupKey].failed += 1;
+        groupedData[displayDate].failed += 1;
       }
     });
 
      // Convert grouped data to array and sort by date for the chart
      return Object.values(groupedData).sort((a, b) => {
-       // Need a consistent way to sort based on the time format used
-       // This is tricky if formats change drastically (e.g., HH:00 vs yyyy-MM-dd)
-       // For simplicity now, we'll rely on the generation order which is roughly time-based
-       // A better approach would involve parsing the 'date' string back to a Date object for sorting
-       return 0; // Placeholder: Needs proper date sorting based on format
+        // Sort based on the time filter format
+        if (timeFilter === 'daily') {
+          // For daily view, sort by hour (HH:00 format)
+          // Simple string comparison works here as format is fixed HH:00
+          return a.date.localeCompare(b.date);
+        } else if (timeFilter === 'weekly' || timeFilter === 'monthly') {
+          // For weekly/monthly, attempt to parse back to sortable form (e.g., using a base year)
+          // This is heuristic, assumes data is within the same year primarily.
+          // A more robust solution might store the original date/timestamp alongside the formatted string.
+          try {
+            // Attempt to parse 'EEE dd' or 'MMM dd' - needs a base year to parse correctly
+            const baseYear = new Date().getFullYear();
+            const dateA = parse(a.date, timeFilter === 'weekly' ? 'EEE dd' : 'MMM dd', new Date(baseYear, 0, 1));
+            const dateB = parse(b.date, timeFilter === 'weekly' ? 'EEE dd' : 'MMM dd', new Date(baseYear, 0, 1));
+            return dateA.getTime() - dateB.getTime();
+          } catch (e) {
+             console.error("Error parsing date for sorting:", e);
+             // Fallback to string sort if parsing fails
+             return a.date.localeCompare(b.date);
+          }
+        } else { // 'all' or default
+          // For 'all' time filter (yyyy-MM-dd format)
+          return a.date.localeCompare(b.date);
+        }
      });
   }, [filteredData, timeFilter]);
 
@@ -147,6 +152,32 @@ export const StellarAnalytics: React.FC = () => {
       return ['all', ...Array.from(assets)];
   }, []);
 
+  // Explicitly type recharts tooltip props for now
+  const CustomTooltip = ({ active, payload, label }: TooltipProps<number, string>) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="bg-white p-2 border rounded-lg shadow-sm text-sm">
+          <p className="label font-semibold mb-1">{`${label}`}</p>
+          {payload.map((p: any, index: number) => {
+            const name = p.name;
+            const value = p.value;
+            // Attempt to format volume as currency if the name matches
+            const displayValue = name === 'volume' 
+                                ? formatCurrency(value, selectedAsset === 'all' ? 'USD' : selectedAsset)
+                                : value;
+
+            return (
+                <div key={`${label}-${index}-${name}`} style={{ color: p.color }} className="flex justify-between items-center"> 
+                  <span className="mr-2">{`${name}:`}</span>
+                  <span className="font-medium">{displayValue}</span>
+                </div>
+              );
+           })}
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div className="space-y-6">
@@ -239,10 +270,9 @@ export const StellarAnalytics: React.FC = () => {
                 <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
                 <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
                  <Tooltip 
-                    formatter={(value: number, name: string) => {
-                        if (name === 'volume') return formatCurrency(value, selectedAsset === 'all' ? 'USD' : selectedAsset);
-                        return value;
-                    }}
+                    labelStyle={{ color: 'black' }}
+                    itemStyle={{ color: 'black' }}
+                    content={<CustomTooltip />}
                  />
                  <Legend />
                   <Line yAxisId="left" type="monotone" dataKey="volume" stroke="#8884d8" activeDot={{ r: 8 }} name={`Volume (${selectedAsset === 'all' ? 'Mixed' : selectedAsset})`} />
