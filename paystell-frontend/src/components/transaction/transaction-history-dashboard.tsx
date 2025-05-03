@@ -65,8 +65,15 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
       // Use provided cursor or current cursor
       const cursorToUse = targetCursor !== undefined ? targetCursor : cursor;
       
-      // Call fetchTransactionHistory with the correct parameter types
-      const result = await fetchTransactionHistory(publicKey, cursorToUse);
+      // Call fetchTransactionHistory with the correct parameter types and filters
+      const result = await fetchTransactionHistory(
+        publicKey,
+        cursorToUse,
+        10, // limit
+        "desc", // order
+        true, // includeFailed (this will be handled in the service based on filters.status)
+        filters // Pass filters to the service
+      );
       
       if (!result || !result.records || result.records.length === 0) {
         if (resetPagination) {
@@ -104,7 +111,7 @@ export function TransactionHistoryDashboard({ publicKey, network, isConnected }:
     } finally {
       setIsLoading(false);
     }
-  }, [publicKey, cursor]);
+  }, [publicKey, cursor, filters]);
 
   // Load next/previous page
   const loadNextPage = () => {
