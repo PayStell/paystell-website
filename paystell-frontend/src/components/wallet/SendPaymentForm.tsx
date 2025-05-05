@@ -53,16 +53,16 @@ export default function SendPaymentForm() {
     },
   })
 
-  // Update USD equivalent when amount changes or XLM price changes
+  // Update USD equivalent when amount changes
   useEffect(() => {
-    const amount = form.watch("amount")
-    if (amount && xlmPrice && !isNaN(Number(amount))) {
+    const amount = form.watch("amount");
+    if (amount && xlmPrice) {
       const usdValue = (Number(amount) * xlmPrice).toFixed(2)
       setUsdEquivalent(usdValue)
     } else {
       setUsdEquivalent(null)
     }
-  }, [form.watch("amount"), xlmPrice, form])
+  }, [form, xlmPrice]);
 
   // Handle Max button click
   const handleMaxClick = () => {

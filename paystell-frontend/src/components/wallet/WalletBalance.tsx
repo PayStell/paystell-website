@@ -25,7 +25,7 @@ export default function WalletBalance() {
 
       return () => clearInterval(balanceIntervalId)
     }
-  }, [publicKey, isConnected])
+  }, [publicKey, isConnected, fetchBalances, fetchXLMPrice])
 
   if (isLoadingBalances) {
     return (

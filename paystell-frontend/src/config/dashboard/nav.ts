@@ -39,6 +39,12 @@ export const merchantNavItems = [
     icon: ShoppingBag,
     requiredPermissions: [Permission.MANAGE_MERCHANT],
   },
+  {
+    title: "Webhooks",
+    href: "/dashboard/webhooks",
+    icon: Link,
+    requiredPermissions: [Permission.MANAGE_MERCHANT],
+  },
 ];
 
 // Navigation items for admins
