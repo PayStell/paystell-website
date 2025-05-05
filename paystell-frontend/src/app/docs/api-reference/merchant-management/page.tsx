@@ -72,7 +72,7 @@ Process:
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Delete Merchant Logo</h2>
       <p className="text-gray-300 mb-4">
-        Removes the merchant's logo.
+        Removes the merchant&apos;s logo.
       </p>
       <CodeExample
         code={`DELETE /merchants/logo

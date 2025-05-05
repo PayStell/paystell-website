@@ -103,7 +103,7 @@ Error Response (401 Unauthorized):
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Get Profile</h2>
       <p className="text-gray-300 mb-4">
-        Retrieves the current user's profile information.
+        Retrieves the current users profile information.
       </p>
       <CodeExample
         code={`GET /auth/profile
