@@ -2,7 +2,7 @@
 
 export const dynamic = 'force-dynamic';
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   PaymentLinkType,
   PaymentLinksTable,
@@ -10,42 +10,59 @@ import {
 import { Button } from "@/components/ui/button";
 import { NewLinkModal } from "@/components/dashboard/links/newLink/NewLinkModal";
 import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
+import { Toaster } from "@/components/ui/toaster";
+import { getPaymentLinks, type PaymentLink } from "@/services/paymentLink.service";
+import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 export default function PaymentLinkScreen(): JSX.Element {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [paymentLinksData, setPaymentLinksData] = useState<PaymentLinkType[]>(
-    []
-  );
+  const [paymentLinksData, setPaymentLinksData] = useState<PaymentLinkType[]>([]);
+  const router = useRouter();
+
+  const fetchPaymentLinks = useCallback(async () => {
+    try {
+      // Check if we have a token
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('No auth token found, redirecting to login');
+        router.push('/login');
+        return;
+      }
+
+      const response = await getPaymentLinks();
+      console.log('Payment links response:', response); // Debug log
+      
+      // Map the items from the paginated response
+      setPaymentLinksData(response.items.map((link: PaymentLink) => ({
+        id: link.id,
+        name: link.name,
+        sku: link.sku || '',
+        price: `${link.amount} ${link.currency}`,
+        state: link.status.charAt(0).toUpperCase() + link.status.slice(1), // Capitalize status
+      })));
+    } catch (error) {
+      console.error('Failed to fetch payment links:', error);
+      if ((error as AxiosError)?.response?.status === 401) {
+        router.push('/login');
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [router]);
 
   useEffect(() => {
-    setTimeout(() => {
-      setPaymentLinksData([
-        {
-          id: 1,
-          name: "Product 1",
-          sku: "SKU12345",
-          price: "$20.00",
-          state: "Active",
-        },
-        {
-          id: 2,
-          name: "Product 2",
-          sku: "SKU67890",
-          price: "$35.00",
-          state: "Inactive",
-        },
-        {
-          id: 3,
-          name: "Product 3",
-          sku: "SKU54321",
-          price: "$50.00",
-          state: "Active",
-        },
-      ]);
-      setLoading(false);
-    }, 2000);
-  }, []);
+    fetchPaymentLinks();
+  }, [router, fetchPaymentLinks]);
+
+  const handleUpdate = async () => {
+    await fetchPaymentLinks(); // Refresh the list after update
+  };
+
+  const handleDelete = async () => {
+    await fetchPaymentLinks(); // Refresh the list after deletion
+  };
 
   return (
     <div className="flex flex-col bg-card rounded-lg w-full p-8 mt-8">
@@ -60,12 +77,20 @@ export default function PaymentLinkScreen(): JSX.Element {
           <LoadingSkeleton type="table" rows={5} />
         </div>
       ) : (
-        <PaymentLinksTable data={paymentLinksData} />
+        <PaymentLinksTable 
+          data={paymentLinksData} 
+          onUpdate={handleUpdate}
+          onDelete={handleDelete}
+        />
       )}
       <NewLinkModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          fetchPaymentLinks(); // Refresh the list after creating a new link
+        }}
       />
+      <Toaster />
     </div>
   );
 }
