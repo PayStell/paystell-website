@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Balance from "@/components/dashboard/balance";
 import Activity, { UserActivity } from "@/components/dashboard/activity";
 import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
+import { StellarAnalytics } from "@/components/dashboard/analytics/StellarAnalytics";
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
@@ -68,6 +69,17 @@ export default function DashboardPage() {
             <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto"> {error} </div>
         ) : (
           <Activity data={activityData} />
+        )}
+      </div>
+      
+      {/* Stellar Analytics Section */}
+      <div className="mt-8">
+        {loading ? (
+          <LoadingSkeleton type="chart" height="300px" width="100%" />
+        ) : error ? (
+          <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">{error}</div>
+        ) : (
+          <StellarAnalytics />
         )}
       </div>
     </main>

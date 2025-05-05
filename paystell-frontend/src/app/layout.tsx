@@ -3,6 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { ThemeProvider } from "next-themes";
+import { WalletProvider } from "@/providers/useWalletProvider";
+import { Toaster } from "@/components/ui/sonner"
+
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,9 +23,12 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-          <AuthProvider>
-            {children}
-          </AuthProvider>
+          <WalletProvider>
+            <AuthProvider>
+              {children}
+              <Toaster />
+            </AuthProvider>
+          </WalletProvider>
         </ThemeProvider>
       </body>
     </html>
