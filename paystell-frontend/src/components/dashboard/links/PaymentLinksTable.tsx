@@ -24,6 +24,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { EditLinkModal } from "./editLink/EditLinkModal";
+import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
+import { PaymentLink, softDeletePaymentLink } from "@/services/paymentLink.service";
+import { useToast } from "@/components/ui/use-toast";
 
 // Temporary Badge replacement until UI components are fixed
 const Badge = ({ 
@@ -50,7 +54,7 @@ const Badge = ({
 };
 
 export interface PaymentLinkType {
-  id: number;
+  id: string;
   name: string;
   sku: string;
   price: string;
@@ -59,11 +63,16 @@ export interface PaymentLinkType {
 
 interface PaymentLinksProps {
   data: PaymentLinkType[];
+  onUpdate: (updatedLink: PaymentLink) => void;
+  onDelete: (id: string) => void;
 }
 
-export function PaymentLinksTable({ data }: PaymentLinksProps) {
+export function PaymentLinksTable({ data, onUpdate, onDelete }: PaymentLinksProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [editingLink, setEditingLink] = useState<PaymentLink | null>(null);
+  const [deletingLink, setDeletingLink] = useState<PaymentLinkType | null>(null);
+  const { toast } = useToast();
 
   const totalSteps = Math.ceil(data.length / itemsPerPage);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -75,6 +84,40 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
   const handleItemsPerPageChange = (value: number) => {
     setItemsPerPage(value);
     setCurrentPage(1);
+  };
+
+  const handleEdit = (link: PaymentLinkType) => {
+    // Convert PaymentLinkType to PaymentLink format
+    const [amount, currency] = link.price.split(' ');
+    const paymentLink: PaymentLink = {
+      id: link.id,
+      name: link.name,
+      sku: link.sku,
+      amount: parseFloat(amount),
+      currency,
+      status: link.state.toLowerCase(),
+      slug: '', // This is not shown in the table but required by the type
+      createdAt: new Date().toISOString(), // This is not shown in the table but required by the type
+    };
+    setEditingLink(paymentLink);
+  };
+
+  const handleDelete = async (link: PaymentLinkType) => {
+    try {
+      await softDeletePaymentLink(link.id);
+      onDelete(link.id);
+      toast({
+        title: "Success",
+        description: "Payment link deleted successfully",
+      });
+    } catch (error) {
+      console.error("Failed to delete payment link:", error);
+      toast({
+        title: "Error",
+        description: "Failed to delete payment link. Please try again.",
+        variant: "destructive",
+      });
+    }
   };
 
   return (
@@ -120,7 +163,7 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
               <TableCell className="text-center">{item.sku}</TableCell>
               <TableCell className="text-center">{item.price}</TableCell>
               <TableCell className="text-center">
-                <Badge variant={item.state === "Active" ? "active" : "default"}>
+                <Badge variant={item.state === "active" ? "active" : "default"}>
                   {item.state}
                 </Badge>
               </TableCell>
@@ -136,12 +179,15 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
-                      <DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => handleEdit(item)}>
                         <MdEdit className="h-4 w-4 mr-2" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem>
-                        <MdDeleteOutline className="h-4 w-4 mr-2 text-destructive" />
+                      <DropdownMenuItem 
+                        onClick={() => setDeletingLink(item)}
+                        className="text-destructive"
+                      >
+                        <MdDeleteOutline className="h-4 w-4 mr-2" />
                         Delete
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -181,6 +227,27 @@ export function PaymentLinksTable({ data }: PaymentLinksProps) {
           <MdChevronRight />
         </Button>
       </div>
+
+      {editingLink && (
+        <EditLinkModal
+          isOpen={true}
+          onClose={() => setEditingLink(null)}
+          paymentLink={editingLink}
+          onUpdate={(updatedLink) => {
+            onUpdate(updatedLink);
+            setEditingLink(null);
+          }}
+        />
+      )}
+
+      {deletingLink && (
+        <DeleteConfirmDialog
+          isOpen={true}
+          onClose={() => setDeletingLink(null)}
+          onConfirm={() => handleDelete(deletingLink)}
+          name={deletingLink.name}
+        />
+      )}
     </div>
   );
 }
