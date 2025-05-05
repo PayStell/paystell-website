@@ -54,9 +54,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const login = async (email: string, password: string) => {
     try {
       const response = await authService.login({ email, password });
-      setToken(response.token);
+      setToken(response.tokens.accessToken);
       setUser(response.user);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.tokens.accessToken);
       localStorage.setItem('user', JSON.stringify(response.user));
     } catch (error) {
       console.error('Login failed:', error);
@@ -67,9 +67,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const register = async (name: string, email: string, password: string, role: string) => {
     try {
       const response = await authService.register({ name, email, password, role });
-      setToken(response.token);
+      setToken(response.tokens.accessToken);
       setUser(response.user);
-      localStorage.setItem('token', response.token);
+      localStorage.setItem('token', response.tokens.accessToken);
       localStorage.setItem('user', JSON.stringify(response.user));
     } catch (error) {
       console.error('Registration failed:', error);
