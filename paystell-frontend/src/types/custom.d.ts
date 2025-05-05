@@ -23,6 +23,13 @@ declare module 'lucide-react' {
   export const EyeOff: LucideIcon;
   export const Shield: LucideIcon;
   export const ArrowLeft: LucideIcon;
+  export const ArrowUpRight: LucideIcon;
+  export const ArrowDownLeft: LucideIcon;
+  export const Clock: LucideIcon;
+  export const CalendarIcon: LucideIcon;
+  export const Filter: LucideIcon;
+  export const ChevronDown: LucideIcon;
+  export const ChevronUp: LucideIcon;
   export const Edit2: LucideIcon;
   export const Search: LucideIcon;
   export const UserCheck: LucideIcon;
