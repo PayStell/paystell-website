@@ -15,12 +15,14 @@ api.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  console.log('Request config:', {
-    url: config.url,
-    method: config.method,
-    headers: config.headers,
-    baseURL: config.baseURL
-  });
+  if (process.env.NODE_ENV === 'development') {
+    console.log('Request config:', {
+      url: config.url,
+      method: config.method,
+      headers: config.headers,
+      baseURL: config.baseURL
+    });
+  }
   return config;
 });
 
@@ -28,13 +30,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    console.error('API Error:', {
-      url: error.config?.url,
-      method: error.config?.method,
-      status: error.response?.status,
-      data: error.response?.data,
-      message: error.message
-    });
+    if (process.env.NODE_ENV === 'development') {
+      console.error('API Error:', {
+        url: error.config?.url,
+        method: error.config?.method,
+        status: error.response?.status,
+        data: error.response?.data,
+        message: error.message
+      });
+    }
 
     if (error.response?.status === 401) {
       // Clear invalid token
@@ -87,37 +91,49 @@ export interface PaginatedResponse<T> {
 
 export const createPaymentLink = async (data: CreatePaymentLinkDto): Promise<PaymentLink> => {
   try {
-    console.log('Sending payment link data:', data); // Log the request data
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Sending payment link data:', data);
+    }
     const response = await api.post('/paymentlink', data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error('Payment link creation failed:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        headers: error.response?.headers,
-        config: error.config
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Payment link creation failed:', {
+          status: error.response?.status,
+          data: error.response?.data,
+          headers: error.response?.headers,
+          config: error.config
+        });
+      }
       throw new Error(error.response?.data?.message || 'Failed to create payment link');
     }
-    console.error('Unexpected error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Unexpected error:', error);
+    }
     throw error;
   }
 };
 
 export const getPaymentLinks = async (): Promise<PaginatedResponse<PaymentLink>> => {
   try {
-    console.log('Fetching payment links...');
-    const response = await api.get('/paymentlink/user');  // Updated path to match backend
-    console.log('Payment links response:', response.data);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Fetching payment links...');
+    }
+    const response = await api.get('/paymentlink/user');
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Payment links response:', response.data);
+    }
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error('Failed to fetch payment links:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        message: error.message
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Failed to fetch payment links:', {
+          status: error.response?.status,
+          data: error.response?.data,
+          message: error.message
+        });
+      }
       if (error.response?.status === 404) {
         return {
           items: [],
@@ -135,39 +151,51 @@ export const getPaymentLinks = async (): Promise<PaginatedResponse<PaymentLink>>
 
 export const updatePaymentLink = async (id: string, data: Partial<CreatePaymentLinkDto>): Promise<PaymentLink> => {
   try {
-    console.log('Updating payment link:', { id, data });
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Updating payment link:', { id, data });
+    }
     const response = await api.put(`/paymentlink/${id}`, data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error('Payment link update failed:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        headers: error.response?.headers,
-        config: error.config
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Payment link update failed:', {
+          status: error.response?.status,
+          data: error.response?.data,
+          headers: error.response?.headers,
+          config: error.config
+        });
+      }
       throw new Error(error.response?.data?.message || 'Failed to update payment link');
     }
-    console.error('Unexpected error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Unexpected error:', error);
+    }
     throw error;
   }
 };
 
 export const softDeletePaymentLink = async (id: string): Promise<void> => {
   try {
-    console.log('Soft deleting payment link:', id);
+    if (process.env.NODE_ENV === 'development') {
+      console.log('Soft deleting payment link:', id);
+    }
     await api.patch(`/paymentlink/${id}/soft-delete`);
   } catch (error) {
     if (axios.isAxiosError(error)) {
-      console.error('Payment link deletion failed:', {
-        status: error.response?.status,
-        data: error.response?.data,
-        headers: error.response?.headers,
-        config: error.config
-      });
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Payment link deletion failed:', {
+          status: error.response?.status,
+          data: error.response?.data,
+          headers: error.response?.headers,
+          config: error.config
+        });
+      }
       throw new Error(error.response?.data?.message || 'Failed to delete payment link');
     }
-    console.error('Unexpected error:', error);
+    if (process.env.NODE_ENV === 'development') {
+      console.error('Unexpected error:', error);
+    }
     throw error;
   }
 }; 

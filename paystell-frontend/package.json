@@ -37,7 +37,6 @@
     "@react-icons/all-files": "^4.1.0",
     "@stellar/stellar-sdk": "^13.3.0",
     "@storybook/addon-themes": "^8.6.8",
-    "@types/next-auth": "^3.13.0",
     "axios": "^1.9.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
