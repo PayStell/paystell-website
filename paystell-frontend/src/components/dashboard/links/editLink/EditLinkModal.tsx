@@ -15,7 +15,10 @@ import { PaymentLink, updatePaymentLink } from "@/services/paymentLink.service";
 
 const formSchema = z.object({
   name: z.string().min(1, "Name is required").max(100),
-  amount: z.number().min(0, "Amount must be positive"),
+  amount: z.number()
+    .min(0, "Amount must be positive")
+    .max(1000000, "Amount exceeds maximum allowed")
+    .refine(val => !isNaN(val) && Number.isFinite(val), "Amount must be a valid number"),
   currency: z.string().min(1, "Currency is required").max(3),
   sku: z.string().min(1, "SKU is required").max(50),
   status: z.enum(["active", "inactive", "expired"]),
