@@ -1,26 +1,41 @@
-"use client";
+"use client"
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic"
 
-import React, { useState } from "react";
-import ProfileForm from "@/components/dashboard/settings/ProfileForm";
-import WalletVerificationSection from "@/components/dashboard/settings/WalletVerificationSection";
-import AppearanceSection from "@/components/dashboard/settings/AppearanceSection";
+import type React from "react"
+import { useState } from "react"
+import ProfileForm from "@/components/dashboard/settings/ProfileForm"
+import WalletVerificationSection from "@/components/dashboard/settings/WalletVerificationSection"
+import AppearanceSection from "@/components/dashboard/settings/AppearanceSection"
+import { useWallet } from "@/providers/useWalletProvider"
 
 const SettingsScreen: React.FC = () => {
-  const [isWalletVerified, setIsWalletVerified] = useState(false);
-  const isEmailVerified = true; // Changed to constant since it's not being modified
+  const { state } = useWallet()
+  const { publicKey } = state
 
-  // Mock wallet address - replace with actual wallet address from your system
-  const walletAddress = "GABC...XYZ";
+  const [isWalletVerified, setIsWalletVerified] = useState(false)
+  const [verifiedWalletAddress, setVerifiedWalletAddress] = useState<string | null>(null)
+  const isEmailVerified = true //user state/API
 
   const handleProfileSubmit = (data: {
-    name: string;
-    logo: string | null;
-    description: string;
+    name: string
+    logo: string | null
+    description: string
   }) => {
-    console.log("Form is valid:", data);
-  };
+    console.log("Form is valid:", data)
+  }
+
+  const handleVerificationComplete = (walletAddress: string) => {
+    setIsWalletVerified(true)
+    setVerifiedWalletAddress(walletAddress)
+    console.log("Wallet verified:", walletAddress)
+    //Update your user state or call an API
+  }
+
+  const handleVerificationError = (error: string) => {
+    console.error("Verification error:", error)
+    // Handle verification error (maybe show a notification)
+  }
 
   return (
     <div className="container mx-auto py-8">
@@ -28,15 +43,15 @@ const SettingsScreen: React.FC = () => {
       <div className="grid gap-6">
         <ProfileForm onSubmit={handleProfileSubmit} />
         <WalletVerificationSection
-          walletAddress={walletAddress}
           isWalletVerified={isWalletVerified}
           isEmailVerified={isEmailVerified}
-          onVerificationComplete={() => setIsWalletVerified(true)}
+          onVerificationComplete={handleVerificationComplete}
+          onVerificationError={handleVerificationError}
         />
       </div>
       <AppearanceSection />
     </div>
-  );
-};
+  )
+}
 
-export default SettingsScreen;
+export default SettingsScreen
