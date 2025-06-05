@@ -1,103 +1,72 @@
-"use client"
+'use client'
+import React, { useState } from 'react';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import { WalletData } from '@/types/types';
+import { mockWalletData } from '@/mock/wallet-data';
 
-import { Badge } from "@/components/ui/badge"
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { AlertCircle } from "lucide-react"
-import { useWallet } from "@/providers/useWalletProvider"
-import { StellarProvider } from "@/hooks/use-wallet"
-import WalletBalance from "./WalletBalance"
-import TransactionHistory from "./TransactionHistory"
-import SendPaymentForm from "./SendPaymentForm"
-import ConnectWalletButton from "../shared/ConnectWalletButton"
 
-export default function WalletDashboard() {
-  const { state } = useWallet()
-  const { isConnected, publicKey } = state
-  const [error] = useState<string | null>(null)
-  const [activeTab, setActiveTab] = useState("overview")
+import { Navigation } from './navigation';
+import { WalletCheck } from './wallet-check';
+import { WalletActivationWizard } from './wallet-activation-wizard';
+import { WalletDashboard } from './wallet-dashboard';
+import { TransactionHistory } from './transaction-history';
+import { SettingsPage } from './settings';
+import { SendPayment } from './send-payment';
+import { ReceivePayment } from './receive-payment';
 
-  useEffect(() => {
-    if (!isConnected) {
-      setActiveTab("overview")
+export const StellarWalletApp: React.FC = () => {
+  const [currentPage, setCurrentPage] = useState('start');
+  const [walletData, setWalletData] = useState<WalletData | null>(null);
+  const [hasWallet, setHasWallet] = useState(false);
+
+  const handleHasWallet = () => {
+    setHasWallet(true);
+    setWalletData({ ...mockWalletData, hasWallet: true });
+    setCurrentPage('dashboard');
+  };
+
+  const handleNoWallet = () => {
+    setHasWallet(false);
+    setCurrentPage('activate');
+  };
+
+  const handleWalletActivated = () => {
+    setHasWallet(true);
+    setWalletData({ ...mockWalletData, hasWallet: true });
+    setCurrentPage('dashboard');
+  };
+
+  const renderPage = () => {
+    switch (currentPage) {
+      case 'start':
+        return <WalletCheck onHasWallet={handleHasWallet} onNoWallet={handleNoWallet} />;
+      case 'activate':
+        return <WalletActivationWizard onComplete={handleWalletActivated} />;
+      case 'dashboard':
+        return <WalletDashboard walletData={walletData} onNavigate={setCurrentPage} />;
+      case 'transactions':
+        return <TransactionHistory onNavigate={setCurrentPage} />;
+      case 'settings':
+        return <SettingsPage onNavigate={setCurrentPage} />;
+      case 'send':
+        return <SendPayment onNavigate={setCurrentPage} />;
+      case 'receive':
+        return <ReceivePayment onNavigate={setCurrentPage} />;
+      default:
+        return <WalletDashboard walletData={walletData} onNavigate={setCurrentPage} />;
     }
-  }, [isConnected])
+  };
 
   return (
-    <StellarProvider>
-      <div className="space-y-6">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <div>
-              <CardTitle className="text-xl mb-2">Stellar Wallet</CardTitle>
-              <CardDescription>{isConnected? <Badge className="bg-green-600">Connected</Badge>: "Connect your Stellar wallet to manage funds"}</CardDescription>
-            </div>
-            <div>
-              <Badge variant="secondary">TESTNET</Badge>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-4">
-            <ConnectWalletButton className="w-full sm:w-auto" />
-          </CardContent>
-        </Card>
-
-        {error && (
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
-
-     <div >
-     {isConnected && publicKey && (
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="">
-            <TabsList className="grid w-full grid-cols-3">
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="transactions">Transactions</TabsTrigger>
-              <TabsTrigger value="send">Send Payment</TabsTrigger>
-            </TabsList>
-
-            <TabsContent value="overview" className="space-y-4 mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Wallet Overview</CardTitle>
-                  <CardDescription>View your Stellar wallet balance and assets</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <WalletBalance />
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="transactions" className="space-y-4 mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Transaction History</CardTitle>
-                  <CardDescription>View your recent transactions</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <TransactionHistory />
-                </CardContent>
-              </Card>
-            </TabsContent>
-
-            <TabsContent value="send" className="space-y-4 mt-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Send Payment</CardTitle>
-                  <CardDescription>Send payments to other Stellar accounts</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <SendPaymentForm />
-                </CardContent>
-              </Card>
-            </TabsContent>
-          </Tabs>
-        )}
-     </div>
+    <TooltipProvider>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
+        <Navigation currentPage={currentPage} onNavigate={setCurrentPage} hasWallet={hasWallet} />
+        <main className="max-w-7xl mx-auto px-6 py-8">
+          {renderPage()}
+        </main>
       </div>
-    </StellarProvider>
-  )
-}
+    </TooltipProvider>
+  );
+};
+
+export default StellarWalletApp;
