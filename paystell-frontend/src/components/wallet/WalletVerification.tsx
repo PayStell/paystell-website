@@ -2,6 +2,8 @@
 import { type ReactNode, useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
 import {
   MdCheckCircle,
   MdAccountBalanceWallet,
@@ -10,18 +12,20 @@ import {
   MdOutlineSync,
   MdChevronRight,
   MdShield,
-  MdWarning,
   MdError,
+  MdInfo,
+  MdRefresh,
 } from "react-icons/md"
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { useWallet } from "@/providers/useWalletProvider"
 import { toast } from "sonner"
 import { formatAddress } from "@/lib/utils"
+import { walletVerificationAPI } from "@/services/wallet-verification"
 
 const STAGES = {
   CONNECT: "connect",
-  SIGN: "sign",
-  EMAIL: "email",
+  INITIATE: "initiate",
+  VERIFY: "verify",
   CONFIRMED: "confirmed",
   ERROR: "error",
 }
@@ -109,30 +113,25 @@ const WalletOption = ({
 interface WalletVerificationProps {
   onVerificationComplete?: (walletAddress: string) => void
   onVerificationError?: (error: string) => void
+  userId: number
 }
 
-const WalletVerification = ({ onVerificationComplete, onVerificationError }: WalletVerificationProps) => {
-  const { state, connectWallet, signTransaction } = useWallet()
+const WalletVerification = ({ onVerificationComplete, onVerificationError, userId }: WalletVerificationProps) => {
+  const { state, connectWallet } = useWallet()
   const { publicKey, connecting, isConnected } = state
 
   const [stage, setStage] = useState(STAGES.CONNECT)
   const [isLoading, setIsLoading] = useState(false)
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false)
-  const [isSignDialogOpen, setIsSignDialogOpen] = useState(false)
-  const [verificationMessage, setVerificationMessage] = useState("")
-  const [signedMessage, setSignedMessage] = useState("")
   const [error, setError] = useState<string | null>(null)
-
-  // Generate verification message
-  useEffect(() => {
-    const message = `Verify wallet ownership for PayStell account registration at ${new Date().toISOString().split("T")[0]} - Nonce: ${Math.random().toString(36).substring(7)}`
-    setVerificationMessage(message)
-  }, [])
+  const [verificationToken, setVerificationToken] = useState("")
+  const [verificationCode, setVerificationCode] = useState("")
+  const [verificationData, setVerificationData] = useState<any>(null)
 
   // Update stage based on wallet connection
   useEffect(() => {
     if (isConnected && publicKey && stage === STAGES.CONNECT) {
-      setStage(STAGES.SIGN)
+      setStage(STAGES.INITIATE)
       toast.success("Wallet Connected", {
         description: `Connected to ${formatAddress(publicKey)}`,
       })
@@ -157,9 +156,9 @@ const WalletVerification = ({ onVerificationComplete, onVerificationError }: Wal
     }
   }
 
-  const handleSignMessage = async () => {
-    if (!publicKey || !verificationMessage) {
-      toast.error("Error", { description: "Wallet not connected or message not generated" })
+  const handleInitiateVerification = async () => {
+    if (!publicKey) {
+      toast.error("Error", { description: "Wallet not connected" })
       return
     }
 
@@ -167,29 +166,23 @@ const WalletVerification = ({ onVerificationComplete, onVerificationError }: Wal
       setIsLoading(true)
       setError(null)
 
-      // Create a simple transaction for signing (this is a placeholder - you might need to adjust based on your backend requirements)
-      // For now, we'll simulate the signing process
-      const messageToSign = Buffer.from(verificationMessage).toString("base64")
-
-      // In a real implementation, you might need to create a proper Stellar transaction
-      // For demonstration, we'll use a mock signed message
-      const mockSignedMessage = `signed_${messageToSign}_${Date.now()}`
-
-      setSignedMessage(mockSignedMessage)
-      setIsSignDialogOpen(false)
-      setStage(STAGES.EMAIL)
-
-      toast.success("Message Signed", {
-        description: "Successfully signed verification message",
+      const response = await walletVerificationAPI.initiateVerification({
+        userId,
+        walletAddress: publicKey,
       })
 
-      // Here you would typically send the signed message to your backend
-      // await sendVerificationToBackend(publicKey, mockSignedMessage);
+      setVerificationData(response)
+      setVerificationToken(response.verificationToken)
+      setStage(STAGES.VERIFY)
+
+      toast.success("Verification Initiated", {
+        description: "Check your email for the verification code!",
+      })
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Failed to sign message"
+      const errorMessage = error instanceof Error ? error.message : "Failed to initiate verification"
       setError(errorMessage)
       onVerificationError?.(errorMessage)
-      toast.error("Signing Failed", {
+      toast.error("Initiation Failed", {
         description: errorMessage,
       })
     } finally {
@@ -197,23 +190,33 @@ const WalletVerification = ({ onVerificationComplete, onVerificationError }: Wal
     }
   }
 
-  const handleEmailVerification = async () => {
+  const handleVerifyWallet = async () => {
+    if (!verificationToken || !verificationCode.trim()) {
+      toast.error("Error", { description: "Please enter the verification code" })
+      return
+    }
+
     try {
       setIsLoading(true)
       setError(null)
 
-      // Simulate email verification process
-      // In real implementation, this would call your backend API
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-
-      setStage(STAGES.CONFIRMED)
-      onVerificationComplete?.(publicKey!)
-
-      toast.success("Verification Complete", {
-        description: "Wallet successfully verified!",
+      const response = await walletVerificationAPI.verifyWallet({
+        token: verificationToken,
+        code: verificationCode,
       })
+
+      if (response.success) {
+        setStage(STAGES.CONFIRMED)
+        onVerificationComplete?.(publicKey!)
+
+        toast.success("Verification Complete", {
+          description: "Wallet successfully verified!",
+        })
+      } else {
+        throw new Error("Verification failed")
+      }
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Email verification failed"
+      const errorMessage = error instanceof Error ? error.message : "Verification failed"
       setError(errorMessage)
       onVerificationError?.(errorMessage)
       toast.error("Verification Failed", {
@@ -228,9 +231,9 @@ const WalletVerification = ({ onVerificationComplete, onVerificationError }: Wal
     switch (stage) {
       case STAGES.CONNECT:
         return 1
-      case STAGES.SIGN:
+      case STAGES.INITIATE:
         return 2
-      case STAGES.EMAIL:
+      case STAGES.VERIFY:
         return 3
       case STAGES.CONFIRMED:
         return 4
@@ -248,15 +251,15 @@ const WalletVerification = ({ onVerificationComplete, onVerificationError }: Wal
     },
     {
       numberlabel: 2,
-      title: "Sign Message",
-      description: "Sign a message to verify wallet ownership",
-      status: signedMessage ? "completed" : stage === STAGES.SIGN ? "pending" : "pending",
+      title: "Initiate Verification",
+      description: "Start the verification process and receive an email with verification code.",
+      status: verificationToken ? "completed" : stage === STAGES.INITIATE ? "pending" : "pending",
     },
     {
       numberlabel: 3,
-      title: "Email Verification",
-      description: "Verify your wallet through your registered email.",
-      status: stage === STAGES.CONFIRMED ? "completed" : stage === STAGES.EMAIL ? "pending" : "pending",
+      title: "Enter Verification Code",
+      description: "Enter the verification code sent to your email.",
+      status: stage === STAGES.CONFIRMED ? "completed" : stage === STAGES.VERIFY ? "pending" : "pending",
     },
   ]
 
@@ -301,81 +304,100 @@ const WalletVerification = ({ onVerificationComplete, onVerificationError }: Wal
           </>
         )
 
-      case STAGES.SIGN:
+      case STAGES.INITIATE:
         return (
-          <>
-            <Dialog open={isSignDialogOpen} onOpenChange={setIsSignDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="w-full">
-                  <MdKey className="w-4 h-4 mr-2" /> Sign Message
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <div className="flex items-center gap-2">
-                    <MdShield className="w-5 h-5 text-blue-500" />
-                    <DialogTitle className="text-xl font-semibold">Sign Message</DialogTitle>
-                  </div>
-                  <p className="text-card-foreground text-sm mt-1">
-                    Verify ownership of your wallet by signing this message
-                  </p>
-                </DialogHeader>
-
-                <div className="my-6 space-y-4">
-                  <div className="bg-muted p-4 rounded-lg border border-border">
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">Connected Wallet:</h4>
-                    <p className="text-sm font-mono text-foreground">
-                      {publicKey ? formatAddress(publicKey) : "Not connected"}
-                    </p>
-                  </div>
-
-                  <div className="bg-muted p-4 rounded-lg border border-border">
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">Message to sign:</h4>
-                    <p className="text-sm text-card-foreground font-mono bg-card p-3 rounded border border-border break-all">
-                      {verificationMessage}
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-2 text-sm text-amber-700 bg-amber-50 dark:bg-amber-950 dark:text-amber-300 p-3 rounded-lg">
-                    <MdWarning className="w-4 h-4 mt-0.5 flex-shrink-0" />
-                    <p>This signature request will not trigger any blockchain transaction or incur any fees.</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button variant="outline" className="sm:w-full" onClick={() => setIsSignDialogOpen(false)}>
-                    Cancel
-                  </Button>
-                  <Button className="sm:w-full" onClick={handleSignMessage} disabled={isLoading}>
-                    {isLoading ? (
-                      <>
-                        <MdOutlineSync className="w-4 h-4 mr-2 animate-spin" />
-                        Signing...
-                      </>
-                    ) : (
-                      "Sign Message"
-                    )}
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </>
+          <div className="space-y-4">
+            <div className="flex items-start gap-2 p-4 bg-blue-50 dark:bg-blue-950 text-blue-700 dark:text-blue-300 rounded-lg border border-blue-200 dark:border-blue-800">
+              <MdInfo className="w-5 h-5 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-medium text-sm">Ready to Verify</p>
+                <p className="text-sm mt-1">
+                  Your wallet {formatAddress(publicKey!)} is connected. Click below to start verification.
+                </p>
+              </div>
+            </div>
+            <Button onClick={handleInitiateVerification} className="w-full" disabled={isLoading}>
+              <MdKey className="w-4 h-4 mr-2" />
+              {isLoading ? "Initiating..." : "Start Verification"}
+            </Button>
+          </div>
         )
 
-      case STAGES.EMAIL:
+      case STAGES.VERIFY:
         return (
-          <Button onClick={handleEmailVerification} className="w-full" disabled={isLoading}>
-            <MdMail className="w-4 h-4 mr-2" />
-            {isLoading ? "Verifying..." : "Complete Verification"}
-          </Button>
+          <div className="space-y-4">
+            <div className="flex items-start gap-2 p-4 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300 rounded-lg border border-green-200 dark:border-green-800">
+              <MdMail className="w-5 h-5 mt-0.5 flex-shrink-0" />
+              <div>
+                <p className="font-medium text-sm">Email Sent!</p>
+                <p className="text-sm mt-1">Check your email for the verification code and enter it below.</p>
+              </div>
+            </div>
+
+            {verificationData && (
+              <div className="bg-muted p-4 rounded-lg border border-border">
+                <h4 className="text-sm font-medium text-muted-foreground mb-2">Verification Details:</h4>
+                <div className="space-y-1 text-sm">
+                  <p>
+                    <span className="font-medium">Wallet:</span> {formatAddress(verificationData.walletAddress)}
+                  </p>
+                  <p>
+                    <span className="font-medium">Status:</span> {verificationData.status}
+                  </p>
+                  <p>
+                    <span className="font-medium">Expires:</span>{" "}
+                    {new Date(verificationData.expiresAt).toLocaleString()}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            <div className="space-y-2">
+              <Label htmlFor="verificationCode">Verification Code</Label>
+              <Input
+                id="verificationCode"
+                type="text"
+                value={verificationCode}
+                onChange={(e) => setVerificationCode(e.target.value)}
+                placeholder="Enter 6-digit code from email"
+                maxLength={6}
+                required
+              />
+              <p className="text-xs text-muted-foreground">Enter the 6-digit verification code sent to your email.</p>
+            </div>
+
+            <Button
+              onClick={handleVerifyWallet}
+              className="w-full"
+              disabled={isLoading || !verificationCode.trim() || verificationCode.length !== 6}
+            >
+              <MdShield className="w-4 h-4 mr-2" />
+              {isLoading ? "Verifying..." : "Verify Wallet"}
+            </Button>
+          </div>
         )
 
       case STAGES.CONFIRMED:
         return (
-          <Button className="w-full" variant="outline" disabled>
-            <MdCheckCircle className="w-4 h-4 mr-2 text-green-500" />
-            Verification Complete
-          </Button>
+          <div className="space-y-4">
+            <div className="flex items-center gap-2 p-4 bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300 rounded-lg border border-green-200 dark:border-green-800">
+              <MdCheckCircle className="w-5 h-5 text-green-500" />
+              <div>
+                <p className="font-medium text-sm">Verification Successful!</p>
+                <p className="text-sm mt-1">Your wallet has been verified and linked to your account.</p>
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <Button className="sm:w-full" variant="outline" disabled>
+                <MdCheckCircle className="w-4 h-4 mr-2 text-green-500" />
+                Verification Complete
+              </Button>
+              <Button className="sm:w-full" onClick={() => window.location.reload()}>
+                <MdRefresh className="w-4 h-4 mr-2" />
+                Refresh Page
+              </Button>
+            </div>
+          </div>
         )
 
       default:

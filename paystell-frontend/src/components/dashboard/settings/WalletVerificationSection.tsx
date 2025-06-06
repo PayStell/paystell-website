@@ -12,22 +12,26 @@ import { toast } from "sonner"
 interface WalletVerificationSectionProps {
   isWalletVerified: boolean
   isEmailVerified: boolean
+  userId: number
   onVerificationComplete?: (walletAddress: string) => void
   onVerificationError?: (error: string) => void
 }
 
 const WalletVerificationSection = ({
-  isWalletVerified,
+  isWalletVerified: initialWalletVerified,
   isEmailVerified,
+  userId,
   onVerificationComplete,
   onVerificationError,
 }: WalletVerificationSectionProps) => {
   const { state } = useWallet()
   const { publicKey, isConnected } = state
   const [isVerificationOpen, setIsVerificationOpen] = useState(false)
+  const [isWalletVerified, setIsWalletVerified] = useState(initialWalletVerified)
 
   const handleVerificationComplete = (walletAddress: string) => {
     setIsVerificationOpen(false)
+    setIsWalletVerified(true)
     onVerificationComplete?.(walletAddress)
     toast.success("Wallet Verified", {
       description: "Your wallet has been successfully verified!",
@@ -93,6 +97,7 @@ const WalletVerificationSection = ({
                   <WalletVerification
                     onVerificationComplete={handleVerificationComplete}
                     onVerificationError={handleVerificationError}
+                    userId={userId}
                   />
                 </DialogContent>
               </Dialog>
