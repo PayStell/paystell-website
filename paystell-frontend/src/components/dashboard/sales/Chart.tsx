@@ -65,11 +65,11 @@ const Chart = () => {
           <div className="space-y-1">
             <p className="text-sm">
               <span className="text-blue-500">Sales: </span>
-              {formatPrice(payload[0].value)}
+              {payload[0] ? formatPrice(payload[0].value) : 'N/A'}
             </p>
             <p className="text-sm">
               <span className="text-green-500">Transactions: </span>
-              {payload[1].value}
+              {payload[1]?.value || 0}
             </p>
           </div>
         </div>
