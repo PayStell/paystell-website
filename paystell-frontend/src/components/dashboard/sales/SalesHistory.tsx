@@ -109,7 +109,8 @@ const SalesHistory = () => {
         {loading ? (
           <LoadingSkeleton type="table" rows={4} width="100%" />
         ) : (
-          <>
+        ) : (
+          <div>
             <Table>
               <TableCaption>A list of your recent transactions.</TableCaption>
               <TableHeader>
@@ -152,7 +153,7 @@ const SalesHistory = () => {
                 ))}
               </TableBody>
             </Table>
-            
+
             <div className="flex justify-between items-center mt-4">
               <Button
                 variant="outline"
@@ -177,8 +178,12 @@ const SalesHistory = () => {
                 Next
                 <ChevronRight className="h-4 w-4 ml-2" />
               </Button>
-          </>
+            </div>
+          </div>
         )}
+      </div>
+      
+      <div className="mt-5 md:w-[40%]">
       </div>
 
       <div className="mt-5 md:w-[40%]">
