@@ -74,30 +74,6 @@ const Chart = () => {
     fetchData();
   }, [timeFilter]);
 
-<<<<<<< HEAD
-=======
-  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-4 border rounded-lg shadow-sm">
-          <p className="font-semibold mb-2">{label}</p>
-          <div className="space-y-1">
-            <p className="text-sm">
-              <span className="text-blue-500">Sales: </span>
-              {payload[0] ? formatPrice(payload[0].value) : 'N/A'}
-            </p>
-            <p className="text-sm">
-              <span className="text-green-500">Transactions: </span>
-              {payload[1]?.value || 0}
-            </p>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
-
->>>>>>> 9b424a4af3a82736ca5b981613b38686beb41b9d
   if (error) {
     return (
       <Alert variant="destructive" className="mt-4">
@@ -115,11 +91,7 @@ const Chart = () => {
           <Select 
             value={timeFilter} 
             onValueChange={(value) => setTimeFilter(value as TimeFilter)}
-<<<<<<< HEAD
             disabled={loading}
-=======
-+           disabled={loading}
->>>>>>> 9b424a4af3a82736ca5b981613b38686beb41b9d
           >
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Select period" />

@@ -180,11 +180,7 @@ const SalesHistory = () => {
               </Button>
             </div>
           </div>
-          </div>
         )}
-      </div>
-      
-      <div className="mt-5 md:w-[40%]">
       </div>
 
       <div className="mt-5 md:w-[40%]">
