@@ -66,26 +66,31 @@ const Cards = () => {
           data.salesByPeriod.thisWeek / 7
         );
 
+        // Calculate each percentage change once and reuse
+        const revenueChange = calculatePercentageChange(data.totalSales, previousTotalSales);
+        const transactionChange = calculatePercentageChange(data.totalTransactions, previousTransactions);
+        const avgTransactionChange = calculatePercentageChange(data.averageTransactionValue, previousAvgTransaction);
+
         setCardData([
           {
             title: "Total Revenue",
             value: formatPrice(data.totalSales),
-            percentage: calculatePercentageChange(data.totalSales, previousTotalSales).value,
-            trend: calculatePercentageChange(data.totalSales, previousTotalSales).trend,
+            percentage: revenueChange.value,
+            trend: revenueChange.trend,
             icon: <FaDollarSign className="h-4 w-4" />,
           },
           {
             title: "Total Transactions",
             value: data.totalTransactions.toString(),
-            percentage: calculatePercentageChange(data.totalTransactions, previousTransactions).value,
-            trend: calculatePercentageChange(data.totalTransactions, previousTransactions).trend,
+            percentage: transactionChange.value,
+            trend: transactionChange.trend,
             icon: <FiUsers className="h-4 w-4" />,
           },
           {
             title: "Average Transaction",
             value: formatPrice(data.averageTransactionValue),
-            percentage: calculatePercentageChange(data.averageTransactionValue, previousAvgTransaction).value,
-            trend: calculatePercentageChange(data.averageTransactionValue, previousAvgTransaction).trend,
+            percentage: avgTransactionChange.value,
+            trend: avgTransactionChange.trend,
             icon: <CiCreditCard1 className="h-4 w-4" />,
           },
           {
