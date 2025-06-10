@@ -28,6 +28,23 @@ interface CustomTooltipProps extends TooltipProps<number, string> {
   label?: string;
 }
 
+const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="bg-white p-4 border rounded-lg shadow-sm">
+        <p className="font-semibold mb-2">{label}</p>
+        <div className="space-y-1">
+          <p className="text-sm">
+            <span className="text-blue-500">Sales: </span>
+            {formatPrice(payload[0]?.value || 0)}
+          </p>
+        </div>
+      </div>
+    );
+  }
+  return null;
+};
+
 const Chart = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -57,27 +74,6 @@ const Chart = () => {
     fetchData();
   }, [timeFilter]);
 
-  const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-white p-4 border rounded-lg shadow-sm">
-          <p className="font-semibold mb-2">{label}</p>
-          <div className="space-y-1">
-            <p className="text-sm">
-              <span className="text-blue-500">Sales: </span>
-              {formatPrice(payload[0].value)}
-            </p>
-            <p className="text-sm">
-              <span className="text-green-500">Transactions: </span>
-              {payload[1].value}
-            </p>
-          </div>
-        </div>
-      );
-    }
-    return null;
-  };
-
   if (error) {
     return (
       <Alert variant="destructive" className="mt-4">
@@ -95,6 +91,7 @@ const Chart = () => {
           <Select 
             value={timeFilter} 
             onValueChange={(value) => setTimeFilter(value as TimeFilter)}
+            disabled={loading}
           >
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Select period" />
@@ -119,12 +116,10 @@ const Chart = () => {
             <BarChart data={chartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="period" />
-              <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-              <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
+              <YAxis />
               <Tooltip content={<CustomTooltip />} />
               <Legend />
-              <Bar yAxisId="left" dataKey="totalSales" name="Total Sales" fill="#8884d8" radius={[4, 4, 0, 0]} />
-              <Bar yAxisId="right" dataKey="transactionCount" name="Transaction Count" fill="#82ca9d" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="totalSales" name="Total Sales" fill="#8884d8" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         )}
