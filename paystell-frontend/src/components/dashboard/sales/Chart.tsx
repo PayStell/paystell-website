@@ -95,6 +95,7 @@ const Chart = () => {
           <Select 
             value={timeFilter} 
             onValueChange={(value) => setTimeFilter(value as TimeFilter)}
++           disabled={loading}
           >
             <SelectTrigger className="w-[120px]">
               <SelectValue placeholder="Select period" />
