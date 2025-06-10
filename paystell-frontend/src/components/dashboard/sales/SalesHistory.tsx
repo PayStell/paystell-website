@@ -153,12 +153,14 @@ const SalesHistory = () => {
               </TableBody>
             </Table>
 
+
             <div className="flex justify-between items-center mt-4">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                 disabled={currentPage === 1}
+                aria-label="Go to previous page"
               >
                 <ChevronLeft className="h-4 w-4 mr-2" />
                 Previous
@@ -171,13 +173,18 @@ const SalesHistory = () => {
                 size="sm"
                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                 disabled={currentPage === totalPages}
+                aria-label="Go to next page"
               >
                 Next
                 <ChevronRight className="h-4 w-4 ml-2" />
               </Button>
             </div>
           </div>
+          </div>
         )}
+      </div>
+      
+      <div className="mt-5 md:w-[40%]">
       </div>
 
       <div className="mt-5 md:w-[40%]">
