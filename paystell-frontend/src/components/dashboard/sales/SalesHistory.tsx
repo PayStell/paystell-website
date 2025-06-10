@@ -32,8 +32,12 @@ const SalesHistory = () => {
       try {
         setLoading(true);
         setError(null);
-        const { success, data, error } = await transactionsService.getRecent(currentPage);
-        if (!success || !data) throw new Error(error || 'Failed to fetch transactions');
+        const {
+          success,
+          data,
+          error: apiError,
+        } = await transactionsService.getRecent(currentPage);
+        if (!success || !data) throw new Error(apiError || "Failed to fetch transactions");
         setTransactions(data.items);
         setTotalItems(data.total);
         setTotalPages(data.pages);
@@ -89,47 +93,57 @@ const SalesHistory = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {transactions.map((transaction) => (
-                  <TableRow key={transaction.id}>
-                    <TableCell className="font-medium">
-                      <div className="flex items-center space-x-2">
-                        <Avatar className="h-8 w-8">
-                          {transaction.customer.avatar ? (
-                            <AvatarImage src={transaction.customer.avatar} alt={transaction.customer.name} />
-                          ) : (
-                            <AvatarFallback>
-                              {transaction.customer.name.split(' ').map(n => n[0]).join('')}
-                            </AvatarFallback>
-                          )}
-                        </Avatar>
-                        <div>
-                          <p className="text-sm font-medium">{transaction.customer.name}</p>
-                          <p className="text-xs text-muted-foreground">{transaction.customer.email}</p>
-                        </div>
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          transaction.status === 'paid'
-                            ? 'success'
-                            : transaction.status === 'pending'
-                            ? 'warning'
-                            : 'destructive'
-                        }
-                      >
-                        {transaction.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{transaction.method}</TableCell>
-                    <TableCell>{formatDate(transaction.date)}</TableCell>
-                    <TableCell className="text-right font-medium">
-                      {formatPrice(transaction.amount)}
-                    </TableCell>
-                  </TableRow>
-                ))}
+              <TableBody>
+-               {transactions.map((transaction) => (
++               {transactions.length === 0 ? (
++                 <TableRow>
++                   <TableCell colSpan={5} className="text-center text-sm text-muted-foreground">
++                     No transactions found
++                   </TableCell>
++                 </TableRow>
++               ) : (
++                 transactions.map((transaction) => (
+                   <TableRow key={transaction.id}>
+                     <TableCell className="font-medium">
+                       <div className="flex items-center space-x-2">
+                         <Avatar className="h-8 w-8">
+                           {transaction.customer.avatar ? (
+                             <AvatarImage src={transaction.customer.avatar} alt={transaction.customer.name} />
+                           ) : (
+                             <AvatarFallback>
+                               {transaction.customer.name.split(' ').map(n => n[0]).join('')}
+                             </AvatarFallback>
+                           )}
+                         </Avatar>
+                         <div>
+                           <p className="text-sm font-medium">{transaction.customer.name}</p>
+                           <p className="text-xs text-muted-foreground">{transaction.customer.email}</p>
+                         </div>
+                       </div>
+                     </TableCell>
+                     <TableCell>
+                       <Badge
+                         variant={
+                           transaction.status === 'paid'
+                             ? 'success'
+                             : transaction.status === 'pending'
+                             ? 'warning'
+                             : 'destructive'
+                         }
+                       >
+                         {transaction.status}
+                       </Badge>
+                     </TableCell>
+                     <TableCell>{transaction.method}</TableCell>
+                     <TableCell>{formatDate(transaction.date)}</TableCell>
+                     <TableCell className="text-right font-medium">
+                       {formatPrice(transaction.amount)}
+                     </TableCell>
+                   </TableRow>
+-               ))}
++                 ))
++               )}
               </TableBody>
-            </Table>
 
             <div className="flex justify-between items-center mt-4">
               <Button
