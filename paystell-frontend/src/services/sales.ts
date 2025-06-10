@@ -34,15 +34,23 @@ export interface ApiResponse<T> {
 }
 
 class SalesService {
-  private baseUrl = '/api/sales-summary';
+  private baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL
+    ? `${process.env.NEXT_PUBLIC_API_BASE_URL}/sales-summary`
+    : '/api/sales-summary';
 
-  private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
-    if (!response.ok) {
-      const error = await response.json().catch(() => ({ message: 'An error occurred' }));
-      throw new Error(error.message || `HTTP error! status: ${response.status}`);
-    }
-    return await response.json();
-  }
+   private async handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+     if (!response.ok) {
+       let errorMessage = `HTTP error! status: ${response.status}`;
+       try {
+         const errorData = await response.json();
+         errorMessage = errorData.message || errorMessage;
+       } catch {
+         // Response body is not valid JSON
+       }
+       throw new Error(errorMessage);
+     }
+     return await response.json();
+   }
 
   async getSalesSummary(): Promise<ApiResponse<SalesSummary>> {
     if (USE_MOCK) {
