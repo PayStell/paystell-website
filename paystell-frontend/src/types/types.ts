@@ -10,16 +10,19 @@ export interface WalletData {
 
 export interface Transaction {
   id: string;
-  hash: string;
+  hash: string; // Should be validated as Stellar transaction hash
   type: 'sent' | 'received';
-  amount: string;
-  currency: string;
-  from: string;
-  to: string;
-  date: string;
+  amount: string; // Consider using number for calculations
+  currency: string; // Should be validated against supported assets
+  from: StellarAddress;
+  to: StellarAddress;
+  date: string; // Consider using Date type or ISO string
   status: 'completed' | 'pending' | 'failed';
-  fee: string;
+  fee: string; // Consider using number
   memo?: string;
+  ledger?: number; // Stellar ledger number
+  sequence?: string; // Account sequence number
+  operationType?: 'payment' | 'create_account' | 'trust' | 'offer';
 }
 
 export interface FormData {

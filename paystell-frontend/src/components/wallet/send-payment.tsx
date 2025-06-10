@@ -17,8 +17,15 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
     amount: '',
     currency: 'XLM',
     memo: '',
-    fee: '0.00001'
+    fee: '0.00001' // Consider fetching dynamic fees
   });
+  const isValidStellarAddress = (address: string) => {
+    return /^G[A-Z0-9]{55}$/.test(address);
+  };
+  const isValidAmount = (amount: string) => {
+    const num = parseFloat(amount);
+    return !isNaN(num) && num > 0 && num >= 0.0000001; // Stellar minimum
+  };
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [isExecuting, setIsExecuting] = useState(false);
 
@@ -32,7 +39,19 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
 
   const executeTransaction = async () => {
     setIsExecuting(true);
-    await new Promise(resolve => setTimeout(resolve, 2000));
+    try {
+      // TODO: Integrate with Stellar SDK
+      // const result = await stellarService.submitTransaction({
+      //   destination: sendForm.recipient,
+      //   amount: sendForm.amount,
+      //   asset: sendForm.currency,
+      //   memo: sendForm.memo
+      // });
+    } catch (error) {
+      // Handle transaction errors
+      console.error('Transaction failed:', error);
+      // Show error to user
+    }
     setIsExecuting(false);
     setShowConfirmation(false);
     onNavigate('dashboard');
@@ -116,10 +135,15 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-          <Button 
+                   <Button 
             onClick={handleConfirmTransaction}
             className="w-full"
-            disabled={!sendForm.recipient || !sendForm.amount}
+            disabled={
+              !sendForm.recipient ||
+              !sendForm.amount ||
+              !isValidStellarAddress(sendForm.recipient) ||
+              !isValidAmount(sendForm.amount)
+            }
           >
             Confirm Transaction
           </Button>

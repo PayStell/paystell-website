@@ -5,7 +5,7 @@ export const mockWalletData: WalletData = {
   isActivated: true,
   trustlines: 3,
   transactions: 247,
-  hasWallet: false 
+  hasWallet: true
 };
 
 export const mockTransactions: Transaction[] = [
@@ -15,8 +15,8 @@ export const mockTransactions: Transaction[] = [
     type: 'received',
     amount: '1000.00',
     currency: 'XLM',
-    from: 'GDQOE23CFSUMSVQK4Y5JHPPYK73VYCNHZHA7ENKCV37P6SUEO6XQBKPP',
-    to: 'GCKFBEIYTKP56ZPBWJBZ5JDNK5QMK7OOWMZD4GVYOQ5LRJHQHKL6ZMKDJ',
+    from: 'GCKFBEIYTKP56ZPBWJBZ5JDNK5QMK7OOWMZD4GVYOQ5LRJHQHKL6ZMKDJ',
+    to:   'GDQOE23CFSUMSVQK4Y5JHPPYK73VYCNHZHA7ENKCV37P6SUEO6XQBKPP',
     date: new Date().toISOString(),
     status: 'completed',
     fee: '0.00001',
@@ -28,8 +28,8 @@ export const mockTransactions: Transaction[] = [
     type: 'sent',
     amount: '250.00',
     currency: 'XLM',
-    from: 'GCKFBEIYTKP56ZPBWJBZ5JDNK5QMK7OOWMZD4GVYOQ5LRJHQHKL6ZMKDJ',
-    to: 'GALIE5H6VQVAHE6HDKSHZHDSJSH2DSHABNSHBDJAKVHDSJLKAJDSOQHDS',
+    from: 'GDQOE23CFSUMSVQK4Y5JHPPYK73VYCNHZHA7ENKCV37P6SUEO6XQBKPP',
+    to:   'GALIE5H6VQVAHE6HDKSHZHDSJSH2DSHABNSHBDJAKVHDSJLKAJDSOQHDS',
     date: new Date(Date.now() - 3600000).toISOString(),
     status: 'completed',
     fee: '0.00001',

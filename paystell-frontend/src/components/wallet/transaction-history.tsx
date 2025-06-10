@@ -98,20 +98,40 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
   // Filter transactions based on filters
   useEffect(() => {
     let filtered = transactions;
-
     if (filters.type !== 'all') {
       filtered = filtered.filter(tx => tx.type === filters.type);
     }
-
+    // Implement date range filtering
+    if (filters.dateRange !== 'all') {
+      const now = new Date();
+      const dateRanges: Record<string, number> = {
+        '24h': 24 * 60 * 60 * 1000,
+        '7d': 7 * 24 * 60 * 60 * 1000,
+        '30d': 30 * 24 * 60 * 60 * 1000
+      };
+      if (dateRanges[filters.dateRange]) {
+        const cutoffDate = new Date(now.getTime() - dateRanges[filters.dateRange]);
+        filtered = filtered.filter(tx => new Date(tx.date) >= cutoffDate);
+      }
+    }
+    // Implement amount range filtering
+    if (filters.amount) {
+      const [min, max] = filters.amount.split('-').map(v => parseFloat(v.trim()));
+      if (!isNaN(min)) {
+        filtered = filtered.filter(tx => parseFloat(tx.amount) >= min);
+      }
+      if (!isNaN(max)) {
+        filtered = filtered.filter(tx => parseFloat(tx.amount) <= max);
+      }
+    }
     if (filters.search) {
-      filtered = filtered.filter(tx => 
+      filtered = filtered.filter(tx =>
         tx.hash.toLowerCase().includes(filters.search.toLowerCase()) ||
         tx.from.toLowerCase().includes(filters.search.toLowerCase()) ||
         tx.to.toLowerCase().includes(filters.search.toLowerCase()) ||
         tx.memo?.toLowerCase().includes(filters.search.toLowerCase())
       );
     }
-
     setFilteredTransactions(filtered);
   }, [transactions, filters]);
 

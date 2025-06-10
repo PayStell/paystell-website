@@ -17,7 +17,13 @@ export const WalletDashboard: React.FC<WalletDashboardProps> = ({ walletData, on
 
   const handleRefresh = async () => {
     setRefreshing(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    try {
+      // TODO: Implement actual wallet data refresh
+      // await walletService.refreshWalletData();
+    } catch (error) {
+      console.error('Failed to refresh wallet data:', error);
+      // Show error notification to user
+    }
     setRefreshing(false);
   };
 

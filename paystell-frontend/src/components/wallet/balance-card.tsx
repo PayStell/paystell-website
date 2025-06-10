@@ -26,7 +26,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
           onClick={() => setShowBalance(!showBalance)}
           className="text-white/90 hover:text-white hover:bg-white/20"
         >
-          {showBalance ? <Eye className="w-4 h-4" /> : <EyeOff className="w-4 h-4" />}
+          {showBalance ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
         </Button>
       </div>
     </CardHeader>
