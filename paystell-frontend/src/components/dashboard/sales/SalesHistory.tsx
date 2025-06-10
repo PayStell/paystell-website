@@ -16,65 +16,39 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
-
-interface Transaction {
-  id: string;
-  customer: {
-    name: string;
-    email: string;
-    avatar?: string;
-  };
-  status: 'paid' | 'pending' | 'failed';
-  method: string;
-  amount: number;
-  date: string;
-}
+import { Badge } from "@/components/ui/badge";
+import { transactionsService, Transaction } from "@/services/transactions";
 
 const ITEMS_PER_PAGE = 10;
 
 const SalesHistory = () => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTransactions = async () => {
       try {
         setLoading(true);
         setError(null);
-
-        // TODO: Replace with actual transaction API call
-        // For now, we'll use mock data
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        const mockTransactions: Transaction[] = Array.from({ length: 50 }, (_, i) => ({
-          id: `tx-${i + 1}`,
-          customer: {
-            name: `Customer ${i + 1}`,
-            email: `customer${i + 1}@example.com`,
-            avatar: i % 2 === 0 ? 'https://github.com/shadcn.png' : undefined
-          },
-          status: ['paid', 'pending', 'failed'][Math.floor(Math.random() * 3)] as Transaction['status'],
-          method: ['Credit Card', 'PayPal', 'Bank Transfer'][Math.floor(Math.random() * 3)],
-          amount: Math.random() * 1000,
-          date: new Date(Date.now() - Math.random() * 30 * 24 * 60 * 60 * 1000).toISOString()
-        }));
-
-        setTransactions(mockTransactions);
-        setTotalItems(mockTransactions.length);
-        setTotalPages(Math.ceil(mockTransactions.length / ITEMS_PER_PAGE));
+        const { success, data, error } = await transactionsService.getRecent(currentPage);
+        if (!success || !data) throw new Error(error || 'Failed to fetch transactions');
+        setTransactions(data.items);
+        setTotalItems(data.total);
+        setTotalPages(data.pages);
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Failed to load transaction data');
+        setError(err instanceof Error ? err.message : 'Failed to load transactions');
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchTransactions();
+  }, [currentPage]);
 
   const getStatusColor = (status: Transaction['status']) => {
     switch (status) {
@@ -127,10 +101,13 @@ const SalesHistory = () => {
                     <TableCell className="font-medium">
                       <div className="flex items-center space-x-2">
                         <Avatar className="h-8 w-8">
-                          <AvatarImage src={transaction.customer.avatar} />
-                          <AvatarFallback>
-                            {transaction.customer.name.slice(0, 2).toUpperCase()}
-                          </AvatarFallback>
+                          {transaction.customer.avatar ? (
+                            <AvatarImage src={transaction.customer.avatar} alt={transaction.customer.name} />
+                          ) : (
+                            <AvatarFallback>
+                              {transaction.customer.name.split(' ').map(n => n[0]).join('')}
+                            </AvatarFallback>
+                          )}
                         </Avatar>
                         <div>
                           <p className="text-sm font-medium">{transaction.customer.name}</p>
@@ -139,9 +116,17 @@ const SalesHistory = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <span className={`${getStatusColor(transaction.status)} font-medium`}>
-                        {transaction.status.charAt(0).toUpperCase() + transaction.status.slice(1)}
-                      </span>
+                      <Badge
+                        variant={
+                          transaction.status === 'paid'
+                            ? 'success'
+                            : transaction.status === 'pending'
+                            ? 'warning'
+                            : 'destructive'
+                        }
+                      >
+                        {transaction.status}
+                      </Badge>
                     </TableCell>
                     <TableCell>{transaction.method}</TableCell>
                     <TableCell>{formatDate(transaction.date)}</TableCell>
@@ -152,7 +137,6 @@ const SalesHistory = () => {
                 ))}
               </TableBody>
             </Table>
-
 
             <div className="flex justify-between items-center mt-4">
               <Button
