@@ -22,7 +22,9 @@ export interface TransactionsResponse {
 export const transactionsService = {
   getRecent: async (page: number = 1, limit: number = 10): Promise<{ success: boolean; data?: TransactionsResponse; error?: string }> => {
     try {
-      const response = await api.get(`/transactions/recent?page=${page}&limit=${limit}`);
+      const response = await api.get<TransactionsResponse>(
+        `/transactions/recent?page=${page}&limit=${limit}`
+      );
       return {
         success: true,
         data: response.data

@@ -19,8 +19,6 @@ import { AlertCircle } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { transactionsService, Transaction } from "@/services/transactions";
 
-const ITEMS_PER_PAGE = 10;
-
 const SalesHistory = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -63,11 +61,6 @@ const SalesHistory = () => {
     }
   };
 
-  const paginatedTransactions = transactions.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
-
   if (error) {
     return (
       <Alert variant="destructive" className="mt-4">
@@ -96,7 +89,7 @@ const SalesHistory = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {paginatedTransactions.map((transaction) => (
+                {transactions.map((transaction) => (
                   <TableRow key={transaction.id}>
                     <TableCell className="font-medium">
                       <div className="flex items-center space-x-2">
