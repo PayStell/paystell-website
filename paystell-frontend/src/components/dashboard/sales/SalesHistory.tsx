@@ -9,128 +9,173 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChartConfig } from "@/components/ui/chart";
 import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
 import { useState, useEffect } from "react";
+import { formatPrice, formatDate } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { transactionsService, Transaction } from "@/services/transactions";
 
 const SalesHistory = () => {
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<null | string>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [totalItems, setTotalItems] = useState(0);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchTransactions = async () => {
       try {
         setLoading(true);
         setError(null);
-        // Simulating loading state
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        const {
+          success,
+          data,
+          error: apiError,
+        } = await transactionsService.getRecent(currentPage);
+        if (!success || !data) throw new Error(apiError || "Failed to fetch transactions");
+        setTransactions(data.items);
+        setTotalItems(data.total);
+        setTotalPages(data.pages);
       } catch (err) {
-        console.log(err)
-        setError("Failed to load data. Please try again.");
+        setError(err instanceof Error ? err.message : 'Failed to load transactions');
+        console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchData();
-  }, []);
+    fetchTransactions();
+  }, [currentPage]);
 
-  const chartData = [
-    { month: "January", desktop: 186, mobile: 80 },
-    { month: "February", desktop: 305, mobile: 200 },
-    { month: "March", desktop: 237, mobile: 120 },
-    { month: "April", desktop: 73, mobile: 190 },
-    { month: "May", desktop: 209, mobile: 130 },
-    { month: "June", desktop: 214, mobile: 140 },
-    { month: "July", desktop: 214, mobile: 140 },
-  ];
-
-  const chartConfig = {
-    desktop: {
-      label: "Snacks",
-      color: "#2563eb",
-    },
-    mobile: {
-      label: "Drinks",
-      color: "#60a5fa",
-    },
-  } satisfies ChartConfig;
+  const getStatusColor = (status: Transaction['status']) => {
+    switch (status) {
+      case 'paid':
+        return 'text-green-500';
+      case 'pending':
+        return 'text-yellow-500';
+      case 'failed':
+        return 'text-red-500';
+      default:
+        return 'text-gray-500';
+    }
+  };
 
   if (error) {
-    return <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">{error}</div>;
+    return (
+      <Alert variant="destructive" className="mt-4">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    );
   }
 
   return (
     <div className="mt-6 flex flex-col md:flex-row bg-card rounded-lg w-full p-8 gap-x-6">
-      {loading ? (
-        <LoadingSkeleton type="table" rows={4} width="90%" />
-      ) : (
-        <Table className="md:w-[90%]">
-          <TableCaption>A list of your recent invoices.</TableCaption>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Invoice</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Method</TableHead>
-              <TableHead className="text-right">Amount</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="font-medium flex flex-row items-center justify-between">
-                <Avatar className="w-[2rem]">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <div className="ml-2">
-                  <h2 className="text-base font-medium">Olivia chioma</h2>
-                  <span className="text-xs">victorjames408@gmail.com</span>
-                </div>
-              </TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium flex flex-row items-center justify-between">
-                <Avatar className="w-[2rem]">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <div className="ml-2">
-                  <h2 className="text-base font-medium">Olivia chioma</h2>
-                  <span className="text-xs">victorjames408@gmail.com</span>
-                </div>
-              </TableCell>
-              <TableCell>Paid</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-medium flex flex-row items-center justify-between">
-                <Avatar className="w-[2rem]">
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <div className="ml-2">
-                  <h2 className="text-base font-medium">Olivia chioma</h2>
-                  <span className="text-xs">victorjames408@gmail.com</span>
-                </div>
-              </TableCell>
-              <TableCell>Pending</TableCell>
-              <TableCell>Credit Card</TableCell>
-              <TableCell className="text-right">$250.00</TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      )}
+      <div className="md:w-[60%]">
+        {loading ? (
+          <LoadingSkeleton type="table" rows={4} width="100%" />
+        ) : (
+          <div>
+            <Table>
+              <TableCaption>A list of your recent transactions.</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[100px]">Customer</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Method</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead className="text-right">Amount</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+              <TableBody>
+-               {transactions.map((transaction) => (
++               {transactions.length === 0 ? (
++                 <TableRow>
++                   <TableCell colSpan={5} className="text-center text-sm text-muted-foreground">
++                     No transactions found
++                   </TableCell>
++                 </TableRow>
++               ) : (
++                 transactions.map((transaction) => (
+                   <TableRow key={transaction.id}>
+                     <TableCell className="font-medium">
+                       <div className="flex items-center space-x-2">
+                         <Avatar className="h-8 w-8">
+                           {transaction.customer.avatar ? (
+                             <AvatarImage src={transaction.customer.avatar} alt={transaction.customer.name} />
+                           ) : (
+                             <AvatarFallback>
+                               {transaction.customer.name.split(' ').map(n => n[0]).join('')}
+                             </AvatarFallback>
+                           )}
+                         </Avatar>
+                         <div>
+                           <p className="text-sm font-medium">{transaction.customer.name}</p>
+                           <p className="text-xs text-muted-foreground">{transaction.customer.email}</p>
+                         </div>
+                       </div>
+                     </TableCell>
+                     <TableCell>
+                       <Badge
+                         variant={
+                           transaction.status === 'paid'
+                             ? 'success'
+                             : transaction.status === 'pending'
+                             ? 'warning'
+                             : 'destructive'
+                         }
+                       >
+                         {transaction.status}
+                       </Badge>
+                     </TableCell>
+                     <TableCell>{transaction.method}</TableCell>
+                     <TableCell>{formatDate(transaction.date)}</TableCell>
+                     <TableCell className="text-right font-medium">
+                       {formatPrice(transaction.amount)}
+                     </TableCell>
+                   </TableRow>
+-               ))}
++                 ))
++               )}
+              </TableBody>
+
+            <div className="flex justify-between items-center mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                disabled={currentPage === 1}
+                aria-label="Go to previous page"
+              >
+                <ChevronLeft className="h-4 w-4 mr-2" />
+                Previous
+              </Button>
+              <span className="text-sm text-muted-foreground">
+                Page {currentPage} of {totalPages} ({totalItems} total)
+              </span>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                aria-label="Go to next page"
+              >
+                Next
+                <ChevronRight className="h-4 w-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
 
       <div className="mt-5 md:w-[40%]">
-        {loading ? (
-          <LoadingSkeleton type="chart" height="250px" width="100%" />
-        ) : (
-          <Chart chartData={chartData} chartConfig={chartConfig} />
-        )}
+        <Chart />
       </div>
     </div>
   );
