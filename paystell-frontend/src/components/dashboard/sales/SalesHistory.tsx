@@ -52,19 +52,6 @@ const SalesHistory = () => {
     fetchTransactions();
   }, [currentPage]);
 
-  const getStatusColor = (status: Transaction['status']) => {
-    switch (status) {
-      case 'paid':
-        return 'text-green-500';
-      case 'pending':
-        return 'text-yellow-500';
-      case 'failed':
-        return 'text-red-500';
-      default:
-        return 'text-gray-500';
-    }
-  };
-
   if (error) {
     return (
       <Alert variant="destructive" className="mt-4">
@@ -93,16 +80,7 @@ const SalesHistory = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-              <TableBody>
--               {transactions.map((transaction) => (
-+               {transactions.length === 0 ? (
-+                 <TableRow>
-+                   <TableCell colSpan={5} className="text-center text-sm text-muted-foreground">
-+                     No transactions found
-+                   </TableCell>
-+                 </TableRow>
-+               ) : (
-+                 transactions.map((transaction) => (
+                {transactions.map((transaction) => (
                    <TableRow key={transaction.id}>
                      <TableCell className="font-medium">
                        <div className="flex items-center space-x-2">
@@ -140,10 +118,9 @@ const SalesHistory = () => {
                        {formatPrice(transaction.amount)}
                      </TableCell>
                    </TableRow>
--               ))}
-+                 ))
-+               )}
+                ))}
               </TableBody>
+            </Table>
 
             <div className="flex justify-between items-center mt-4">
               <Button
