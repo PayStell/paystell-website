@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import WalletVerification from "@/components/wallet/WalletVerification"
+import WalletVerification from "@/components/wallet/walletconnect/WalletVerification"
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { MdCheckCircle, MdCancel, MdAccountBalanceWallet, MdWarning } from "react-icons/md"
@@ -13,6 +13,7 @@ interface WalletVerificationSectionProps {
   isWalletVerified: boolean
   isEmailVerified: boolean
   userId: number
+  walletAddress?: string
   onVerificationComplete?: (walletAddress: string) => void
   onVerificationError?: (error: string) => void
 }
@@ -21,6 +22,7 @@ const WalletVerificationSection = ({
   isWalletVerified: initialWalletVerified,
   isEmailVerified,
   userId,
+  walletAddress,
   onVerificationComplete,
   onVerificationError,
 }: WalletVerificationSectionProps) => {

@@ -24,24 +24,28 @@ const defaultData: CardData[] = [
     value: "$5,000",
     percentage: "+15%",
     icon: <FaArrowUp />,
+    trend: 'up',
   },
   {
     title: "Expenses",
     value: "$2,000",
     percentage: "-5%",
     icon: <FaArrowDown />,
+    trend: 'down',
   },
   {
     title: "Profit",
     value: "$3,000",
     percentage: "+20%",
     icon: <FaArrowUp />,
+    trend: 'up',
   },
   {
     title: "Revenue",
     value: "$8,000",
     percentage: "+10%",
     icon: <FaArrowUp />,
+    trend: 'up',
   },
 ];
 

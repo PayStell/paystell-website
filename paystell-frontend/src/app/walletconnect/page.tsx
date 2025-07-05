@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import WalletDashboard from "@/components/wallet/WalletDashboard"
+import WalletDashboard from "@/components/wallet/walletconnect/WalletDashboard"
 
 export const metadata: Metadata = {
   title: "Paystell Stellar Wallet | Dashboard",
@@ -8,7 +8,10 @@ export const metadata: Metadata = {
 
 export default function WalletPage() {
   return (
-    <div className=" mx-auto">
+    <div className="container mx-auto py-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-3xl font-bold">Stellar Wallet</h1>
+      </div>
       <WalletDashboard />
     </div>
   )

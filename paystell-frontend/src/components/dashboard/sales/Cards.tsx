@@ -60,10 +60,7 @@ const Cards = () => {
           ? Math.round(previousTotalSales / data.averageTransactionValue)
           : 0;
         // Replace this line:
--        const previousAvgTransaction = previousTotalSales / previousTransactions;
-+        const previousAvgTransaction = previousTransactions > 0
-+          ? previousTotalSales / previousTransactions
-+          : 0;
+        const previousAvgTransaction = previousTotalSales / previousTransactions;
 
         const todayVsWeekAvg = calculatePercentageChange(
           data.salesByPeriod.today,

@@ -28,7 +28,7 @@ const SettingsScreen: React.FC = () => {
       setLocalWalletVerified(userData.isWalletVerified)
       setVerifiedWalletAddress(publicKey || null)
     }
-  }, [userData])
+  }, [userData, publicKey])
 
   const handleProfileSubmit = (data: {
     name: string

@@ -1,5 +1,170 @@
 // custom type declarations
 
+// Recharts type declarations
+declare module 'recharts' {
+  import type React from 'react';
+  
+  export interface TooltipProps<TValue, TName> {
+    active?: boolean;
+    payload?: Array<{
+      value: TValue;
+      name: TName;
+      color: string;
+    }>;
+    label?: string;
+  }
+
+  export interface BarChartProps {
+    data: unknown[];
+    margin?: {
+      top?: number;
+      right?: number;
+      left?: number;
+      bottom?: number;
+    };
+    children?: React.ReactNode;
+  }
+
+  export interface ResponsiveContainerProps {
+    width?: string | number;
+    height?: string | number;
+    children?: React.ReactNode;
+  }
+
+  export interface XAxisProps {
+    dataKey?: string;
+    tick?: boolean | Record<string, unknown>;
+    tickLine?: boolean | Record<string, unknown>;
+    axisLine?: boolean | Record<string, unknown>;
+  }
+
+  export interface YAxisProps {
+    dataKey?: string;
+    yAxisId?: string;
+    orientation?: 'left' | 'right';
+    stroke?: string;
+    tick?: boolean | Record<string, unknown>;
+    tickLine?: boolean | Record<string, unknown>;
+    axisLine?: boolean | Record<string, unknown>;
+    domain?: [number | string, number | string];
+  }
+
+  export interface TooltipComponentProps {
+    content?: React.ComponentType<Record<string, unknown>> | React.ReactElement;
+    labelStyle?: React.CSSProperties;
+    itemStyle?: React.CSSProperties;
+    contentStyle?: React.CSSProperties;
+    cursor?: boolean | Record<string, unknown>;
+    active?: boolean;
+    payload?: Array<{
+      value: string | number;
+      name: string;
+      color: string;
+      dataKey?: string;
+      payload?: Record<string, unknown>;
+      fill?: string;
+    }>;
+    label?: string;
+    labelClassName?: string;
+    labelFormatter?: (value: unknown, payload: unknown[]) => React.ReactNode;
+    formatter?: (value: unknown, name: string, item: unknown, index: number, payload: unknown) => React.ReactNode;
+    hideLabel?: boolean;
+    hideIndicator?: boolean;
+    indicator?: "line" | "dot" | "dashed";
+    nameKey?: string;
+    labelKey?: string;
+  }
+
+  export interface LegendProps {
+    className?: string;
+    align?: 'left' | 'center' | 'right';
+    verticalAlign?: 'top' | 'middle' | 'bottom';
+    payload?: Array<{
+      value: string;
+      color: string;
+      dataKey?: string;
+      payload?: Record<string, unknown>;
+    }>;
+    hideIcon?: boolean;
+    nameKey?: string;
+  }
+
+  export interface BarProps {
+    dataKey: string;
+    name?: string;
+    fill?: string;
+    radius?: number[];
+    stackId?: string;
+  }
+
+  export interface PieChartProps {
+    data?: unknown[];
+    margin?: {
+      top?: number;
+      right?: number;
+      left?: number;
+      bottom?: number;
+    };
+    children?: React.ReactNode;
+  }
+
+  export interface PieProps {
+    data?: unknown[];
+    cx?: string | number;
+    cy?: string | number;
+    labelLine?: boolean;
+    outerRadius?: number;
+    fill?: string;
+    dataKey: string;
+    label?: ((entry: { name: string; percent: number; value: number }) => string) | boolean;
+    children?: React.ReactNode;
+  }
+
+  export interface CellProps {
+    fill?: string;
+  }
+
+  export interface CartesianGridProps {
+    strokeDasharray?: string;
+  }
+
+  export interface LineChartProps {
+    data: unknown[];
+    margin?: {
+      top?: number;
+      right?: number;
+      left?: number;
+      bottom?: number;
+    };
+    children?: React.ReactNode;
+  }
+
+  export interface LineProps {
+    dataKey: string;
+    yAxisId?: string;
+    stroke?: string;
+    strokeWidth?: number;
+    dot?: boolean | Record<string, unknown>;
+    activeDot?: boolean | Record<string, unknown>;
+    name?: string;
+    type?: 'monotone' | 'linear' | 'step' | 'stepBefore' | 'stepAfter';
+  }
+
+  export const Bar: React.ComponentType<BarProps>;
+  export const BarChart: React.ComponentType<BarChartProps>;
+  export const LineChart: React.ComponentType<LineChartProps>;
+  export const Line: React.ComponentType<LineProps>;
+  export const PieChart: React.ComponentType<PieChartProps>;
+  export const Pie: React.ComponentType<PieProps>;
+  export const Cell: React.ComponentType<CellProps>;
+  export const CartesianGrid: React.ComponentType<CartesianGridProps>;
+  export const XAxis: React.ComponentType<XAxisProps>;
+  export const YAxis: React.ComponentType<YAxisProps>;
+  export const Tooltip: React.ComponentType<TooltipComponentProps>;
+  export const Legend: React.ComponentType<LegendProps>;
+  export const ResponsiveContainer: React.ComponentType<ResponsiveContainerProps>;
+}
+
 // For modules that don't have their own type declarations
 declare module 'lucide-react' {
   import type React from 'react';
@@ -86,6 +251,10 @@ declare module 'lucide-react' {
   export const Globe: LucideIcon;
   export const RotateCcw: LucideIcon;
   export const Lock: LucideIcon;
+  export const QrCode: LucideIcon;
+  export const TrendingUp: LucideIcon;
+  export const SendHorizontal: LucideIcon;
+  export const Download: LucideIcon;
 }
 
 // For react-icons modules
