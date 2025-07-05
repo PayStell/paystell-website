@@ -12,7 +12,7 @@ const SalesPage = () => {
   return (
     <div className="py-10 px-8">
       <Header />
-      <Cards data={cardData} loading={loading} />
+      <Cards />
       <SalesHistory />
     </div>
   );

@@ -27,24 +27,28 @@ const SalesPage = () => {
               value: "$45,231.89",
               percentage: "20.1%",
               icon: <span>$</span>,
+              trend: 'up',
             },
             {
               title: "Subscriptions",
               value: "+3000",
               percentage: "20.1%",
               icon: <FiUsers />,
+              trend: 'up',
             },
             {
               title: "Sales",
               value: "+12,234",
               percentage: "20.1%",
               icon: <CiCreditCard1 />,
+              trend: 'up',
             },
             {
               title: "Active Now",
               value: "+3000",
               percentage: "20.1%",
               icon: <MdShowChart />,
+              trend: 'up',
             },
           ]);
           setError(null);
@@ -63,7 +67,7 @@ const SalesPage = () => {
   return (
     <div>
       <Header />
-      <Cards data={cardData} loading={loading} />
+      <Cards />
       {error && <p className="text-red-500">{error}</p>}
       <SalesHistory />
     </div>
