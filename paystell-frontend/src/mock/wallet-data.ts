@@ -1,3 +1,5 @@
+import { WalletData, Transaction } from '@/types/types';
+
 export const mockWalletData: WalletData = {
   address: 'GDQOE23CFSUMSVQK4Y5JHPPYK73VYCNHZHA7ENKCV37P6SUEO6XQBKPP',
   balance: '15,420.50',

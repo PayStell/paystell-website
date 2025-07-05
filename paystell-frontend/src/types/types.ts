@@ -1,3 +1,5 @@
+export type StellarAddress = string;
+
 export interface WalletData {
   address: string;
   balance: string;
