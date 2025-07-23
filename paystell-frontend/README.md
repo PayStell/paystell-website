@@ -116,10 +116,32 @@ backgrounds: {
 
 Watch this video to see the global theme switcher and background options in the storybook:
 
-
-
 https://github.com/user-attachments/assets/bf536f98-7b0b-4aaf-9094-62eb1a44cbfc
 
-
-
 ---
+
+## CI/CD Pipeline
+
+This project uses GitHub Actions for continuous integration and deployment. The workflow includes:
+
+- Linting and Prettier checks
+- TypeScript type checking
+- Build and Storybook build verification
+- Security audit (pnpm audit)
+- Bundle size analysis
+- Lighthouse performance testing
+- Automatic deployment to staging on main branch
+- Manual approval for production deployment
+- PR preview environments
+
+### Environment Variables
+
+Copy `.env.example` to `.env.local` and fill in the required values for local development and deployment.
+
+### Deployment
+
+- **Staging**: Deploys automatically on push to `main`.
+- **Production**: Deploys with manual approval after merging to `main`.
+- **PR Previews**: Deploy preview environments for each pull request.
+
+See `.github/workflows/frontend-ci.yml` for details.

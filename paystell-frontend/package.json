@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint --fix",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "prettier": "prettier --check .",
+    "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
