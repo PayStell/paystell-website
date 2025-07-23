@@ -1,0 +1,144 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  ci:
+    name: CI (Node.js ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: paystell-frontend
+
+      - name: Lint
+        run: pnpm lint
+        working-directory: paystell-frontend
+
+      - name: Type Check
+        run: pnpm tsc --noEmit
+        working-directory: paystell-frontend
+
+      - name: Prettier Check
+        run: pnpm prettier --check .
+        working-directory: paystell-frontend
+
+      - name: Build
+        run: pnpm build
+        working-directory: paystell-frontend
+
+      - name: Storybook Build
+        run: pnpm build-storybook
+        working-directory: paystell-frontend
+
+      - name: Audit for vulnerabilities
+        run: pnpm audit --audit-level=moderate
+        working-directory: paystell-frontend
+
+      - name: Bundle Size Analysis
+        uses: preactjs/compressed-size-action@v2
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: "paystell-frontend/.next/**"
+
+      - name: Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v11
+        with:
+          configPath: ./paystell-frontend/lighthouserc.json
+        continue-on-error: true
+
+  deploy_staging:
+    name: Deploy to Staging
+    needs: ci
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "pnpm"
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: paystell-frontend
+      - name: Build
+        run: pnpm build
+        working-directory: paystell-frontend
+      # TODO: Add your staging deployment step here (e.g., Vercel, Netlify, custom script)
+      - name: Deploy to Staging
+        run: echo "Deploy to staging environment"
+
+  deploy_production:
+    name: Deploy to Production
+    needs: ci
+    if: github.ref == 'refs/heads/main' && github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "pnpm"
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: paystell-frontend
+      - name: Build
+        run: pnpm build
+        working-directory: paystell-frontend
+      # TODO: Add your production deployment step here (e.g., Vercel, Netlify, custom script)
+      - name: Deploy to Production
+        run: echo "Deploy to production environment"
+
+  pr_preview:
+    name: Deploy PR Preview
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: "pnpm"
+      - name: Install pnpm
+        run: npm install -g pnpm
+      - name: Install dependencies
+        run: pnpm install
+        working-directory: paystell-frontend
+      - name: Build
+        run: pnpm build
+        working-directory: paystell-frontend
+      # TODO: Add your PR preview deployment step here (e.g., Vercel preview, Netlify preview)
+      - name: Deploy PR Preview
+        run: echo "Deploy PR preview environment"
