@@ -9,7 +9,7 @@ import { Logo } from "@/components/dashboard/nav/Logo";
 import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { IoLogOutOutline } from "react-icons/io5";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 
 export function Nav({
   items,
@@ -22,7 +22,10 @@ export function Nav({
   const { logout } = useAuth();
   const router = useRouter();
 
-  const handleMobileNavClose = () => onOpenChange(false);
+  const handleMobileNavClose = useCallback(
+    () => onOpenChange(false),
+    [onOpenChange]
+  );
 
   const handleLogout = async () => {
     try {
@@ -53,7 +56,7 @@ export function Nav({
       document.body.style.overflow = "";
       document.removeEventListener("keydown", handleEscape);
     };
-  }, [isOpen]);
+  }, [isOpen, handleMobileNavClose]);
 
   return (
     <>

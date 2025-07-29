@@ -4,11 +4,10 @@ export const dynamic = 'force-dynamic';
 
 import { Nav } from "@/components/dashboard/nav";
 import { dashboardNavItems } from "@/config/dashboard/nav";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/dashboard/nav/Logo";
 import { useAuth } from "@/providers/AuthProvider";
-import { useRouter } from "next/navigation";
 import type { NavItem } from "@/components/dashboard/nav/types";
 import type { Permission, UserRole } from "@/lib/types/user";
 
@@ -19,7 +18,6 @@ export default function DashboardLayout({
 }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { user, hasPermission, isLoading } = useAuth();
-  const router = useRouter();
 
   // Redirect to login if not authenticated
   // useEffect(() => {

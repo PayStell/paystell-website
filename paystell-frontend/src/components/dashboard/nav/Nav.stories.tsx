@@ -87,7 +87,7 @@ const sampleNavItems = [
         strokeWidth="2"
       >
         <circle cx="12" cy="12" r="3" />
-        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06-.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z" />
       </svg>
     ),
   },
@@ -152,18 +152,43 @@ const NavigationWrapper = ({
   );
 };
 
+// Create React components for each story
+const DefaultStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
+};
+
+const MobileViewStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
+};
+
+const TabletViewStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
+};
+
+const DesktopViewStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
+};
+
+const MobileWithOpenNavStory = () => {
+  const [isOpen, setIsOpen] = useState(true);
+  return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
+};
+
+const TouchTargetTestStory = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
+};
+
 export const Default: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
-  },
+  render: () => <DefaultStory />,
 };
 
 export const MobileView: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
-  },
+  render: () => <MobileViewStory />,
   parameters: {
     viewport: {
       defaultViewport: "mobile1",
@@ -172,10 +197,7 @@ export const MobileView: Story = {
 };
 
 export const TabletView: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
-  },
+  render: () => <TabletViewStory />,
   parameters: {
     viewport: {
       defaultViewport: "tablet",
@@ -184,10 +206,7 @@ export const TabletView: Story = {
 };
 
 export const DesktopView: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
-  },
+  render: () => <DesktopViewStory />,
   parameters: {
     viewport: {
       defaultViewport: "desktop",
@@ -196,10 +215,7 @@ export const DesktopView: Story = {
 };
 
 export const MobileWithOpenNav: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(true);
-    return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
-  },
+  render: () => <MobileWithOpenNavStory />,
   parameters: {
     viewport: {
       defaultViewport: "mobile1",
@@ -208,10 +224,7 @@ export const MobileWithOpenNav: Story = {
 };
 
 export const TouchTargetTest: Story = {
-  render: () => {
-    const [isOpen, setIsOpen] = useState(false);
-    return <NavigationWrapper isOpen={isOpen} onOpenChange={setIsOpen} />;
-  },
+  render: () => <TouchTargetTestStory />,
   parameters: {
     viewport: {
       defaultViewport: "mobile1",

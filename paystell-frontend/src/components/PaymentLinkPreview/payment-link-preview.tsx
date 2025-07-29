@@ -27,7 +27,7 @@ interface PaymentPreviewProps {
 export default function PaymentPreview({ product }: PaymentPreviewProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [txId, setTxId] = useState<string | null>(null);
+  // const [txId, setTxId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const { isConnected, publicKey, connectWallet, signTransaction } =
     useWalletStore();
@@ -76,7 +76,7 @@ export default function PaymentPreview({ product }: PaymentPreviewProps) {
         throw new Error(result.message || "Payment failed");
       }
 
-      setTxId(result.transactionId);
+      // setTxId(result.transactionId);
       setIsSuccess(true);
     } catch (err) {
       console.error("Payment error:", err);
