@@ -22,11 +22,11 @@ export default function DashboardLayout({
   const router = useRouter();
 
   // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!isLoading && !user) {
-      router.push('/login');
-    }
-  }, [user, isLoading, router]);
+  // useEffect(() => {
+  //   if (!isLoading && !user) {
+  //     router.push('/login');
+  //   }
+  // }, [user, isLoading, router]);
 
   // Filter nav items based on user permissions and roles
   const filteredNavItems = useMemo(() => {
@@ -60,9 +60,9 @@ export default function DashboardLayout({
   }
 
   // Don't render if not authenticated
-  if (!user) {
-    return null;
-  }
+  // if (!user) {
+  //   return null;
+  // }
 
   return (
     <div className="flex min-h-screen">

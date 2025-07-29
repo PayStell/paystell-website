@@ -43,7 +43,7 @@ export default function DashboardPage() {
         setLastBalance(1800);
       } catch (err) {
         setError("Failed to load data. Please try again.");
-        console.log(err)
+        console.log(err);
       } finally {
         setLoading(false);
       }
@@ -53,31 +53,42 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col p-8">
-      <h1 className="text-2xl font-semibold">Dashboard</h1>
-      <div className="flex flex-col gap-8 mt-5 items-start md:flex-row">
+    <main className="flex min-h-screen flex-col p-2 md:p-8">
+      <h1 className="text-xl md:text-2xl font-semibold mb-4 md:mb-5">
+        Dashboard
+      </h1>
+
+      {/* Balance and Activity Section */}
+      <div className="flex flex-col gap-6 md:gap-8 mb-8">
         {loading ? (
-          <LoadingSkeleton type="card" width={400} height="150px" />
+          <LoadingSkeleton type="card" width="100%" height="150px" />
         ) : error ? (
-          <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">{error}</div>
+          <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">
+            {error}
+          </div>
         ) : (
           <Balance balance={balance} lastBalance={lastBalance} />
         )}
+
         {loading ? (
           <LoadingSkeleton type="table" rows={3} width="100%" />
         ) : error ? (
-            <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto"> {error} </div>
+          <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">
+            {error}
+          </div>
         ) : (
           <Activity data={activityData} />
         )}
       </div>
-      
+
       {/* Stellar Analytics Section */}
-      <div className="mt-8">
+      <div className=" ">
         {loading ? (
           <LoadingSkeleton type="chart" height="300px" width="100%" />
         ) : error ? (
-          <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">{error}</div>
+          <div className="text-red-400 font-bold text-center mt-4 p-3 rounded-md shadow-md w-fit mx-auto">
+            {error}
+          </div>
         ) : (
           <StellarAnalytics />
         )}

@@ -59,7 +59,6 @@ const Cards = () => {
         const previousTransactions = data.averageTransactionValue > 0 
           ? Math.round(previousTotalSales / data.averageTransactionValue)
           : 0;
-        // Replace this line:
         const previousAvgTransaction = previousTotalSales / previousTransactions;
 
         const todayVsWeekAvg = calculatePercentageChange(
@@ -67,7 +66,6 @@ const Cards = () => {
           data.salesByPeriod.thisWeek / 7
         );
 
-        // Calculate each percentage change once and reuse
         const revenueChange = calculatePercentageChange(data.totalSales, previousTotalSales);
         const transactionChange = calculatePercentageChange(data.totalTransactions, previousTransactions);
         const avgTransactionChange = calculatePercentageChange(data.averageTransactionValue, previousAvgTransaction);
@@ -115,42 +113,52 @@ const Cards = () => {
 
   if (error) {
     return (
-      <Alert variant="destructive" className="mt-4">
+      <Alert variant="destructive" className="mt-4 mx-2 sm:mx-0">
         <AlertCircle className="h-4 w-4" />
-        <AlertDescription>{error}</AlertDescription>
+        <AlertDescription className="text-sm">{error}</AlertDescription>
       </Alert>
     );
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mt-10">
-      {loading ? (
-        Array.from({ length: 4 }).map((_, i) => (
-          <LoadingSkeleton key={i} type="card" width="100%" height="160px" />
-        ))
-      ) : (
-        cardData.map((card, index) => (
-          <Card key={index} className="relative overflow-hidden">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{card.title}</CardTitle>
-              <span className="text-muted-foreground">{card.icon}</span>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{card.value}</div>
-              <div className="flex items-center mt-2">
-                <span className={`text-sm ${
-                  card.trend === 'up' ? 'text-green-500' :
-                  card.trend === 'down' ? 'text-red-500' :
-                  'text-gray-500'
-                }`}>
-                  {card.percentage}
-                </span>
-                <span className="text-sm text-muted-foreground ml-2">from last period</span>
-              </div>
-            </CardContent>
-          </Card>
-        ))
-      )}
+    <div className="px-2 sm:px-0">
+      {/* Mobile: 1 column, Tablet: 2 columns, Desktop: 4 columns */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-6 sm:mt-10">
+        {loading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <LoadingSkeleton key={i} type="card" width="100%" height="140px" />
+          ))
+        ) : (
+          cardData.map((card, index) => (
+            <Card key={index} className="relative overflow-hidden border-border/50 hover:border-border transition-colors">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6 pt-4 sm:pt-6">
+                <CardTitle className="text-xs sm:text-sm font-medium text-muted-foreground truncate pr-2">
+                  {card.title}
+                </CardTitle>
+                <span className="text-muted-foreground flex-shrink-0">{card.icon}</span>
+              </CardHeader>
+              <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
+                <div className="text-xl sm:text-2xl font-bold mb-2 truncate" title={card.value}>
+                  {card.value}
+                </div>
+                <div className="flex items-center justify-between sm:justify-start">
+                  <span className={`text-xs sm:text-sm font-medium ${
+                    card.trend === 'up' ? 'text-green-600 dark:text-green-400' :
+                    card.trend === 'down' ? 'text-red-600 dark:text-red-400' :
+                    'text-gray-600 dark:text-gray-400'
+                  }`}>
+                    {card.percentage}
+                  </span>
+                  <span className="text-xs text-muted-foreground ml-1 sm:ml-2 truncate">
+                    <span className="hidden sm:inline">from last period</span>
+                    <span className="sm:hidden">vs last</span>
+                  </span>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
+      </div>
     </div>
   );
 };

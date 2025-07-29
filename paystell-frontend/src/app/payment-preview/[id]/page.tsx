@@ -1,9 +1,12 @@
 export const dynamic = 'force-dynamic';
+import { useWalletStore } from "@/lib/wallet/wallet-store";
 
 import PaymentPreview, { type ProductData } from "@/components/PaymentLinkPreview/payment-link-preview"
 import Image from "next/image"
 
 async function getProductData(id: string): Promise<ProductData> {
+    const {  connectWallet } =
+    useWalletStore();
     const productName = decodeURIComponent(id.replace(/-/g, " "))
     return {
         name: productName,
@@ -11,6 +14,7 @@ async function getProductData(id: string): Promise<ProductData> {
         price: 79.99,
         serviceFee: 10.0,
         features: ["Noise cancellation technology", "40-hour battery life", "Premium sound quality", "1-year warranty"],
+        merchantWalletAddress: connectWallet, 
     }
 }
 
