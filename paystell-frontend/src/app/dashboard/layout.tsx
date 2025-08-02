@@ -1,15 +1,16 @@
 "use client";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 import { Nav } from "@/components/dashboard/nav";
 import { dashboardNavItems } from "@/config/dashboard/nav";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import { Logo } from "@/components/dashboard/nav/Logo";
 import { useAuth } from "@/providers/AuthProvider";
 import type { NavItem } from "@/components/dashboard/nav/types";
 import type { Permission, UserRole } from "@/lib/types/user";
+import { useRouter } from "next/navigation";
 
 export default function DashboardLayout({
   children,
@@ -18,31 +19,36 @@ export default function DashboardLayout({
 }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { user, hasPermission, isLoading } = useAuth();
+  const router = useRouter();
 
   // Redirect to login if not authenticated
-  // useEffect(() => {
-  //   if (!isLoading && !user) {
-  //     router.push('/login');
-  //   }
-  // }, [user, isLoading, router]);
+  useEffect(() => {
+    if (!isLoading && !user) {
+      router.push("/login");
+    }
+  }, [user, isLoading, router]);
 
   // Filter nav items based on user permissions and roles
   const filteredNavItems = useMemo(() => {
     if (!user) return [];
 
-    return (dashboardNavItems as NavItem[]).filter(item => {
+    return (dashboardNavItems as NavItem[]).filter((item) => {
       // If no role or permission requirements, always show the item
       if (!item.requiredRoles && !item.requiredPermissions) {
         return true;
       }
 
       // Check role requirements
-      const hasRequiredRole = !item.requiredRoles || 
+      const hasRequiredRole =
+        !item.requiredRoles ||
         item.requiredRoles.includes(user.role as UserRole);
 
       // Check permission requirements
-      const hasRequiredPermissions = !item.requiredPermissions || 
-        item.requiredPermissions.every((permission: Permission) => hasPermission(permission));
+      const hasRequiredPermissions =
+        !item.requiredPermissions ||
+        item.requiredPermissions.every((permission: Permission) =>
+          hasPermission(permission)
+        );
 
       return hasRequiredRole && hasRequiredPermissions;
     });
@@ -58,9 +64,9 @@ export default function DashboardLayout({
   }
 
   // Don't render if not authenticated
-  // if (!user) {
-  //   return null;
-  // }
+  if (!user) {
+    return null;
+  }
 
   return (
     <div className="flex min-h-screen">
@@ -78,7 +84,7 @@ export default function DashboardLayout({
           "flex-1 p-4 md:p-8 w-full mt-14 md:mt-0 md:ml-64 transition-all duration-200",
           isNavOpen
             ? "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"
-            : "opacity-100 pointer-events-auto",
+            : "opacity-100 pointer-events-auto"
         )}
       >
         {children}
