@@ -1,11 +1,27 @@
-"use client";
+'use client';
 
 import React, { useState, useMemo } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { mockStellarTransactions, MockStellarTransaction } from './mockData';
-import { XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line, TooltipProps } from 'recharts';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  TooltipProps,
+} from 'recharts';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { subDays, format, parseISO } from 'date-fns';
 
 type TimeFilter = 'daily' | 'weekly' | 'monthly' | 'all';
@@ -51,25 +67,33 @@ export const StellarAnalytics: React.FC = () => {
         startDate = subDays(now, 90); // Default to last 90 days for 'all'
         break;
     }
-    
-    return mockStellarTransactions.filter((tx: MockStellarTransaction) => {
-        const txDate = parseISO(tx.timestamp);
-        const assetMatch = selectedAsset === 'all' || tx.asset === selectedAsset;
-        // Ensure we only include transactions after the calculated start date
-        // For daily, weekly, monthly - we compare against the start date
-        // For 'all', we use a wider range (e.g., last 90 days)
-        // Correct filtering: Ensure transaction date is ON OR AFTER the start date
-        return txDate >= startDate && assetMatch;
-    });
 
+    return mockStellarTransactions.filter((tx: MockStellarTransaction) => {
+      const txDate = parseISO(tx.timestamp);
+      const assetMatch = selectedAsset === 'all' || tx.asset === selectedAsset;
+      // Ensure we only include transactions after the calculated start date
+      // For daily, weekly, monthly - we compare against the start date
+      // For 'all', we use a wider range (e.g., last 90 days)
+      // Correct filtering: Ensure transaction date is ON OR AFTER the start date
+      return txDate >= startDate && assetMatch;
+    });
   }, [timeFilter, selectedAsset]);
 
   // --- Metric Calculation Logic ---
   const metrics = useMemo(() => {
-    const successfulTx = filteredData.filter((tx: MockStellarTransaction) => tx.status === 'success');
-    const totalVolume = successfulTx.reduce((sum: number, tx: MockStellarTransaction) => sum + tx.amount, 0);
-    const successfulPayments = successfulTx.filter((tx: MockStellarTransaction) => tx.type === 'payment').length;
-    const failedAttempts = filteredData.filter((tx: MockStellarTransaction) => tx.status === 'failed').length;
+    const successfulTx = filteredData.filter(
+      (tx: MockStellarTransaction) => tx.status === 'success',
+    );
+    const totalVolume = successfulTx.reduce(
+      (sum: number, tx: MockStellarTransaction) => sum + tx.amount,
+      0,
+    );
+    const successfulPayments = successfulTx.filter(
+      (tx: MockStellarTransaction) => tx.type === 'payment',
+    ).length;
+    const failedAttempts = filteredData.filter(
+      (tx: MockStellarTransaction) => tx.status === 'failed',
+    ).length;
 
     return {
       totalVolume,
@@ -136,10 +160,9 @@ export const StellarAnalytics: React.FC = () => {
     }
   }, [filteredData, timeFilter]);
 
-
   const availableAssets = useMemo(() => {
-      const assets = new Set(mockStellarTransactions.map(tx => tx.asset));
-      return ['all', ...Array.from(assets)];
+    const assets = new Set(mockStellarTransactions.map((tx) => tx.asset));
+    return ['all', ...Array.from(assets)];
   }, []);
 
   // Explicitly type recharts tooltip props for now
@@ -151,23 +174,28 @@ export const StellarAnalytics: React.FC = () => {
       return (
         <div className="bg-white p-2 border rounded-lg shadow-sm text-sm">
           <p className="label font-semibold mb-1">{`${label}`}</p>
-          {/* Use the inferred Payload type directly */} 
+          {/* Use the inferred Payload type directly */}
           {payload.map((p, index: number) => {
             const name = p.name || 'Unknown'; // Handle potentially undefined name
             const value = p.value;
             // Attempt to format volume as currency if the name matches
             // Ensure value is treated as a number for formatting
-            const displayValue = name === 'volume' && typeof value === 'number'
-                                ? formatCurrency(value, selectedAsset === 'all' ? 'USD' : selectedAsset)
-                                : value;
+            const displayValue =
+              name === 'volume' && typeof value === 'number'
+                ? formatCurrency(value, selectedAsset === 'all' ? 'USD' : selectedAsset)
+                : value;
 
             return (
-                <div key={`${label}-${index}-${name}`} style={{ color: p.color }} className="flex justify-between items-center"> 
-                  <span className="mr-2">{`${name}:`}</span>
-                  <span className="font-medium">{displayValue}</span>
-                </div>
-              );
-           })}
+              <div
+                key={`${label}-${index}-${name}`}
+                style={{ color: p.color }}
+                className="flex justify-between items-center"
+              >
+                <span className="mr-2">{`${name}:`}</span>
+                <span className="font-medium">{displayValue}</span>
+              </div>
+            );
+          })}
         </div>
       );
     }
@@ -175,109 +203,160 @@ export const StellarAnalytics: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold tracking-tight">Stellar Transaction Analytics</h2>
-        <div className="flex items-center space-x-2">
-           <Select value={selectedAsset} onValueChange={setSelectedAsset}>
-                <SelectTrigger className="w-[120px]">
-                    <SelectValue placeholder="Asset" />
-                </SelectTrigger>
-                <SelectContent>
-                    {availableAssets.map(asset => (
-                        <SelectItem key={asset} value={asset}>
-                            {asset === 'all' ? 'All Assets' : asset}
-                        </SelectItem>
-                    ))}
-                </SelectContent>
+    <div className="space-y-4 sm:space-y-6  sm:px-0">
+      {/* Header Section - Mobile Responsive */}
+      <div className="space-y-4 sm:space-y-0">
+        {/* Title */}
+        <div className="text-center sm:text-left">
+          <h2 className="text-lg sm:text-2xl font-semibold tracking-tight">
+            Stellar Transaction Analytics
+          </h2>
+        </div>
+
+        {/* Controls - Stacked on Mobile */}
+        <div className="flex flex-col space-y-3 sm:flex-row sm:justify-end sm:items-center sm:space-y-0 sm:space-x-3">
+          {/* Asset Select */}
+          <div className="w-full sm:w-auto">
+            <Select value={selectedAsset} onValueChange={setSelectedAsset}>
+              <SelectTrigger className="w-full sm:w-[140px] h-10 sm:h-9">
+                <SelectValue placeholder="Asset" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableAssets.map((asset) => (
+                  <SelectItem key={asset} value={asset}>
+                    {asset === 'all' ? 'All Assets' : asset}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
-          {(['daily', 'weekly', 'monthly', 'all'] as TimeFilter[]).map((filter) => (
-            <Button
-              key={filter}
-              variant={timeFilter === filter ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setTimeFilter(filter)}
-            >
-              {filter.charAt(0).toUpperCase() + filter.slice(1)}
-            </Button>
-          ))}
+          </div>
+
+          {/* Time Filter Buttons */}
+          <div className="grid grid-cols-2 gap-2 sm:flex sm:space-x-2">
+            {(['daily', 'weekly', 'monthly', 'all'] as TimeFilter[]).map((filter) => (
+              <Button
+                key={filter}
+                variant={timeFilter === filter ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setTimeFilter(filter)}
+                className="h-10 sm:h-9 text-xs sm:text-sm min-h-[40px] sm:min-h-[36px] touch-manipulation"
+              >
+                {filter.charAt(0).toUpperCase() + filter.slice(1)}
+              </Button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* Key Metrics */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Volume ({selectedAsset === 'all' ? 'Mixed' : selectedAsset})</CardTitle>
-            {/* Icon? */}
+      <div className="grid gap-3 sm:gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+        <Card className="w-full">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
+            <CardTitle className="text-xs sm:text-sm font-medium leading-tight">
+              Total Volume ({selectedAsset === 'all' ? 'Mixed' : selectedAsset})
+            </CardTitle>
           </CardHeader>
-          <CardContent>
-            {/* Handle multiple currencies better in a real app */}
-            <div className="text-2xl font-bold">{formatCurrency(metrics.totalVolume, selectedAsset === 'all' ? 'USD' : selectedAsset)}</div>
-             <p className="text-xs text-muted-foreground">
-               Based on {metrics.totalTransactions} transactions
-             </p>
+          <CardContent className="px-4 sm:px-6 pb-4">
+            <div className="text-lg sm:text-2xl font-bold break-words">
+              {formatCurrency(metrics.totalVolume, selectedAsset === 'all' ? 'USD' : selectedAsset)}
+            </div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Based on {metrics.totalTransactions} transactions
+            </p>
           </CardContent>
         </Card>
-         <Card>
-           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-             <CardTitle className="text-sm font-medium">Successful Payments</CardTitle>
-             {/* Icon? */}
-           </CardHeader>
-           <CardContent>
-             <div className="text-2xl font-bold">{metrics.successfulPayments}</div>
-              <p className="text-xs text-muted-foreground">
-                Success Rate: {metrics.successRate.toFixed(1)}%
-              </p>
-           </CardContent>
-         </Card>
-         <Card>
-           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-             <CardTitle className="text-sm font-medium">Failed Attempts</CardTitle>
-             {/* Icon? */}
-           </CardHeader>
-           <CardContent>
-             <div className="text-2xl font-bold">{metrics.failedAttempts}</div>
-              <p className="text-xs text-muted-foreground">
-                 Across all transaction types
-               </p>
-           </CardContent>
-         </Card>
-        {/* Add more metric cards as needed */}
+
+        <Card className="w-full">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
+            <CardTitle className="text-xs sm:text-sm font-medium">Successful Payments</CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6 pb-4">
+            <div className="text-lg sm:text-2xl font-bold">{metrics.successfulPayments}</div>
+            <p className="text-xs text-muted-foreground mt-1">
+              Success Rate: {metrics.successRate.toFixed(1)}%
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card className="w-full">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
+            <CardTitle className="text-xs sm:text-sm font-medium">Failed Attempts</CardTitle>
+          </CardHeader>
+          <CardContent className="px-4 sm:px-6 pb-4">
+            <div className="text-lg sm:text-2xl font-bold">{metrics.failedAttempts}</div>
+            <p className="text-xs text-muted-foreground mt-1">Across all transaction types</p>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Charts */}
-      <Card>
-        <CardHeader>
-           <CardTitle>Transaction Trends ({selectedAsset === 'all' ? 'All Assets' : selectedAsset})</CardTitle>
+      <Card className="w-full">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="text-sm sm:text-base">
+            Transaction Trends ({selectedAsset === 'all' ? 'All Assets' : selectedAsset})
+          </CardTitle>
         </CardHeader>
-        <CardContent className="h-[350px] w-full">
-           {chartData.length === 0 ? (
-             <div className="flex items-center justify-center h-full text-muted-foreground">
-               No data available for the selected period or asset.
-             </div>
-           ) : (
-           <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={chartData} margin={{ top: 5, right: 20, left: 20, bottom: 5 }}>
-                 <CartesianGrid strokeDasharray="3 3" />
-                 <XAxis dataKey="date" />
-                 {/* Adjust Y-axis based on selected asset? Might need multiple Y-axes if showing counts and volume */}
-                <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                 <Tooltip 
-                    labelStyle={{ color: 'black' }}
-                    itemStyle={{ color: 'black' }}
-                    content={<CustomTooltip />}
-                 />
-                 <Legend />
-                  <Line yAxisId="left" type="monotone" dataKey="volume" stroke="#8884d8" activeDot={{ r: 8 }} name={`Volume (${selectedAsset === 'all' ? 'Mixed' : selectedAsset})`} />
-                  <Line yAxisId="right" type="monotone" dataKey="count" stroke="#82ca9d" name="Successful Count" />
-                  <Line yAxisId="right" type="monotone" dataKey="failed" stroke="#ff7300" name="Failed Count" />
-               </LineChart>
-           </ResponsiveContainer>
-           )}
-         </CardContent>
-       </Card>
-     </div>
-   );
- }; 
+        <CardContent className="h-[300px]  sm:h-[350px] w-full px-2 sm:px-6 pb-4 sm:pb-6">
+          {chartData.length === 0 ? (
+            <div className="flex items-center justify-center h-full text-muted-foreground text-sm text-center">
+              No data available for the selected period or asset.
+            </div>
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={chartData}
+                margin={{ top: 5, right: 10, left: 10, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="date"
+                  tick={{ fontSize: 12 }}
+                  axisLine={{ stroke: '#374151' }}
+                  tickLine={{ stroke: '#374151' }}
+                />
+                <YAxis yAxisId="left" orientation="left" stroke="#8884d8" tick={{ fontSize: 12 }} />
+                <YAxis
+                  yAxisId="right"
+                  orientation="right"
+                  stroke="#82ca9d"
+                  tick={{ fontSize: 12 }}
+                />
+                <Tooltip
+                  labelStyle={{ color: 'black' }}
+                  itemStyle={{ color: 'black' }}
+                  content={<CustomTooltip />}
+                />
+                <Legend />
+                <Line
+                  yAxisId="left"
+                  type="monotone"
+                  dataKey="volume"
+                  stroke="#8884d8"
+                  activeDot={{ r: 6 }}
+                  name={`Volume (${selectedAsset === 'all' ? 'Mixed' : selectedAsset})`}
+                  strokeWidth={2}
+                />
+                <Line
+                  yAxisId="right"
+                  type="monotone"
+                  dataKey="count"
+                  stroke="#82ca9d"
+                  name="Successful Count"
+                  strokeWidth={2}
+                />
+                <Line
+                  yAxisId="right"
+                  type="monotone"
+                  dataKey="failed"
+                  stroke="#ff7300"
+                  name="Failed Count"
+                  strokeWidth={2}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+};

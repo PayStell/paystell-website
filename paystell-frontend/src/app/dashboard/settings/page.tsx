@@ -18,7 +18,7 @@ const SettingsScreen: React.FC = () => {
 
   // Use auth data for verification status, with local state as fallback
   const [localWalletVerified, setLocalWalletVerified] = useState(false)
-  const [verifiedWalletAddress, setVerifiedWalletAddress] = useState<string | null>(null)
+  // const [verifiedWalletAddress, setVerifiedWalletAddress] = useState<string | null>(null)
 
   const isEmailVerified = userData?.isEmailVerified ?? false
   const isWalletVerified = userData?.isWalletVerified ?? localWalletVerified
@@ -26,7 +26,7 @@ const SettingsScreen: React.FC = () => {
   useEffect(() => {
     if (userData?.isWalletVerified) {
       setLocalWalletVerified(userData.isWalletVerified)
-      setVerifiedWalletAddress(publicKey || null)
+      // setVerifiedWalletAddress(publicKey || null)
     }
   }, [userData, publicKey])
 
@@ -40,7 +40,7 @@ const SettingsScreen: React.FC = () => {
 
   const handleVerificationComplete = async (walletAddress: string) => {
     setLocalWalletVerified(true)
-    setVerifiedWalletAddress(walletAddress)
+    // setVerifiedWalletAddress(walletAddress)
 
     toast.success("Wallet Verified", {
       description: "Your wallet has been successfully verified! Please refresh the page to see updated status.",
