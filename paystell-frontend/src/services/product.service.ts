@@ -13,7 +13,7 @@ export interface ProductData {
   currency?: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
 
 // Create axios instance with default config
 const api = axios.create({
@@ -226,7 +226,9 @@ export class ProductService {
 
       if (process.env.NODE_ENV === "development" && isMockingEnabled) {
         // In mock mode, validate that product ID is not empty and has reasonable length
-        return productId && productId.length > 0 && productId.length <= 100;
+        return (
+          Boolean(productId) && productId.length > 0 && productId.length <= 100
+        );
       }
 
       const response = await api.get(`/products/${productId}/validate`);

@@ -1,8 +1,13 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
+import crypto from "crypto";
 
 const HORIZON_URL = "https://horizon-testnet.stellar.org";
+
+// In-memory store for transaction hashes to prevent replay attacks
+// In production, use Redis or a database
+const processedTransactions = new Set<string>();
 
 export async function POST(request: Request) {
   let errorMessage = "Unknown error";
@@ -26,7 +31,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // console.log("Submitting transaction:", signedXdr)
+    // 2. Check for replay attacks
+    const transactionHash = crypto
+      .createHash("sha256")
+      .update(signedXdr)
+      .digest("hex");
+    if (processedTransactions.has(transactionHash)) {
+      return NextResponse.json(
+        { error: "Transaction already processed" },
+        { status: 409 }
+      );
+    }
+
+    // 3. Submit to the network
     const response = await fetch(`${HORIZON_URL}/transactions`, {
       method: "POST",
       headers: {
@@ -59,6 +76,9 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+
+    // 4. Mark transaction as processed to prevent replay
+    processedTransactions.add(transactionHash);
 
     console.log("Transaction submitted successfully:", result);
 

@@ -18,7 +18,7 @@ export default function DashboardPage() {
       try {
         setLoading(true);
         setError(null);
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 500)); // Reduced from 2000ms to 500ms
 
         // @TODO remove this mock data once the BE is integrated
         setActivityData([

@@ -21,9 +21,19 @@ export default function DashboardLayout({
   const { user, hasPermission, isLoading } = useAuth();
   const router = useRouter();
 
+  // Debug logging
+  useEffect(() => {
+    console.log("Dashboard Layout Debug:", {
+      isLoading,
+      user: user ? "User exists" : "No user",
+      isAuthenticated: !!user,
+    });
+  }, [isLoading, user]);
+
   // Redirect to login if not authenticated
   useEffect(() => {
     if (!isLoading && !user) {
+      console.log("Redirecting to login - no user found");
       router.push("/login");
     }
   }, [user, isLoading, router]);
@@ -56,6 +66,7 @@ export default function DashboardLayout({
 
   // Don't render until authentication is complete
   if (isLoading) {
+    console.log("Dashboard Layout: Still loading...");
     return (
       <div className="flex items-center justify-center min-h-screen">
         <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
@@ -65,9 +76,11 @@ export default function DashboardLayout({
 
   // Don't render if not authenticated
   if (!user) {
+    console.log("Dashboard Layout: No user, returning null");
     return null;
   }
 
+  console.log("Dashboard Layout: Rendering dashboard with user");
   return (
     <div className="flex min-h-screen">
       <Nav
