@@ -5,6 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { headers } from "next/headers";
 import crypto from "crypto";
 import { paymentRateLimit } from "@/middleware/rateLimit";
+import { ProductService } from "@/services/product.service";
+import { MerchantService } from "@/services/merchant.service";
 
 const server = new Horizon.Server("https://horizon-testnet.stellar.org");
 
@@ -31,38 +33,80 @@ function isValidProductId(productId: string): boolean {
   );
 }
 
-// Mock function to validate product against database
-// In production, replace with actual database query
+// Validate product against database using ProductService
 async function validateProduct(
   productId: string,
   amount: number
 ): Promise<boolean> {
-  // TODO: Replace with actual database validation
-  // const product = await db.product.findUnique({ where: { id: productId } });
-  // return product && product.price === amount;
+  try {
+    // First validate that the product exists and is active
+    const isProductValid = await ProductService.validateProduct(productId);
+    if (!isProductValid) {
+      console.error(`Product validation failed for productId: ${productId}`);
+      return false;
+    }
 
-  // For now, return true in development mode
-  if (process.env.NODE_ENV === "development") {
+    // Get the actual product price from database
+    const actualPrice = await ProductService.getProductPrice(productId);
+
+    // Calculate total amount including service fee
+    const productData = await ProductService.getProductData(productId, null);
+    const totalExpectedAmount = actualPrice + productData.serviceFee;
+
+    // Validate that the provided amount matches the expected amount
+    if (Math.abs(amount - totalExpectedAmount) > 0.01) {
+      // Allow small rounding differences
+      console.error(
+        `Amount mismatch: expected ${totalExpectedAmount}, got ${amount}`
+      );
+      return false;
+    }
+
     return true;
+  } catch (error) {
+    console.error("Error validating product:", error);
+    return false;
   }
-
-  // In production, this should always validate against the database
-  return false;
 }
 
-// Mock function to validate merchant wallet address
-// In production, replace with actual database query
+// Validate merchant wallet address against database using MerchantService
 async function validateMerchantWallet(
   merchantWalletAddress: string
 ): Promise<boolean> {
-  // TODO: Replace with actual database validation
-  // const merchant = await db.merchant.findFirst({
-  //   where: { walletAddress: merchantWalletAddress, isActive: true }
-  // });
-  // return !!merchant;
+  try {
+    // First validate the format
+    if (!MerchantService.isValidStellarPublicKey(merchantWalletAddress)) {
+      console.error(`Invalid merchant wallet format: ${merchantWalletAddress}`);
+      return false;
+    }
 
-  // For now, just validate the format
-  return isValidStellarPublicKey(merchantWalletAddress);
+    // Validate merchant against database
+    const isMerchantValid = await MerchantService.validateMerchant(
+      merchantWalletAddress
+    );
+    if (!isMerchantValid) {
+      console.error(
+        `Merchant validation failed for wallet: ${merchantWalletAddress}`
+      );
+      return false;
+    }
+
+    // Get merchant data to ensure it's active and verified
+    const merchantData = await MerchantService.getMerchantByWallet(
+      merchantWalletAddress
+    );
+    if (!merchantData || !merchantData.isActive || !merchantData.isVerified) {
+      console.error(
+        `Merchant not active or verified: ${merchantWalletAddress}`
+      );
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    console.error("Error validating merchant wallet:", error);
+    return false;
+  }
 }
 
 export async function POST(request: Request) {
@@ -101,9 +145,19 @@ export async function POST(request: Request) {
       );
     }
 
-    // 4. Validate amount
+    // 4. Validate amount format and range
+    if (typeof amount !== "number" || isNaN(amount)) {
+      return NextResponse.json(
+        { message: "Invalid amount format" },
+        { status: 400 }
+      );
+    }
+
     if (!isValidAmount(amount)) {
-      return NextResponse.json({ message: "Invalid amount" }, { status: 400 });
+      return NextResponse.json(
+        { message: "Invalid amount: must be positive and less than 1,000,000" },
+        { status: 400 }
+      );
     }
 
     // 5. Validate merchant wallet address format
