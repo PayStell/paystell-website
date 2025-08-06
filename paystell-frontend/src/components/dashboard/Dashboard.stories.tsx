@@ -1,19 +1,18 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import DashboardPage from "@/app/dashboard/page";
+import type { Meta, StoryObj } from '@storybook/react';
+import DashboardPage from '@/app/dashboard/page';
 
 const meta: Meta<typeof DashboardPage> = {
-  title: "Pages/Dashboard",
+  title: 'Pages/Dashboard',
   component: DashboardPage,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
     docs: {
       description: {
-        component:
-          "The main dashboard page with balance, activity, and analytics sections.",
+        component: 'The main dashboard page with balance, activity, and analytics sections.',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -24,7 +23,7 @@ export const Default: Story = {};
 export const MobileView: Story = {
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };
@@ -32,7 +31,7 @@ export const MobileView: Story = {
 export const TabletView: Story = {
   parameters: {
     viewport: {
-      defaultViewport: "tablet",
+      defaultViewport: 'tablet',
     },
   },
 };
@@ -40,23 +39,30 @@ export const TabletView: Story = {
 export const DesktopView: Story = {
   parameters: {
     viewport: {
-      defaultViewport: "desktop",
+      defaultViewport: 'desktop',
     },
   },
 };
 
 export const LoadingState: Story = {
+  decorators: [
+    (Story) => {
+    
+      return <Story />;
+    },
+  ],
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };
 
 export const ErrorState: Story = {
   parameters: {
+    // Add parameters to force loading state  
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };

@@ -26,7 +26,7 @@ export const Default: Story = {
         "Premium sound quality",
         "1-year warranty",
       ],
-      merchantWalletAddress: "GABC1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      merchantWalletAddress: "GCKFBEIYV2U22IO2BJ4KVJOIP7XPWQGQFKKWXR6DOSJBV7STMAQSMTMA",
     },
   },
 };

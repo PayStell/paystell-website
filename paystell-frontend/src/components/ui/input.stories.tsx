@@ -53,7 +53,7 @@ export const Password: Story = {
   },
 };
 
-export const Number: Story = {
+export const NumberInput: Story = {
   args: {
     type: "number",
     placeholder: "Enter amount",

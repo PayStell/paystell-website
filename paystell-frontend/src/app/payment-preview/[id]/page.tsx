@@ -5,7 +5,6 @@ import { useWalletStore } from "@/lib/wallet/wallet-store";
 import PaymentPreview, {
   type ProductData,
 } from "@/components/PaymentLinkPreview/payment-link-preview";
-import Image from "next/image";
 import { ProductService } from "@/services/product.service";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -16,7 +15,6 @@ export default function PaymentPreviewPage({
 }: {
   params: { id: string };
 }) {
-  const { publicKey } = useWalletStore();
   const searchParams = useSearchParams();
   const merchantWalletAddress = searchParams.get("merchant");
   const [productData, setProductData] = useState<ProductData | null>(null);
