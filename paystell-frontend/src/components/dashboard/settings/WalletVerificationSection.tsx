@@ -22,7 +22,6 @@ const WalletVerificationSection = ({
   isWalletVerified: initialWalletVerified,
   isEmailVerified,
   userId,
-  walletAddress,
   onVerificationComplete,
   onVerificationError,
 }: WalletVerificationSectionProps) => {

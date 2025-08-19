@@ -24,25 +24,31 @@ const Balance = ({
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-base font-semibold">{title}</CardTitle>
+    <Card className="w-full max-w-md mx-auto sm:max-w-none">
+      <CardHeader className="pb-3 px-4 sm:px-6">
+        <CardTitle className="text-sm sm:text-base font-semibold text-center sm:text-left">
+          {title}
+        </CardTitle>
       </CardHeader>
-      <CardContent>
-        <div className="flex flex-row items-center gap-3">
-          <p className="text-3xl font-bold">
+      <CardContent className="space-y-4 px-4 sm:px-6 pb-4 sm:pb-6">
+        <div className="flex flex-col items-center sm:items-start sm:flex-row sm:items-center gap-2 sm:gap-3">
+          <p className="text-xl xs:text-2xl sm:text-3xl font-bold break-words text-center sm:text-left leading-tight">
             {`${formatPrice(balance, currency)}`}
           </p>
-          <BalanceStat balance={balance} lastBalance={lastBalance} />
+          <div className="w-full sm:w-auto flex justify-center sm:justify-start">
+            <BalanceStat balance={balance} lastBalance={lastBalance} />
+          </div>
         </div>
-        <Button
-          className="mt-4 text-xs font-semibold"
-          size={"sm"}
-          onClick={handleWithdraw}
-          variant="secondary"
-        >
-          Withdraw
-        </Button>
+        <div className="pt-2">
+          <Button
+            className="w-full sm:w-auto h-12 sm:h-9 text-sm sm:text-xs font-semibold min-h-[48px] sm:min-h-[36px] touch-manipulation"
+            size={"sm"}
+            onClick={handleWithdraw}
+            variant="secondary"
+          >
+            Withdraw
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );
