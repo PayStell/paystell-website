@@ -38,7 +38,7 @@ export default function PaymentPreview({ paymentId, merchantWalletAddress }: Pay
         setIsLoading(true)
 
         // Fetch product data
-        const productData = ProductService.getMockProductData(paymentId, publicKey)
+        const productData = ProductService.getMockProductData(paymentId, String(merchantWalletAddress))
         setProduct(productData)
 
         const total = productData.price + productData.serviceFee
