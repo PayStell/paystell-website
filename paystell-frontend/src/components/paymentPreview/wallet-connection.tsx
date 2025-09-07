@@ -2,6 +2,13 @@
 
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+
+// Extend the Window interface to include the 'freighter' property
+declare global {
+  interface Window {
+    freighter?: unknown
+  }
+}
 import { Button } from "@/components/ui/button"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Wallet, AlertCircle, CheckCircle, Loader2 } from "lucide-react"
@@ -21,7 +28,7 @@ export function WalletConnection({ onConnectionChange, error }: WalletConnection
     // Check if Freighter is installed
     const checkFreighter = async () => {
       if (typeof window !== "undefined") {
-        const installed = !!(window as any).freighter
+        const installed = !!(window).freighter
         setFreighterInstalled(installed)
       }
     }

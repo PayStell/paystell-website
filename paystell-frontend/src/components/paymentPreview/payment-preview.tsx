@@ -62,7 +62,7 @@ export default function PaymentPreview({ paymentId, merchantWalletAddress }: Pay
         setError({
           type: "VERIFICATION_ERROR",
           code: "FETCH_FAILED",
-          message: "Failed to load payment details",
+          message:`"Failed to load payment details, ${err instanceof Error ? err.message : "unknown error"}"`,
           recoverable: true,
         })
       } finally {
@@ -73,7 +73,7 @@ export default function PaymentPreview({ paymentId, merchantWalletAddress }: Pay
     fetchPaymentData()
   }, [paymentId, merchantWalletAddress])
 
-  const processPayment = async () => {
+const processPayment = async () => {
     if (!payment || !isConnected || !publicKey) return
 
     try {
@@ -106,28 +106,33 @@ export default function PaymentPreview({ paymentId, merchantWalletAddress }: Pay
       await new Promise((resolve) => setTimeout(resolve, 1000))
 
       setPaymentState("COMPLETED")
-      toast("Payment completed successfully!")
-    } catch (err: any) {
+      toast("Payment completed successfully!" )
+    } catch (err) {
       setPaymentState("FAILED")
 
       let errorType: PaymentError["type"] = "TRANSACTION_ERROR"
       let recoverable = true
 
-      if (err.message?.includes("User rejected")) {
-        errorType = "WALLET_ERROR"
-        recoverable = true
-      } else if (err.message?.includes("insufficient funds")) {
-        errorType = "TRANSACTION_ERROR"
-        recoverable = false
-      } else if (err.message?.includes("verification")) {
-        errorType = "VERIFICATION_ERROR"
-        recoverable = true
+      if (typeof err === "object" && err !== null && "message" in err && typeof (err as any).message === "string") {
+        if ((err as any).message.includes("User rejected")) {
+          errorType = "WALLET_ERROR"
+          recoverable = true
+        } else if ((err as any).message.includes("insufficient funds")) {
+          errorType = "TRANSACTION_ERROR"
+          recoverable = false
+        } else if ((err as any).message.includes("verification")) {
+          errorType = "VERIFICATION_ERROR"
+          recoverable = true
+        }
       }
 
       setError({
         type: errorType,
-        code: err.code || "UNKNOWN_ERROR",
-        message: err.message || "An unexpected error occurred",
+        code: typeof err === "object" && err !== null && "code" in err ? (err as any).code : "UNKNOWN_ERROR",
+        message:
+          typeof err === "object" && err !== null && "message" in err
+            ? (err as any).message
+            : "An unexpected error occurred",
         recoverable,
       })
     }
