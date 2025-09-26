@@ -66,6 +66,8 @@ jobs:
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           pattern: "paystell-frontend/.next/**"
+          build-script: "npm run build"
+          directory: "paystell-frontend"
 
       - name: Lighthouse CI
         uses: treosh/lighthouse-ci-action@v11
