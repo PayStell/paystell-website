@@ -22,18 +22,18 @@ export interface PaymentLinkData {
 
 export const defaultPaymentLinkData: PaymentLinkData = {
   product: {
-    title: "",
-    description: "",
-    price: "",
-    currency: "USDC",
+    title: '',
+    description: '',
+    price: '',
+    currency: 'USDC',
     image: null,
-    sku: "",
+    sku: '',
   },
   branding: {
     logo: null,
-    primaryColor: "#0070F3",
-    backgroundColor: "#FFFFFF",
-    buttonText: "Pay Now",
+    primaryColor: '#0070F3',
+    backgroundColor: '#FFFFFF',
+    buttonText: 'Pay Now',
     showSecurePayment: true,
   },
 };

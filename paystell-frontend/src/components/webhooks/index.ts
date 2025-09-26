@@ -5,4 +5,4 @@ export { default as WebhookList } from './WebhookList';
 export { default as WebhookDeliveryEvents } from './WebhookDeliveryEvents';
 export { default as WebhookRetryTimeline } from './WebhookRetryTimeline';
 export { default as WebhookMetrics } from './WebhookMetrics';
-export { default as WebhookSecurity } from './WebhookSecurity'; 
+export { default as WebhookSecurity } from './WebhookSecurity';

@@ -1,16 +1,16 @@
-import { Home, Link, HandCoins, Settings, Users, ShieldCheck, ShoppingBag } from "lucide-react";
-import { Permission, UserRole } from "@/lib/types/user";
+import { Home, Link, HandCoins, Settings, Users, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { Permission, UserRole } from '@/lib/types/user';
 
 // Common navigation items for all users
 export const commonNavItems = [
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: 'Dashboard',
+    href: '/dashboard',
     icon: Home,
   },
   {
-    title: "Settings",
-    href: "/dashboard/settings",
+    title: 'Settings',
+    href: '/dashboard/settings',
     icon: Settings,
   },
 ];
@@ -18,14 +18,14 @@ export const commonNavItems = [
 // Navigation items for users with transaction permissions
 export const transactionNavItems = [
   {
-    title: "Payment Links",
-    href: "/dashboard/links",
+    title: 'Payment Links',
+    href: '/dashboard/links',
     icon: Link,
     requiredPermissions: [Permission.CREATE_PAYMENT],
   },
   {
-    title: "Sales",
-    href: "/dashboard/sales",
+    title: 'Sales',
+    href: '/dashboard/sales',
     icon: HandCoins,
     requiredPermissions: [Permission.VIEW_PAYMENTS],
   },
@@ -34,14 +34,14 @@ export const transactionNavItems = [
 // Navigation items for merchants
 export const merchantNavItems = [
   {
-    title: "Store",
-    href: "/dashboard/store",
+    title: 'Store',
+    href: '/dashboard/store',
     icon: ShoppingBag,
     requiredPermissions: [Permission.MANAGE_MERCHANT],
   },
   {
-    title: "Webhooks",
-    href: "/dashboard/webhooks",
+    title: 'Webhooks',
+    href: '/dashboard/webhooks',
     icon: Link,
     requiredPermissions: [Permission.MANAGE_MERCHANT],
   },
@@ -50,15 +50,15 @@ export const merchantNavItems = [
 // Navigation items for admins
 export const adminNavItems = [
   {
-    title: "User Management",
-    href: "/admin/users",
+    title: 'User Management',
+    href: '/admin/users',
     icon: Users,
     requiredRoles: [UserRole.ADMIN],
     requiredPermissions: [Permission.MANAGE_USERS],
   },
   {
-    title: "Security",
-    href: "/admin/security",
+    title: 'Security',
+    href: '/admin/security',
     icon: ShieldCheck,
     requiredRoles: [UserRole.ADMIN],
     requiredPermissions: [Permission.MANAGE_SETTINGS],

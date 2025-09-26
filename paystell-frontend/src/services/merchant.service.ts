@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export interface MerchantData {
   id: string;
@@ -10,19 +10,19 @@ export interface MerchantData {
   updatedAt: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:4000";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 // Add request interceptor to add auth token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -39,8 +39,8 @@ export class MerchantService {
     try {
       // In development mode, use mock validation if API is not available
       if (
-        process.env.NODE_ENV === "development" &&
-        process.env.NEXT_PUBLIC_API_MOCKING === "enabled"
+        process.env.NODE_ENV === 'development' &&
+        process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
       ) {
         return this.validateMockMerchant(walletAddress);
       }
@@ -52,11 +52,11 @@ export class MerchantService {
 
       return response.data.isValid;
     } catch (error) {
-      console.error("Error validating merchant:", error);
+      console.error('Error validating merchant:', error);
 
       // Fallback to mock validation in development
-      if (process.env.NODE_ENV === "development") {
-        console.warn("Falling back to mock merchant validation");
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Falling back to mock merchant validation');
         return this.validateMockMerchant(walletAddress);
       }
 
@@ -69,13 +69,11 @@ export class MerchantService {
    * @param walletAddress - The merchant wallet address
    * @returns Merchant data
    */
-  static async getMerchantByWallet(
-    walletAddress: string
-  ): Promise<MerchantData | null> {
+  static async getMerchantByWallet(walletAddress: string): Promise<MerchantData | null> {
     try {
       if (
-        process.env.NODE_ENV === "development" &&
-        process.env.NEXT_PUBLIC_API_MOCKING === "enabled"
+        process.env.NODE_ENV === 'development' &&
+        process.env.NEXT_PUBLIC_API_MOCKING === 'enabled'
       ) {
         return this.getMockMerchantData(walletAddress);
       }
@@ -83,11 +81,11 @@ export class MerchantService {
       const response = await api.get(`/merchants/wallet/${walletAddress}`);
       return response.data;
     } catch (error) {
-      console.error("Error fetching merchant data:", error);
+      console.error('Error fetching merchant data:', error);
 
       // Fallback to mock data in development
-      if (process.env.NODE_ENV === "development") {
-        console.warn("Falling back to mock merchant data");
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Falling back to mock merchant data');
         return this.getMockMerchantData(walletAddress);
       }
 
@@ -117,7 +115,7 @@ export class MerchantService {
 
     // Mock validation logic for development
     // In production, this would be replaced with actual database validation
-    return walletAddress.startsWith("G") && walletAddress.length === 56;
+    return walletAddress.startsWith('G') && walletAddress.length === 56;
   }
 
   /**
@@ -125,13 +123,11 @@ export class MerchantService {
    * @param walletAddress - The merchant wallet address
    * @returns Mock merchant data
    */
-  private static getMockMerchantData(
-    walletAddress: string
-  ): MerchantData | null {
+  private static getMockMerchantData(walletAddress: string): MerchantData | null {
     // Mock merchant data for development
     return {
-      id: "mock-merchant-1",
-      name: "Mock Merchant",
+      id: 'mock-merchant-1',
+      name: 'Mock Merchant',
       walletAddress,
       isActive: true,
       isVerified: true,

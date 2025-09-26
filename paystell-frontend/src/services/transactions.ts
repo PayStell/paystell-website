@@ -1,4 +1,4 @@
-import { api } from "@/lib/api";
+import { api } from '@/lib/api';
 
 export interface Transaction {
   id: string;
@@ -20,20 +20,23 @@ export interface TransactionsResponse {
 }
 
 export const transactionsService = {
-  getRecent: async (page: number = 1, limit: number = 10): Promise<{ success: boolean; data?: TransactionsResponse; error?: string }> => {
+  getRecent: async (
+    page: number = 1,
+    limit: number = 10,
+  ): Promise<{ success: boolean; data?: TransactionsResponse; error?: string }> => {
     try {
       const response = await api.get<TransactionsResponse>(
-        `/transactions/recent?page=${page}&limit=${limit}`
+        `/transactions/recent?page=${page}&limit=${limit}`,
       );
       return {
         success: true,
-        data: response.data
+        data: response.data,
       };
     } catch (error) {
       return {
         success: false,
-        error: error instanceof Error ? error.message : 'Failed to fetch transactions'
+        error: error instanceof Error ? error.message : 'Failed to fetch transactions',
       };
     }
-  }
-}; 
+  },
+};

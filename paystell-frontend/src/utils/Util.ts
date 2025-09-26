@@ -16,10 +16,9 @@ export const formatDate = (dateString: string): string => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 };
-
 
 export const truncateAddress = (address: string): string => {
   if (!address || address.length <= 16) {

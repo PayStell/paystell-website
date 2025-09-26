@@ -1,4 +1,4 @@
-import { PaymentLinkFormValues } from "../schema/schema";
+import { PaymentLinkFormValues } from '../schema/schema';
 
 export interface PreviewProps {
   data: PaymentLinkFormValues;

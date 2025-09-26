@@ -1,9 +1,23 @@
 import axios from 'axios';
-import { WebhookConfig, WebhookDeliveryEvent, WebhookMetrics, WebhookFormData, WebhookEventType, WebhookSubscriptionRequest } from '@/types/webhook-types';
-import { mockWebhooks, mockDeliveryEvents, mockMetrics, maskSecretKey, storeMockSecret } from '@/mock/webhook-mock-data';
+import {
+  WebhookConfig,
+  WebhookDeliveryEvent,
+  WebhookMetrics,
+  WebhookFormData,
+  WebhookEventType,
+  WebhookSubscriptionRequest,
+} from '@/types/webhook-types';
+import {
+  mockWebhooks,
+  mockDeliveryEvents,
+  mockMetrics,
+  maskSecretKey,
+  storeMockSecret,
+} from '@/mock/webhook-mock-data';
 
 // Enable or disable mock mode (use mock data instead of real API)
-const MOCK_ENABLED = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled' || process.env.NODE_ENV === 'development';
+const MOCK_ENABLED =
+  process.env.NEXT_PUBLIC_API_MOCKING === 'enabled' || process.env.NODE_ENV === 'development';
 
 // Updated API base URLs as per new requirements
 const WEBHOOK_REGISTER_URL = '/webhooks/register';
@@ -15,7 +29,7 @@ const WEBHOOK_METRICS_URL = '/api/webhooks/metrics';
  */
 export const fetchWebhooks = async (): Promise<WebhookConfig[]> => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       // Return masked secrets in the response
       setTimeout(() => resolve(mockWebhooks), 500);
     });
@@ -35,8 +49,8 @@ export const fetchWebhooks = async (): Promise<WebhookConfig[]> => {
  */
 export const fetchWebhookById = async (id: string): Promise<WebhookConfig> => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
-      const webhook = mockWebhooks.find(webhook => webhook.id === id);
+    return new Promise((resolve) => {
+      const webhook = mockWebhooks.find((webhook) => webhook.id === id);
       if (webhook) {
         setTimeout(() => resolve(webhook), 300);
       } else {
@@ -75,7 +89,7 @@ export const createWebhook = async (webhookData: WebhookFormData): Promise<Webho
   };
 
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       const newWebhook: WebhookConfig = {
         id: `wh_${Math.random().toString(36).substring(2, 8)}`,
         merchantId: 'mer_123456',
@@ -87,17 +101,17 @@ export const createWebhook = async (webhookData: WebhookFormData): Promise<Webho
         initialRetryDelay: webhookData.initialRetryDelay,
         maxRetryDelay: webhookData.maxRetryDelay,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
-      
+
       // Store the full secret in our mock secret store
       if (webhookData.secretKey) {
         storeMockSecret(newWebhook.id, webhookData.secretKey);
       }
-      
+
       // Add to mock webhooks (this won't persist after reload)
       mockWebhooks.push(newWebhook);
-      
+
       setTimeout(() => resolve(newWebhook), 500);
     });
   }
@@ -114,33 +128,37 @@ export const createWebhook = async (webhookData: WebhookFormData): Promise<Webho
 /**
  * Update an existing webhook
  */
-export const updateWebhook = async (id: string, webhookData: Partial<WebhookFormData>): Promise<WebhookConfig> => {
+export const updateWebhook = async (
+  id: string,
+  webhookData: Partial<WebhookFormData>,
+): Promise<WebhookConfig> => {
   // Convert partial WebhookFormData to WebhookSubscriptionRequest, ensuring url is present when required
   const subscriptionRequest: Partial<WebhookSubscriptionRequest> = {};
-  
+
   // Only add properties that are present in webhookData
   if ('url' in webhookData) subscriptionRequest.url = webhookData.url;
   if ('secretKey' in webhookData) subscriptionRequest.secretKey = webhookData.secretKey;
   if ('eventTypes' in webhookData) subscriptionRequest.eventTypes = webhookData.eventTypes;
   if ('maxRetries' in webhookData) subscriptionRequest.maxRetries = webhookData.maxRetries;
-  if ('initialRetryDelay' in webhookData) subscriptionRequest.initialRetryDelay = webhookData.initialRetryDelay;
+  if ('initialRetryDelay' in webhookData)
+    subscriptionRequest.initialRetryDelay = webhookData.initialRetryDelay;
   if ('maxRetryDelay' in webhookData) subscriptionRequest.maxRetryDelay = webhookData.maxRetryDelay;
   if ('isActive' in webhookData) subscriptionRequest.isActive = webhookData.isActive;
 
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
-      const webhookIndex = mockWebhooks.findIndex(webhook => webhook.id === id);
+    return new Promise((resolve) => {
+      const webhookIndex = mockWebhooks.findIndex((webhook) => webhook.id === id);
       if (webhookIndex !== -1) {
         // If a new secret is provided, store it and mask it in the response
         if (webhookData.secretKey) {
           storeMockSecret(id, webhookData.secretKey);
           webhookData.secretKey = maskSecretKey(webhookData.secretKey);
         }
-        
+
         const updatedWebhook = {
           ...mockWebhooks[webhookIndex],
           ...webhookData,
-          updatedAt: new Date()
+          updatedAt: new Date(),
         };
         mockWebhooks[webhookIndex] = updatedWebhook;
         setTimeout(() => resolve(updatedWebhook), 500);
@@ -154,7 +172,7 @@ export const updateWebhook = async (id: string, webhookData: Partial<WebhookForm
     // Include the ID in the request body for the updated endpoint structure
     const response = await axios.put(WEBHOOK_REGISTER_URL, {
       id,
-      ...subscriptionRequest
+      ...subscriptionRequest,
     });
     return response.data;
   } catch (error) {
@@ -168,8 +186,8 @@ export const updateWebhook = async (id: string, webhookData: Partial<WebhookForm
  */
 export const deleteWebhook = async (id: string): Promise<void> => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
-      const webhookIndex = mockWebhooks.findIndex(webhook => webhook.id === id);
+    return new Promise((resolve) => {
+      const webhookIndex = mockWebhooks.findIndex((webhook) => webhook.id === id);
       if (webhookIndex !== -1) {
         mockWebhooks.splice(webhookIndex, 1);
         setTimeout(() => resolve(), 500);
@@ -192,7 +210,7 @@ export const deleteWebhook = async (id: string): Promise<void> => {
  */
 export const fetchWebhookEventTypes = async () => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => resolve(Object.values(WebhookEventType)), 300);
     });
   }
@@ -211,13 +229,14 @@ export const fetchWebhookEventTypes = async () => {
  */
 export const sendTestWebhook = async (id: string) => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       // Create a mock delivery event for the test webhook
       const testEvent: WebhookDeliveryEvent = {
         id: `evt_test_${Math.random().toString(36).substring(2, 8)}`,
         jobId: `job_test_${Math.random().toString(36).substring(2, 8)}`,
         webhookId: id,
-        webhookUrl: mockWebhooks.find(webhook => webhook.id === id)?.url || 'https://example.com/webhook',
+        webhookUrl:
+          mockWebhooks.find((webhook) => webhook.id === id)?.url || 'https://example.com/webhook',
         status: 'completed',
         attemptsMade: 1,
         maxAttempts: 3,
@@ -231,21 +250,21 @@ export const sendTestWebhook = async (id: string) => {
           reqMethod: 'POST',
           test: true,
           created: new Date().toISOString(),
-          message: 'This is a test webhook event'
+          message: 'This is a test webhook event',
         },
         responseStatusCode: 200,
         responseBody: '{"success": true, "received": true}',
         createdAt: new Date(),
         completedAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
       };
-      
+
       // Add to mock delivery events
       if (!mockDeliveryEvents[id]) {
         mockDeliveryEvents[id] = [];
       }
       mockDeliveryEvents[id].unshift(testEvent);
-      
+
       setTimeout(() => resolve({ success: true, event: testEvent }), 1000);
     });
   }
@@ -264,7 +283,7 @@ export const sendTestWebhook = async (id: string) => {
  */
 export const fetchWebhookEvents = async (id: string): Promise<WebhookDeliveryEvent[]> => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => resolve(mockDeliveryEvents[id] || []), 500);
     });
   }
@@ -283,20 +302,20 @@ export const fetchWebhookEvents = async (id: string): Promise<WebhookDeliveryEve
  */
 export const retryWebhookEvent = async (eventId: string): Promise<WebhookDeliveryEvent> => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       // Find the event in mock data
       let foundEvent: WebhookDeliveryEvent | null = null;
       let webhookId: string | null = null;
-      
+
       for (const [wId, events] of Object.entries(mockDeliveryEvents)) {
-        const event = events.find(e => e.id === eventId);
+        const event = events.find((e) => e.id === eventId);
         if (event) {
           foundEvent = event;
           webhookId = wId;
           break;
         }
       }
-      
+
       if (foundEvent && webhookId) {
         // Create a copy with updated values
         const success = Math.random() > 0.3;
@@ -307,13 +326,13 @@ export const retryWebhookEvent = async (eventId: string): Promise<WebhookDeliver
           updatedAt: new Date(),
           completedAt: success ? new Date() : undefined,
         };
-        
+
         // Replace the event in mock data
-        const eventIndex = mockDeliveryEvents[webhookId].findIndex(e => e.id === eventId);
+        const eventIndex = mockDeliveryEvents[webhookId].findIndex((e) => e.id === eventId);
         if (eventIndex !== -1) {
           mockDeliveryEvents[webhookId][eventIndex] = updatedEvent;
         }
-        
+
         setTimeout(() => resolve(updatedEvent), 1000);
       } else {
         throw new Error(`Event with ID ${eventId} not found`);
@@ -335,7 +354,7 @@ export const retryWebhookEvent = async (eventId: string): Promise<WebhookDeliver
  */
 export const fetchWebhookMetrics = async (): Promise<WebhookMetrics> => {
   if (MOCK_ENABLED) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => resolve(mockMetrics), 800);
     });
   }
@@ -347,4 +366,4 @@ export const fetchWebhookMetrics = async (): Promise<WebhookMetrics> => {
     console.error('Error fetching webhook metrics:', error);
     throw error;
   }
-}; 
+};

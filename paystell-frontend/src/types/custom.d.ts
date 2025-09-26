@@ -3,7 +3,7 @@
 // Recharts type declarations
 declare module 'recharts' {
   import type React from 'react';
-  
+
   export interface TooltipProps<TValue, TName> {
     active?: boolean;
     payload?: Array<{
@@ -67,10 +67,16 @@ declare module 'recharts' {
     label?: string;
     labelClassName?: string;
     labelFormatter?: (value: unknown, payload: unknown[]) => React.ReactNode;
-    formatter?: (value: unknown, name: string, item: unknown, index: number, payload: unknown) => React.ReactNode;
+    formatter?: (
+      value: unknown,
+      name: string,
+      item: unknown,
+      index: number,
+      payload: unknown,
+    ) => React.ReactNode;
     hideLabel?: boolean;
     hideIndicator?: boolean;
-    indicator?: "line" | "dot" | "dashed";
+    indicator?: 'line' | 'dot' | 'dashed';
     nameKey?: string;
     labelKey?: string;
   }
@@ -168,14 +174,14 @@ declare module 'recharts' {
 // For modules that don't have their own type declarations
 declare module 'lucide-react' {
   import type React from 'react';
-  
+
   export type LucideIcon = React.ComponentType<{
     size?: number | string;
     color?: string;
     strokeWidth?: number | string;
     className?: string;
   }>;
-  
+
   // Common icons used in the project
   export const Home: LucideIcon;
   export const Link: LucideIcon;
@@ -260,14 +266,14 @@ declare module 'lucide-react' {
 // For react-icons modules
 declare module 'react-icons/md' {
   import type React from 'react';
-  
+
   export type IconType = React.ComponentType<{
     size?: number | string;
     color?: string;
     className?: string;
     style?: React.CSSProperties;
   }>;
-  
+
   // Icons from Material Design
   export const MdKeyboardArrowDown: IconType;
   export const MdKeyboardArrowUp: IconType;
@@ -298,14 +304,14 @@ declare module 'react-icons/md' {
 
 declare module 'react-icons/fa' {
   import type React from 'react';
-  
+
   export type IconType = React.ComponentType<{
     size?: number | string;
     color?: string;
     className?: string;
     style?: React.CSSProperties;
   }>;
-  
+
   // Icons from Font Awesome
   export const FaCheck: IconType;
   export const FaFacebook: IconType;
@@ -321,106 +327,114 @@ declare module 'react-icons/fa' {
 // Feather icons
 declare module 'react-icons/fi' {
   import type React from 'react';
-  
+
   export type IconType = React.ComponentType<{
     size?: number | string;
     color?: string;
     className?: string;
     style?: React.CSSProperties;
   }>;
-  
+
   export const FiUsers: IconType;
 }
 
 // Custom icons
 declare module 'react-icons/ci' {
   import type React from 'react';
-  
+
   export type IconType = React.ComponentType<{
     size?: number | string;
     color?: string;
     className?: string;
     style?: React.CSSProperties;
   }>;
-  
+
   export const CiCreditCard1: IconType;
 }
 
 // CG icons
 declare module 'react-icons/cg' {
   import type React from 'react';
-  
+
   export type IconType = React.ComponentType<{
     size?: number | string;
     color?: string;
     className?: string;
     style?: React.CSSProperties;
   }>;
-  
+
   export const CgSpinner: IconType;
 }
 
 // For radix ui modules
 declare module '@radix-ui/react-dialog' {
   import type React from 'react';
-  
+
   export interface DialogProps {
     open?: boolean;
     onOpenChange?: (open: boolean) => void;
     children?: React.ReactNode;
   }
-  
+
   export interface TriggerProps {
     asChild?: boolean;
     className?: string;
     children?: React.ReactNode;
   }
-  
+
   export interface PortalProps {
     children?: React.ReactNode;
   }
-  
-  export interface OverlayProps extends React.ComponentPropsWithoutRef<"div"> {
+
+  export interface OverlayProps extends React.ComponentPropsWithoutRef<'div'> {
     className?: string;
     children?: React.ReactNode;
   }
-  
-  export interface ContentProps extends React.ComponentPropsWithoutRef<"div"> {
+
+  export interface ContentProps extends React.ComponentPropsWithoutRef<'div'> {
     className?: string;
     children?: React.ReactNode;
   }
-  
-  export interface TitleProps extends React.ComponentPropsWithoutRef<"h2"> {
+
+  export interface TitleProps extends React.ComponentPropsWithoutRef<'h2'> {
     className?: string;
     children?: React.ReactNode;
   }
-  
-  export interface DescriptionProps extends React.ComponentPropsWithoutRef<"p"> {
+
+  export interface DescriptionProps extends React.ComponentPropsWithoutRef<'p'> {
     className?: string;
     children?: React.ReactNode;
   }
-  
+
   export interface CloseProps {
     className?: string;
     children?: React.ReactNode;
     asChild?: boolean;
   }
-  
+
   // Exportar interfaces y componentes
   export const Root: React.FC<DialogProps>;
   export const Trigger: React.FC<TriggerProps>;
   export const Portal: React.FC<PortalProps>;
-  export const Overlay: React.ForwardRefExoticComponent<OverlayProps & React.RefAttributes<HTMLDivElement>>;
-  export const Content: React.ForwardRefExoticComponent<ContentProps & React.RefAttributes<HTMLDivElement>>;
-  export const Title: React.ForwardRefExoticComponent<TitleProps & React.RefAttributes<HTMLHeadingElement>>;
-  export const Description: React.ForwardRefExoticComponent<DescriptionProps & React.RefAttributes<HTMLParagraphElement>>;
+  export const Overlay: React.ForwardRefExoticComponent<
+    OverlayProps & React.RefAttributes<HTMLDivElement>
+  >;
+  export const Content: React.ForwardRefExoticComponent<
+    ContentProps & React.RefAttributes<HTMLDivElement>
+  >;
+  export const Title: React.ForwardRefExoticComponent<
+    TitleProps & React.RefAttributes<HTMLHeadingElement>
+  >;
+  export const Description: React.ForwardRefExoticComponent<
+    DescriptionProps & React.RefAttributes<HTMLParagraphElement>
+  >;
   export const Close: React.FC<CloseProps>;
 }
 
 // Add missing UI component properties
 declare module '@/components/ui/select' {
   import type React from 'react';
-  
+
   export const Select: React.FC<{
     children?: React.ReactNode;
     value?: string;
@@ -429,25 +443,25 @@ declare module '@/components/ui/select' {
     disabled?: boolean;
     onOpenChange?: (open: boolean) => void;
   }>;
-  
+
   export const SelectContent: React.FC<{
     children?: React.ReactNode;
     position?: string;
     className?: string;
   }>;
-  
+
   export const SelectItem: React.FC<{
     value: string;
     children?: React.ReactNode;
     className?: string;
   }>;
-  
+
   export const SelectTrigger: React.FC<{
     className?: string;
     children?: React.ReactNode;
     id?: string;
   }>;
-  
+
   export const SelectValue: React.FC<{
     placeholder?: string;
     children?: React.ReactNode;
@@ -457,13 +471,13 @@ declare module '@/components/ui/select' {
 // Add missing UI component properties
 declare module '@/components/ui/badge' {
   import type React from 'react';
-  
+
   export interface BadgeProps {
     variant?: string;
     className?: string;
     children?: React.ReactNode;
   }
-  
+
   export const Badge: React.FC<BadgeProps>;
 }
 
@@ -471,27 +485,27 @@ declare module '@/components/ui/badge' {
 declare module '@fortawesome/react-fontawesome' {
   import type React from 'react';
   import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-  
+
   export interface FontAwesomeIconProps {
     icon: IconDefinition;
     className?: string;
     size?: string;
     color?: string;
   }
-  
+
   export const FontAwesomeIcon: React.ComponentType<FontAwesomeIconProps>;
 }
 
 declare module '@fortawesome/free-solid-svg-icons' {
   import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-  
+
   export const faSun: IconDefinition;
   export const faMoon: IconDefinition;
 }
 
 declare module '@fortawesome/free-brands-svg-icons' {
   import type { IconDefinition } from '@fortawesome/fontawesome-svg-core';
-  
+
   export const faXTwitter: IconDefinition;
 }
 
@@ -504,7 +518,7 @@ declare module '@fortawesome/fontawesome-svg-core' {
       number, // height
       string[], // ligatures
       string, // unicode
-      string // svgPathData
+      string, // svgPathData
     ];
   }
 }
@@ -543,4 +557,4 @@ declare module '*.webp' {
 declare module '*.ico' {
   const content: string;
   export default content;
-} 
+}

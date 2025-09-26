@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse } from 'next/server';
 
 interface RateLimitConfig {
   windowMs: number;
@@ -17,8 +17,8 @@ interface RateLimitStore {
 const rateLimitStore: RateLimitStore = {};
 
 const defaultConfig: RateLimitConfig = {
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || "900000"), // 15 minutes
-  maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || "100"),
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS || '900000'), // 15 minutes
+  maxRequests: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS || '100'),
 };
 
 export function createRateLimit(config: RateLimitConfig = defaultConfig) {
@@ -46,19 +46,19 @@ export function createRateLimit(config: RateLimitConfig = defaultConfig) {
     if (entry.count >= config.maxRequests) {
       return NextResponse.json(
         {
-          error: "Too many requests",
-          message: "Rate limit exceeded. Please try again later.",
+          error: 'Too many requests',
+          message: 'Rate limit exceeded. Please try again later.',
           retryAfter: Math.ceil((entry.resetTime - now) / 1000),
         },
         {
           status: 429,
           headers: {
-            "Retry-After": Math.ceil((entry.resetTime - now) / 1000).toString(),
-            "X-RateLimit-Limit": config.maxRequests.toString(),
-            "X-RateLimit-Remaining": "0",
-            "X-RateLimit-Reset": entry.resetTime.toString(),
+            'Retry-After': Math.ceil((entry.resetTime - now) / 1000).toString(),
+            'X-RateLimit-Limit': config.maxRequests.toString(),
+            'X-RateLimit-Remaining': '0',
+            'X-RateLimit-Reset': entry.resetTime.toString(),
           },
-        }
+        },
       );
     }
 
@@ -67,12 +67,9 @@ export function createRateLimit(config: RateLimitConfig = defaultConfig) {
 
     // Add rate limit headers
     const response = NextResponse.next();
-    response.headers.set("X-RateLimit-Limit", config.maxRequests.toString());
-    response.headers.set(
-      "X-RateLimit-Remaining",
-      (config.maxRequests - entry.count).toString()
-    );
-    response.headers.set("X-RateLimit-Reset", entry.resetTime.toString());
+    response.headers.set('X-RateLimit-Limit', config.maxRequests.toString());
+    response.headers.set('X-RateLimit-Remaining', (config.maxRequests - entry.count).toString());
+    response.headers.set('X-RateLimit-Reset', entry.resetTime.toString());
 
     return null;
   };
@@ -80,8 +77,8 @@ export function createRateLimit(config: RateLimitConfig = defaultConfig) {
 
 function getClientId(request: NextRequest): string {
   // Use IP address as client identifier
-  const forwarded = request.headers.get("x-forwarded-for");
-  const ip = forwarded ? forwarded.split(",")[0] : request.ip || "unknown";
+  const forwarded = request.headers.get('x-forwarded-for');
+  const ip = forwarded ? forwarded.split(',')[0] : request.ip || 'unknown';
 
   // In production, you might want to use a more sophisticated method
   // like API keys or user sessions
