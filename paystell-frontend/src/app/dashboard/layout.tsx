@@ -8,13 +8,15 @@ import { useState, useMemo, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/dashboard/nav/Logo';
 import { useAuth } from '@/providers/AuthProvider';
+import { useMockAuth } from '@/providers/MockAuthProvider';
 import type { NavItem } from '@/components/dashboard/nav/types';
 import type { Permission, UserRole } from '@/lib/types/user';
 import { useRouter } from 'next/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const { user, hasPermission, isLoading } = useAuth();
+  // Use mock auth for testing - switch to useAuth() for production
+  const { user, hasPermission, isLoading } = useMockAuth();
   const router = useRouter();
 
   // Debug logging

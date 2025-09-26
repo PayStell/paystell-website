@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { MockAuthProvider } from "@/providers/MockAuthProvider";
 import { ThemeProvider } from "next-themes";
 import { WalletProvider } from "@/providers/useWalletProvider";
 import { Toaster } from "@/components/ui/sonner"
@@ -24,10 +25,10 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <WalletProvider>
-            <AuthProvider>
+            <MockAuthProvider>
               {children}
               <Toaster />
-            </AuthProvider>
+            </MockAuthProvider>
           </WalletProvider>
         </ThemeProvider>
       </body>
