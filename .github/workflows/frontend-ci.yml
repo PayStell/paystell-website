@@ -17,43 +17,39 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
-
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "pnpm"
+          cache: "npm"
+          cache-dependency-path: "paystell-frontend/package-lock.json"
 
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
         working-directory: paystell-frontend
 
       - name: Lint
-        run: pnpm lint
+        run: npm run lint
         working-directory: paystell-frontend
 
       - name: Type Check
-        run: pnpm tsc --noEmit
+        run: npm run type-check
         working-directory: paystell-frontend
 
       - name: Prettier Check
-        run: pnpm prettier --check .
+        run: npm run prettier
         working-directory: paystell-frontend
 
       - name: Build
-        run: pnpm build
+        run: npm run build
         working-directory: paystell-frontend
 
       - name: Storybook Build
-        run: pnpm build-storybook
+        run: npm run build-storybook
         working-directory: paystell-frontend
 
       - name: Audit for vulnerabilities
-        run: pnpm audit --audit-level=moderate
+        run: npm audit --audit-level=moderate
         working-directory: paystell-frontend
 
       - name: Bundle Size Analysis
@@ -76,20 +72,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: "pnpm"
+          cache: "npm"
+          cache-dependency-path: "paystell-frontend/package-lock.json"
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
         working-directory: paystell-frontend
       - name: Build
-        run: pnpm build
+        run: npm run build
         working-directory: paystell-frontend
       # TODO: Add your staging deployment step here (e.g., Vercel, Netlify, custom script)
       - name: Deploy to Staging
@@ -106,20 +99,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: "pnpm"
+          cache: "npm"
+          cache-dependency-path: "paystell-frontend/package-lock.json"
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
         working-directory: paystell-frontend
       - name: Build
-        run: pnpm build
+        run: npm run build
         working-directory: paystell-frontend
       # TODO: Add your production deployment step here (e.g., Vercel, Netlify, custom script)
       - name: Deploy to Production
@@ -132,20 +122,17 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 8
       - name: Use Node.js 20.x
         uses: actions/setup-node@v4
         with:
           node-version: 20.x
-          cache: "pnpm"
+          cache: "npm"
+          cache-dependency-path: "paystell-frontend/package-lock.json"
       - name: Install dependencies
-        run: pnpm install
+        run: npm ci
         working-directory: paystell-frontend
       - name: Build
-        run: pnpm build
+        run: npm run build
         working-directory: paystell-frontend
       # TODO: Add your PR preview deployment step here (e.g., Vercel preview, Netlify preview)
       - name: Deploy PR Preview
