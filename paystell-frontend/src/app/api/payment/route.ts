@@ -2,7 +2,6 @@ import { NextResponse, NextRequest } from "next/server";
 import { Horizon, Networks, Transaction } from "@stellar/stellar-sdk";
 import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
-import { headers } from "next/headers";
 import crypto from "crypto";
 import { paymentRateLimit } from "@/middleware/rateLimit";
 import { ProductService } from "@/services/product.service";

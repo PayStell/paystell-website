@@ -38,7 +38,7 @@ const SettingsScreen: React.FC = () => {
     console.log("Form is valid:", data)
   }
 
-  const handleVerificationComplete = async (walletAddress: string) => {
+  const handleVerificationComplete = async (/*walletAddress: string*/) => {
     setLocalWalletVerified(true)
     // setVerifiedWalletAddress(walletAddress)
 

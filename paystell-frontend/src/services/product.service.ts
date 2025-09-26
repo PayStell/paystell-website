@@ -78,7 +78,7 @@ export class ProductService {
    * @param merchantWalletAddress - The merchant wallet address
    * @returns Mock product data
    */
-  private static getMockProductData(
+  static getMockProductData(
     productId: string,
     merchantWalletAddress: string | null
   ): ProductData {
