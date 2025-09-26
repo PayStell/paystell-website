@@ -91,7 +91,7 @@ const processPayment = async () => {
       setPaymentState("SIGNING")
 
       // Sign transaction
-      const signedXdr = await signTransaction(xdr, {
+      await signTransaction(xdr, {
         networkPassphrase: network_passphrase,
       })
 
@@ -113,14 +113,14 @@ const processPayment = async () => {
       let errorType: PaymentError["type"] = "TRANSACTION_ERROR"
       let recoverable = true
 
-      if (typeof err === "object" && err !== null && "message" in err && typeof (err as any).message === "string") {
-        if ((err as any).message.includes("User rejected")) {
+      if (typeof err === "object" && err !== null && "message" in err && typeof (err as Error).message === "string") {
+        if ((err as Error).message.includes("User rejected")) {
           errorType = "WALLET_ERROR"
           recoverable = true
-        } else if ((err as any).message.includes("insufficient funds")) {
+        } else if ((err as Error).message.includes("insufficient funds")) {
           errorType = "TRANSACTION_ERROR"
           recoverable = false
-        } else if ((err as any).message.includes("verification")) {
+        } else if ((err as Error).message.includes("verification")) {
           errorType = "VERIFICATION_ERROR"
           recoverable = true
         }
@@ -128,10 +128,10 @@ const processPayment = async () => {
 
       setError({
         type: errorType,
-        code: typeof err === "object" && err !== null && "code" in err ? (err as any).code : "UNKNOWN_ERROR",
+        code: typeof err === "object" && err !== null && "code" in err ? (err as Error & { code?: string }).code || "UNKNOWN_ERROR" : "UNKNOWN_ERROR",
         message:
           typeof err === "object" && err !== null && "message" in err
-            ? (err as any).message
+            ? (err as Error).message
             : "An unexpected error occurred",
         recoverable,
       })
