@@ -78,7 +78,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen">
       <Nav
-        items={filteredNavItems}
+        items={filteredNavItems || []}
         isOpen={isNavOpen}
         onOpenChange={setIsNavOpen}
         brand={{
