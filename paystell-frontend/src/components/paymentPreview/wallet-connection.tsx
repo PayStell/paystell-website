@@ -1,51 +1,51 @@
-"use client"
+'use client';
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 // Extend the Window interface to include the 'freighter' property
 declare global {
   interface Window {
-    freighter?: unknown
+    freighter?: unknown;
   }
 }
-import { Button } from "@/components/ui/button"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { Wallet, AlertCircle, CheckCircle, Loader2 } from "lucide-react"
-import { useWalletStore } from "@/lib/wallet/wallet-store"
-import type { PaymentError } from "@/lib/types/payment"
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Wallet, AlertCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { useWalletStore } from '@/lib/wallet/wallet-store';
+import type { PaymentError } from '@/lib/types/payment';
 
 interface WalletConnectionProps {
-  onConnectionChange: (connected: boolean) => void
-  error?: PaymentError | null
+  onConnectionChange: (connected: boolean) => void;
+  error?: PaymentError | null;
 }
 
 export function WalletConnection({ onConnectionChange, error }: WalletConnectionProps) {
-  const { isConnected, connecting, connectWallet, disconnectWallet, publicKey } = useWalletStore()
-  const [freighterInstalled, setFreighterInstalled] = useState(false)
+  const { isConnected, connecting, connectWallet, disconnectWallet, publicKey } = useWalletStore();
+  const [freighterInstalled, setFreighterInstalled] = useState(false);
 
   useEffect(() => {
     // Check if Freighter is installed
     const checkFreighter = async () => {
-      if (typeof window !== "undefined") {
-        const installed = !!(window).freighter
-        setFreighterInstalled(installed)
+      if (typeof window !== 'undefined') {
+        const installed = !!window.freighter;
+        setFreighterInstalled(installed);
       }
-    }
-    checkFreighter()
-  }, [])
+    };
+    checkFreighter();
+  }, []);
 
   useEffect(() => {
-    onConnectionChange(isConnected)
-  }, [isConnected, onConnectionChange])
+    onConnectionChange(isConnected);
+  }, [isConnected, onConnectionChange]);
 
   const handleConnect = async () => {
     try {
-      await connectWallet()
+      await connectWallet();
     } catch (err) {
-      console.error("Connection failed:", err)
+      console.error('Connection failed:', err);
     }
-  }
+  };
 
   if (!freighterInstalled) {
     return (
@@ -70,7 +70,7 @@ export function WalletConnection({ onConnectionChange, error }: WalletConnection
           </Button>
         </CardContent>
       </Card>
-    )
+    );
   }
 
   return (
@@ -82,12 +82,14 @@ export function WalletConnection({ onConnectionChange, error }: WalletConnection
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {error && error.type === "WALLET_ERROR" && (
+        {error && error.type === 'WALLET_ERROR' && (
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
               {error.message}
-              {error.recoverable && <span className="block mt-2 text-sm">Please try connecting again.</span>}
+              {error.recoverable && (
+                <span className="block mt-2 text-sm">Please try connecting again.</span>
+              )}
             </AlertDescription>
           </Alert>
         )}
@@ -110,7 +112,9 @@ export function WalletConnection({ onConnectionChange, error }: WalletConnection
           </div>
         ) : (
           <div className="space-y-3">
-            <p className="text-sm text-muted-foreground">Connect your Freighter wallet to proceed with the payment.</p>
+            <p className="text-sm text-muted-foreground">
+              Connect your Freighter wallet to proceed with the payment.
+            </p>
             <Button onClick={handleConnect} disabled={connecting} className="w-full">
               {connecting ? (
                 <>
@@ -118,12 +122,12 @@ export function WalletConnection({ onConnectionChange, error }: WalletConnection
                   Connecting...
                 </>
               ) : (
-                "Connect Freighter Wallet"
+                'Connect Freighter Wallet'
               )}
             </Button>
           </div>
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

@@ -27,11 +27,11 @@ export const RecentTransactions: React.FC<RecentTransactionsProps> = ({ onNaviga
       <div className="space-y-3">
         {mockTransactions.slice(0, 3).map((tx) => (
           <div key={tx.id} className="flex items-center space-x-3 p-3 rounded-lg border">
-            <div className={`p-2 rounded-full ${
-              tx.type === 'received' 
-                ? 'bg-green-100 text-green-600' 
-                : 'bg-red-100 text-red-600'
-            }`}>
+            <div
+              className={`p-2 rounded-full ${
+                tx.type === 'received' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600'
+              }`}
+            >
               {tx.type === 'received' ? (
                 <ArrowDownLeft className="w-4 h-4" />
               ) : (
@@ -40,18 +40,17 @@ export const RecentTransactions: React.FC<RecentTransactionsProps> = ({ onNaviga
             </div>
             <div className="flex-1">
               <div className="flex items-center justify-between">
-                <span className="font-medium">
-                  {tx.type === 'received' ? 'Received' : 'Sent'}
-                </span>
-                <span className={`font-medium ${
-                  tx.type === 'received' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {tx.type === 'received' ? '+' : '-'}{tx.amount} {tx.currency}
+                <span className="font-medium">{tx.type === 'received' ? 'Received' : 'Sent'}</span>
+                <span
+                  className={`font-medium ${
+                    tx.type === 'received' ? 'text-green-600' : 'text-red-600'
+                  }`}
+                >
+                  {tx.type === 'received' ? '+' : '-'}
+                  {tx.amount} {tx.currency}
                 </span>
               </div>
-              <div className="text-sm text-gray-500">
-                {formatDate(tx.date)}
-              </div>
+              <div className="text-sm text-gray-500">{formatDate(tx.date)}</div>
             </div>
           </div>
         ))}

@@ -1,26 +1,26 @@
-"use client"
+'use client';
 
-import { useEffect } from "react"
-import { Skeleton } from "@/components/ui/skeleton"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { ExternalLink, ChevronLeft, ChevronRight,  ArrowRight, ArrowLeft } from "lucide-react"
-import { useWallet } from "@/providers/useWalletProvider"
-import { useStellar } from "@/hooks/use-wallet"
-import { formatDate, formatAddress } from "@/lib/utils"
+import { useEffect } from 'react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ExternalLink, ChevronLeft, ChevronRight, ArrowRight, ArrowLeft } from 'lucide-react';
+import { useWallet } from '@/providers/useWalletProvider';
+import { useStellar } from '@/hooks/use-wallet';
+import { formatDate, formatAddress } from '@/lib/utils';
 
 export default function TransactionHistory() {
-  const { state: walletState } = useWallet()
-  const { publicKey, isConnected } = walletState
-  const { state, fetchPayments, goToNextPage, goToPrevPage } = useStellar()
-  const { payments, isLoadingPayments, paymentError, paymentCursor, prevCursors } = state
-  const networkType = "TESTNET";
+  const { state: walletState } = useWallet();
+  const { publicKey, isConnected } = walletState;
+  const { state, fetchPayments, goToNextPage, goToPrevPage } = useStellar();
+  const { payments, isLoadingPayments, paymentError, paymentCursor, prevCursors } = state;
+  const networkType = 'TESTNET';
 
   useEffect(() => {
     if (isConnected && publicKey) {
-      fetchPayments(publicKey, null)
+      fetchPayments(publicKey, null);
     }
-  }, [publicKey, isConnected, fetchPayments])
+  }, [publicKey, isConnected, fetchPayments]);
 
   if (isLoadingPayments) {
     return (
@@ -29,15 +29,23 @@ export default function TransactionHistory() {
         <Skeleton className="h-16 w-full" />
         <Skeleton className="h-16 w-full" />
       </div>
-    )
+    );
   }
 
   if (paymentError) {
-    return <div className="p-4 border border-red-200 rounded-md bg-red-50 text-red-600">{paymentError}</div>
+    return (
+      <div className="p-4 border border-red-200 rounded-md bg-red-50 text-red-600">
+        {paymentError}
+      </div>
+    );
   }
 
   if (payments.length === 0) {
-    return <div className="text-center py-6 text-muted-foreground">No transactions found for this account.</div>
+    return (
+      <div className="text-center py-6 text-muted-foreground">
+        No transactions found for this account.
+      </div>
+    );
   }
 
   return (
@@ -56,22 +64,24 @@ export default function TransactionHistory() {
           </thead>
           <tbody>
             {payments.map((payment) => {
-              const txDate = payment.created_at || "Unknown"
+              const txDate = payment.created_at || 'Unknown';
 
               return (
                 <tr key={payment.id} className="border-b hover:bg-muted/50">
                   <td className="px-4 py-3 font-medium">
-                    {payment.amount ? Number(payment.amount).toFixed(7) : "N/A"}
+                    {payment.amount ? Number(payment.amount).toFixed(7) : 'N/A'}
                   </td>
                   <td className="px-4 py-3">{payment.displayAsset}</td>
                   <td className="px-4 py-3">
                     <Badge
-                      variant={payment.direction === "received" ? "success" : "default"}
+                      variant={payment.direction === 'received' ? 'success' : 'default'}
                       className={`flex items-center gap-1 ${
-                        payment.direction === "received" ? "bg-green-100 text-green-800" : "bg-blue-100 text-blue-800"
+                        payment.direction === 'received'
+                          ? 'bg-green-100 text-green-800'
+                          : 'bg-blue-100 text-blue-800'
                       }`}
                     >
-                      {payment.direction === "received" ? (
+                      {payment.direction === 'received' ? (
                         <>
                           <ArrowRight className="h-3 w-3" /> Received
                         </>
@@ -83,10 +93,12 @@ export default function TransactionHistory() {
                     </Badge>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="font-mono text-xs">{formatAddress(payment.counterparty || "Unknown")}</span>
+                    <span className="font-mono text-xs">
+                      {formatAddress(payment.counterparty || 'Unknown')}
+                    </span>
                   </td>
                   <td className="px-4 py-3 text-muted-foreground">
-                    {txDate !== "Unknown" ? formatDate(txDate) : "Unknown"}
+                    {txDate !== 'Unknown' ? formatDate(txDate) : 'Unknown'}
                   </td>
                   <td className="px-4 py-3 text-right">
                     <Button
@@ -95,7 +107,7 @@ export default function TransactionHistory() {
                       onClick={() =>
                         window.open(
                           `https://stellar.expert/explorer/${networkType.toLowerCase()}/tx/${payment.transaction_hash}`,
-                          "_blank"
+                          '_blank',
                         )
                       }
                       className="h-8 px-2"
@@ -105,7 +117,7 @@ export default function TransactionHistory() {
                     </Button>
                   </td>
                 </tr>
-              )
+              );
             })}
           </tbody>
         </table>
@@ -130,5 +142,5 @@ export default function TransactionHistory() {
         </Button>
       </div>
     </div>
-  )
+  );
 }

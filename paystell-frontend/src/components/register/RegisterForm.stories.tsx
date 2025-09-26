@@ -1,8 +1,8 @@
-import { Meta, StoryFn } from "@storybook/react";
-import RegisterForm from "./RegisterForm";
+import { Meta, StoryFn } from '@storybook/react';
+import RegisterForm from './RegisterForm';
 
 export default {
-  title: "Components/RegisterForm",
+  title: 'Components/RegisterForm',
   component: RegisterForm,
 } as Meta;
 

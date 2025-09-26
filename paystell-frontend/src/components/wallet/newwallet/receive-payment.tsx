@@ -7,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { copyToClipboard } from '@/utils/Util'; 
+import { copyToClipboard } from '@/utils/Util';
 
 interface ReceivePaymentProps {
   onNavigate: (page: string) => void;
@@ -61,7 +61,7 @@ export const ReceivePayment: React.FC<ReceivePaymentProps> = ({ onNavigate }) =>
                 onChange={(e) => setAmount(e.target.value)}
               />
             </div>
-            
+
             <div className="space-y-2">
               <Label htmlFor="requestMemo">Memo (Optional)</Label>
               <Input
@@ -79,9 +79,9 @@ export const ReceivePayment: React.FC<ReceivePaymentProps> = ({ onNavigate }) =>
               </div>
             </div>
 
-            <Button 
+            <Button
               onClick={() => copyToClipboard(generateQRData())}
-              variant="outline" 
+              variant="outline"
               className="w-full"
             >
               <Copy className="w-4 h-4 mr-2" />
@@ -115,9 +115,15 @@ export const ReceivePayment: React.FC<ReceivePaymentProps> = ({ onNavigate }) =>
             <div className="space-y-2">
               <Label>Supported Assets</Label>
               <div className="space-y-2">
-                <Badge variant="secondary" className="mr-2">XLM</Badge>
-                <Badge variant="secondary" className="mr-2">USDC</Badge>
-                <Badge variant="secondary" className="mr-2">USDT</Badge>
+                <Badge variant="secondary" className="mr-2">
+                  XLM
+                </Badge>
+                <Badge variant="secondary" className="mr-2">
+                  USDC
+                </Badge>
+                <Badge variant="secondary" className="mr-2">
+                  USDT
+                </Badge>
               </div>
             </div>
 
@@ -125,7 +131,8 @@ export const ReceivePayment: React.FC<ReceivePaymentProps> = ({ onNavigate }) =>
               <Info className="h-4 w-4" />
               <AlertTitle>Important</AlertTitle>
               <AlertDescription>
-                Only send Stellar network assets to this address. Sending other cryptocurrencies may result in permanent loss.
+                Only send Stellar network assets to this address. Sending other cryptocurrencies may
+                result in permanent loss.
               </AlertDescription>
             </Alert>
           </CardContent>

@@ -23,9 +23,7 @@ export const PaymentSummary = ({
             !
           </button>
         </div>
-        <span className="font-semibold text-[#FF3131] text-[12px]">
-          {gasFee}
-        </span>
+        <span className="font-semibold text-[#FF3131] text-[12px]">{gasFee}</span>
       </div>
 
       {/* Total Amount */}

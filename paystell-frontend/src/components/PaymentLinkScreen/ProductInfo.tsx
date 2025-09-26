@@ -1,13 +1,7 @@
-import Image from "next/image";
-import Product from "./Images/Product.png";
+import Image from 'next/image';
+import Product from './Images/Product.png';
 
-export const ProductInfo = ({
-  productName,
-  sku,
-}: {
-  productName: string;
-  sku: string;
-}) => {
+export const ProductInfo = ({ productName, sku }: { productName: string; sku: string }) => {
   return (
     <div className="flex flex-col space-y-2 bg-card border-b border-border text-card-foreground p-4 ">
       <div className="flex justify-between text-sm items-center">

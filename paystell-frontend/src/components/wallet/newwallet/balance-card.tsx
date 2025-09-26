@@ -11,10 +11,10 @@ interface BalanceCardProps {
   setShowBalance: (show: boolean) => void;
 }
 
-export const BalanceCard: React.FC<BalanceCardProps> = ({ 
-  walletData, 
-  showBalance, 
-  setShowBalance 
+export const BalanceCard: React.FC<BalanceCardProps> = ({
+  walletData,
+  showBalance,
+  setShowBalance,
 }) => (
   <Card className="bg-gradient-to-r from-blue-500 to-purple-600 text-white">
     <CardHeader>

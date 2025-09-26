@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React from "react";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { UseFormRegisterReturn } from "react-hook-form";
+import React from 'react';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { UseFormRegisterReturn } from 'react-hook-form';
 
 interface FormFieldProps {
   id: string;
@@ -18,7 +18,7 @@ const FormField: React.FC<FormFieldProps> = ({
   id,
   label,
   placeholder,
-  type = "text",
+  type = 'text',
   register,
   error,
 }) => {

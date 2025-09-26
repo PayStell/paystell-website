@@ -1,16 +1,16 @@
-"use client"
+'use client';
 
-export const dynamic = "force-dynamic"
-import PaymentPreview from "@/components/paymentPreview/payment-preview"
-import { Suspense } from "react"
-import { Loader2 } from "lucide-react"
-import { useSearchParams } from "next/navigation"
-import { ErrorBoundary } from "@/components/ErrorBoundary"
+export const dynamic = 'force-dynamic';
+import PaymentPreview from '@/components/paymentPreview/payment-preview';
+import { Suspense } from 'react';
+import { Loader2 } from 'lucide-react';
+import { useSearchParams } from 'next/navigation';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 interface PageProps {
   params: {
-    id: string
-  }
+    id: string;
+  };
 }
 
 function PaymentSkeleton() {
@@ -23,12 +23,12 @@ function PaymentSkeleton() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default function PaymentPreviewClient({ params }: PageProps) {
-  const searchParams = useSearchParams()
-  const merchantWalletAddress = searchParams.get("merchant")
+  const searchParams = useSearchParams();
+  const merchantWalletAddress = searchParams.get('merchant');
 
   return (
     <ErrorBoundary>
@@ -38,5 +38,5 @@ export default function PaymentPreviewClient({ params }: PageProps) {
         </Suspense>
       </div>
     </ErrorBoundary>
-  )
+  );
 }

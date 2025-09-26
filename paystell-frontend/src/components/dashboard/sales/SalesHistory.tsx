@@ -1,5 +1,5 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Chart from "./Chart";
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import Chart from './Chart';
 import {
   Table,
   TableBody,
@@ -8,16 +8,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
-import { useState, useEffect } from "react";
-import { formatPrice, formatDate } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { transactionsService, Transaction } from "@/services/transactions";
+} from '@/components/ui/table';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import { useState, useEffect } from 'react';
+import { formatPrice, formatDate } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { transactionsService, Transaction } from '@/services/transactions';
 
 const SalesHistory = () => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
@@ -32,12 +32,8 @@ const SalesHistory = () => {
       try {
         setLoading(true);
         setError(null);
-        const {
-          success,
-          data,
-          error: apiError,
-        } = await transactionsService.getRecent(currentPage);
-        if (!success || !data) throw new Error(apiError || "Failed to fetch transactions");
+        const { success, data, error: apiError } = await transactionsService.getRecent(currentPage);
+        if (!success || !data) throw new Error(apiError || 'Failed to fetch transactions');
         setTransactions(data.items);
         setTotalItems(data.total);
         setTotalPages(data.pages);
@@ -65,7 +61,6 @@ const SalesHistory = () => {
     <div className="mt-6 px-2 sm:px-0">
       {/* Mobile: Stack vertically, Desktop: Side by side */}
       <div className="flex flex-col xl:flex-row bg-card rounded-lg w-full p-3 sm:p-6 lg:p-8 gap-4 lg:gap-6">
-        
         {/* Transactions Table Section */}
         <div className="w-full xl:w-[60%]">
           {loading ? (
@@ -76,27 +71,38 @@ const SalesHistory = () => {
               <div className="block sm:hidden space-y-3">
                 <h3 className="text-lg font-semibold mb-4">Recent Transactions</h3>
                 {transactions.map((transaction) => (
-                  <div key={transaction.id} className="bg-background rounded-lg p-4 border space-y-3">
+                  <div
+                    key={transaction.id}
+                    className="bg-background rounded-lg p-4 border space-y-3"
+                  >
                     {/* Customer Info */}
                     <div className="flex items-center space-x-3">
                       <Avatar className="h-10 w-10">
                         {transaction.customer.avatar ? (
-                          <AvatarImage src={transaction.customer.avatar} alt={transaction.customer.name} />
+                          <AvatarImage
+                            src={transaction.customer.avatar}
+                            alt={transaction.customer.name}
+                          />
                         ) : (
                           <AvatarFallback className="text-xs">
-                            {transaction.customer.name.split(' ').map(n => n[0]).join('')}
+                            {transaction.customer.name
+                              .split(' ')
+                              .map((n) => n[0])
+                              .join('')}
                           </AvatarFallback>
                         )}
                       </Avatar>
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-medium truncate">{transaction.customer.name}</p>
-                        <p className="text-xs text-muted-foreground truncate">{transaction.customer.email}</p>
+                        <p className="text-xs text-muted-foreground truncate">
+                          {transaction.customer.email}
+                        </p>
                       </div>
                       <div className="text-right">
                         <p className="text-sm font-bold">{formatPrice(transaction.amount)}</p>
                       </div>
                     </div>
-                    
+
                     {/* Transaction Details */}
                     <div className="flex items-center justify-between text-xs">
                       <div className="flex items-center space-x-2">
@@ -105,8 +111,8 @@ const SalesHistory = () => {
                             transaction.status === 'paid'
                               ? 'success'
                               : transaction.status === 'pending'
-                              ? 'warning'
-                              : 'destructive'
+                                ? 'warning'
+                                : 'destructive'
                           }
                           className="text-xs"
                         >
@@ -124,7 +130,9 @@ const SalesHistory = () => {
               <div className="hidden sm:block">
                 <div className="overflow-x-auto">
                   <Table>
-                    <TableCaption className="text-xs sm:text-sm">A list of your recent transactions.</TableCaption>
+                    <TableCaption className="text-xs sm:text-sm">
+                      A list of your recent transactions.
+                    </TableCaption>
                     <TableHeader>
                       <TableRow>
                         <TableHead className="min-w-[200px]">Customer</TableHead>
@@ -141,16 +149,26 @@ const SalesHistory = () => {
                             <div className="flex items-center space-x-2">
                               <Avatar className="h-8 w-8 flex-shrink-0">
                                 {transaction.customer.avatar ? (
-                                  <AvatarImage src={transaction.customer.avatar} alt={transaction.customer.name} />
+                                  <AvatarImage
+                                    src={transaction.customer.avatar}
+                                    alt={transaction.customer.name}
+                                  />
                                 ) : (
                                   <AvatarFallback className="text-xs">
-                                    {transaction.customer.name.split(' ').map(n => n[0]).join('')}
+                                    {transaction.customer.name
+                                      .split(' ')
+                                      .map((n) => n[0])
+                                      .join('')}
                                   </AvatarFallback>
                                 )}
                               </Avatar>
                               <div className="min-w-0 flex-1">
-                                <p className="text-sm font-medium truncate">{transaction.customer.name}</p>
-                                <p className="text-xs text-muted-foreground truncate">{transaction.customer.email}</p>
+                                <p className="text-sm font-medium truncate">
+                                  {transaction.customer.name}
+                                </p>
+                                <p className="text-xs text-muted-foreground truncate">
+                                  {transaction.customer.email}
+                                </p>
                               </div>
                             </div>
                           </TableCell>
@@ -160,8 +178,8 @@ const SalesHistory = () => {
                                 transaction.status === 'paid'
                                   ? 'success'
                                   : transaction.status === 'pending'
-                                  ? 'warning'
-                                  : 'destructive'
+                                    ? 'warning'
+                                    : 'destructive'
                               }
                               className="text-xs"
                             >
@@ -185,7 +203,7 @@ const SalesHistory = () => {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
                   disabled={currentPage === 1}
                   aria-label="Go to previous page"
                   className="w-full sm:w-auto text-xs sm:text-sm"
@@ -193,16 +211,20 @@ const SalesHistory = () => {
                   <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
                   Previous
                 </Button>
-                
+
                 <span className="text-xs sm:text-sm text-muted-foreground text-center">
-                  <span className="hidden sm:inline">Page {currentPage} of {totalPages} ({totalItems} total)</span>
-                  <span className="sm:hidden">{currentPage}/{totalPages} ({totalItems})</span>
+                  <span className="hidden sm:inline">
+                    Page {currentPage} of {totalPages} ({totalItems} total)
+                  </span>
+                  <span className="sm:hidden">
+                    {currentPage}/{totalPages} ({totalItems})
+                  </span>
                 </span>
-                
+
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
                   disabled={currentPage === totalPages}
                   aria-label="Go to next page"
                   className="w-full sm:w-auto text-xs sm:text-sm"

@@ -1,39 +1,29 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
-import { useState } from "react";
-import { X } from "lucide-react";
-import { type ProductTabProps, currencyOptions } from "./types";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import { type ProductTabProps, currencyOptions } from './types';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import Image from "next/image";
+} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Image from 'next/image';
 
-export default function ProductTab({
-  control,
-  setValue,
-  watch,
-}: ProductTabProps) {
+export default function ProductTab({ control, setValue, watch }: ProductTabProps) {
   const [dragActive, setDragActive] = useState(false);
-  const product = watch("product");
-  const productImage = "image" in product ? product.image : null;
+  const product = watch('product');
+  const productImage = 'image' in product ? product.image : null;
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -41,7 +31,7 @@ export default function ProductTab({
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        setValue("product.image", reader.result as string);
+        setValue('product.image', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -50,9 +40,9 @@ export default function ProductTab({
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
+    if (e.type === 'dragenter' || e.type === 'dragover') {
       setDragActive(true);
-    } else if (e.type === "dragleave") {
+    } else if (e.type === 'dragleave') {
       setDragActive(false);
     }
   };
@@ -65,14 +55,14 @@ export default function ProductTab({
       const file = e.dataTransfer.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        setValue("product.image", reader.result as string);
+        setValue('product.image', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const removeImage = () => {
-    setValue("product.image", null);
+    setValue('product.image', null);
   };
 
   return (
@@ -100,11 +90,7 @@ export default function ProductTab({
           <FormItem>
             <FormLabel>Descripción del Producto</FormLabel>
             <FormControl>
-              <Textarea
-                {...field}
-                placeholder="Ingrese la descripción del producto"
-                rows={3}
-              />
+              <Textarea {...field} placeholder="Ingrese la descripción del producto" rows={3} />
             </FormControl>
             <FormMessage />
           </FormItem>
@@ -121,13 +107,7 @@ export default function ProductTab({
                 Precio <span className="text-destructive">*</span>
               </FormLabel>
               <FormControl>
-                <Input
-                  {...field}
-                  placeholder="0.00"
-                  type="number"
-                  min="0"
-                  step="0.01"
-                />
+                <Input {...field} placeholder="0.00" type="number" min="0" step="0.01" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -165,11 +145,7 @@ export default function ProductTab({
         {productImage ? (
           <div className="relative w-full h-48 rounded-md overflow-hidden border">
             <Image
-              src={
-                typeof productImage === "string"
-                  ? productImage
-                  : "/placeholder.svg"
-              }
+              src={typeof productImage === 'string' ? productImage : '/placeholder.svg'}
               alt="Product"
               className="w-full h-full object-cover"
             />
@@ -187,10 +163,8 @@ export default function ProductTab({
         ) : (
           <div
             className={cn(
-              "border-2 border-dashed rounded-md h-48 flex flex-col items-center justify-center cursor-pointer",
-              dragActive
-                ? "border-primary bg-primary/5"
-                : "border-muted-foreground/20"
+              'border-2 border-dashed rounded-md h-48 flex flex-col items-center justify-center cursor-pointer',
+              dragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/20',
             )}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}

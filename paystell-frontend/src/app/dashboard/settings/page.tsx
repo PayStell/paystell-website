@@ -1,65 +1,66 @@
-"use client"
+'use client';
 
-export const dynamic = "force-dynamic"
+export const dynamic = 'force-dynamic';
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import ProfileForm from "@/components/dashboard/settings/ProfileForm"
-import WalletVerificationSection from "@/components/dashboard/settings/WalletVerificationSection"
-import AppearanceSection from "@/components/dashboard/settings/AppearanceSection"
-import { useWallet } from "@/providers/useWalletProvider"
-import { useAuth } from "@/providers/AuthProvider"
-import { toast } from "sonner"
+import type React from 'react';
+import { useState, useEffect } from 'react';
+import ProfileForm from '@/components/dashboard/settings/ProfileForm';
+import WalletVerificationSection from '@/components/dashboard/settings/WalletVerificationSection';
+import AppearanceSection from '@/components/dashboard/settings/AppearanceSection';
+import { useWallet } from '@/providers/useWalletProvider';
+import { useAuth } from '@/providers/AuthProvider';
+import { toast } from 'sonner';
 
 const SettingsScreen: React.FC = () => {
-  const { state } = useWallet()
-  const { publicKey } = state
-  const { user: userData } = useAuth()
+  const { state } = useWallet();
+  const { publicKey } = state;
+  const { user: userData } = useAuth();
 
   // Use auth data for verification status, with local state as fallback
-  const [localWalletVerified, setLocalWalletVerified] = useState(false)
+  const [localWalletVerified, setLocalWalletVerified] = useState(false);
   // const [verifiedWalletAddress, setVerifiedWalletAddress] = useState<string | null>(null)
 
-  const isEmailVerified = userData?.isEmailVerified ?? false
-  const isWalletVerified = userData?.isWalletVerified ?? localWalletVerified
-  const userId = userData?.id
+  const isEmailVerified = userData?.isEmailVerified ?? false;
+  const isWalletVerified = userData?.isWalletVerified ?? localWalletVerified;
+  const userId = userData?.id;
   useEffect(() => {
     if (userData?.isWalletVerified) {
-      setLocalWalletVerified(userData.isWalletVerified)
+      setLocalWalletVerified(userData.isWalletVerified);
       // setVerifiedWalletAddress(publicKey || null)
     }
-  }, [userData, publicKey])
+  }, [userData, publicKey]);
 
   const handleProfileSubmit = (data: {
-    name: string
-    logo: string | null
-    description: string
+    name: string;
+    logo: string | null;
+    description: string;
   }) => {
-    console.log("Form is valid:", data)
-  }
+    console.log('Form is valid:', data);
+  };
 
   const handleVerificationComplete = async (/*walletAddress: string*/) => {
-    setLocalWalletVerified(true)
+    setLocalWalletVerified(true);
     // setVerifiedWalletAddress(walletAddress)
 
-    toast.success("Wallet Verified", {
-      description: "Your wallet has been successfully verified! Please refresh the page to see updated status.",
-    })
+    toast.success('Wallet Verified', {
+      description:
+        'Your wallet has been successfully verified! Please refresh the page to see updated status.',
+    });
 
     setTimeout(() => {
-      toast.info("Refresh Needed", {
-        description: "Please refresh the page to see your updated verification status.",
+      toast.info('Refresh Needed', {
+        description: 'Please refresh the page to see your updated verification status.',
         action: {
-          label: "Refresh",
+          label: 'Refresh',
           onClick: () => window.location.reload(),
         },
-      })
-    }, 3000)
-  }
+      });
+    }, 3000);
+  };
 
   const handleVerificationError = (error: string) => {
-    console.error("Verification error:", error)
-  }
+    console.error('Verification error:', error);
+  };
 
   if (!userData || !userId) {
     return (
@@ -71,7 +72,7 @@ const SettingsScreen: React.FC = () => {
           </div>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -89,7 +90,7 @@ const SettingsScreen: React.FC = () => {
       </div>
       <AppearanceSection />
     </div>
-  )
-}
+  );
+};
 
-export default SettingsScreen
+export default SettingsScreen;

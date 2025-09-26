@@ -16,10 +16,12 @@ async function enableTwoFactorAuth(): Promise<{
 ```
 
 #### Returns
+
 - `qrCode`: URL for QR code generation
 - `secret`: Secret key for manual entry
 
 #### Error Handling
+
 - Throws if user is not authenticated
 - Handles rate limiting (429) errors
 - Proper error messages for all failure cases
@@ -29,20 +31,20 @@ async function enableTwoFactorAuth(): Promise<{
 Verifies the 2FA token during the initial setup process.
 
 ```typescript
-async function verifyTwoFactorSetup(
-  token: string,
-  secret: string
-): Promise<boolean>;
+async function verifyTwoFactorSetup(token: string, secret: string): Promise<boolean>;
 ```
 
 #### Parameters
+
 - `token`: 6-digit verification code
 - `secret`: Secret key from enableTwoFactorAuth
 
 #### Returns
+
 - `boolean`: Success status of verification
 
 #### Error Handling
+
 - Validates token format
 - Handles rate limiting
 - Authentication errors
@@ -52,15 +54,15 @@ async function verifyTwoFactorSetup(
 Verifies the 2FA token during the login process.
 
 ```typescript
-async function verifyTwoFactorCode(
-  token: string
-): Promise<boolean>;
+async function verifyTwoFactorCode(token: string): Promise<boolean>;
 ```
 
 #### Parameters
+
 - `token`: 6-digit verification code
 
 #### Returns
+
 - `boolean`: Success status of verification
 
 ### disableTwoFactorAuth
@@ -74,6 +76,7 @@ async function disableTwoFactorAuth(): Promise<{
 ```
 
 #### Returns
+
 - `message`: Success message
 
 ## Error Handling
@@ -81,15 +84,18 @@ async function disableTwoFactorAuth(): Promise<{
 All functions implement comprehensive error handling:
 
 1. **Network Errors**
+
    - Connection issues
    - Server errors
    - Timeout handling
 
 2. **Authentication Errors**
+
    - Token missing or invalid
    - Session expired
 
 3. **Rate Limiting**
+
    - Too many attempts
    - Proper retry-after handling
 
@@ -104,7 +110,7 @@ import {
   enableTwoFactorAuth,
   verifyTwoFactorSetup,
   verifyTwoFactorCode,
-  disableTwoFactorAuth
+  disableTwoFactorAuth,
 } from '@/services/twoFactorAuthService';
 
 // Enable 2FA
@@ -139,11 +145,13 @@ try {
 ## Security Considerations
 
 1. **Token Management**
+
    - Secure storage in localStorage
    - Proper token validation
    - Token expiration handling
 
 2. **Rate Limiting**
+
    - Prevents brute force attacks
    - Configurable limits
    - Clear user feedback
@@ -157,4 +165,4 @@ try {
 
 - Fetch API for HTTP requests
 - localStorage for token management
-- OTPAuth library for token validation 
+- OTPAuth library for token validation

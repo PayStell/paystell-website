@@ -1,29 +1,19 @@
-import React from "react";
-import { QRCodeSVG } from "qrcode.react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import React from 'react';
+import { QRCodeSVG } from 'qrcode.react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export interface QRCodeDisplayProps {
   otpAuthUrl: string;
   secret: string;
 }
 
-export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({
-  otpAuthUrl,
-  secret,
-}) => {
+export const QRCodeDisplay: React.FC<QRCodeDisplayProps> = ({ otpAuthUrl, secret }) => {
   return (
     <Card className="w-full max-w-md">
       <CardHeader>
         <CardTitle className="text-2xl font-bold">Scan QR Code</CardTitle>
         <CardDescription>
-          Scan this QR code with your authentication app (like Google
-          Authenticator)
+          Scan this QR code with your authentication app (like Google Authenticator)
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col items-center space-y-4">

@@ -1,10 +1,10 @@
-import type { Metadata } from "next"
-import WalletDashboard from "@/components/wallet/walletconnect/WalletDashboard"
+import type { Metadata } from 'next';
+import WalletDashboard from '@/components/wallet/walletconnect/WalletDashboard';
 
 export const metadata: Metadata = {
-  title: "Paystell Stellar Wallet | Dashboard",
-  description: "Manage your Stellar wallet, view balances, and send transactions",
-}
+  title: 'Paystell Stellar Wallet | Dashboard',
+  description: 'Manage your Stellar wallet, view balances, and send transactions',
+};
 
 export default function WalletPage() {
   return (
@@ -14,5 +14,5 @@ export default function WalletPage() {
       </div>
       <WalletDashboard />
     </div>
-  )
+  );
 }

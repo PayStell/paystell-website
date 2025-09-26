@@ -1,15 +1,15 @@
-"use client"
+'use client';
 import CodeExample from '@/components/CodeExample';
 
 export default function TwoFactorAuthPage() {
   return (
     <div className="prose prose-gray max-w-none">
-      <h1 className="text-4xl font-bold text-white mb-8">Two-Factor Authentication (2FA) Endpoints</h1>
-      
+      <h1 className="text-4xl font-bold text-white mb-8">
+        Two-Factor Authentication (2FA) Endpoints
+      </h1>
+
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Enable 2FA</h2>
-      <p className="text-gray-300 mb-4">
-        Generates a QR code to set up 2FA.
-      </p>
+      <p className="text-gray-300 mb-4">Generates a QR code to set up 2FA.</p>
       <CodeExample
         code={`POST /auth/enable-2fa
 
@@ -32,9 +32,7 @@ Complete Flow:
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Verify 2FA Setup</h2>
-      <p className="text-gray-300 mb-4">
-        Verifies that the 2FA setup works correctly.
-      </p>
+      <p className="text-gray-300 mb-4">Verifies that the 2FA setup works correctly.</p>
       <CodeExample
         code={`POST /auth/verify-2fa
 
@@ -60,9 +58,7 @@ Error Response (400 Bad Request):
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Login with 2FA</h2>
-      <p className="text-gray-300 mb-4">
-        Authenticates a user with credentials + 2FA code.
-      </p>
+      <p className="text-gray-300 mb-4">Authenticates a user with credentials + 2FA code.</p>
       <CodeExample
         code={`POST /auth/login-2fa
 
@@ -103,9 +99,7 @@ Complete Flow:
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Disable 2FA</h2>
-      <p className="text-gray-300 mb-4">
-        Disables two-factor authentication.
-      </p>
+      <p className="text-gray-300 mb-4">Disables two-factor authentication.</p>
       <CodeExample
         code={`POST /auth/disable-2fa
 
@@ -125,4 +119,4 @@ Error Response (400 Bad Request):
       />
     </div>
   );
-} 
+}

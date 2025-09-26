@@ -1,25 +1,28 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { createContext, useContext } from "react"
-import { useWalletStore } from "@/lib/wallet/wallet-store"
+import { createContext, useContext } from 'react';
+import { useWalletStore } from '@/lib/wallet/wallet-store';
 
 type WalletContextState = {
   state: {
-    isConnected: boolean
-    publicKey: string | null
-    connecting: boolean
-  }
-  connectWallet: () => Promise<void>
-  disconnectWallet: () => Promise<void>
-  signTransaction: (transactionXDR: string, opts?: { networkPassphrase?: string }) => Promise<string>
-}
+    isConnected: boolean;
+    publicKey: string | null;
+    connecting: boolean;
+  };
+  connectWallet: () => Promise<void>;
+  disconnectWallet: () => Promise<void>;
+  signTransaction: (
+    transactionXDR: string,
+    opts?: { networkPassphrase?: string },
+  ) => Promise<string>;
+};
 
-const WalletContext = createContext<WalletContextState | null>(null)
+const WalletContext = createContext<WalletContextState | null>(null);
 
 export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
-  const walletStore = useWalletStore()
+  const walletStore = useWalletStore();
 
   // Map the zustand store to the context state
   const contextValue: WalletContextState = {
@@ -31,15 +34,15 @@ export const WalletProvider = ({ children }: { children: React.ReactNode }) => {
     connectWallet: walletStore.connectWallet,
     disconnectWallet: walletStore.disconnectWallet,
     signTransaction: walletStore.signTransaction,
-  }
+  };
 
-  return <WalletContext.Provider value={contextValue}>{children}</WalletContext.Provider>
-}
+  return <WalletContext.Provider value={contextValue}>{children}</WalletContext.Provider>;
+};
 
 export const useWallet = () => {
-  const context = useContext(WalletContext)
+  const context = useContext(WalletContext);
   if (!context) {
-    throw new Error("useWallet must be used within a WalletProvider")
+    throw new Error('useWallet must be used within a WalletProvider');
   }
-  return context
-}
+  return context;
+};

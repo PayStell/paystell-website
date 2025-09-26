@@ -1,22 +1,22 @@
-"use client"
+'use client';
 
-import { CheckCircle2 } from "lucide-react"
-import { useProgress } from "@/hooks/use-progress"
-import { motion } from "framer-motion"
+import { CheckCircle2 } from 'lucide-react';
+import { useProgress } from '@/hooks/use-progress';
+import { motion } from 'framer-motion';
 
 export function Progress() {
-  const { progress, totalSteps, goToStep, getPercentage } = useProgress()
+  const { progress, totalSteps, goToStep, getPercentage } = useProgress();
 
-  const steps = ["Basic Information", "Business Details", "Payment Setup", "Complete"]
+  const steps = ['Basic Information', 'Business Details', 'Payment Setup', 'Complete'];
 
   // Animation variants
   const progressVariants = {
     initial: { width: 0 },
     animate: {
       width: `${getPercentage()}%`,
-      transition: { duration: 0.5, ease: "easeOut" },
+      transition: { duration: 0.5, ease: 'easeOut' },
     },
-  }
+  };
 
   const stepVariants = {
     inactive: { scale: 1 },
@@ -28,7 +28,7 @@ export function Progress() {
       scale: [1, 1.2, 1],
       transition: { duration: 0.5 },
     },
-  }
+  };
 
   return (
     <div className="mb-8">
@@ -37,37 +37,39 @@ export function Progress() {
           <motion.div
             className="h-full bg-primary"
             initial={{ width: 0 }}
-            animate={{ width: `${(progress - 1) / (steps.length - 1) * 100}%` }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
+            animate={{ width: `${((progress - 1) / (steps.length - 1)) * 100}%` }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           />
         </div>
         {steps.map((step, index) => {
-          const isCompleted = index < progress
-          const isActive = index === progress - 1
-          const isClickable = index < progress
+          const isCompleted = index < progress;
+          const isActive = index === progress - 1;
+          const isClickable = index < progress;
 
           return (
             <div key={index} className="flex flex-col items-center relative z-10">
               <motion.div
                 className={`w-10 h-10 rounded-full flex items-center justify-center cursor-pointer border-2 border-primary ${
                   isCompleted
-                    ? "bg-primary text-primary-foreground"
+                    ? 'bg-primary text-primary-foreground'
                     : isActive
-                    ? "bg-primary text-primary-foreground"
-                    : "bg-muted text-muted-foreground"
+                      ? 'bg-primary text-primary-foreground'
+                      : 'bg-muted text-muted-foreground'
                 }`}
                 variants={stepVariants}
                 initial="inactive"
-                animate={isActive ? "active" : isCompleted ? "completed" : "inactive"}
+                animate={isActive ? 'active' : isCompleted ? 'completed' : 'inactive'}
                 onClick={() => isClickable && goToStep(index + 1)}
               >
                 {isCompleted ? <CheckCircle2 className="h-6 w-6" /> : <span>{index + 1}</span>}
               </motion.div>
-              <span className={`text-xs mt-2 font-medium ${index < progress ? "text-primary" : "text-muted-foreground"}`}>
+              <span
+                className={`text-xs mt-2 font-medium ${index < progress ? 'text-primary' : 'text-muted-foreground'}`}
+              >
                 {step}
               </span>
             </div>
-          )
+          );
         })}
       </div>
 
@@ -89,5 +91,5 @@ export function Progress() {
         </div>
       </div>
     </div>
-  )
+  );
 }

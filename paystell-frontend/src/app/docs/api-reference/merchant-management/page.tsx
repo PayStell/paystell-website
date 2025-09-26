@@ -1,26 +1,41 @@
-"use client"
+'use client';
 import CodeExample from '@/components/CodeExample';
 
 export default function MerchantManagementPage() {
   return (
     <div className="prose prose-gray max-w-none">
       <h1 className="text-4xl font-bold text-white mb-8">Merchant Management Endpoints</h1>
-      
+
       <p className="text-lg text-gray-300 mb-6">
-        These endpoints provide functionality for managing merchants, including authentication, profile updates, and logo management.
+        These endpoints provide functionality for managing merchants, including authentication,
+        profile updates, and logo management.
       </p>
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Merchant Authentication</h2>
       <ul className="list-disc pl-6 space-y-2 text-gray-300">
-        <li><strong className="font-semibold text-white">Authentication Mechanism</strong>: Merchants authenticate using an API Key.</li>
-        <li><strong className="font-semibold text-white">Header Requirement</strong>: <code className="bg-gray-800 px-2 py-1 rounded text-sm font-mono">x-api-key</code></li>
-        <li><strong className="font-semibold text-white">Middleware</strong>: <code className="bg-gray-800 px-2 py-1 rounded text-sm font-mono">authenticateMerchant</code> validates the API Key via <code className="bg-gray-800 px-2 py-1 rounded text-sm font-mono">MerchantAuthService</code>.</li>
+        <li>
+          <strong className="font-semibold text-white">Authentication Mechanism</strong>: Merchants
+          authenticate using an API Key.
+        </li>
+        <li>
+          <strong className="font-semibold text-white">Header Requirement</strong>:{' '}
+          <code className="bg-gray-800 px-2 py-1 rounded text-sm font-mono">x-api-key</code>
+        </li>
+        <li>
+          <strong className="font-semibold text-white">Middleware</strong>:{' '}
+          <code className="bg-gray-800 px-2 py-1 rounded text-sm font-mono">
+            authenticateMerchant
+          </code>{' '}
+          validates the API Key via{' '}
+          <code className="bg-gray-800 px-2 py-1 rounded text-sm font-mono">
+            MerchantAuthService
+          </code>
+          .
+        </li>
       </ul>
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Update Merchant Profile</h2>
-      <p className="text-gray-300 mb-4">
-        Updates merchant profile information.
-      </p>
+      <p className="text-gray-300 mb-4">Updates merchant profile information.</p>
       <CodeExample
         code={`PUT /merchants/profile
 
@@ -46,9 +61,7 @@ Process:
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Upload Merchant Logo</h2>
-      <p className="text-gray-300 mb-4">
-        Uploads a logo for the merchant profile.
-      </p>
+      <p className="text-gray-300 mb-4">Uploads a logo for the merchant profile.</p>
       <CodeExample
         code={`POST /merchants/logo
 
@@ -71,9 +84,7 @@ Process:
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Delete Merchant Logo</h2>
-      <p className="text-gray-300 mb-4">
-        Removes the merchant&apos;s logo.
-      </p>
+      <p className="text-gray-300 mb-4">Removes the merchant&apos;s logo.</p>
       <CodeExample
         code={`DELETE /merchants/logo
 
@@ -93,4 +104,4 @@ Process:
       />
     </div>
   );
-} 
+}

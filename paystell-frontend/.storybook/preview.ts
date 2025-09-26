@@ -1,5 +1,5 @@
-import "../src/app/globals.css";
-import type { Preview } from "@storybook/react";
+import '../src/app/globals.css';
+import type { Preview } from '@storybook/react';
 import { withThemeByClassName } from '@storybook/addon-themes';
 
 export const decorators = [
@@ -25,17 +25,17 @@ const preview: Preview = {
       values: [
         {
           name: 'card background',
-          value: 'hsl(var(--card))', 
+          value: 'hsl(var(--card))',
         },
         {
           name: 'background',
-          value: 'hsl(var(--background))', 
+          value: 'hsl(var(--background))',
         },
       ],
     },
   },
 
-  tags: ["autodocs"]
+  tags: ['autodocs'],
 };
 
 export default preview;

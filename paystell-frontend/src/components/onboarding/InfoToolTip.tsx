@@ -1,11 +1,11 @@
-"use client"
+'use client';
 
-import { Info } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { motion } from "framer-motion"
+import { Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { motion } from 'framer-motion';
 
 interface InfoTooltipProps {
-  content: string
+  content: string;
 }
 
 export function InfoTooltip({ content }: InfoTooltipProps) {
@@ -29,6 +29,5 @@ export function InfoTooltip({ content }: InfoTooltipProps) {
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
-  )
+  );
 }
-

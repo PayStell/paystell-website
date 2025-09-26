@@ -1,9 +1,9 @@
-import React from "react";
-import { Meta, StoryFn } from "@storybook/react";
-import PaymentLinkBuilder from "./PaymentLinkBuilder";
+import React from 'react';
+import { Meta, StoryFn } from '@storybook/react';
+import PaymentLinkBuilder from './PaymentLinkBuilder';
 
 export default {
-  title: "Components/PaymentLinkBuilder",
+  title: 'Components/PaymentLinkBuilder',
   component: PaymentLinkBuilder,
 } as Meta;
 
@@ -15,9 +15,9 @@ Default.args = {};
 export const WithPreFilledData = Template.bind({});
 WithPreFilledData.args = {
   defaultValues: {
-    productName: "Ejemplo de Producto",
-    price: "49.99",
-    currency: "USD",
-    brandingColor: "#FF5733",
+    productName: 'Ejemplo de Producto',
+    price: '49.99',
+    currency: 'USD',
+    brandingColor: '#FF5733',
   },
 };

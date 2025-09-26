@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { 
-  Wallet, 
-  Shield, 
-  CheckCircle, 
-  ArrowRight, 
+import {
+  Wallet,
+  Shield,
+  CheckCircle,
+  ArrowRight,
   Settings,
   Lock,
   AlertCircle,
@@ -11,14 +11,20 @@ import {
   Phone as Smartphone,
   Bell,
   ShieldCheck,
-  RefreshCw
+  RefreshCw,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
@@ -38,22 +44,32 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
     confirmPassword: '',
     mnemonic: '',
     securityQuestions: {},
-    twoFactorEnabled: false
+    twoFactorEnabled: false,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [mnemonicConfirmed, setMnemonicConfirmed] = useState(false);
 
   const steps = [
-    { number: 1, title: 'Wallet Creation', description: 'Create your new Stellar wallet', icon: Wallet },
+    {
+      number: 1,
+      title: 'Wallet Creation',
+      description: 'Create your new Stellar wallet',
+      icon: Wallet,
+    },
     { number: 2, title: 'Verification', description: 'Verify your identity', icon: Shield },
-    { number: 3, title: 'Initial Setup', description: 'Configure your preferences', icon: Settings },
-    { number: 4, title: 'Security Configuration', description: 'Secure your wallet', icon: Lock }
+    {
+      number: 3,
+      title: 'Initial Setup',
+      description: 'Configure your preferences',
+      icon: Settings,
+    },
+    { number: 4, title: 'Security Configuration', description: 'Secure your wallet', icon: Lock },
   ];
 
   const handleNext = async () => {
     setIsLoading(true);
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     if (currentStep < 4) {
       setCurrentStep(currentStep + 1);
     } else {
@@ -63,15 +79,32 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
   };
 
   const handleInputChange = (field: keyof FormData, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const generateMnemonic = () => {
     const words = [
-      'abandon', 'ability', 'able', 'about', 'above', 'absent', 'absorb', 'abstract',
-      'absurd', 'abuse', 'access', 'accident', 'account', 'accuse', 'achieve', 'acid'
+      'abandon',
+      'ability',
+      'able',
+      'about',
+      'above',
+      'absent',
+      'absorb',
+      'abstract',
+      'absurd',
+      'abuse',
+      'access',
+      'accident',
+      'account',
+      'accuse',
+      'achieve',
+      'acid',
     ];
-    const mnemonic = Array.from({ length: 12 }, () => words[Math.floor(Math.random() * words.length)]).join(' ');
+    const mnemonic = Array.from(
+      { length: 12 },
+      () => words[Math.floor(Math.random() * words.length)],
+    ).join(' ');
     handleInputChange('mnemonic', mnemonic);
   };
 
@@ -83,11 +116,13 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
           return (
             <div key={step.number} className="flex items-center flex-1">
               <div className="flex flex-col items-center">
-                <div className={`flex items-center justify-center w-12 h-12 rounded-full border-2 ${
-                  currentStep >= step.number 
-                    ? 'bg-blue-500 border-blue-500 text-white' 
-                    : 'bg-white border-gray-300 text-gray-400'
-                }`}>
+                <div
+                  className={`flex items-center justify-center w-12 h-12 rounded-full border-2 ${
+                    currentStep >= step.number
+                      ? 'bg-blue-500 border-blue-500 text-white'
+                      : 'bg-white border-gray-300 text-gray-400'
+                  }`}
+                >
                   {currentStep > step.number ? (
                     <CheckCircle className="w-6 h-6" />
                   ) : (
@@ -95,18 +130,22 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
                   )}
                 </div>
                 <div className="mt-2 text-center">
-                  <div className={`text-sm font-medium ${
-                    currentStep >= step.number ? 'text-blue-600' : 'text-gray-400'
-                  }`}>
+                  <div
+                    className={`text-sm font-medium ${
+                      currentStep >= step.number ? 'text-blue-600' : 'text-gray-400'
+                    }`}
+                  >
                     {step.title}
                   </div>
                   <div className="text-xs text-gray-500">{step.description}</div>
                 </div>
               </div>
               {index < steps.length - 1 && (
-                <div className={`flex-1 h-1 mx-4 ${
-                  currentStep > step.number ? 'bg-blue-500' : 'bg-gray-200'
-                }`} />
+                <div
+                  className={`flex-1 h-1 mx-4 ${
+                    currentStep > step.number ? 'bg-blue-500' : 'bg-gray-200'
+                  }`}
+                />
               )}
             </div>
           );
@@ -125,9 +164,7 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
                 <Wallet className="w-5 h-5 text-blue-500" />
                 <span>Step 1: Wallet Creation</span>
               </CardTitle>
-              <CardDescription>
-                Enter your details to create a new Stellar wallet
-              </CardDescription>
+              <CardDescription>Enter your details to create a new Stellar wallet</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
@@ -181,9 +218,7 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
                 <Shield className="w-5 h-5 text-green-500" />
                 <span>Step 2: Verification</span>
               </CardTitle>
-              <CardDescription>
-                Verify your identity and account details
-              </CardDescription>
+              <CardDescription>Verify your identity and account details</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Alert>
@@ -195,11 +230,7 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
               </Alert>
               <div className="space-y-2">
                 <Label htmlFor="emailCode">Email Verification Code</Label>
-                <Input
-                  id="emailCode"
-                  placeholder="Enter 6-digit code"
-                  maxLength={6}
-                />
+                <Input id="emailCode" placeholder="Enter 6-digit code" maxLength={6} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="phone">Phone Number (Optional)</Label>
@@ -229,9 +260,7 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
                 <Settings className="w-5 h-5 text-purple-500" />
                 <span>Step 3: Initial Setup</span>
               </CardTitle>
-              <CardDescription>
-                Configure your wallet preferences and settings
-              </CardDescription>
+              <CardDescription>Configure your wallet preferences and settings</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
               <div className="space-y-2">
@@ -247,28 +276,34 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div className="space-y-4">
                 <Label>Notification Preferences</Label>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Bell className="w-4 h-4 text-gray-500" />
-                      <Label htmlFor="emailNotif" className="text-sm">Email notifications</Label>
+                      <Label htmlFor="emailNotif" className="text-sm">
+                        Email notifications
+                      </Label>
                     </div>
                     <Switch id="emailNotif" />
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <Smartphone className="w-4 h-4 text-gray-500" />
-                      <Label htmlFor="pushNotif" className="text-sm">Push notifications</Label>
+                      <Label htmlFor="pushNotif" className="text-sm">
+                        Push notifications
+                      </Label>
                     </div>
                     <Switch id="pushNotif" />
                   </div>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
                       <ArrowRight className="w-4 h-4 text-gray-500" />
-                      <Label htmlFor="transactionNotif" className="text-sm">Transaction alerts</Label>
+                      <Label htmlFor="transactionNotif" className="text-sm">
+                        Transaction alerts
+                      </Label>
                     </div>
                     <Switch id="transactionNotif" defaultChecked />
                   </div>
@@ -286,9 +321,7 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
                 <Lock className="w-5 h-5 text-red-500" />
                 <span>Step 4: Security Configuration</span>
               </CardTitle>
-              <CardDescription>
-                Secure your wallet with recovery options and 2FA
-              </CardDescription>
+              <CardDescription>Secure your wallet with recovery options and 2FA</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
               <Alert>
@@ -298,15 +331,11 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
                   Your recovery phrase is the only way to restore your wallet. Keep it safe!
                 </AlertDescription>
               </Alert>
-              
+
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
                   <Label>Recovery Phrase</Label>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={generateMnemonic}
-                  >
+                  <Button variant="outline" size="sm" onClick={generateMnemonic}>
                     Generate
                   </Button>
                 </div>
@@ -332,7 +361,9 @@ export const WalletActivationWizard: React.FC<WalletActivationWizardProps> = ({ 
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
                   <ShieldCheck className="w-4 h-4 text-gray-500" />
-                  <Label htmlFor="twoFactor" className="text-sm">Enable 2FA (Recommended)</Label>
+                  <Label htmlFor="twoFactor" className="text-sm">
+                    Enable 2FA (Recommended)
+                  </Label>
                 </div>
                 <Switch
                   id="twoFactor"

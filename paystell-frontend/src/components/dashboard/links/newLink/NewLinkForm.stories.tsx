@@ -1,8 +1,8 @@
-import { Meta, StoryFn } from "@storybook/react";
-import NewLinks from "./NewLinkForm";
+import { Meta, StoryFn } from '@storybook/react';
+import NewLinks from './NewLinkForm';
 
 export default {
-  title: "Dashboard/Links/NewLinkForm",
+  title: 'Dashboard/Links/NewLinkForm',
   component: NewLinks,
 } as Meta<typeof NewLinks>;
 

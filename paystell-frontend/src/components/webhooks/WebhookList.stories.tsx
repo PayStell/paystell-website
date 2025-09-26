@@ -32,7 +32,7 @@ const mockWebhooks = [
     initialRetryDelay: 5000,
     maxRetryDelay: 300000,
     createdAt: new Date('2023-01-01T00:00:00Z'),
-    updatedAt: new Date('2023-01-02T00:00:00Z')
+    updatedAt: new Date('2023-01-02T00:00:00Z'),
   },
   {
     id: 'wh_789012',
@@ -45,7 +45,7 @@ const mockWebhooks = [
     initialRetryDelay: 10000,
     maxRetryDelay: 600000,
     createdAt: new Date('2023-02-01T00:00:00Z'),
-    updatedAt: new Date('2023-02-02T00:00:00Z')
+    updatedAt: new Date('2023-02-02T00:00:00Z'),
   },
   {
     id: 'wh_345678',
@@ -57,14 +57,14 @@ const mockWebhooks = [
       WebhookEventType.PAYMENT_SUCCEEDED,
       WebhookEventType.PAYMENT_FAILED,
       WebhookEventType.PAYMENT_REFUNDED,
-      WebhookEventType.PAYMENT_PENDING
+      WebhookEventType.PAYMENT_PENDING,
     ],
     maxRetries: 7,
     initialRetryDelay: 3000,
     maxRetryDelay: 900000,
     createdAt: new Date('2023-03-01T00:00:00Z'),
-    updatedAt: new Date('2023-03-02T00:00:00Z')
-  }
+    updatedAt: new Date('2023-03-02T00:00:00Z'),
+  },
 ];
 
 // Stories
@@ -84,4 +84,4 @@ export const EmptyState: Story = {
     onEdit,
     onViewEvents,
   },
-}; 
+};

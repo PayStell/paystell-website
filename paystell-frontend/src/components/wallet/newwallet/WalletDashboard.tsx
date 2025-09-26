@@ -1,9 +1,8 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { WalletData } from '@/types/types';
 import { mockWalletData } from '@/mock/wallet-data';
-
 
 import { Navigation } from './navigation';
 import { WalletCheck } from './wallet-check';
@@ -61,9 +60,7 @@ export const StellarWalletApp: React.FC = () => {
     <TooltipProvider>
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
         <Navigation currentPage={currentPage} onNavigate={setCurrentPage} hasWallet={hasWallet} />
-        <main className="max-w-7xl mx-auto px-6 py-8">
-          {renderPage()}
-        </main>
+        <main className="max-w-7xl mx-auto px-6 py-8">{renderPage()}</main>
       </div>
     </TooltipProvider>
   );

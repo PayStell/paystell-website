@@ -1,98 +1,98 @@
-"use client"
+'use client';
 
-import type React from "react"
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
-import { HelpCircle, ExternalLink, Loader2 } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { motion } from "framer-motion"
-import { toast } from "sonner"
-import { useProgress } from "@/hooks/use-progress"
+import type React from 'react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Checkbox } from '@/components/ui/checkbox';
+import { HelpCircle, ExternalLink, Loader2 } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { motion } from 'framer-motion';
+import { toast } from 'sonner';
+import { useProgress } from '@/hooks/use-progress';
 
 interface PaymentSetupStepProps {
   formData: {
-    stellarAddress?: string
-    acceptedAssets?: string[]
-    paymentTypes?: string[]
-    [key: string]: unknown
-  }
+    stellarAddress?: string;
+    acceptedAssets?: string[];
+    paymentTypes?: string[];
+    [key: string]: unknown;
+  };
   updateFormData: (data: {
-    stellarAddress: string
-    acceptedAssets: string[]
-    paymentTypes: string[]
-    [key: string]: unknown
-  }) => void
+    stellarAddress: string;
+    acceptedAssets: string[];
+    paymentTypes: string[];
+    [key: string]: unknown;
+  }) => void;
 }
 
 export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupStepProps) {
-  const { nextStep } = useProgress()
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { nextStep } = useProgress();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Initialize state from formData
-  const [stellarAddress, setStellarAddress] = useState(formData.stellarAddress || "")
-  const [acceptedAssets, setAcceptedAssets] = useState(formData.acceptedAssets || ["XLM"])
-  const [paymentTypesState, setPaymentTypes] = useState(formData.paymentTypes || ["online"])
+  const [stellarAddress, setStellarAddress] = useState(formData.stellarAddress || '');
+  const [acceptedAssets, setAcceptedAssets] = useState(formData.acceptedAssets || ['XLM']);
+  const [paymentTypesState, setPaymentTypes] = useState(formData.paymentTypes || ['online']);
 
   const assets = [
-    { id: "XLM", label: "Stellar Lumens (XLM)" },
-    { id: "USDC", label: "USD Coin (USDC)" },
-    { id: "BTC", label: "Bitcoin (BTC)" },
-    { id: "ETH", label: "Ethereum (ETH)" },
-    { id: "EUR", label: "Euro (EUR)" },
-  ]
+    { id: 'XLM', label: 'Stellar Lumens (XLM)' },
+    { id: 'USDC', label: 'USD Coin (USDC)' },
+    { id: 'BTC', label: 'Bitcoin (BTC)' },
+    { id: 'ETH', label: 'Ethereum (ETH)' },
+    { id: 'EUR', label: 'Euro (EUR)' },
+  ];
 
   const paymentTypeOptions = [
-    { id: "online", label: "Online Payments" },
-    { id: "pos", label: "Point of Sale" },
-    { id: "invoice", label: "Invoicing" },
-    { id: "subscription", label: "Subscriptions" },
-  ]
+    { id: 'online', label: 'Online Payments' },
+    { id: 'pos', label: 'Point of Sale' },
+    { id: 'invoice', label: 'Invoicing' },
+    { id: 'subscription', label: 'Subscriptions' },
+  ];
 
   const toggleAsset = (assetId: string) => {
     setAcceptedAssets(
       acceptedAssets.includes(assetId)
         ? acceptedAssets.filter((id: string) => id !== assetId)
         : [...acceptedAssets, assetId],
-    )
-  }
+    );
+  };
 
   const togglePaymentType = (typeId: string) => {
     setPaymentTypes(
       paymentTypesState.includes(typeId)
         ? paymentTypesState.filter((id: string) => id !== typeId)
         : [...paymentTypesState, typeId],
-    )
-  }
+    );
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    e.preventDefault();
+    setIsSubmitting(true);
 
     updateFormData({
       stellarAddress,
       acceptedAssets,
       paymentTypes: paymentTypesState,
-    })
+    });
 
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-      toast.success("Payment settings saved", {
-        description: "Your payment preferences have been saved successfully.",
-      })
-      nextStep()
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      toast.success('Payment settings saved', {
+        description: 'Your payment preferences have been saved successfully.',
+      });
+      nextStep();
     } catch (error) {
       toast.error(`Error: ${error}`, {
-        description: "There was a problem saving your payment settings. Please try again.",
-      })
+        description: 'There was a problem saving your payment settings. Please try again.',
+      });
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
-  }
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -102,7 +102,7 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -113,18 +113,22 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
         duration: 0.3,
       },
     },
-  }
+  };
 
   const isStepComplete = () => {
-    return stellarAddress.trim() !== "" && acceptedAssets.length > 0 && paymentTypesState.length > 0
-  }
+    return (
+      stellarAddress.trim() !== '' && acceptedAssets.length > 0 && paymentTypesState.length > 0
+    );
+  };
 
   return (
     <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="show">
       <CardHeader className="p-0">
         <motion.div variants={itemVariants}>
           <CardTitle className="text-2xl">Payment Settings</CardTitle>
-          <CardDescription>Configure how you&apos;ll receive payments on the Stellar network</CardDescription>
+          <CardDescription>
+            Configure how you&apos;ll receive payments on the Stellar network
+          </CardDescription>
         </motion.div>
       </CardHeader>
 
@@ -149,7 +153,7 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
               onChange={(e) => setStellarAddress(e.target.value)}
             />
             <p className="text-xs text-muted-foreground">
-              Don&apos;t have a Stellar address?{" "}
+              Don&apos;t have a Stellar address?{' '}
               <a href="#" className="text-primary inline-flex items-center">
                 Create one <ExternalLink className="h-3 w-3 ml-1" />
               </a>
@@ -226,8 +230,8 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
         <motion.div variants={itemVariants}>
           <Alert variant="default" className="bg-muted/50 border-muted">
             <AlertDescription>
-              PayStell automatically converts between assets at the best available rate. You&apos;ll always receive the
-              assets you&apos;ve selected above.
+              PayStell automatically converts between assets at the best available rate. You&apos;ll
+              always receive the assets you&apos;ve selected above.
             </AlertDescription>
           </Alert>
         </motion.div>
@@ -253,7 +257,7 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
                     animate={{ x: [0, 5, 0] }}
                     transition={{
                       repeat: Number.POSITIVE_INFINITY,
-                      repeatType: "mirror",
+                      repeatType: 'mirror',
                       duration: 1,
                       repeatDelay: 1,
                     }}
@@ -265,6 +269,5 @@ export function PaymentDetailsStep({ formData, updateFormData }: PaymentSetupSte
         </CardFooter>
       </motion.form>
     </motion.div>
-  )
+  );
 }
-

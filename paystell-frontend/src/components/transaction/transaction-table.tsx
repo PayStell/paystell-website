@@ -1,92 +1,105 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import type { Horizon } from "@stellar/stellar-sdk"
-import { format } from "date-fns"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
-import { Eye, ExternalLink, ChevronDown, ChevronUp, Copy, Check } from "lucide-react"
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
-import { Card } from "@/components/ui/card"
-import type { NetworkType } from "@/types/transaction-types"
+import { useState } from 'react';
+import type { Horizon } from '@stellar/stellar-sdk';
+import { format } from 'date-fns';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Eye, ExternalLink, ChevronDown, ChevronUp, Copy, Check } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { Card } from '@/components/ui/card';
+import type { NetworkType } from '@/types/transaction-types';
 
 interface TransactionTableProps {
-  transactions: Horizon.ServerApi.TransactionRecord[]
-  onViewTransaction: (transactionId: string) => void
-  network: NetworkType
+  transactions: Horizon.ServerApi.TransactionRecord[];
+  onViewTransaction: (transactionId: string) => void;
+  network: NetworkType;
 }
 
-export function TransactionTable({ transactions, onViewTransaction, network }: TransactionTableProps) {
-  const [sortField, setSortField] = useState<string>("created_at")
-  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc")
-  const [copiedId, setCopiedId] = useState<string | null>(null)
+export function TransactionTable({
+  transactions,
+  onViewTransaction,
+  network,
+}: TransactionTableProps) {
+  const [sortField, setSortField] = useState<string>('created_at');
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   // Helper function to truncate hash/id
   const truncateHash = (hash: string) => {
-    return `${hash.substring(0, 8)}...${hash.substring(hash.length - 8)}`
-  }
+    return `${hash.substring(0, 8)}...${hash.substring(hash.length - 8)}`;
+  };
 
   // Helper function to format date
   const formatDate = (dateString: string) => {
-    return format(new Date(dateString), "MMM dd, yyyy HH:mm:ss")
-  }
+    return format(new Date(dateString), 'MMM dd, yyyy HH:mm:ss');
+  };
 
   // Copy to clipboard function
   const copyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text)
-    setCopiedId(text)
-    setTimeout(() => setCopiedId(null), 2000)
-  }
+    navigator.clipboard.writeText(text);
+    setCopiedId(text);
+    setTimeout(() => setCopiedId(null), 2000);
+  };
 
   // Get explorer URL based on network
   const getExplorerUrl = (txId: string) => {
-    return network === "TESTNET"
+    return network === 'TESTNET'
       ? `https://stellar.expert/explorer/testnet/tx/${txId}`
-      : `https://stellar.expert/explorer/public/tx/${txId}`
-  }
+      : `https://stellar.expert/explorer/public/tx/${txId}`;
+  };
 
   // Handle sort
   const handleSort = (field: string) => {
     if (sortField === field) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc")
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
     } else {
-      setSortField(field)
-      setSortDirection("desc")
+      setSortField(field);
+      setSortDirection('desc');
     }
-  }
+  };
 
   // Sort transactions
   const sortedTransactions = [...transactions].sort((a, b) => {
-    if (sortField === "created_at") {
-      const dateA = new Date(a.created_at).getTime()
-      const dateB = new Date(b.created_at).getTime()
-      return sortDirection === "asc" ? dateA - dateB : dateB - dateA
+    if (sortField === 'created_at') {
+      const dateA = new Date(a.created_at).getTime();
+      const dateB = new Date(b.created_at).getTime();
+      return sortDirection === 'asc' ? dateA - dateB : dateB - dateA;
     }
 
-    if (sortField === "fee_charged") {
-      const feeA = Number(a.fee_charged)
-      const feeB = Number(b.fee_charged)
-      return sortDirection === "asc" ? feeA - feeB : feeB - feeA
+    if (sortField === 'fee_charged') {
+      const feeA = Number(a.fee_charged);
+      const feeB = Number(b.fee_charged);
+      return sortDirection === 'asc' ? feeA - feeB : feeB - feeA;
     }
 
-    if (sortField === "operation_count") {
-      return sortDirection === "asc" ? a.operation_count - b.operation_count : b.operation_count - a.operation_count
+    if (sortField === 'operation_count') {
+      return sortDirection === 'asc'
+        ? a.operation_count - b.operation_count
+        : b.operation_count - a.operation_count;
     }
 
-    return 0
-  })
+    return 0;
+  });
 
   // Render sort indicator
   const renderSortIndicator = (field: string) => {
-    if (sortField !== field) return null
+    if (sortField !== field) return null;
 
-    return sortDirection === "asc" ? (
+    return sortDirection === 'asc' ? (
       <ChevronUp className="inline h-4 w-4 ml-1" />
     ) : (
       <ChevronDown className="inline h-4 w-4 ml-1" />
-    )
-  }
+    );
+  };
 
   if (transactions.length === 0) {
     return (
@@ -112,10 +125,11 @@ export function TransactionTable({ transactions, onViewTransaction, network }: T
         </div>
         <h3 className="text-lg font-medium">No transactions found</h3>
         <p className="text-muted-foreground mt-2 max-w-sm">
-          No transactions match your current filters. Try adjusting your search criteria or check back later.
+          No transactions match your current filters. Try adjusting your search criteria or check
+          back later.
         </p>
       </Card>
-    )
+    );
   }
 
   return (
@@ -126,23 +140,23 @@ export function TransactionTable({ transactions, onViewTransaction, network }: T
             <TableRow className="bg-muted/50">
               <TableHead
                 className="cursor-pointer hover:text-primary transition-colors"
-                onClick={() => handleSort("created_at")}
+                onClick={() => handleSort('created_at')}
               >
-                Date {renderSortIndicator("created_at")}
+                Date {renderSortIndicator('created_at')}
               </TableHead>
               <TableHead>Transaction ID</TableHead>
               <TableHead>Status</TableHead>
               <TableHead
                 className="cursor-pointer hover:text-primary transition-colors"
-                onClick={() => handleSort("fee_charged")}
+                onClick={() => handleSort('fee_charged')}
               >
-                Fee (XLM) {renderSortIndicator("fee_charged")}
+                Fee (XLM) {renderSortIndicator('fee_charged')}
               </TableHead>
               <TableHead
                 className="cursor-pointer hover:text-primary transition-colors"
-                onClick={() => handleSort("operation_count")}
+                onClick={() => handleSort('operation_count')}
               >
-                Operations {renderSortIndicator("operation_count")}
+                Operations {renderSortIndicator('operation_count')}
               </TableHead>
               <TableHead>Memo</TableHead>
               <TableHead className="text-right">Actions</TableHead>
@@ -172,7 +186,7 @@ export function TransactionTable({ transactions, onViewTransaction, network }: T
                           </Button>
                         </TooltipTrigger>
                         <TooltipContent>
-                          <p>{copiedId === tx.id ? "Copied!" : "Copy ID"}</p>
+                          <p>{copiedId === tx.id ? 'Copied!' : 'Copy ID'}</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -180,7 +194,10 @@ export function TransactionTable({ transactions, onViewTransaction, network }: T
                 </TableCell>
                 <TableCell>
                   {tx.successful ? (
-                    <Badge variant="outline" className="bg-green-50 text-green-700 border-green-200">
+                    <Badge
+                      variant="outline"
+                      className="bg-green-50 text-green-700 border-green-200"
+                    >
                       Successful
                     </Badge>
                   ) : (
@@ -191,8 +208,8 @@ export function TransactionTable({ transactions, onViewTransaction, network }: T
                 </TableCell>
                 <TableCell>{(Number(tx.fee_charged) / 10000000).toFixed(7)}</TableCell>
                 <TableCell>{tx.operation_count}</TableCell>
-                <TableCell className="max-w-[150px] truncate" title={tx.memo || ""}>
-                  {tx.memo || "-"}
+                <TableCell className="max-w-[150px] truncate" title={tx.memo || ''}>
+                  {tx.memo || '-'}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end space-x-1">
@@ -218,7 +235,11 @@ export function TransactionTable({ transactions, onViewTransaction, network }: T
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <Button variant="ghost" size="icon" className="h-8 w-8" asChild>
-                            <a href={getExplorerUrl(tx.id)} target="_blank" rel="noopener noreferrer">
+                            <a
+                              href={getExplorerUrl(tx.id)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
                               <ExternalLink className="h-4 w-4" />
                             </a>
                           </Button>
@@ -236,5 +257,5 @@ export function TransactionTable({ transactions, onViewTransaction, network }: T
         </Table>
       </div>
     </div>
-  )
+  );
 }

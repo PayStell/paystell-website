@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { formatPrice } from "@/lib/utils";
-import BalanceStat from "./BalanceStat";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatPrice } from '@/lib/utils';
+import BalanceStat from './BalanceStat';
 
 interface BalanceProps {
   title?: string;
@@ -12,15 +12,10 @@ interface BalanceProps {
   currency?: string;
 }
 
-const Balance = ({
-  title = "Available",
-  balance,
-  lastBalance,
-  currency = "USD",
-}: BalanceProps) => {
+const Balance = ({ title = 'Available', balance, lastBalance, currency = 'USD' }: BalanceProps) => {
   // @TODO implement withdraw
   const handleWithdraw = () => {
-    console.log("withdraw clicked");
+    console.log('withdraw clicked');
   };
 
   return (
@@ -42,7 +37,7 @@ const Balance = ({
         <div className="pt-2">
           <Button
             className="w-full sm:w-auto h-12 sm:h-9 text-sm sm:text-xs font-semibold min-h-[48px] sm:min-h-[36px] touch-manipulation"
-            size={"sm"}
+            size={'sm'}
             onClick={handleWithdraw}
             variant="secondary"
           >

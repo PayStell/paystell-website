@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import RegisterForm from "@/components/register/RegisterForm";
-import EmailVerificationForm from "@/components/register/EmailVerificationForm";
+import React, { useState } from 'react';
+import RegisterForm from '@/components/register/RegisterForm';
+import EmailVerificationForm from '@/components/register/EmailVerificationForm';
 
 const RegisterPage = () => {
   const [isVerified, setIsVerified] = useState(false);

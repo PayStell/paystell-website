@@ -2,8 +2,8 @@
 const nextConfig = {
   images: {
     unoptimized: true,
-    domains:['assets.coingecko.com','s2.coinmarketcap.com'],
+    domains: ['assets.coingecko.com', 's2.coinmarketcap.com'],
   },
 };
 
-module.exports = nextConfig; 
+module.exports = nextConfig;

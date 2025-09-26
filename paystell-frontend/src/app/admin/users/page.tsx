@@ -1,21 +1,15 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { 
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import UserList from "@/components/admin/UserList";
-import WithAuth from "@/lib/middleware/withAuth";
-import { useAuth } from "@/providers/AuthProvider";
-import { Permission, UserRole } from "@/lib/types/user";
-import { MdShield } from "react-icons/md";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import UserList from '@/components/admin/UserList';
+import WithAuth from '@/lib/middleware/withAuth';
+import { useAuth } from '@/providers/AuthProvider';
+import { Permission, UserRole } from '@/lib/types/user';
+import { MdShield } from 'react-icons/md';
 
 export default function AdminUsersPage() {
   const { user, isLoading } = useAuth();
@@ -24,12 +18,12 @@ export default function AdminUsersPage() {
   useEffect(() => {
     // If user is loaded and not an admin, redirect to unauthorized
     if (!isLoading && user && user.role !== UserRole.ADMIN) {
-      router.push("/unauthorized");
+      router.push('/unauthorized');
     }
   }, [user, isLoading, router]);
 
   return (
-    <WithAuth 
+    <WithAuth
       requiredRoles={[UserRole.ADMIN]}
       requiredPermissions={[Permission.MANAGE_USERS, Permission.MANAGE_ROLES]}
     >
@@ -40,15 +34,13 @@ export default function AdminUsersPage() {
           </div>
           <div>
             <h1 className="text-3xl font-bold tracking-tight">User Management</h1>
-            <p className="text-muted-foreground">
-              Manage user accounts and assign roles
-            </p>
+            <p className="text-muted-foreground">Manage user accounts and assign roles</p>
           </div>
         </div>
-        
+
         <div className="grid gap-8">
           <UserList />
-          
+
           <Card>
             <CardHeader>
               <CardTitle>Roles and Permissions</CardTitle>
@@ -78,11 +70,12 @@ export default function AdminUsersPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h3 className="font-semibold mb-2">Merchant</h3>
                   <p className="text-sm text-muted-foreground mb-2">
-                    Access to merchant features including store management and transaction processing
+                    Access to merchant features including store management and transaction
+                    processing
                   </p>
                   <div className="flex flex-wrap gap-2">
                     <div className="bg-slate-100 text-slate-800 px-2 py-1 rounded-md text-xs">
@@ -96,7 +89,7 @@ export default function AdminUsersPage() {
                     </div>
                   </div>
                 </div>
-                
+
                 <div>
                   <h3 className="font-semibold mb-2">User</h3>
                   <p className="text-sm text-muted-foreground mb-2">
@@ -118,4 +111,4 @@ export default function AdminUsersPage() {
       </div>
     </WithAuth>
   );
-} 
+}

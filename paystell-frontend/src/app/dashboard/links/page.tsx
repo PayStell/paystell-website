@@ -1,19 +1,16 @@
-"use client";
+'use client';
 
 export const dynamic = 'force-dynamic';
 
-import { useState, useEffect, useCallback } from "react";
-import {
-  PaymentLinkType,
-  PaymentLinksTable,
-} from "@/components/dashboard/links/PaymentLinksTable";
-import { Button } from "@/components/ui/button";
-import { NewLinkModal } from "@/components/dashboard/links/newLink/NewLinkModal";
-import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
-import { Toaster } from "@/components/ui/toaster";
-import { getPaymentLinks, type PaymentLink } from "@/services/paymentLink.service";
-import { useRouter } from "next/navigation";
-import { AxiosError } from "axios";
+import { useState, useEffect, useCallback } from 'react';
+import { PaymentLinkType, PaymentLinksTable } from '@/components/dashboard/links/PaymentLinksTable';
+import { Button } from '@/components/ui/button';
+import { NewLinkModal } from '@/components/dashboard/links/newLink/NewLinkModal';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import { Toaster } from '@/components/ui/toaster';
+import { getPaymentLinks, type PaymentLink } from '@/services/paymentLink.service';
+import { useRouter } from 'next/navigation';
+import { AxiosError } from 'axios';
 
 export default function PaymentLinkScreen(): JSX.Element {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -33,15 +30,17 @@ export default function PaymentLinkScreen(): JSX.Element {
 
       const response = await getPaymentLinks();
       console.log('Payment links response:', response); // Debug log
-      
+
       // Map the items from the paginated response
-      setPaymentLinksData(response.items.map((link: PaymentLink) => ({
-        id: link.id,
-        name: link.name,
-        sku: link.sku || '',
-        price: `${link.amount} ${link.currency}`,
-        state: link.status.charAt(0).toUpperCase() + link.status.slice(1), // Capitalize status
-      })));
+      setPaymentLinksData(
+        response.items.map((link: PaymentLink) => ({
+          id: link.id,
+          name: link.name,
+          sku: link.sku || '',
+          price: `${link.amount} ${link.currency}`,
+          state: link.status.charAt(0).toUpperCase() + link.status.slice(1), // Capitalize status
+        })),
+      );
     } catch (error) {
       console.error('Failed to fetch payment links:', error);
       if ((error as AxiosError)?.response?.status === 401) {
@@ -77,8 +76,8 @@ export default function PaymentLinkScreen(): JSX.Element {
           <LoadingSkeleton type="table" rows={5} />
         </div>
       ) : (
-        <PaymentLinksTable 
-          data={paymentLinksData} 
+        <PaymentLinksTable
+          data={paymentLinksData}
           onUpdate={handleUpdate}
           onDelete={handleDelete}
         />

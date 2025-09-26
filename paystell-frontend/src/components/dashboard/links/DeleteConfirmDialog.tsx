@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   AlertDialog,
@@ -7,8 +7,8 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
 
 interface DeleteConfirmDialogProps {
   isOpen: boolean;
@@ -29,13 +29,15 @@ export function DeleteConfirmDialog({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will deactivate the payment link &quot;{name}&quot;. The link will no longer be accessible to customers.
-            This action can be undone by contacting support.
+            This will deactivate the payment link &quot;{name}&quot;. The link will no longer be
+            accessible to customers. This action can be undone by contacting support.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button variant="outline" onClick={onClose}>Cancel</Button>
-          <Button 
+          <Button variant="outline" onClick={onClose}>
+            Cancel
+          </Button>
+          <Button
             onClick={() => {
               onConfirm();
               onClose();
@@ -48,4 +50,4 @@ export function DeleteConfirmDialog({
       </AlertDialogContent>
     </AlertDialog>
   );
-} 
+}

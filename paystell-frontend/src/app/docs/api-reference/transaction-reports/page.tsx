@@ -1,11 +1,11 @@
-"use client"
+'use client';
 import CodeExample from '@/components/CodeExample';
 
 export default function TransactionReportsPage() {
   return (
     <div className="prose prose-gray max-w-none">
       <h1 className="text-4xl font-bold text-white mb-8">Transaction Reports Endpoints</h1>
-      
+
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Generate Transaction Report</h2>
       <p className="text-gray-300 mb-4">
         Generates a filtered report of transactions with various export options.
@@ -67,4 +67,4 @@ Error Response (400 Bad Request):
       />
     </div>
   );
-} 
+}

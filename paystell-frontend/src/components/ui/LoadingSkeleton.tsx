@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 interface SkeletonProps {
-  type?: "card" | "table" | "chart";
+  type?: 'card' | 'table' | 'chart';
   rows?: number;
   height?: string;
   width?: number | string;
@@ -9,26 +9,23 @@ interface SkeletonProps {
 }
 
 const LoadingSkeleton: React.FC<SkeletonProps> = ({
-  type = "card",
+  type = 'card',
   rows = 3,
   height,
-  width = "100%",
+  width = '100%',
 }) => {
-  const baseStyle = "rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse";
+  const baseStyle = 'rounded-md bg-gray-200 dark:bg-gray-700 animate-pulse';
   switch (type) {
-    case "card":
+    case 'card':
       return (
-        <div
-          className={`${baseStyle} p-4`}
-          style={{ height: height || 150, width }}
-        >
+        <div className={`${baseStyle} p-4`} style={{ height: height || 150, width }}>
           <div className="h-4 w-3/5 rounded bg-gray-300 dark:bg-gray-600 mb-2"></div>
           <div className="h-6 w-4/5 rounded bg-gray-300 dark:bg-gray-600 mb-2"></div>
           <div className="h-4 w-2/5 rounded bg-gray-300 dark:bg-gray-600"></div>
         </div>
       );
 
-    case "table":
+    case 'table':
       return (
         <div
           className="gap-y-4 animate-pulse flex flex-col p-4 bg-gray-200 dark:bg-gray-700 rounded-md"
@@ -46,9 +43,12 @@ const LoadingSkeleton: React.FC<SkeletonProps> = ({
         </div>
       );
 
-    case "chart":
+    case 'chart':
       return (
-        <div className="flex items-end space-x-2 h-fit animate-pulse bg-gray-200 dark:bg-gray-700 rounded-md p-4 pt-6" style={{ width }}>
+        <div
+          className="flex items-end space-x-2 h-fit animate-pulse bg-gray-200 dark:bg-gray-700 rounded-md p-4 pt-6"
+          style={{ width }}
+        >
           {[...Array(9)].map((_, i) => (
             <div
               key={i}

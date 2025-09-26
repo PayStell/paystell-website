@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
-import { useAuth } from "@/providers/AuthProvider";
-import type { Permission, UserRole } from "@/lib/types/user";
+import { useRouter, usePathname } from 'next/navigation';
+import { useEffect } from 'react';
+import { useAuth } from '@/providers/AuthProvider';
+import type { Permission, UserRole } from '@/lib/types/user';
 
 interface WithAuthProps {
   requiredPermissions?: Permission[];
@@ -19,7 +19,7 @@ interface WithAuthProps {
 export default function WithAuth({
   requiredPermissions = [],
   requiredRoles = [],
-  redirectTo = "/login",
+  redirectTo = '/login',
   children,
 }: WithAuthProps) {
   const { user, isLoading, hasPermission } = useAuth();
@@ -33,26 +33,36 @@ export default function WithAuth({
     // Redirect if not authenticated
     if (!user) {
       // Store the attempted URL for redirecting after login
-      if (pathname !== "/login") {
-        sessionStorage.setItem("redirectAfterLogin", pathname);
+      if (pathname !== '/login') {
+        sessionStorage.setItem('redirectAfterLogin', pathname);
       }
       router.push(redirectTo);
       return;
     }
 
     // Check for required roles
-    const hasRequiredRole = requiredRoles.length === 0 || 
-      requiredRoles.includes(user.role as UserRole);
+    const hasRequiredRole =
+      requiredRoles.length === 0 || requiredRoles.includes(user.role as UserRole);
 
     // Check for required permissions
-    const hasRequiredPermissions = requiredPermissions.length === 0 || 
-      requiredPermissions.every(permission => hasPermission(permission));
+    const hasRequiredPermissions =
+      requiredPermissions.length === 0 ||
+      requiredPermissions.every((permission) => hasPermission(permission));
 
     // Redirect if missing required role or permissions
     if (!hasRequiredRole || !hasRequiredPermissions) {
-      router.push("/unauthorized");
+      router.push('/unauthorized');
     }
-  }, [user, isLoading, router, pathname, redirectTo, requiredRoles, requiredPermissions, hasPermission]);
+  }, [
+    user,
+    isLoading,
+    router,
+    pathname,
+    redirectTo,
+    requiredRoles,
+    requiredPermissions,
+    hasPermission,
+  ]);
 
   // Show nothing while checking auth
   if (isLoading) {
@@ -69,9 +79,11 @@ export default function WithAuth({
   }
 
   // Check role and permissions
-  const hasRequiredRole = requiredRoles.length === 0 || requiredRoles.includes(user.role as UserRole);
-  const hasRequiredPermissions = requiredPermissions.length === 0 || 
-    requiredPermissions.every(permission => hasPermission(permission));
+  const hasRequiredRole =
+    requiredRoles.length === 0 || requiredRoles.includes(user.role as UserRole);
+  const hasRequiredPermissions =
+    requiredPermissions.length === 0 ||
+    requiredPermissions.every((permission) => hasPermission(permission));
 
   // If missing permissions, render nothing (redirect will happen)
   if (!hasRequiredRole || !hasRequiredPermissions) {
@@ -80,4 +92,4 @@ export default function WithAuth({
 
   // If user has required permissions, render children
   return <>{children}</>;
-} 
+}

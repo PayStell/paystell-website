@@ -1,21 +1,21 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import WalletVerification from "@/components/wallet/walletconnect/WalletVerification"
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
-import { MdCheckCircle, MdCancel, MdAccountBalanceWallet, MdWarning } from "react-icons/md"
-import { useWallet } from "@/providers/useWalletProvider"
-import { formatAddress } from "@/lib/utils"
-import { toast } from "sonner"
+import { useState } from 'react';
+import WalletVerification from '@/components/wallet/walletconnect/WalletVerification';
+import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { MdCheckCircle, MdCancel, MdAccountBalanceWallet, MdWarning } from 'react-icons/md';
+import { useWallet } from '@/providers/useWalletProvider';
+import { formatAddress } from '@/lib/utils';
+import { toast } from 'sonner';
 
 interface WalletVerificationSectionProps {
-  isWalletVerified: boolean
-  isEmailVerified: boolean
-  userId: number
-  walletAddress?: string
-  onVerificationComplete?: (walletAddress: string) => void
-  onVerificationError?: (error: string) => void
+  isWalletVerified: boolean;
+  isEmailVerified: boolean;
+  userId: number;
+  walletAddress?: string;
+  onVerificationComplete?: (walletAddress: string) => void;
+  onVerificationError?: (error: string) => void;
 }
 
 const WalletVerificationSection = ({
@@ -25,26 +25,26 @@ const WalletVerificationSection = ({
   onVerificationComplete,
   onVerificationError,
 }: WalletVerificationSectionProps) => {
-  const { state } = useWallet()
-  const { publicKey, isConnected } = state
-  const [isVerificationOpen, setIsVerificationOpen] = useState(false)
-  const [isWalletVerified, setIsWalletVerified] = useState(initialWalletVerified)
+  const { state } = useWallet();
+  const { publicKey, isConnected } = state;
+  const [isVerificationOpen, setIsVerificationOpen] = useState(false);
+  const [isWalletVerified, setIsWalletVerified] = useState(initialWalletVerified);
 
   const handleVerificationComplete = (walletAddress: string) => {
-    setIsVerificationOpen(false)
-    setIsWalletVerified(true)
-    onVerificationComplete?.(walletAddress)
-    toast.success("Wallet Verified", {
-      description: "Your wallet has been successfully verified!",
-    })
-  }
+    setIsVerificationOpen(false);
+    setIsWalletVerified(true);
+    onVerificationComplete?.(walletAddress);
+    toast.success('Wallet Verified', {
+      description: 'Your wallet has been successfully verified!',
+    });
+  };
 
   const handleVerificationError = (error: string) => {
-    onVerificationError?.(error)
-    toast.error("Verification Failed", {
+    onVerificationError?.(error);
+    toast.error('Verification Failed', {
       description: error,
-    })
-  }
+    });
+  };
 
   return (
     <div className="bg-card rounded-lg w-full p-8 mt-8">
@@ -58,7 +58,9 @@ const WalletVerificationSection = ({
             <div>
               <p className="text-sm text-foreground font-medium">Wallet Connection</p>
               {isConnected && publicKey ? (
-                <p className="font-mono text-sm text-muted-foreground">{formatAddress(publicKey)}</p>
+                <p className="font-mono text-sm text-muted-foreground">
+                  {formatAddress(publicKey)}
+                </p>
               ) : (
                 <p className="text-sm text-muted-foreground">No wallet connected</p>
               )}
@@ -80,7 +82,7 @@ const WalletVerificationSection = ({
             <div>
               <p className="text-sm text-foreground font-medium">Wallet Verification</p>
               <p className="text-sm text-muted-foreground">
-                {isWalletVerified ? "Wallet ownership verified" : "Verify wallet ownership"}
+                {isWalletVerified ? 'Wallet ownership verified' : 'Verify wallet ownership'}
               </p>
             </div>
           </div>
@@ -91,7 +93,7 @@ const WalletVerificationSection = ({
               <Dialog open={isVerificationOpen} onOpenChange={setIsVerificationOpen}>
                 <DialogTrigger asChild>
                   <Button variant="secondary" size="sm">
-                    {isConnected ? "Verify Wallet" : "Connect & Verify"}
+                    {isConnected ? 'Verify Wallet' : 'Connect & Verify'}
                   </Button>
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-lg">
@@ -117,7 +119,7 @@ const WalletVerificationSection = ({
             <div>
               <p className="font-medium">Email Verification</p>
               <p className="text-sm text-muted-foreground">
-                {isEmailVerified ? "Email address verified" : "Email verification required"}
+                {isEmailVerified ? 'Email address verified' : 'Email verification required'}
               </p>
             </div>
           </div>
@@ -129,13 +131,15 @@ const WalletVerificationSection = ({
             <MdWarning className="w-5 h-5 mt-0.5 flex-shrink-0" />
             <div>
               <p className="font-medium text-sm">Verification Required</p>
-              <p className="text-sm mt-1">Complete wallet and email verification to access all features.</p>
+              <p className="text-sm mt-1">
+                Complete wallet and email verification to access all features.
+              </p>
             </div>
           </div>
         )}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default WalletVerificationSection
+export default WalletVerificationSection;

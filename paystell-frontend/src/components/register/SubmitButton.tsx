@@ -1,5 +1,5 @@
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Button } from '@/components/ui/button';
 
 export interface SubmitButtonProps {
   label: string;
@@ -20,6 +20,6 @@ const SubmitButton = React.forwardRef<HTMLButtonElement, SubmitButtonProps>(
   },
 );
 
-SubmitButton.displayName = "SubmitButton";
+SubmitButton.displayName = 'SubmitButton';
 
 export default SubmitButton;

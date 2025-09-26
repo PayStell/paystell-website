@@ -1,134 +1,133 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { InfoTooltip } from "../InfoToolTip"
-import { ArrowRight, CheckCircle, Loader2 } from "lucide-react"
-import { useProgress } from "@/hooks/use-progress"
-import { motion } from "framer-motion"
-import { toast } from "sonner"
-
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { InfoTooltip } from '../InfoToolTip';
+import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
+import { useProgress } from '@/hooks/use-progress';
+import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface BasicInfoStepProps {
   formData: {
-    businessName: string
-    fullName: string
-    email: string
-    phone: string
-  }
+    businessName: string;
+    fullName: string;
+    email: string;
+    phone: string;
+  };
   updateFormData: (
     data: Partial<{
-      businessName: string
-      fullName: string
-      email: string
-      phone: string
+      businessName: string;
+      fullName: string;
+      email: string;
+      phone: string;
     }>,
-  ) => void
+  ) => void;
 }
 
 export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) {
-  const { nextStep } = useProgress()
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { nextStep } = useProgress();
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Validation patterns
-  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-  const phonePattern = /^\+?[0-9\s$$$$-]{10,20}$/
+  const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+  const phonePattern = /^\+?[0-9\s$$$$-]{10,20}$/;
 
   const validate = (field?: string) => {
-    const newErrors: Record<string, string> = { ...errors }
+    const newErrors: Record<string, string> = { ...errors };
 
-    if (!field || field === "businessName") {
+    if (!field || field === 'businessName') {
       if (!formData.businessName.trim()) {
-        newErrors.businessName = "Business name is required"
+        newErrors.businessName = 'Business name is required';
       } else if (formData.businessName.length < 2) {
-        newErrors.businessName = "Business name must be at least 2 characters"
+        newErrors.businessName = 'Business name must be at least 2 characters';
       } else {
-        delete newErrors.businessName
+        delete newErrors.businessName;
       }
     }
 
-    if (!field || field === "fullName") {
+    if (!field || field === 'fullName') {
       if (!formData.fullName.trim()) {
-        newErrors.fullName = "Full name is required"
+        newErrors.fullName = 'Full name is required';
       } else if (formData.fullName.length < 3) {
-        newErrors.fullName = "Full name must be at least 3 characters"
+        newErrors.fullName = 'Full name must be at least 3 characters';
       } else {
-        delete newErrors.fullName
+        delete newErrors.fullName;
       }
     }
 
-    if (!field || field === "email") {
+    if (!field || field === 'email') {
       if (!formData.email.trim()) {
-        newErrors.email = "Email is required"
+        newErrors.email = 'Email is required';
       } else if (!emailPattern.test(formData.email)) {
-        newErrors.email = "Please enter a valid email address"
+        newErrors.email = 'Please enter a valid email address';
       } else {
-        delete newErrors.email
+        delete newErrors.email;
       }
     }
 
-    if (!field || field === "phone") {
+    if (!field || field === 'phone') {
       if (!formData.phone.trim()) {
-        newErrors.phone = "Phone number is required"
+        newErrors.phone = 'Phone number is required';
       } else if (!phonePattern.test(formData.phone)) {
-        newErrors.phone = "Please enter a valid phone number"
+        newErrors.phone = 'Please enter a valid phone number';
       } else {
-        delete newErrors.phone
+        delete newErrors.phone;
       }
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleBlur = (field: string) => {
-    setTouched({ ...touched, [field]: true })
-    validate(field)
-  }
+    setTouched({ ...touched, [field]: true });
+    validate(field);
+  };
 
   const handleChange = (field: string, value: string) => {
-    updateFormData({ [field as keyof typeof formData]: value })
+    updateFormData({ [field as keyof typeof formData]: value });
     if (touched[field]) {
-      validate(field)
+      validate(field);
     }
-  }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     setTouched({
       businessName: true,
       fullName: true,
       email: true,
       phone: true,
-    })
+    });
 
     if (validate()) {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
 
       // Simulate API call
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        toast.success("Information saved", {
-          description:"Your basic information has been saved successfully."
-        })
-        nextStep()
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        toast.success('Information saved', {
+          description: 'Your basic information has been saved successfully.',
+        });
+        nextStep();
       } catch (error) {
         toast.error(`Error: ${error}`, {
-          description:"There was a problem saving your information. Please try again."
-        })
+          description: 'There was a problem saving your information. Please try again.',
+        });
       } finally {
-        setIsSubmitting(false)
+        setIsSubmitting(false);
       }
     } else {
-      toast.error("Error", {description:"Please correct the errors in the form."})
+      toast.error('Error', { description: 'Please correct the errors in the form.' });
     }
-  }
+  };
 
   // Animation variants
   const formVariants = {
@@ -139,7 +138,7 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -150,13 +149,15 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
         duration: 0.3,
       },
     },
-  }
+  };
 
   return (
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold">Basic Information</h2>
-        <p className="text-muted-foreground">Let&apos;s start with some basic information about you and your business.</p>
+        <p className="text-muted-foreground">
+          Let&apos;s start with some basic information about you and your business.
+        </p>
       </div>
 
       <motion.form
@@ -175,10 +176,10 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
             <Input
               id="businessName"
               value={formData.businessName}
-              onChange={(e) => handleChange("businessName", e.target.value)}
-              onBlur={() => handleBlur("businessName")}
+              onChange={(e) => handleChange('businessName', e.target.value)}
+              onBlur={() => handleBlur('businessName')}
               placeholder="Acme Inc."
-              className={`transition-all ${errors.businessName && touched.businessName ? "border-destructive pr-10" : formData.businessName && !errors.businessName ? "border-green-500 pr-10" : ""}`}
+              className={`transition-all ${errors.businessName && touched.businessName ? 'border-destructive pr-10' : formData.businessName && !errors.businessName ? 'border-green-500 pr-10' : ''}`}
             />
             {formData.businessName && !errors.businessName && (
               <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
@@ -205,10 +206,10 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
             <Input
               id="fullName"
               value={formData.fullName}
-              onChange={(e) => handleChange("fullName", e.target.value)}
-              onBlur={() => handleBlur("fullName")}
+              onChange={(e) => handleChange('fullName', e.target.value)}
+              onBlur={() => handleBlur('fullName')}
               placeholder="John Doe"
-              className={`transition-all ${errors.fullName && touched.fullName ? "border-destructive pr-10" : formData.fullName && !errors.fullName ? "border-green-500 pr-10" : ""}`}
+              className={`transition-all ${errors.fullName && touched.fullName ? 'border-destructive pr-10' : formData.fullName && !errors.fullName ? 'border-green-500 pr-10' : ''}`}
             />
             {formData.fullName && !errors.fullName && (
               <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
@@ -236,10 +237,10 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
               id="email"
               type="email"
               value={formData.email}
-              onChange={(e) => handleChange("email", e.target.value)}
-              onBlur={() => handleBlur("email")}
+              onChange={(e) => handleChange('email', e.target.value)}
+              onBlur={() => handleBlur('email')}
               placeholder="john@acmeinc.com"
-              className={`transition-all ${errors.email && touched.email ? "border-destructive pr-10" : formData.email && !errors.email ? "border-green-500 pr-10" : ""}`}
+              className={`transition-all ${errors.email && touched.email ? 'border-destructive pr-10' : formData.email && !errors.email ? 'border-green-500 pr-10' : ''}`}
             />
             {formData.email && !errors.email && (
               <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
@@ -267,10 +268,10 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
               id="phone"
               type="tel"
               value={formData.phone}
-              onChange={(e) => handleChange("phone", e.target.value)}
-              onBlur={() => handleBlur("phone")}
+              onChange={(e) => handleChange('phone', e.target.value)}
+              onBlur={() => handleBlur('phone')}
               placeholder="+1 (555) 123-4567"
-              className={`transition-all ${errors.phone && touched.phone ? "border-destructive pr-10" : formData.phone && !errors.phone ? "border-green-500 pr-10" : ""}`}
+              className={`transition-all ${errors.phone && touched.phone ? 'border-destructive pr-10' : formData.phone && !errors.phone ? 'border-green-500 pr-10' : ''}`}
             />
             {formData.phone && !errors.phone && (
               <CheckCircle className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-green-500" />
@@ -305,6 +306,5 @@ export function BasicInfoStep({ formData, updateFormData }: BasicInfoStepProps) 
         </motion.div>
       </motion.form>
     </div>
-  )
+  );
 }
-

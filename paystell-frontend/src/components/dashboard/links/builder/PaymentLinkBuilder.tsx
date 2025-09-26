@@ -1,32 +1,28 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { RotateCcw } from "lucide-react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
-import ProductTab from "./ProductTab";
-import BrandingTab from "./BrandingTab";
-import Preview from "./Preview";
-import {
-  type PaymentLinkFormValues,
-  defaultValues,
-  paymentLinkSchema,
-} from "./schema/schema";
-import useIsMobile from "@/hooks/mobile.hook";
+import { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { RotateCcw } from 'lucide-react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form } from '@/components/ui/form';
+import ProductTab from './ProductTab';
+import BrandingTab from './BrandingTab';
+import Preview from './Preview';
+import { type PaymentLinkFormValues, defaultValues, paymentLinkSchema } from './schema/schema';
+import useIsMobile from '@/hooks/mobile.hook';
 
 export default function PaymentLinkBuilder() {
-  const [activeTab, setActiveTab] = useState("product");
+  const [activeTab, setActiveTab] = useState('product');
   const isMobile = useIsMobile();
 
   const form = useForm<PaymentLinkFormValues>({
     resolver: zodResolver(paymentLinkSchema),
     defaultValues,
-    mode: "onChange",
+    mode: 'onChange',
   });
 
   const {
@@ -45,7 +41,7 @@ export default function PaymentLinkBuilder() {
   };
 
   const onSubmit = (data: PaymentLinkFormValues) => {
-    console.log("Form submitted successfully:", data);
+    console.log('Form submitted successfully:', data);
   };
 
   return (
@@ -71,12 +67,7 @@ export default function PaymentLinkBuilder() {
               <Separator className="mt-6" />
               <CardContent className="pt-6">
                 <TabsContent value="product">
-                  <ProductTab
-                    control={control}
-                    errors={errors}
-                    setValue={setValue}
-                    watch={watch}
-                  />
+                  <ProductTab control={control} errors={errors} setValue={setValue} watch={watch} />
                 </TabsContent>
                 <TabsContent value="branding">
                   <BrandingTab
@@ -88,9 +79,7 @@ export default function PaymentLinkBuilder() {
                 </TabsContent>
 
                 <div className="mt-6 flex justify-end">
-                  <Button onClick={handleSubmit(onSubmit)}>
-                    Guardar Enlace de Pago
-                  </Button>
+                  <Button onClick={handleSubmit(onSubmit)}>Guardar Enlace de Pago</Button>
                 </div>
               </CardContent>
             </Tabs>

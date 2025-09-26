@@ -1,154 +1,160 @@
-"use client"
+'use client';
 
-import type React from "react"
+import type React from 'react';
 
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { InfoTooltip } from "../InfoToolTip"
-import { ArrowRight, CheckCircle, Loader2 } from "lucide-react"
-import { Textarea } from "@/components/ui/textarea"
-import { useProgress } from "@/hooks/use-progress"
-import { motion } from "framer-motion"
-import { toast } from "sonner"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { InfoTooltip } from '../InfoToolTip';
+import { ArrowRight, CheckCircle, Loader2 } from 'lucide-react';
+import { Textarea } from '@/components/ui/textarea';
+import { useProgress } from '@/hooks/use-progress';
+import { motion } from 'framer-motion';
+import { toast } from 'sonner';
 
 interface BusinessDetailsStepProps {
   formData: {
-    businessType: string
-    businessCategory: string
-    country: string
-    address: string
-    taxId: string
-  }
+    businessType: string;
+    businessCategory: string;
+    country: string;
+    address: string;
+    taxId: string;
+  };
   updateFormData: (
     data: Partial<{
-      businessType: string
-      businessCategory: string
-      country: string
-      address: string
-      taxId: string
+      businessType: string;
+      businessCategory: string;
+      country: string;
+      address: string;
+      taxId: string;
     }>,
-  ) => void
+  ) => void;
 }
 
 export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetailsStepProps) {
-  const { nextStep } = useProgress()
-  const [errors, setErrors] = useState<Record<string, string>>({})
-  const [touched, setTouched] = useState<Record<string, boolean>>({})
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { nextStep } = useProgress();
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const businessTypes = [
-    "Sole Proprietorship",
-    "Partnership",
-    "Limited Liability Company (LLC)",
-    "Corporation",
-    "Non-profit Organization",
-  ]
+    'Sole Proprietorship',
+    'Partnership',
+    'Limited Liability Company (LLC)',
+    'Corporation',
+    'Non-profit Organization',
+  ];
 
   const businessCategories = [
-    "Retail",
-    "E-commerce",
-    "Food & Beverage",
-    "Technology",
-    "Healthcare",
-    "Education",
-    "Financial Services",
-    "Other",
-  ]
+    'Retail',
+    'E-commerce',
+    'Food & Beverage',
+    'Technology',
+    'Healthcare',
+    'Education',
+    'Financial Services',
+    'Other',
+  ];
 
   const countries = [
-    "United States",
-    "Canada",
-    "United Kingdom",
-    "Australia",
-    "Germany",
-    "France",
-    "Japan",
-    "Singapore",
-    "Other",
-  ]
+    'United States',
+    'Canada',
+    'United Kingdom',
+    'Australia',
+    'Germany',
+    'France',
+    'Japan',
+    'Singapore',
+    'Other',
+  ];
 
   const validate = (field?: string) => {
-    const newErrors: Record<string, string> = { ...errors }
+    const newErrors: Record<string, string> = { ...errors };
 
-    if (!field || field === "businessType") {
+    if (!field || field === 'businessType') {
       if (!formData.businessType) {
-        newErrors.businessType = "Business type is required"
+        newErrors.businessType = 'Business type is required';
       } else {
-        delete newErrors.businessType
+        delete newErrors.businessType;
       }
     }
 
-    if (!field || field === "businessCategory") {
+    if (!field || field === 'businessCategory') {
       if (!formData.businessCategory) {
-        newErrors.businessCategory = "Business category is required"
+        newErrors.businessCategory = 'Business category is required';
       } else {
-        delete newErrors.businessCategory
+        delete newErrors.businessCategory;
       }
     }
 
-    if (!field || field === "country") {
+    if (!field || field === 'country') {
       if (!formData.country) {
-        newErrors.country = "Country is required"
+        newErrors.country = 'Country is required';
       } else {
-        delete newErrors.country
+        delete newErrors.country;
       }
     }
 
-    if (!field || field === "address") {
+    if (!field || field === 'address') {
       if (!formData.address.trim()) {
-        newErrors.address = "Business address is required"
+        newErrors.address = 'Business address is required';
       } else if (formData.address.length < 10) {
-        newErrors.address = "Please enter a complete address"
+        newErrors.address = 'Please enter a complete address';
       } else {
-        delete newErrors.address
+        delete newErrors.address;
       }
     }
 
-    setErrors(newErrors)
-    return Object.keys(newErrors).length === 0
-  }
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleBlur = (field: string) => {
-    setTouched({ ...touched, [field]: true })
-    validate(field)
-  }
+    setTouched({ ...touched, [field]: true });
+    validate(field);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     setTouched({
       businessType: true,
       businessCategory: true,
       country: true,
       address: true,
       taxId: true,
-    })
+    });
 
     if (validate()) {
-      setIsSubmitting(true)
+      setIsSubmitting(true);
 
       // Simulate API call
       try {
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        toast.success("Business details saved", {
-          description:"Your business details have been saved successfully."
-        })
-        nextStep()
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        toast.success('Business details saved', {
+          description: 'Your business details have been saved successfully.',
+        });
+        nextStep();
       } catch (error) {
         toast.error(`Error: ${error}`, {
-          description:"There was a problem saving your business details. Please try again."
-        })
+          description: 'There was a problem saving your business details. Please try again.',
+        });
       } finally {
-        setIsSubmitting(false)
+        setIsSubmitting(false);
       }
     } else {
-      toast.error("Validation Error", {
-        description:"Please correct the errors in the form."
-      })
+      toast.error('Validation Error', {
+        description: 'Please correct the errors in the form.',
+      });
     }
-  }
+  };
 
   // Animation variants
   const formVariants = {
@@ -159,7 +165,7 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -170,7 +176,7 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
         duration: 0.3,
       },
     },
-  }
+  };
 
   return (
     <div className="space-y-6">
@@ -196,19 +202,21 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
           <Select
             value={formData.businessType}
             onValueChange={(value) => {
-              updateFormData({ businessType: value })
-              if (touched.businessType) validate("businessType")
+              updateFormData({ businessType: value });
+              if (touched.businessType) validate('businessType');
             }}
-            onOpenChange={() => !touched.businessType && setTouched({ ...touched, businessType: true })}
+            onOpenChange={() =>
+              !touched.businessType && setTouched({ ...touched, businessType: true })
+            }
           >
             <SelectTrigger
               id="businessType"
               className={
                 errors.businessType && touched.businessType
-                  ? "border-destructive"
+                  ? 'border-destructive'
                   : formData.businessType
-                    ? "border-green-500"
-                    : ""
+                    ? 'border-green-500'
+                    : ''
               }
             >
               <SelectValue placeholder="Select business type" />
@@ -241,19 +249,21 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
           <Select
             value={formData.businessCategory}
             onValueChange={(value) => {
-              updateFormData({ businessCategory: value })
-              if (touched.businessCategory) validate("businessCategory")
+              updateFormData({ businessCategory: value });
+              if (touched.businessCategory) validate('businessCategory');
             }}
-            onOpenChange={() => !touched.businessCategory && setTouched({ ...touched, businessCategory: true })}
+            onOpenChange={() =>
+              !touched.businessCategory && setTouched({ ...touched, businessCategory: true })
+            }
           >
             <SelectTrigger
               id="businessCategory"
               className={
                 errors.businessCategory && touched.businessCategory
-                  ? "border-destructive"
+                  ? 'border-destructive'
                   : formData.businessCategory
-                    ? "border-green-500"
-                    : ""
+                    ? 'border-green-500'
+                    : ''
               }
             >
               <SelectValue placeholder="Select business category" />
@@ -286,15 +296,19 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
           <Select
             value={formData.country}
             onValueChange={(value) => {
-              updateFormData({ country: value })
-              if (touched.country) validate("country")
+              updateFormData({ country: value });
+              if (touched.country) validate('country');
             }}
             onOpenChange={() => !touched.country && setTouched({ ...touched, country: true })}
           >
             <SelectTrigger
               id="country"
               className={
-                errors.country && touched.country ? "border-destructive" : formData.country ? "border-green-500" : ""
+                errors.country && touched.country
+                  ? 'border-destructive'
+                  : formData.country
+                    ? 'border-green-500'
+                    : ''
               }
             >
               <SelectValue placeholder="Select country" />
@@ -329,12 +343,12 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
               id="address"
               value={formData.address}
               onChange={(e) => {
-                updateFormData({ address: e.target.value })
-                if (touched.address) validate("address")
+                updateFormData({ address: e.target.value });
+                if (touched.address) validate('address');
               }}
-              onBlur={() => handleBlur("address")}
+              onBlur={() => handleBlur('address')}
               placeholder="123 Business St, City, State, ZIP"
-              className={`transition-all ${errors.address && touched.address ? "border-destructive" : formData.address && !errors.address ? "border-green-500" : ""}`}
+              className={`transition-all ${errors.address && touched.address ? 'border-destructive' : formData.address && !errors.address ? 'border-green-500' : ''}`}
               rows={3}
             />
             {formData.address && !errors.address && (
@@ -388,6 +402,5 @@ export function BusinessDetailsStep({ formData, updateFormData }: BusinessDetail
         </motion.div>
       </motion.form>
     </div>
-  )
+  );
 }
-

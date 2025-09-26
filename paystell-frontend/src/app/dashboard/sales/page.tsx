@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-export const dynamic = "force-dynamic";
+export const dynamic = 'force-dynamic';
 
-import Header from "@/components/dashboard/sales/Header";
-import Cards from "@/components/dashboard/sales/Cards";
-import SalesHistory from "@/components/dashboard/sales/SalesHistory";
-import { useEffect, useState } from "react";
+import Header from '@/components/dashboard/sales/Header';
+import Cards from '@/components/dashboard/sales/Cards';
+import SalesHistory from '@/components/dashboard/sales/SalesHistory';
+import { useEffect, useState } from 'react';
 
 const SalesPage = () => {
   const [error, setError] = useState<string | null>(null);
@@ -18,7 +18,7 @@ const SalesPage = () => {
           setError(null);
         }, 2000);
       } catch (err) {
-        setError("Failed to load sales data. Please try again.");
+        setError('Failed to load sales data. Please try again.');
         console.log(err);
       }
     };

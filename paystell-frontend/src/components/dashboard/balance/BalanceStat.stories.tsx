@@ -1,13 +1,13 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import Balance from ".";
+import type { Meta, StoryObj } from '@storybook/react';
+import Balance from '.';
 
 const meta: Meta<typeof Balance> = {
-  title: "Dashboard/Dashboard/Balance",
+  title: 'Dashboard/Dashboard/Balance',
   component: Balance,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
-    balance: { control: "number" },
-    lastBalance: { control: "number" },
+    balance: { control: 'number' },
+    lastBalance: { control: 'number' },
   },
 };
 

@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { toast } from 'sonner';
@@ -17,7 +17,11 @@ import WebhookForm from '@/components/webhooks/WebhookForm';
 import WebhookDeliveryEvents from '@/components/webhooks/WebhookDeliveryEvents';
 import WebhookMetrics from '@/components/webhooks/WebhookMetrics';
 import WebhookSecurity from '@/components/webhooks/WebhookSecurity';
-import { WebhookConfig, WebhookDeliveryEvent, WebhookMetrics as WebhookMetricsType } from '@/types/webhook-types';
+import {
+  WebhookConfig,
+  WebhookDeliveryEvent,
+  WebhookMetrics as WebhookMetricsType,
+} from '@/types/webhook-types';
 import { fetchWebhooks, fetchWebhookEvents, fetchWebhookMetrics } from '@/services/webhook.service';
 
 const WebhooksPage: React.FC = () => {
@@ -84,7 +88,7 @@ const WebhooksPage: React.FC = () => {
 
   const handleEventsRefresh = async () => {
     if (!selectedWebhook) return;
-    
+
     try {
       setIsLoading(true);
       const events = await fetchWebhookEvents(selectedWebhook.id);
@@ -106,15 +110,10 @@ const WebhooksPage: React.FC = () => {
       <div className="flex justify-between items-center">
         <h1 className="text-3xl font-bold">Webhook Management</h1>
         <div className="flex space-x-2">
-          <Button 
-            variant="outline" 
-            onClick={handleOpenSecurity}
-          >
+          <Button variant="outline" onClick={handleOpenSecurity}>
             Security Guide
           </Button>
-          <Button onClick={handleCreateWebhook}>
-            Create Webhook
-          </Button>
+          <Button onClick={handleCreateWebhook}>Create Webhook</Button>
         </div>
       </div>
 
@@ -142,10 +141,19 @@ const WebhooksPage: React.FC = () => {
 
         <TabsContent value="metrics" className="mt-6">
           <WebhookMetrics
-            metrics={metrics || {
-              overall: { active: 0, completed: 0, failed: 0, delayed: 0, waiting: 0, successRate: 0 },
-              merchant: { completed: 0, failed: 0, pending: 0, successRate: 0 }
-            }}
+            metrics={
+              metrics || {
+                overall: {
+                  active: 0,
+                  completed: 0,
+                  failed: 0,
+                  delayed: 0,
+                  waiting: 0,
+                  successRate: 0,
+                },
+                merchant: { completed: 0, failed: 0, pending: 0, successRate: 0 },
+              }
+            }
             isLoading={isLoading}
           />
         </TabsContent>
@@ -162,10 +170,7 @@ const WebhooksPage: React.FC = () => {
                 : 'Create a new webhook to receive event notifications'}
             </DialogDescription>
           </DialogHeader>
-          <WebhookForm 
-            webhook={selectedWebhook || undefined} 
-            onSuccess={handleFormSuccess} 
-          />
+          <WebhookForm webhook={selectedWebhook || undefined} onSuccess={handleFormSuccess} />
         </DialogContent>
       </Dialog>
 
@@ -175,13 +180,11 @@ const WebhooksPage: React.FC = () => {
           <DialogHeader>
             <DialogTitle>Webhook Delivery Events</DialogTitle>
             <DialogDescription>
-              {selectedWebhook && (
-                <span>Viewing events for webhook: {selectedWebhook.url}</span>
-              )}
+              {selectedWebhook && <span>Viewing events for webhook: {selectedWebhook.url}</span>}
             </DialogDescription>
           </DialogHeader>
-          {selectedWebhook && (
-            isLoading ? (
+          {selectedWebhook &&
+            (isLoading ? (
               <div className="flex items-center justify-center p-8">
                 <Loader2 className="h-6 w-6 animate-spin text-primary" />
                 <span className="ml-2">Loading webhook events...</span>
@@ -192,8 +195,7 @@ const WebhooksPage: React.FC = () => {
                 deliveryEvents={deliveryEvents}
                 onRefresh={handleEventsRefresh}
               />
-            )
-          )}
+            ))}
         </DialogContent>
       </Dialog>
 
@@ -213,4 +215,4 @@ const WebhooksPage: React.FC = () => {
   );
 };
 
-export default WebhooksPage; 
+export default WebhooksPage;

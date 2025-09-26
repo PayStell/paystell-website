@@ -21,7 +21,8 @@ const meta: Meta<typeof CompleteStep> = {
     layout: 'centered',
     docs: {
       description: {
-        component: 'A success screen displayed after completing the onboarding process. Shows a summary of the account details and next steps.',
+        component:
+          'A success screen displayed after completing the onboarding process. Shows a summary of the account details and next steps.',
       },
     },
   },
@@ -71,10 +72,28 @@ export const MinimalData: Story = {
 export const LongValues: Story = {
   args: {
     formData: {
-      businessName: 'Super Extraordinarily Long Business Name That Might Cause Layout Issues If Not Properly Handled',
-      businessType: 'Non-profit Organization with Additional Descriptive Text That Is Unnecessarily Long',
-      stellarAddress: 'GACEHZFGDTCPOFVWVPXKFNWBCFCVVQZQRWEPGXQSJM2NCGDXVOW47SENGACEHZFGDTCPOFVWVPXKFNWBCFCVVQZQRWEPGXQSJM2NCGDXVOW47SEN',
-      acceptedAssets: ['XLM', 'USDC', 'BTC', 'ETH', 'EUR', 'GBP', 'JPY', 'AUD', 'CAD', 'CHF', 'CNY', 'HKD', 'NZD', 'SGD'],
+      businessName:
+        'Super Extraordinarily Long Business Name That Might Cause Layout Issues If Not Properly Handled',
+      businessType:
+        'Non-profit Organization with Additional Descriptive Text That Is Unnecessarily Long',
+      stellarAddress:
+        'GACEHZFGDTCPOFVWVPXKFNWBCFCVVQZQRWEPGXQSJM2NCGDXVOW47SENGACEHZFGDTCPOFVWVPXKFNWBCFCVVQZQRWEPGXQSJM2NCGDXVOW47SEN',
+      acceptedAssets: [
+        'XLM',
+        'USDC',
+        'BTC',
+        'ETH',
+        'EUR',
+        'GBP',
+        'JPY',
+        'AUD',
+        'CAD',
+        'CHF',
+        'CNY',
+        'HKD',
+        'NZD',
+        'SGD',
+      ],
     },
   },
 };
@@ -102,12 +121,12 @@ export const ButtonInteraction: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
-    await new Promise(resolve => setTimeout(resolve, 1000));
-        const dashboardButton = canvas.getByText('Go to Dashboard');
+
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    const dashboardButton = canvas.getByText('Go to Dashboard');
     await userEvent.hover(dashboardButton);
-        await new Promise(resolve => setTimeout(resolve, 500));
-        await userEvent.click(dashboardButton);
+    await new Promise((resolve) => setTimeout(resolve, 500));
+    await userEvent.click(dashboardButton);
   },
 };
 
@@ -158,17 +177,17 @@ export const AnimationSequence: Story = {
     },
   },
   parameters: {
-    chromatic: { delay: 1000 }, 
+    chromatic: { delay: 1000 },
   },
   decorators: [
     (Story) => {
       const [key, setKey] = React.useState(0);
-      
+
       React.useEffect(() => {
-        const timer = setTimeout(() => setKey(prev => prev + 1), 5000);
+        const timer = setTimeout(() => setKey((prev) => prev + 1), 5000);
         return () => clearTimeout(timer);
       }, [key]);
-      
+
       return (
         <div className="max-w-2xl p-6 border rounded-lg shadow-sm bg-background" key={key}>
           <Story />

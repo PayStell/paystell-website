@@ -14,7 +14,7 @@ body {
 
 @layer base {
   :root {
-    --background: 210,8.33%,95.29%;
+    --background: 210, 8.33%, 95.29%;
     --foreground: 233.79 25.22% 22.55%;
     --card: 0 0 100%;
     --card-foreground: 220 22% 37%;
@@ -47,7 +47,7 @@ body {
   }
   .dark {
     --background: 224 28.3% 10.39%;
-    --foreground: 210,8.33%,95.29%;
+    --foreground: 210, 8.33%, 95.29%;
     --card: 222.86 28% 14.71%;
     --card-foreground: 240 8% 71%;
     --popover: var(--card);

@@ -1,10 +1,5 @@
 import React from 'react';
-import { 
-  ArrowUpRight,
-  QrCode,
-  TrendingUp,
-  Settings 
-} from 'lucide-react';
+import { ArrowUpRight, QrCode, TrendingUp, Settings } from 'lucide-react';
 
 interface QuickActionsProps {
   onNavigate: (page: string) => void;
@@ -22,7 +17,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onNavigate }) => (
           <ArrowUpRight className="w-6 h-6 text-blue-500" />
           <span className="text-sm font-medium">Send Payment</span>
         </button>
-        
+
         <button
           className="h-20 flex flex-col items-center justify-center space-y-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           onClick={() => onNavigate('receive')}
@@ -30,7 +25,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onNavigate }) => (
           <QrCode className="w-6 h-6 text-green-500" />
           <span className="text-sm font-medium">Receive Payment</span>
         </button>
-        
+
         <button
           className="h-20 flex flex-col items-center justify-center space-y-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           onClick={() => onNavigate('exchange')}
@@ -38,7 +33,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({ onNavigate }) => (
           <TrendingUp className="w-6 h-6 text-purple-500" />
           <span className="text-sm font-medium">Exchange</span>
         </button>
-        
+
         <button
           className="h-20 flex flex-col items-center justify-center space-y-2 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
           onClick={() => onNavigate('settings')}

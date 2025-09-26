@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { 
-  enableTwoFactorAuth, 
+import {
+  enableTwoFactorAuth,
   verifyTwoFactorSetup,
-  resendTwoFactorCode 
+  resendTwoFactorCode,
 } from '@/services/twoFactorAuthService';
 import { TwoFactorSetup } from './TwoFactorSetup';
 import { withAuth } from '@/components/Auth/withAuth';
@@ -26,9 +26,9 @@ function TwoFactorAuthPage() {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const { qrCode, secret } = await enableTwoFactorAuth();
-      
+
       setQrCodeUrl(qrCode);
       setSecret(secret);
     } catch (err) {
@@ -49,12 +49,12 @@ function TwoFactorAuthPage() {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       // Use the new verifyTwoFactorSetup function with both token and secret
       await verifyTwoFactorSetup(code, secret);
-      
+
       setSuccess('Two-factor authentication successfully enabled!');
-      
+
       setTimeout(() => {
         router.push('/dashboard');
       }, 1500);
@@ -71,14 +71,14 @@ function TwoFactorAuthPage() {
     try {
       setIsLoading(true);
       setError(null);
-      
+
       const { qrCode, secret } = await resendTwoFactorCode();
-      
+
       setQrCodeUrl(qrCode);
       setSecret(secret);
-      
+
       setSuccess('QR code regenerated successfully');
-      
+
       setTimeout(() => {
         setSuccess(null);
       }, 3000);

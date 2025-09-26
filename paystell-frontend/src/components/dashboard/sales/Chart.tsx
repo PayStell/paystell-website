@@ -1,14 +1,30 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Bar, BarChart, CartesianGrid, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer, TooltipProps } from "recharts";
-import { salesService } from "@/services/sales";
-import { formatPrice } from "@/lib/utils";
-import LoadingSkeleton from "@/components/ui/LoadingSkeleton";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle } from "lucide-react";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+  TooltipProps,
+} from 'recharts';
+import { salesService } from '@/services/sales';
+import { formatPrice } from '@/lib/utils';
+import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { AlertCircle } from 'lucide-react';
 
 type TimeFilter = 'daily' | 'weekly' | 'monthly';
 
@@ -88,8 +104,8 @@ const Chart = () => {
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle>Sales Overview</CardTitle>
         <div className="flex items-center space-x-2">
-          <Select 
-            value={timeFilter} 
+          <Select
+            value={timeFilter}
             onValueChange={(value) => setTimeFilter(value as TimeFilter)}
             disabled={loading}
           >

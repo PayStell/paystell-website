@@ -111,7 +111,7 @@ export const Loading: Story = {
         method: 'POST',
         status: 200,
         response: { success: true },
-        delay: 3000, 
+        delay: 3000,
       },
     ],
   },
@@ -143,7 +143,13 @@ export const DifferentBusinessTypes: Story = {
   },
   render: (args) => (
     <div className="space-y-8">
-      {['Sole Proprietorship', 'Partnership', 'Limited Liability Company (LLC)', 'Corporation', 'Non-profit Organization'].map((type) => (
+      {[
+        'Sole Proprietorship',
+        'Partnership',
+        'Limited Liability Company (LLC)',
+        'Corporation',
+        'Non-profit Organization',
+      ].map((type) => (
         <div key={type} className="border-b pb-8 last:border-0">
           <h3 className="text-lg font-medium mb-4">{type}</h3>
           <BusinessDetailsStep

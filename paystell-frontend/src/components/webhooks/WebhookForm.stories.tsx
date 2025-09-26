@@ -36,15 +36,12 @@ export const Edit: Story = {
       url: 'https://example.com/webhook',
       isActive: true,
       secretKey: 'whsec_1234567890••••••••••••••••••••••••••',
-      eventTypes: [
-        WebhookEventType.PAYMENT_SUCCEEDED,
-        WebhookEventType.PAYMENT_FAILED
-      ],
+      eventTypes: [WebhookEventType.PAYMENT_SUCCEEDED, WebhookEventType.PAYMENT_FAILED],
       maxRetries: 5,
       initialRetryDelay: 10000,
       maxRetryDelay: 300000,
       createdAt: new Date('2023-01-01T00:00:00Z'),
-      updatedAt: new Date('2023-01-02T00:00:00Z')
+      updatedAt: new Date('2023-01-02T00:00:00Z'),
     },
     onSuccess,
   },
@@ -57,7 +54,7 @@ export const WithValidationErrors: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    
+
     // Fill in invalid URL
     const urlInput = canvas.getByPlaceholderText('https://example.com/webhook');
     await userEvent.type(urlInput, 'http://invalid-url');
@@ -66,4 +63,4 @@ export const WithValidationErrors: Story = {
     const submitButton = canvas.getByText('Create Webhook');
     await userEvent.click(submitButton);
   },
-}; 
+};

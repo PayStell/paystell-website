@@ -1,5 +1,5 @@
-import TransactionsPage from "@/components/transaction";
-import React from "react";
+import TransactionsPage from '@/components/transaction';
+import React from 'react';
 
 const page = () => {
   return (

@@ -19,7 +19,8 @@ const meta: Meta<typeof TwoFactorSetup> = {
 export default meta;
 type Story = StoryObj<typeof TwoFactorSetup>;
 
-const mockQrCodeUrl = 'otpauth://totp/Paystell:user@example.com?secret=EXAMPLEKEYFORDEMOPURPOSES&issuer=Paystell';
+const mockQrCodeUrl =
+  'otpauth://totp/Paystell:user@example.com?secret=EXAMPLEKEYFORDEMOPURPOSES&issuer=Paystell';
 const mockSecret = 'EXAMPLEKEYFORDEMOPURPOSES';
 
 // Setup state
@@ -96,4 +97,4 @@ export const VerificationSuccess: Story = {
     error: null,
     success: 'Two-factor authentication enabled successfully!',
   },
-}; 
+};

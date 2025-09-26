@@ -1,8 +1,8 @@
-import { Meta, StoryFn } from "@storybook/react";
-import SalesHistory from "./SalesHistory";
+import { Meta, StoryFn } from '@storybook/react';
+import SalesHistory from './SalesHistory';
 
 export default {
-  title: "Dashboard/Sales/SalesHistory",
+  title: 'Dashboard/Sales/SalesHistory',
   component: SalesHistory,
 } as Meta;
 

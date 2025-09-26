@@ -5,10 +5,31 @@ import * as z from 'zod';
 import { toast } from 'sonner';
 import { AlertTriangle } from 'lucide-react';
 import { WebhookConfig, WebhookEventType, WebhookFormData } from '@/types/webhook-types';
-import { generateSecretKey, isValidWebhookUrl, EVENT_TYPE_INFO, EVENT_CATEGORIES, getEventTypesByCategory } from '@/utils/webhook-utils';
+import {
+  generateSecretKey,
+  isValidWebhookUrl,
+  EVENT_TYPE_INFO,
+  EVENT_CATEGORIES,
+  getEventTypesByCategory,
+} from '@/utils/webhook-utils';
 import { createWebhook, updateWebhook, sendTestWebhook } from '@/services/webhook.service';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -17,32 +38,31 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Separator } from '@/components/ui/separator';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 
-const formSchema = z.object({
-  url: z.string()
-    .url('Please enter a valid URL')
-    .refine(url => isValidWebhookUrl(url), {
-      message: 'Webhook URL must use HTTPS',
-    }),
-  eventTypes: z.array(z.nativeEnum(WebhookEventType))
-    .min(1, 'Select at least one event type'),
-  secretKey: z.string().optional(),
-  maxRetries: z.number()
-    .min(0, 'Minimum retries is 0')
-    .max(10, 'Maximum retries is 10'),
-  initialRetryDelay: z.number()
-    .min(1000, 'Minimum initial delay is 1000ms')
-    .max(60000, 'Maximum initial delay is 60000ms'),
-  maxRetryDelay: z.number()
-    .min(1000, 'Minimum max delay is 1000ms')
-    .max(86400000, 'Maximum max delay is 86400000ms'),
-  isActive: z.boolean().default(true),
-}).refine(
-  (data) => data.maxRetryDelay >= data.initialRetryDelay,
-  {
+const formSchema = z
+  .object({
+    url: z
+      .string()
+      .url('Please enter a valid URL')
+      .refine((url) => isValidWebhookUrl(url), {
+        message: 'Webhook URL must use HTTPS',
+      }),
+    eventTypes: z.array(z.nativeEnum(WebhookEventType)).min(1, 'Select at least one event type'),
+    secretKey: z.string().optional(),
+    maxRetries: z.number().min(0, 'Minimum retries is 0').max(10, 'Maximum retries is 10'),
+    initialRetryDelay: z
+      .number()
+      .min(1000, 'Minimum initial delay is 1000ms')
+      .max(60000, 'Maximum initial delay is 60000ms'),
+    maxRetryDelay: z
+      .number()
+      .min(1000, 'Minimum max delay is 1000ms')
+      .max(86400000, 'Maximum max delay is 86400000ms'),
+    isActive: z.boolean().default(true),
+  })
+  .refine((data) => data.maxRetryDelay >= data.initialRetryDelay, {
     message: 'Maximum retry delay must be greater than or equal to the initial delay',
     path: ['maxRetryDelay'],
-  },
-);
+  });
 
 interface WebhookFormProps {
   webhook?: WebhookConfig;
@@ -105,7 +125,9 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
         await createWebhook(data);
         toast.success('Webhook created successfully');
         if (data.secretKey) {
-          toast.warning('Please save your webhook secret key as it will not be fully visible again');
+          toast.warning(
+            'Please save your webhook secret key as it will not be fully visible again',
+          );
         }
       }
       onSuccess();
@@ -135,7 +157,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                 <TabsTrigger value="basic">Basic Configuration</TabsTrigger>
                 <TabsTrigger value="advanced">Advanced Settings</TabsTrigger>
               </TabsList>
-              
+
               <TabsContent value="basic" className="space-y-4 mt-4">
                 {/* URL Field */}
                 <FormField
@@ -145,10 +167,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                     <FormItem>
                       <FormLabel>Webhook URL</FormLabel>
                       <FormControl>
-                        <Input 
-                          placeholder="https://example.com/webhook" 
-                          {...field} 
-                        />
+                        <Input placeholder="https://example.com/webhook" {...field} />
                       </FormControl>
                       <FormDescription>
                         The HTTPS URL where PayStell will send webhook events
@@ -167,9 +186,13 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       <FormLabel>Secret Key</FormLabel>
                       <div className="flex space-x-2">
                         <FormControl>
-                          <Input 
-                            placeholder={isEditMode ? "Leave blank to keep current secret" : "Webhook secret for signature verification"}
-                            type={secretKeyChanged || !isEditMode ? "text" : "password"}
+                          <Input
+                            placeholder={
+                              isEditMode
+                                ? 'Leave blank to keep current secret'
+                                : 'Webhook secret for signature verification'
+                            }
+                            type={secretKeyChanged || !isEditMode ? 'text' : 'password'}
                             {...field}
                             onChange={(e) => {
                               field.onChange(e);
@@ -179,11 +202,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                             }}
                           />
                         </FormControl>
-                        <Button
-                          type="button"
-                          variant="outline"
-                          onClick={handleGenerateSecret}
-                        >
+                        <Button type="button" variant="outline" onClick={handleGenerateSecret}>
                           Generate
                         </Button>
                       </div>
@@ -194,13 +213,16 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                         <Alert variant="destructive" className="mt-2">
                           <AlertTriangle className="h-4 w-4" />
                           <AlertDescription>
-                            Warning: Your webhook secret key will be partially masked after creation and cannot be retrieved in full later. Please store it securely now if needed.
+                            Warning: Your webhook secret key will be partially masked after creation
+                            and cannot be retrieved in full later. Please store it securely now if
+                            needed.
                           </AlertDescription>
                         </Alert>
                       )}
                       {isEditMode && !secretKeyChanged && (
                         <FormDescription className="mt-2 text-amber-600">
-                          The secret key is masked for security. Enter a new value only if you want to change it.
+                          The secret key is masked for security. Enter a new value only if you want
+                          to change it.
                         </FormDescription>
                       )}
                       <FormMessage />
@@ -216,21 +238,16 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                     <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                       <div className="space-y-0.5">
                         <FormLabel className="text-base">Active</FormLabel>
-                        <FormDescription>
-                          Enable or disable this webhook
-                        </FormDescription>
+                        <FormDescription>Enable or disable this webhook</FormDescription>
                       </div>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                     </FormItem>
                   )}
                 />
               </TabsContent>
-              
+
               <TabsContent value="advanced" className="space-y-4 mt-4">
                 {/* Retry Configuration */}
                 <div className="space-y-4">
@@ -238,7 +255,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                   <p className="text-sm text-gray-500">
                     Configure how PayStell retries failed webhook deliveries
                   </p>
-                  
+
                   <FormField
                     control={form.control}
                     name="maxRetries"
@@ -246,8 +263,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       <FormItem>
                         <FormLabel>Maximum Retry Attempts</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
+                          <Input
+                            type="number"
                             {...field}
                             onChange={(e) => {
                               const val = e.currentTarget.valueAsNumber;
@@ -263,7 +280,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="initialRetryDelay"
@@ -271,8 +288,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       <FormItem>
                         <FormLabel>Initial Retry Delay (ms)</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
+                          <Input
+                            type="number"
                             {...field}
                             onChange={(e) => {
                               const val = e.currentTarget.valueAsNumber;
@@ -288,7 +305,7 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="maxRetryDelay"
@@ -296,8 +313,8 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                       <FormItem>
                         <FormLabel>Maximum Retry Delay (ms)</FormLabel>
                         <FormControl>
-                          <Input 
-                            type="number" 
+                          <Input
+                            type="number"
                             {...field}
                             onChange={(e) => {
                               const val = e.currentTarget.valueAsNumber;
@@ -353,17 +370,13 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                                           return checked
                                             ? field.onChange([...field.value, type])
                                             : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== type
-                                                )
+                                                field.value?.filter((value) => value !== type),
                                               );
                                         }}
                                       />
                                     </FormControl>
                                     <div className="space-y-1 leading-none">
-                                      <FormLabel className="text-sm font-medium">
-                                        {type}
-                                      </FormLabel>
+                                      <FormLabel className="text-sm font-medium">{type}</FormLabel>
                                       <FormDescription className="text-xs">
                                         {EVENT_TYPE_INFO[type].description}
                                       </FormDescription>
@@ -392,9 +405,13 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
                 {testingWebhook ? 'Sending...' : 'Test Webhook'}
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting 
-                  ? (isEditMode ? 'Updating...' : 'Creating...') 
-                  : (isEditMode ? 'Update Webhook' : 'Create Webhook')}
+                {isSubmitting
+                  ? isEditMode
+                    ? 'Updating...'
+                    : 'Creating...'
+                  : isEditMode
+                    ? 'Update Webhook'
+                    : 'Create Webhook'}
               </Button>
             </CardFooter>
           </form>
@@ -404,4 +421,4 @@ const WebhookForm: React.FC<WebhookFormProps> = ({ webhook, onSuccess }) => {
   );
 };
 
-export default WebhookForm; 
+export default WebhookForm;
