@@ -1,20 +1,20 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Nav } from "./index";
-import { useState } from "react";
+import type { Meta, StoryObj } from '@storybook/react';
+import { Nav } from './index';
+import { useState } from 'react';
 
 const meta: Meta<typeof Nav> = {
-  title: "Dashboard/Navigation",
+  title: 'Dashboard/Navigation',
   component: Nav,
   parameters: {
-    layout: "fullscreen",
+    layout: 'fullscreen',
     docs: {
       description: {
         component:
-          "Enhanced responsive navigation component with improved mobile drawer functionality and proper touch targets.",
+          'Enhanced responsive navigation component with improved mobile drawer functionality and proper touch targets.',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -22,8 +22,8 @@ type Story = StoryObj<typeof Nav>;
 
 const sampleNavItems = [
   {
-    title: "Dashboard",
-    href: "/dashboard",
+    title: 'Dashboard',
+    href: '/dashboard',
     icon: () => (
       <svg
         width="16"
@@ -39,8 +39,8 @@ const sampleNavItems = [
     ),
   },
   {
-    title: "Transactions",
-    href: "/dashboard/transactions",
+    title: 'Transactions',
+    href: '/dashboard/transactions',
     icon: () => (
       <svg
         width="16"
@@ -57,8 +57,8 @@ const sampleNavItems = [
     ),
   },
   {
-    title: "Analytics",
-    href: "/dashboard/analytics",
+    title: 'Analytics',
+    href: '/dashboard/analytics',
     icon: () => (
       <svg
         width="16"
@@ -75,8 +75,8 @@ const sampleNavItems = [
     ),
   },
   {
-    title: "Settings",
-    href: "/dashboard/settings",
+    title: 'Settings',
+    href: '/dashboard/settings',
     icon: () => (
       <svg
         width="16"
@@ -107,7 +107,7 @@ const NavigationWrapper = ({
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         brand={{
-          title: "PayStell",
+          title: 'PayStell',
           logo: <div className="text-xl font-bold text-primary">PayStell</div>,
         }}
       />
@@ -115,16 +115,15 @@ const NavigationWrapper = ({
         <div className="max-w-4xl mx-auto">
           <h1 className="text-2xl font-bold mb-4">Dashboard Content</h1>
           <p className="text-muted-foreground mb-6">
-            This is the main content area. The navigation should be responsive
-            and work well on mobile devices.
+            This is the main content area. The navigation should be responsive and work well on
+            mobile devices.
           </p>
 
           {/* Touch target testing section */}
           <div className="mb-8 p-4 border rounded-lg bg-muted/50">
             <h2 className="text-lg font-semibold mb-3">Touch Target Testing</h2>
             <p className="text-sm text-muted-foreground mb-4">
-              All interactive elements should have a minimum touch target of
-              44px (48px on mobile).
+              All interactive elements should have a minimum touch target of 44px (48px on mobile).
             </p>
             <div className="space-y-2">
               <button className="min-h-[48px] px-4 py-2 bg-primary text-primary-foreground rounded-lg">
@@ -191,7 +190,7 @@ export const MobileView: Story = {
   render: () => <MobileViewStory />,
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };
@@ -200,7 +199,7 @@ export const TabletView: Story = {
   render: () => <TabletViewStory />,
   parameters: {
     viewport: {
-      defaultViewport: "tablet",
+      defaultViewport: 'tablet',
     },
   },
 };
@@ -209,7 +208,7 @@ export const DesktopView: Story = {
   render: () => <DesktopViewStory />,
   parameters: {
     viewport: {
-      defaultViewport: "desktop",
+      defaultViewport: 'desktop',
     },
   },
 };
@@ -218,7 +217,7 @@ export const MobileWithOpenNav: Story = {
   render: () => <MobileWithOpenNavStory />,
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };
@@ -227,12 +226,12 @@ export const TouchTargetTest: Story = {
   render: () => <TouchTargetTestStory />,
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
     docs: {
       description: {
         story:
-          "Test the touch targets on mobile devices. All interactive elements should be at least 44px in height.",
+          'Test the touch targets on mobile devices. All interactive elements should be at least 44px in height.',
       },
     },
   },

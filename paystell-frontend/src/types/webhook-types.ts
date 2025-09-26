@@ -32,13 +32,13 @@ export interface WebhookSubscriptionRequest {
 }
 
 export enum WebhookEventType {
-  PAYMENT_SUCCEEDED = "payment.succeeded",
-  PAYMENT_FAILED = "payment.failed",
-  PAYMENT_REFUNDED = "payment.refunded",
-  PAYMENT_PENDING = "payment.pending",
-  ACCOUNT_CREATED = "account.created",
-  ACCOUNT_UPDATED = "account.updated",
-  TEST_WEBHOOK = "test.webhook"
+  PAYMENT_SUCCEEDED = 'payment.succeeded',
+  PAYMENT_FAILED = 'payment.failed',
+  PAYMENT_REFUNDED = 'payment.refunded',
+  PAYMENT_PENDING = 'payment.pending',
+  ACCOUNT_CREATED = 'account.created',
+  ACCOUNT_UPDATED = 'account.updated',
+  TEST_WEBHOOK = 'test.webhook',
 }
 
 // New interface for webhook payload
@@ -54,7 +54,7 @@ export interface WebhookPayload {
   paymentMethod?: string;
   metadata?: Record<string, unknown>;
   eventType: WebhookEventType; // Using the enum for better type safety
-  reqMethod: "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
+  reqMethod: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
   // Additional fields for sample payloads
   id?: string;
   currency?: string;
@@ -130,4 +130,4 @@ export interface WebhookEventTypeInfo {
   description: string;
   category: string;
   samplePayload: Partial<WebhookPayload>;
-} 
+}

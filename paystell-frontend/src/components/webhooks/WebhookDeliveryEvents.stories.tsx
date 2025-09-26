@@ -26,7 +26,7 @@ const mockWebhook = {
   initialRetryDelay: 5000,
   maxRetryDelay: 300000,
   createdAt: new Date('2023-01-01T00:00:00Z'),
-  updatedAt: new Date('2023-01-02T00:00:00Z')
+  updatedAt: new Date('2023-01-02T00:00:00Z'),
 };
 
 // Mock delivery events
@@ -43,13 +43,13 @@ const mockDeliveryEvents = [
       id: 'pmt_123456',
       amount: 1000,
       currency: 'USD',
-      status: 'succeeded'
+      status: 'succeeded',
     },
     responseStatusCode: 200,
     responseBody: '{"success": true}',
     createdAt: new Date('2023-04-01T10:00:00Z'),
     completedAt: new Date('2023-04-01T10:00:05Z'),
-    updatedAt: new Date('2023-04-01T10:00:05Z')
+    updatedAt: new Date('2023-04-01T10:00:05Z'),
   },
   {
     id: 'evt_234567',
@@ -63,12 +63,12 @@ const mockDeliveryEvents = [
       id: 'pmt_234567',
       amount: 2000,
       currency: 'USD',
-      status: 'failed'
+      status: 'failed',
     },
     error: 'Connection timeout after 10s',
     responseStatusCode: 504,
     createdAt: new Date('2023-04-02T11:00:00Z'),
-    updatedAt: new Date('2023-04-02T11:15:00Z')
+    updatedAt: new Date('2023-04-02T11:15:00Z'),
   },
   {
     id: 'evt_345678',
@@ -82,12 +82,12 @@ const mockDeliveryEvents = [
       id: 'pmt_345678',
       amount: 3000,
       currency: 'USD',
-      status: 'pending'
+      status: 'pending',
     },
     nextRetry: new Date('2023-04-03T12:10:00Z'),
     createdAt: new Date('2023-04-03T12:00:00Z'),
-    updatedAt: new Date('2023-04-03T12:05:00Z')
-  }
+    updatedAt: new Date('2023-04-03T12:05:00Z'),
+  },
 ];
 
 // Mock function for refreshing events
@@ -108,4 +108,4 @@ export const EmptyState: Story = {
     deliveryEvents: [],
     onRefresh,
   },
-}; 
+};

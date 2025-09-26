@@ -11,12 +11,9 @@ class ApiClient {
     this.baseURL = baseURL;
   }
 
-  private async request<T>(
-    endpoint: string,
-    options: RequestInit = {}
-  ): Promise<ApiResponse<T>> {
+  private async request<T>(endpoint: string, options: RequestInit = {}): Promise<ApiResponse<T>> {
     const url = `${this.baseURL}${endpoint}`;
-    
+
     const defaultHeaders = {
       'Content-Type': 'application/json',
       ...options.headers,
@@ -34,7 +31,7 @@ class ApiClient {
       }
 
       const data = await response.json();
-      
+
       return {
         data,
         status: response.status,
@@ -73,4 +70,4 @@ class ApiClient {
   }
 }
 
-export const api = new ApiClient(); 
+export const api = new ApiClient();

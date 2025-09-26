@@ -1,8 +1,8 @@
-import { Header } from "@/components/PaymentLinkScreen/header";
-import { ProductInfo } from "@/components/PaymentLinkScreen/ProductInfo";
-import { PaymentSummary } from "@/components/PaymentLinkScreen/PaymentSummary";
-import { PaymentButton } from "@/components/PaymentLinkScreen/PaymentButton";
-import { Footer } from "@/components/PaymentLinkScreen/footer";
+import { Header } from '@/components/PaymentLinkScreen/header';
+import { ProductInfo } from '@/components/PaymentLinkScreen/ProductInfo';
+import { PaymentSummary } from '@/components/PaymentLinkScreen/PaymentSummary';
+import { PaymentButton } from '@/components/PaymentLinkScreen/PaymentButton';
+import { Footer } from '@/components/PaymentLinkScreen/footer';
 
 export default function PaymentLinkScreen() {
   return (

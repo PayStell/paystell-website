@@ -15,15 +15,15 @@ The `TwoFactorSetup` component is a comprehensive UI component that handles the 
 
 ```typescript
 interface TwoFactorSetupProps {
-  qrCodeUrl: string | null;        // The URL for the QR code
-  secret: string | null;           // The secret key for manual entry
-  isLoading: boolean;              // Loading state indicator
-  error: string | null;            // Error message to display
-  success: string | null;          // Success message to display
-  onVerify: (code: string) => Promise<void>;      // Handler for verification code submission
-  onRequestNewQR: () => Promise<void>;            // Handler for requesting a new QR code
-  onBack: () => void;                             // Handler for navigation back
-  onContinue: () => void;                         // Handler for continuing to next step
+  qrCodeUrl: string | null; // The URL for the QR code
+  secret: string | null; // The secret key for manual entry
+  isLoading: boolean; // Loading state indicator
+  error: string | null; // Error message to display
+  success: string | null; // Success message to display
+  onVerify: (code: string) => Promise<void>; // Handler for verification code submission
+  onRequestNewQR: () => Promise<void>; // Handler for requesting a new QR code
+  onBack: () => void; // Handler for navigation back
+  onContinue: () => void; // Handler for continuing to next step
 }
 ```
 
@@ -82,4 +82,4 @@ The component handles several states:
 - @/components/ui/card
 - @/components/ui/alert
 - @/components/TwoFactorAuth/QRCodeDisplay
-- lucide-react for icons 
+- lucide-react for icons

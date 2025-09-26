@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import React from "react";
+import React from 'react';
 
 interface ErrorBoundaryState {
   hasError: boolean;
@@ -12,10 +12,7 @@ interface ErrorBoundaryProps {
   fallback?: React.ComponentType<{ error: Error }>;
 }
 
-export class ErrorBoundary extends React.Component<
-  ErrorBoundaryProps,
-  ErrorBoundaryState
-> {
+export class ErrorBoundary extends React.Component<ErrorBoundaryProps, ErrorBoundaryState> {
   constructor(props: ErrorBoundaryProps) {
     super(props);
     this.state = { hasError: false };
@@ -26,7 +23,7 @@ export class ErrorBoundary extends React.Component<
   }
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    console.error("ErrorBoundary caught an error:", error, errorInfo);
+    console.error('ErrorBoundary caught an error:', error, errorInfo);
   }
 
   render() {
@@ -39,16 +36,10 @@ export class ErrorBoundary extends React.Component<
       return (
         <div className="min-h-screen flex items-center justify-center bg-red-50">
           <div className="text-center p-8">
-            <h1 className="text-2xl font-bold text-red-600 mb-4">
-              Something went wrong
-            </h1>
-            <p className="text-gray-600 mb-4">
-              An error occurred while loading this page.
-            </p>
+            <h1 className="text-2xl font-bold text-red-600 mb-4">Something went wrong</h1>
+            <p className="text-gray-600 mb-4">An error occurred while loading this page.</p>
             <details className="text-left bg-white p-4 rounded border">
-              <summary className="cursor-pointer font-semibold mb-2">
-                Error Details
-              </summary>
+              <summary className="cursor-pointer font-semibold mb-2">Error Details</summary>
               <pre className="text-sm text-red-600 whitespace-pre-wrap">
                 {this.state.error?.toString()}
               </pre>

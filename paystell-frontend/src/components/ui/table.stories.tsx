@@ -1,26 +1,18 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./table";
+import type { Meta, StoryObj } from '@storybook/react';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from './table';
 
 const meta: Meta<typeof Table> = {
-  title: "UI/Table",
+  title: 'UI/Table',
   component: Table,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     docs: {
       description: {
-        component:
-          "A responsive table component with mobile-friendly alternatives.",
+        component: 'A responsive table component with mobile-friendly alternatives.',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -29,24 +21,24 @@ type Story = StoryObj<typeof Table>;
 const sampleData = [
   {
     id: 1,
-    name: "John Doe",
-    email: "john@example.com",
-    role: "Admin",
-    status: "Active",
+    name: 'John Doe',
+    email: 'john@example.com',
+    role: 'Admin',
+    status: 'Active',
   },
   {
     id: 2,
-    name: "Jane Smith",
-    email: "jane@example.com",
-    role: "User",
-    status: "Inactive",
+    name: 'Jane Smith',
+    email: 'jane@example.com',
+    role: 'User',
+    status: 'Inactive',
   },
   {
     id: 3,
-    name: "Bob Johnson",
-    email: "bob@example.com",
-    role: "Editor",
-    status: "Active",
+    name: 'Bob Johnson',
+    email: 'bob@example.com',
+    role: 'Editor',
+    status: 'Active',
   },
 ];
 
@@ -71,9 +63,9 @@ export const Default: Story = {
               <TableCell>
                 <span
                   className={`px-2 py-1 rounded-full text-xs ${
-                    user.status === "Active"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
+                    user.status === 'Active'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
                   }`}
                 >
                   {user.status}
@@ -110,9 +102,9 @@ export const MobileResponsive: Story = {
                 <TableCell>
                   <span
                     className={`px-2 py-1 rounded-full text-xs ${
-                      user.status === "Active"
-                        ? "bg-green-100 text-green-800"
-                        : "bg-red-100 text-red-800"
+                      user.status === 'Active'
+                        ? 'bg-green-100 text-green-800'
+                        : 'bg-red-100 text-red-800'
                     }`}
                   >
                     {user.status}
@@ -135,9 +127,9 @@ export const MobileResponsive: Story = {
               </div>
               <span
                 className={`px-2 py-1 rounded-full text-xs ${
-                  user.status === "Active"
-                    ? "bg-green-100 text-green-800"
-                    : "bg-red-100 text-red-800"
+                  user.status === 'Active'
+                    ? 'bg-green-100 text-green-800'
+                    : 'bg-red-100 text-red-800'
                 }`}
               >
                 {user.status}
@@ -153,7 +145,7 @@ export const MobileResponsive: Story = {
   ),
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };
@@ -181,9 +173,9 @@ export const HorizontalScroll: Story = {
               <TableCell>
                 <span
                   className={`px-2 py-1 rounded-full text-xs ${
-                    user.status === "Active"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
+                    user.status === 'Active'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
                   }`}
                 >
                   {user.status}
@@ -191,9 +183,7 @@ export const HorizontalScroll: Story = {
               </TableCell>
               <TableCell>2 hours ago</TableCell>
               <TableCell>
-                <button className="text-blue-600 hover:text-blue-800 text-sm">
-                  Edit
-                </button>
+                <button className="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
               </TableCell>
             </TableRow>
           ))}
@@ -203,7 +193,7 @@ export const HorizontalScroll: Story = {
   ),
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };
@@ -229,9 +219,9 @@ export const Compact: Story = {
               <TableCell className="py-2">
                 <span
                   className={`px-2 py-1 rounded-full text-xs ${
-                    user.status === "Active"
-                      ? "bg-green-100 text-green-800"
-                      : "bg-red-100 text-red-800"
+                    user.status === 'Active'
+                      ? 'bg-green-100 text-green-800'
+                      : 'bg-red-100 text-red-800'
                   }`}
                 >
                   {user.status}

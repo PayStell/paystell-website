@@ -1,8 +1,8 @@
-import { Meta, StoryFn } from "@storybook/react";
-import Chart from "./Chart";
+import { Meta, StoryFn } from '@storybook/react';
+import Chart from './Chart';
 
 export default {
-  title: "Dashboard/Sales/Chart",
+  title: 'Dashboard/Sales/Chart',
   component: Chart,
   parameters: {
     layout: 'padded',

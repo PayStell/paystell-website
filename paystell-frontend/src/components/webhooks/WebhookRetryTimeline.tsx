@@ -59,9 +59,9 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
 
   const getDelayTime = (index: number) => {
     if (index === 0 || index >= timestamps.length) return null;
-    
+
     const delay = differenceInMilliseconds(timestamps[index], timestamps[index - 1]);
-    
+
     // Format the delay
     if (delay < 1000) {
       return `${delay}ms`;
@@ -75,8 +75,8 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
   };
 
   const getTimelineItemClasses = (index: number) => {
-    const baseClasses = "flex items-center";
-    
+    const baseClasses = 'flex items-center';
+
     // Add specific status styling
     if (index === timestamps.length - 1) {
       if (status === 'completed') {
@@ -87,7 +87,7 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
         return `${baseClasses} text-yellow-600`;
       }
     }
-    
+
     return baseClasses;
   };
 
@@ -102,24 +102,25 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
           {timestamps.map((timestamp, index) => (
             <div key={index} className={getTimelineItemClasses(index)}>
               {/* Circle marker */}
-              <div className={`h-6 w-6 rounded-full border-2 flex items-center justify-center
-                ${index === timestamps.length - 1 
-                  ? status === 'completed' 
-                    ? 'border-green-500 bg-green-100' 
-                    : status === 'failed' 
-                      ? 'border-red-500 bg-red-100' 
-                      : 'border-yellow-500 bg-yellow-100'
-                  : 'border-gray-300 bg-white'}`}
+              <div
+                className={`h-6 w-6 rounded-full border-2 flex items-center justify-center
+                ${
+                  index === timestamps.length - 1
+                    ? status === 'completed'
+                      ? 'border-green-500 bg-green-100'
+                      : status === 'failed'
+                        ? 'border-red-500 bg-red-100'
+                        : 'border-yellow-500 bg-yellow-100'
+                    : 'border-gray-300 bg-white'
+                }`}
               >
                 <span className="text-xs font-semibold">{index + 1}</span>
               </div>
-              
+
               {/* Content */}
               <div className="ml-4">
                 <p className="text-sm font-medium">{getAttemptLabel(index)}</p>
-                <p className="text-xs text-gray-500">
-                  {format(timestamp, 'MMM d, yyyy HH:mm:ss')}
-                </p>
+                <p className="text-xs text-gray-500">{format(timestamp, 'MMM d, yyyy HH:mm:ss')}</p>
                 {index > 0 && (
                   <p className="text-xs text-gray-400">
                     {getDelayTime(index) ? `Delay: ${getDelayTime(index)}` : ''}
@@ -142,8 +143,8 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
               status === 'completed'
                 ? 'bg-green-500'
                 : status === 'failed'
-                ? 'bg-red-500'
-                : 'bg-yellow-500'
+                  ? 'bg-red-500'
+                  : 'bg-yellow-500'
             }`}
             style={{ width: `${(attemptsMade / maxAttempts) * 100}%` }}
           />
@@ -153,4 +154,4 @@ const WebhookRetryTimeline: React.FC<WebhookRetryTimelineProps> = ({
   );
 };
 
-export default WebhookRetryTimeline; 
+export default WebhookRetryTimeline;

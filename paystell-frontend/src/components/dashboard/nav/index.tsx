@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { cn } from "@/lib/utils";
 import type { NavProps } from "./types";
@@ -17,46 +17,43 @@ export function Nav({
   className,
   isOpen,
   onOpenChange,
-  brand = { title: "PayStell" },
+  brand = { title: 'PayStell' },
   ...props
 }: NavProps) {
   // Use mock auth for testing - switch to useAuth() for production
   const { logout } = useMockAuth();
   const router = useRouter();
 
-  const handleMobileNavClose = useCallback(
-    () => onOpenChange(false),
-    [onOpenChange]
-  );
+  const handleMobileNavClose = useCallback(() => onOpenChange(false), [onOpenChange]);
 
   const handleLogout = async () => {
     try {
       await logout();
-      router.push("/login");
+      router.push('/login');
     } catch (error) {
-      console.error("Logout failed:", error);
+      console.error('Logout failed:', error);
     }
   };
 
   // Handle escape key and body scroll lock
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && isOpen) {
+      if (e.key === 'Escape' && isOpen) {
         handleMobileNavClose();
       }
     };
 
     // Prevent body scroll when mobile nav is open
     if (isOpen) {
-      document.body.style.overflow = "hidden";
-      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = 'hidden';
+      document.addEventListener('keydown', handleEscape);
     } else {
-      document.body.style.overflow = "";
+      document.body.style.overflow = '';
     }
 
     return () => {
-      document.body.style.overflow = "";
-      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = '';
+      document.removeEventListener('keydown', handleEscape);
     };
   }, [isOpen, handleMobileNavClose]);
 
@@ -67,9 +64,9 @@ export function Nav({
       {/* Enhanced overlay with better touch handling */}
       {isOpen && (
         <div
-          className={cn(navStyles.overlay, "animate-in fade-in duration-200")}
+          className={cn(navStyles.overlay, 'animate-in fade-in duration-200')}
           onClick={handleMobileNavClose}
-          onKeyUp={(e) => e.key === "Escape" && handleMobileNavClose()}
+          onKeyUp={(e) => e.key === 'Escape' && handleMobileNavClose()}
           role="button"
           tabIndex={0}
           aria-label="Close navigation menu"
@@ -80,26 +77,20 @@ export function Nav({
         className={cn(
           navStyles.base,
           isOpen ? navStyles.open : navStyles.closed,
-          "animate-in slide-in-from-left duration-300 ease-out",
-          className
+          'animate-in slide-in-from-left duration-300 ease-out',
+          className,
         )}
         role="navigation"
         aria-label="Main navigation"
         {...props}
       >
         {/* Enhanced header with better touch targets */}
-        <div className="mb-8 flex justify-center p-2">
-          {brand.logo || <Logo />}
-        </div>
+        <div className="mb-8 flex justify-center p-2">{brand.logo || <Logo />}</div>
 
         {/* Navigation items with improved spacing */}
         <div className="space-y-2 flex-1">
           {items.map((item) => (
-            <NavItem
-              key={item.href}
-              item={item}
-              onSelect={handleMobileNavClose}
-            />
+            <NavItem key={item.href} item={item} onSelect={handleMobileNavClose} />
           ))}
         </div>
 
@@ -119,4 +110,4 @@ export function Nav({
   );
 }
 
-export type { NavProps, NavItem } from "./types";
+export type { NavProps, NavItem } from './types';

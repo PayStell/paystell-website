@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
-import { 
-  ArrowRight, 
-  Download, 
-  Filter, 
-  Search, 
-  ArrowUpRight, 
-  ArrowDownLeft, 
-  Info, 
-  Copy 
+import {
+  ArrowRight,
+  Download,
+  Filter,
+  Search,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Info,
+  Copy,
 } from 'lucide-react';
 
 interface Transaction {
@@ -45,7 +44,7 @@ const mockTransactions: Transaction[] = [
     date: '2024-01-15T10:30:00Z',
     status: 'completed',
     fee: '0.00001',
-    memo: 'Payment for services'
+    memo: 'Payment for services',
   },
   {
     id: '2',
@@ -57,8 +56,8 @@ const mockTransactions: Transaction[] = [
     to: 'GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37',
     date: '2024-01-14T15:45:00Z',
     status: 'completed',
-    fee: '0.00001'
-  }
+    fee: '0.00001',
+  },
 ];
 
 // Utility functions
@@ -68,7 +67,7 @@ const formatDate = (dateString: string) => {
     month: 'short',
     day: 'numeric',
     hour: '2-digit',
-    minute: '2-digit'
+    minute: '2-digit',
   });
 };
 
@@ -91,7 +90,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
     type: 'all',
     dateRange: 'all',
     amount: '',
-    search: ''
+    search: '',
   });
   const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
 
@@ -99,7 +98,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
   useEffect(() => {
     let filtered = transactions;
     if (filters.type !== 'all') {
-      filtered = filtered.filter(tx => tx.type === filters.type);
+      filtered = filtered.filter((tx) => tx.type === filters.type);
     }
     // Implement date range filtering
     if (filters.dateRange !== 'all') {
@@ -107,45 +106,57 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
       const dateRanges: Record<string, number> = {
         '24h': 24 * 60 * 60 * 1000,
         '7d': 7 * 24 * 60 * 60 * 1000,
-        '30d': 30 * 24 * 60 * 60 * 1000
+        '30d': 30 * 24 * 60 * 60 * 1000,
       };
       if (dateRanges[filters.dateRange]) {
         const cutoffDate = new Date(now.getTime() - dateRanges[filters.dateRange]);
-        filtered = filtered.filter(tx => new Date(tx.date) >= cutoffDate);
+        filtered = filtered.filter((tx) => new Date(tx.date) >= cutoffDate);
       }
     }
     // Implement amount range filtering
     if (filters.amount) {
-      const [min, max] = filters.amount.split('-').map(v => parseFloat(v.trim()));
+      const [min, max] = filters.amount.split('-').map((v) => parseFloat(v.trim()));
       if (!isNaN(min)) {
-        filtered = filtered.filter(tx => parseFloat(tx.amount) >= min);
+        filtered = filtered.filter((tx) => parseFloat(tx.amount) >= min);
       }
       if (!isNaN(max)) {
-        filtered = filtered.filter(tx => parseFloat(tx.amount) <= max);
+        filtered = filtered.filter((tx) => parseFloat(tx.amount) <= max);
       }
     }
     if (filters.search) {
-      filtered = filtered.filter(tx =>
-        tx.hash.toLowerCase().includes(filters.search.toLowerCase()) ||
-        tx.from.toLowerCase().includes(filters.search.toLowerCase()) ||
-        tx.to.toLowerCase().includes(filters.search.toLowerCase()) ||
-        tx.memo?.toLowerCase().includes(filters.search.toLowerCase())
+      filtered = filtered.filter(
+        (tx) =>
+          tx.hash.toLowerCase().includes(filters.search.toLowerCase()) ||
+          tx.from.toLowerCase().includes(filters.search.toLowerCase()) ||
+          tx.to.toLowerCase().includes(filters.search.toLowerCase()) ||
+          tx.memo?.toLowerCase().includes(filters.search.toLowerCase()),
       );
     }
     setFilteredTransactions(filtered);
   }, [transactions, filters]);
 
   const handleFilterChange = (key: keyof Filters, value: string) => {
-    setFilters(prev => ({ ...prev, [key]: value }));
+    setFilters((prev) => ({ ...prev, [key]: value }));
   };
 
   const exportTransactions = () => {
     const csvContent = [
       ['Hash', 'Type', 'Amount', 'Currency', 'From', 'To', 'Date', 'Status', 'Fee', 'Memo'],
-      ...filteredTransactions.map(tx => [
-        tx.hash, tx.type, tx.amount, tx.currency, tx.from, tx.to, tx.date, tx.status, tx.fee, tx.memo || ''
-      ])
-    ].map(row => row.join(',')).join('\n');
+      ...filteredTransactions.map((tx) => [
+        tx.hash,
+        tx.type,
+        tx.amount,
+        tx.currency,
+        tx.from,
+        tx.to,
+        tx.date,
+        tx.status,
+        tx.fee,
+        tx.memo || '',
+      ]),
+    ]
+      .map((row) => row.join(','))
+      .join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
@@ -162,9 +173,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
         {/* Header - Responsive */}
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
           <div className="space-y-1">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
-              Transaction History
-            </h1>
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Transaction History</h1>
             <p className="text-sm sm:text-base text-gray-600">
               View and manage all your Stellar transactions
             </p>
@@ -193,15 +202,11 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
           <div className="p-4 sm:p-6">
             <div className="flex items-center space-x-2 mb-4">
               <Filter className="w-5 h-5 text-gray-600" />
-              <h2 className="text-lg font-semibold text-gray-900">
-                Filtering Options
-              </h2>
+              <h2 className="text-lg font-semibold text-gray-900">Filtering Options</h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Transaction Type
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Transaction Type</label>
                 <select
                   value={filters.type}
                   onChange={(e) => handleFilterChange('type', e.target.value)}
@@ -212,11 +217,9 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                   <option value="received">Received</option>
                 </select>
               </div>
-              
+
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Date Range
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Date Range</label>
                 <select
                   value={filters.dateRange}
                   onChange={(e) => handleFilterChange('dateRange', e.target.value)}
@@ -230,9 +233,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Search
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Search</label>
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <input
@@ -246,9 +247,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
               </div>
 
               <div className="space-y-2">
-                <label className="block text-sm font-medium text-gray-700">
-                  Amount Range
-                </label>
+                <label className="block text-sm font-medium text-gray-700">Amount Range</label>
                 <input
                   type="text"
                   placeholder="Min - Max XLM"
@@ -272,18 +271,20 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                 {filteredTransactions.length} results
               </span>
             </div>
-            
+
             {/* Mobile Card View */}
             <div className="block sm:hidden space-y-4">
               {filteredTransactions.map((tx) => (
                 <div key={tx.id} className="border border-gray-200 rounded-lg p-4 space-y-3">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-full ${
-                        tx.type === 'received' 
-                          ? 'bg-green-100 text-green-600' 
-                          : 'bg-red-100 text-red-600'
-                      }`}>
+                      <div
+                        className={`p-2 rounded-full ${
+                          tx.type === 'received'
+                            ? 'bg-green-100 text-green-600'
+                            : 'bg-red-100 text-red-600'
+                        }`}
+                      >
                         {tx.type === 'received' ? (
                           <ArrowDownLeft className="w-4 h-4" />
                         ) : (
@@ -292,14 +293,17 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                       </div>
                       <div>
                         <div className="font-medium capitalize">{tx.type}</div>
-                        <div className={`text-sm font-medium ${
-                          tx.type === 'received' ? 'text-green-600' : 'text-red-600'
-                        }`}>
-                          {tx.type === 'received' ? '+' : '-'}{tx.amount} {tx.currency}
+                        <div
+                          className={`text-sm font-medium ${
+                            tx.type === 'received' ? 'text-green-600' : 'text-red-600'
+                          }`}
+                        >
+                          {tx.type === 'received' ? '+' : '-'}
+                          {tx.amount} {tx.currency}
                         </div>
                       </div>
                     </div>
-                    <button 
+                    <button
                       onClick={() => setSelectedTransaction(tx)}
                       className="p-2 text-gray-400 hover:text-gray-600"
                     >
@@ -321,11 +325,13 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-gray-500">{formatDate(tx.date)}</span>
-                      <span className={`px-2 py-1 rounded-full text-xs ${
-                        tx.status === 'completed'
-                          ? 'bg-green-100 text-green-800'
-                          : 'bg-yellow-100 text-yellow-800'
-                      }`}>
+                      <span
+                        className={`px-2 py-1 rounded-full text-xs ${
+                          tx.status === 'completed'
+                            ? 'bg-green-100 text-green-800'
+                            : 'bg-yellow-100 text-yellow-800'
+                        }`}
+                      >
                         {tx.status}
                       </span>
                     </div>
@@ -352,11 +358,13 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                     <tr key={tx.id} className="border-b border-gray-100 hover:bg-gray-50">
                       <td className="py-4 px-4">
                         <div className="flex items-center space-x-2">
-                          <div className={`p-2 rounded-full ${
-                            tx.type === 'received' 
-                              ? 'bg-green-100 text-green-600' 
-                              : 'bg-red-100 text-red-600'
-                          }`}>
+                          <div
+                            className={`p-2 rounded-full ${
+                              tx.type === 'received'
+                                ? 'bg-green-100 text-green-600'
+                                : 'bg-red-100 text-red-600'
+                            }`}
+                          >
                             {tx.type === 'received' ? (
                               <ArrowDownLeft className="w-4 h-4" />
                             ) : (
@@ -368,10 +376,13 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                       </td>
                       <td className="py-4 px-4">
                         <div>
-                          <div className={`font-medium ${
-                            tx.type === 'received' ? 'text-green-600' : 'text-red-600'
-                          }`}>
-                            {tx.type === 'received' ? '+' : '-'}{tx.amount} {tx.currency}
+                          <div
+                            className={`font-medium ${
+                              tx.type === 'received' ? 'text-green-600' : 'text-red-600'
+                            }`}
+                          >
+                            {tx.type === 'received' ? '+' : '-'}
+                            {tx.amount} {tx.currency}
                           </div>
                           <div className="text-sm text-gray-500">Fee: {tx.fee} XLM</div>
                         </div>
@@ -396,16 +407,18 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                         <div className="text-sm">{formatDate(tx.date)}</div>
                       </td>
                       <td className="py-4 px-4">
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          tx.status === 'completed'
-                            ? 'bg-green-100 text-green-800'
-                            : 'bg-yellow-100 text-yellow-800'
-                        }`}>
+                        <span
+                          className={`px-2 py-1 rounded-full text-xs ${
+                            tx.status === 'completed'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}
+                        >
                           {tx.status}
                         </span>
                       </td>
                       <td className="py-4 px-4">
-                        <button 
+                        <button
                           onClick={() => setSelectedTransaction(tx)}
                           className="p-2 text-gray-400 hover:text-gray-600"
                         >
@@ -434,10 +447,8 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                     ✕
                   </button>
                 </div>
-                <p className="text-gray-600 mb-6">
-                  Complete information about this transaction
-                </p>
-                
+                <p className="text-gray-600 mb-6">Complete information about this transaction</p>
+
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -474,7 +485,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ onNaviga
                     </div>
                   )}
                 </div>
-                
+
                 <div className="mt-6 flex justify-end">
                   <button
                     onClick={() => copyToClipboard(selectedTransaction.hash)}

@@ -1,9 +1,9 @@
-"use client";
-import { useState } from "react";
-import type { ChangeEvent, FormEvent } from "react";
-import { Input, Label, Textarea, Button } from "@/components/ui";
-import Image from "next/image";
-import { Edit2 } from "lucide-react";
+'use client';
+import { useState } from 'react';
+import type { ChangeEvent, FormEvent } from 'react';
+import { Input, Label, Textarea, Button } from '@/components/ui';
+import Image from 'next/image';
+import { Edit2 } from 'lucide-react';
 
 interface Errors {
   name?: string;
@@ -11,23 +11,19 @@ interface Errors {
 }
 
 interface ProfileFormProps {
-  onSubmit: (data: {
-    name: string;
-    logo: string | null;
-    description: string;
-  }) => void;
+  onSubmit: (data: { name: string; logo: string | null; description: string }) => void;
 }
 
 const ProfileForm = ({ onSubmit }: ProfileFormProps) => {
-  const [name, setName] = useState<string>("");
+  const [name, setName] = useState<string>('');
   const [logo, setLogo] = useState<string | null>(null);
-  const [description, setDescription] = useState<string>("");
+  const [description, setDescription] = useState<string>('');
   const [errors, setErrors] = useState<Errors>({});
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
   const handleValidation = (): boolean => {
     const formErrors: Errors = {};
-    if (!name) formErrors.name = "Name is required.";
+    if (!name) formErrors.name = 'Name is required.';
     setErrors(formErrors);
     return Object.keys(formErrors).length === 0;
   };
@@ -56,7 +52,7 @@ const ProfileForm = ({ onSubmit }: ProfileFormProps) => {
         <div className="flex flex-col items-center">
           <div className="relative">
             <Image
-              src={logo || "/default-image.jpg"}
+              src={logo || '/default-image.jpg'}
               alt="Profile Picture"
               width={120}
               height={120}
@@ -64,18 +60,13 @@ const ProfileForm = ({ onSubmit }: ProfileFormProps) => {
             />
             <button
               type="button"
-              onClick={() => document.getElementById("logoInput")?.click()}
+              onClick={() => document.getElementById('logoInput')?.click()}
               className="absolute bottom-0 right-0 bg-primary text-white p-2 rounded-full"
             >
               <Edit2 />
             </button>
           </div>
-          <input
-            id="logoInput"
-            type="file"
-            className="hidden"
-            onChange={handleLogoChange}
-          />
+          <input id="logoInput" type="file" className="hidden" onChange={handleLogoChange} />
         </div>
 
         {/* Name Input */}
@@ -108,11 +99,7 @@ const ProfileForm = ({ onSubmit }: ProfileFormProps) => {
         <div className="flex justify-between">
           {isEditing ? (
             <>
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={() => setIsEditing(false)}
-              >
+              <Button type="button" variant="destructive" onClick={() => setIsEditing(false)}>
                 Cancel
               </Button>
               <Button type="submit" variant="default">
@@ -120,11 +107,7 @@ const ProfileForm = ({ onSubmit }: ProfileFormProps) => {
               </Button>
             </>
           ) : (
-            <Button
-              type="button"
-              variant="default"
-              onClick={() => setIsEditing(true)}
-            >
+            <Button type="button" variant="default" onClick={() => setIsEditing(true)}>
               Edit Profile
             </Button>
           )}

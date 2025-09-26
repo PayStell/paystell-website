@@ -9,9 +9,7 @@ interface DocsLayoutProps {
 const navigation = [
   {
     title: 'Getting Started',
-    items: [
-      { title: 'Introduction', href: '/docs/getting-started' },
-    ],
+    items: [{ title: 'Introduction', href: '/docs/getting-started' }],
   },
   {
     title: 'API Reference',
@@ -41,16 +39,11 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
         <nav>
           {navigation.map((section) => (
             <div key={section.title} className="mb-6">
-              <h3 className="mb-2 text-sm font-semibold text-gray-900">
-                {section.title}
-              </h3>
+              <h3 className="mb-2 text-sm font-semibold text-gray-900">{section.title}</h3>
               <ul className="space-y-2">
                 {section.items.map((item) => (
                   <li key={item.href}>
-                    <Link
-                      href={item.href}
-                      className="text-sm text-gray-600 hover:text-gray-900"
-                    >
+                    <Link href={item.href} className="text-sm text-gray-600 hover:text-gray-900">
                       {item.title}
                     </Link>
                   </li>
@@ -66,4 +59,4 @@ export default function DocsLayout({ children }: DocsLayoutProps) {
       </main>
     </div>
   );
-} 
+}

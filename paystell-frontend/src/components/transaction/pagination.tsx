@@ -1,16 +1,16 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface PaginationProps {
-  currentPage: number
-  hasNext: boolean
-  hasPrev: boolean
-  onNext: () => void
-  onPrevious: () => void
-  isLoading: boolean
-  totalItems: number
+  currentPage: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+  onNext: () => void;
+  onPrevious: () => void;
+  isLoading: boolean;
+  totalItems: number;
 }
 
 export function Pagination({
@@ -54,5 +54,5 @@ export function Pagination({
         </Button>
       </div>
     </div>
-  )
+  );
 }

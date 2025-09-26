@@ -53,10 +53,10 @@ export const WalletDashboard: React.FC<WalletDashboardProps> = ({ walletData, on
         </Button>
       </div>
 
-      <BalanceCard 
-        walletData={walletData} 
-        showBalance={showBalance} 
-        setShowBalance={setShowBalance} 
+      <BalanceCard
+        walletData={walletData}
+        showBalance={showBalance}
+        setShowBalance={setShowBalance}
       />
       <QuickActions onNavigate={onNavigate} />
       <RecentTransactions onNavigate={onNavigate} />

@@ -25,4 +25,4 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   }
 
   return isAuthenticated ? <>{children}</> : null;
-}; 
+};

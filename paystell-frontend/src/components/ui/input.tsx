@@ -1,31 +1,31 @@
-import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { cn } from "@/lib/utils";
+import * as React from 'react';
+import { cva, type VariantProps } from 'class-variance-authority';
+import { cn } from '@/lib/utils';
 
 const inputVariants = cva(
-  "flex w-full rounded-md border bg-input text-input-foreground px-3 py-2 text-sm ring-offset-background file:border-transparent file:mr-4 file:bg-background file:text-sm file:font-medium placeholder:text-input-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:border-primary focus-visible:border-2 disabled:cursor-not-allowed disabled:opacity-50 my-1",
+  'flex w-full rounded-md border bg-input text-input-foreground px-3 py-2 text-sm ring-offset-background file:border-transparent file:mr-4 file:bg-background file:text-sm file:font-medium placeholder:text-input-foreground focus-visible:outline-none focus-visible:ring-0 focus-visible:border-primary focus-visible:border-2 disabled:cursor-not-allowed disabled:opacity-50 my-1',
   {
     variants: {
       size: {
-        default: "h-10",
-        sm: "h-8 px-2",
-        lg: "h-12 px-4",
+        default: 'h-10',
+        sm: 'h-8 px-2',
+        lg: 'h-12 px-4',
       },
       variant: {
-        default: "",
-        filled: "border-transparent bg-secondary",
-        outline: "border-2",
+        default: '',
+        filled: 'border-transparent bg-secondary',
+        outline: 'border-2',
       },
     },
     defaultVariants: {
-      size: "default",
-      variant: "default",
+      size: 'default',
+      variant: 'default',
     },
-  }
+  },
 );
 
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">,
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>,
     VariantProps<typeof inputVariants> {}
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -38,8 +38,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {...props}
       />
     );
-  }
+  },
 );
-Input.displayName = "Input";
+Input.displayName = 'Input';
 
 export { Input, inputVariants };

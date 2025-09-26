@@ -1,32 +1,22 @@
-"use client";
+'use client';
 
-import type React from "react";
+import type React from 'react';
 
-import { useState } from "react";
-import { X } from "lucide-react";
-import type { BrandingTabProps } from "./types";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import Image from "next/image";
+import { useState } from 'react';
+import { X } from 'lucide-react';
+import type { BrandingTabProps } from './types';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
+import { Button } from '@/components/ui/button';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import Image from 'next/image';
 
-export default function BrandingTab({
-  control,
-  setValue,
-  watch,
-}: BrandingTabProps) {
+export default function BrandingTab({ control, setValue, watch }: BrandingTabProps) {
   const [dragActive, setDragActive] = useState(false);
 
-  const branding = watch("branding");
-  const brandingLogo = "image" in branding ? branding.image : null;
+  const branding = watch('branding');
+  const brandingLogo = 'image' in branding ? branding.image : null;
 
   const handleLogoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -34,7 +24,7 @@ export default function BrandingTab({
       const file = e.target.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        setValue("branding.logo", reader.result as string);
+        setValue('branding.logo', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
@@ -43,9 +33,9 @@ export default function BrandingTab({
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.type === "dragenter" || e.type === "dragover") {
+    if (e.type === 'dragenter' || e.type === 'dragover') {
       setDragActive(true);
-    } else if (e.type === "dragleave") {
+    } else if (e.type === 'dragleave') {
       setDragActive(false);
     }
   };
@@ -58,14 +48,14 @@ export default function BrandingTab({
       const file = e.dataTransfer.files[0];
       const reader = new FileReader();
       reader.onload = () => {
-        setValue("branding.logo", reader.result as string);
+        setValue('branding.logo', reader.result as string);
       };
       reader.readAsDataURL(file);
     }
   };
 
   const removeLogo = () => {
-    setValue("branding.logo", null);
+    setValue('branding.logo', null);
   };
 
   return (
@@ -75,11 +65,7 @@ export default function BrandingTab({
         {brandingLogo ? (
           <div className="relative w-full h-24 rounded-md overflow-hidden border">
             <Image
-              src={
-                typeof brandingLogo === "string"
-                  ? brandingLogo
-                  : "/placeholder.svg"
-              }
+              src={typeof brandingLogo === 'string' ? brandingLogo : '/placeholder.svg'}
               alt="Logo"
               className="w-full h-full object-contain"
             />
@@ -96,9 +82,7 @@ export default function BrandingTab({
         ) : (
           <div
             className={`border-2 border-dashed rounded-md h-24 flex flex-col items-center justify-center cursor-pointer ${
-              dragActive
-                ? "border-primary bg-primary/5"
-                : "border-muted-foreground/20"
+              dragActive ? 'border-primary bg-primary/5' : 'border-muted-foreground/20'
             }`}
             onDragEnter={handleDrag}
             onDragLeave={handleDrag}

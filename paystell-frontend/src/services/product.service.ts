@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from 'axios';
 
 export interface ProductData {
   id: string;
@@ -13,19 +13,19 @@ export interface ProductData {
   currency?: string;
 }
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
 
 // Create axios instance with default config
 const api = axios.create({
   baseURL: API_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 
 // Add request interceptor to add auth token
 api.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
@@ -41,15 +41,14 @@ export class ProductService {
    */
   static async getProductData(
     productId: string,
-    merchantWalletAddress: string | null
+    merchantWalletAddress: string | null,
   ): Promise<ProductData> {
     try {
       // Check if API mocking is enabled
-      const isMockingEnabled =
-        process.env.NEXT_PUBLIC_API_MOCKING === "enabled";
+      const isMockingEnabled = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
 
       // In development mode, use mock data if API is not available or mocking is enabled
-      if (process.env.NODE_ENV === "development" && isMockingEnabled) {
+      if (process.env.NODE_ENV === 'development' && isMockingEnabled) {
         return this.getMockProductData(productId, merchantWalletAddress);
       }
 
@@ -60,15 +59,15 @@ export class ProductService {
 
       return response.data;
     } catch (error) {
-      console.error("Error fetching product data:", error);
+      console.error('Error fetching product data:', error);
 
       // Fallback to mock data in development only if API call fails
-      if (process.env.NODE_ENV === "development") {
-        console.warn("API call failed, falling back to mock product data");
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('API call failed, falling back to mock product data');
         return this.getMockProductData(productId, merchantWalletAddress);
       }
 
-      throw new Error("Failed to fetch product data");
+      throw new Error('Failed to fetch product data');
     }
   }
 
@@ -78,12 +77,9 @@ export class ProductService {
    * @param merchantWalletAddress - The merchant wallet address
    * @returns Mock product data
    */
-  static getMockProductData(
-    productId: string,
-    merchantWalletAddress: string | null
-  ): ProductData {
+  static getMockProductData(productId: string, merchantWalletAddress: string | null): ProductData {
     // Decode the product ID to get a meaningful name
-    const productName = decodeURIComponent(productId.replace(/-/g, " "));
+    const productName = decodeURIComponent(productId.replace(/-/g, ' '));
 
     // Generate different data based on product ID to simulate real API behavior
     const productIdHash = this.hashString(productId);
@@ -104,10 +100,9 @@ export class ProductService {
       price: basePrice,
       serviceFee: serviceFee,
       features: features,
-      merchantWalletAddress:
-        merchantWalletAddress || "GABC1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+      merchantWalletAddress: merchantWalletAddress || 'GABC1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
       description: `Premium ${productName} with advanced features`,
-      currency: "USDC",
+      currency: 'USDC',
     };
   }
 
@@ -134,18 +129,18 @@ export class ProductService {
   private static getSkuPrefix(productId: string): string {
     const lowerId = productId.toLowerCase();
 
-    if (lowerId.includes("headphone") || lowerId.includes("audio")) {
-      return "AUD";
-    } else if (lowerId.includes("phone") || lowerId.includes("mobile")) {
-      return "MOB";
-    } else if (lowerId.includes("laptop") || lowerId.includes("computer")) {
-      return "COM";
-    } else if (lowerId.includes("watch") || lowerId.includes("fitness")) {
-      return "FIT";
-    } else if (lowerId.includes("camera") || lowerId.includes("photo")) {
-      return "CAM";
+    if (lowerId.includes('headphone') || lowerId.includes('audio')) {
+      return 'AUD';
+    } else if (lowerId.includes('phone') || lowerId.includes('mobile')) {
+      return 'MOB';
+    } else if (lowerId.includes('laptop') || lowerId.includes('computer')) {
+      return 'COM';
+    } else if (lowerId.includes('watch') || lowerId.includes('fitness')) {
+      return 'FIT';
+    } else if (lowerId.includes('camera') || lowerId.includes('photo')) {
+      return 'CAM';
     } else {
-      return "GEN";
+      return 'GEN';
     }
   }
 
@@ -157,59 +152,59 @@ export class ProductService {
   private static getFeaturesByProductType(productId: string): string[] {
     const lowerId = productId.toLowerCase();
 
-    if (lowerId.includes("headphone") || lowerId.includes("audio")) {
+    if (lowerId.includes('headphone') || lowerId.includes('audio')) {
       return [
-        "Noise cancellation technology",
-        "40-hour battery life",
-        "Premium sound quality",
-        "1-year warranty",
-        "Bluetooth 5.0",
-        "Touch controls",
+        'Noise cancellation technology',
+        '40-hour battery life',
+        'Premium sound quality',
+        '1-year warranty',
+        'Bluetooth 5.0',
+        'Touch controls',
       ];
-    } else if (lowerId.includes("phone") || lowerId.includes("mobile")) {
+    } else if (lowerId.includes('phone') || lowerId.includes('mobile')) {
       return [
-        "5G connectivity",
-        "High-resolution camera",
-        "Long battery life",
-        "Water resistant",
-        "Fast charging",
-        "Security features",
+        '5G connectivity',
+        'High-resolution camera',
+        'Long battery life',
+        'Water resistant',
+        'Fast charging',
+        'Security features',
       ];
-    } else if (lowerId.includes("laptop") || lowerId.includes("computer")) {
+    } else if (lowerId.includes('laptop') || lowerId.includes('computer')) {
       return [
-        "High-performance processor",
-        "SSD storage",
-        "Backlit keyboard",
-        "Multiple ports",
-        "Long battery life",
-        "Premium build quality",
+        'High-performance processor',
+        'SSD storage',
+        'Backlit keyboard',
+        'Multiple ports',
+        'Long battery life',
+        'Premium build quality',
       ];
-    } else if (lowerId.includes("watch") || lowerId.includes("fitness")) {
+    } else if (lowerId.includes('watch') || lowerId.includes('fitness')) {
       return [
-        "Heart rate monitoring",
-        "GPS tracking",
-        "Water resistant",
-        "Sleep tracking",
-        "7-day battery life",
-        "Health metrics",
+        'Heart rate monitoring',
+        'GPS tracking',
+        'Water resistant',
+        'Sleep tracking',
+        '7-day battery life',
+        'Health metrics',
       ];
-    } else if (lowerId.includes("camera") || lowerId.includes("photo")) {
+    } else if (lowerId.includes('camera') || lowerId.includes('photo')) {
       return [
-        "High-resolution sensor",
-        "4K video recording",
-        "Image stabilization",
-        "Multiple lenses",
-        "Professional quality",
-        "Weather sealed",
+        'High-resolution sensor',
+        '4K video recording',
+        'Image stabilization',
+        'Multiple lenses',
+        'Professional quality',
+        'Weather sealed',
       ];
     } else {
       return [
-        "Premium quality",
-        "Durable construction",
-        "1-year warranty",
-        "Customer support",
-        "Fast shipping",
-        "Money-back guarantee",
+        'Premium quality',
+        'Durable construction',
+        '1-year warranty',
+        'Customer support',
+        'Fast shipping',
+        'Money-back guarantee',
       ];
     }
   }
@@ -221,20 +216,17 @@ export class ProductService {
    */
   static async validateProduct(productId: string): Promise<boolean> {
     try {
-      const isMockingEnabled =
-        process.env.NEXT_PUBLIC_API_MOCKING === "enabled";
+      const isMockingEnabled = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
 
-      if (process.env.NODE_ENV === "development" && isMockingEnabled) {
+      if (process.env.NODE_ENV === 'development' && isMockingEnabled) {
         // In mock mode, validate that product ID is not empty and has reasonable length
-        return (
-          Boolean(productId) && productId.length > 0 && productId.length <= 100
-        );
+        return Boolean(productId) && productId.length > 0 && productId.length <= 100;
       }
 
       const response = await api.get(`/products/${productId}/validate`);
       return response.data.isValid;
     } catch (error) {
-      console.error("Error validating product:", error);
+      console.error('Error validating product:', error);
       return false;
     }
   }
@@ -246,10 +238,9 @@ export class ProductService {
    */
   static async getProductPrice(productId: string): Promise<number> {
     try {
-      const isMockingEnabled =
-        process.env.NEXT_PUBLIC_API_MOCKING === "enabled";
+      const isMockingEnabled = process.env.NEXT_PUBLIC_API_MOCKING === 'enabled';
 
-      if (process.env.NODE_ENV === "development" && isMockingEnabled) {
+      if (process.env.NODE_ENV === 'development' && isMockingEnabled) {
         // Generate consistent price based on product ID
         const productIdHash = this.hashString(productId);
         return 50 + (productIdHash % 200); // Price between 50-250
@@ -258,8 +249,8 @@ export class ProductService {
       const response = await api.get(`/products/${productId}/price`);
       return response.data.price;
     } catch (error) {
-      console.error("Error fetching product price:", error);
-      throw new Error("Failed to fetch product price");
+      console.error('Error fetching product price:', error);
+      throw new Error('Failed to fetch product price');
     }
   }
 }

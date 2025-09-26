@@ -1,9 +1,9 @@
-import { Meta, StoryFn } from "@storybook/react";
-import AppearanceSection from "./AppearanceSection";
-import { ThemeProvider } from "@/providers/ThemeProvider";
+import { Meta, StoryFn } from '@storybook/react';
+import AppearanceSection from './AppearanceSection';
+import { ThemeProvider } from '@/providers/ThemeProvider';
 
 export default {
-  title: "Dashboard/Settings/AppearanceSection",
+  title: 'Dashboard/Settings/AppearanceSection',
   component: AppearanceSection,
 } as Meta;
 

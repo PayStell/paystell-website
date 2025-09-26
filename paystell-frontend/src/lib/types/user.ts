@@ -2,22 +2,22 @@
  * User role types for role-based access control
  */
 export enum UserRole {
-  USER = "USER",
-  MERCHANT = "MERCHANT",
-  ADMIN = "ADMIN",
+  USER = 'USER',
+  MERCHANT = 'MERCHANT',
+  ADMIN = 'ADMIN',
 }
 
 /**
  * Permissions available for role-based access control
  */
 export enum Permission {
-  CREATE_PAYMENT = "create_payment",
-  VIEW_PAYMENTS = "view_payments",
-  MANAGE_MERCHANT = "manage_merchant",
-  MANAGE_USERS = "manage_users",
-  VIEW_REPORTS = "view_reports",
-  MANAGE_SETTINGS = "manage_settings",
-  MANAGE_ROLES = "manage_roles",
+  CREATE_PAYMENT = 'create_payment',
+  VIEW_PAYMENTS = 'view_payments',
+  MANAGE_MERCHANT = 'manage_merchant',
+  MANAGE_USERS = 'manage_users',
+  VIEW_REPORTS = 'view_reports',
+  MANAGE_SETTINGS = 'manage_settings',
+  MANAGE_ROLES = 'manage_roles',
 }
 
 /**
@@ -25,8 +25,21 @@ export enum Permission {
  */
 export const ROLE_PERMISSIONS: Record<UserRole, Permission[]> = {
   [UserRole.USER]: [Permission.CREATE_PAYMENT, Permission.VIEW_PAYMENTS],
-  [UserRole.MERCHANT]: [Permission.CREATE_PAYMENT, Permission.VIEW_PAYMENTS, Permission.MANAGE_MERCHANT, Permission.VIEW_REPORTS],
-  [UserRole.ADMIN]: [Permission.CREATE_PAYMENT, Permission.VIEW_PAYMENTS, Permission.MANAGE_MERCHANT, Permission.MANAGE_USERS, Permission.VIEW_REPORTS, Permission.MANAGE_SETTINGS, Permission.MANAGE_ROLES],
+  [UserRole.MERCHANT]: [
+    Permission.CREATE_PAYMENT,
+    Permission.VIEW_PAYMENTS,
+    Permission.MANAGE_MERCHANT,
+    Permission.VIEW_REPORTS,
+  ],
+  [UserRole.ADMIN]: [
+    Permission.CREATE_PAYMENT,
+    Permission.VIEW_PAYMENTS,
+    Permission.MANAGE_MERCHANT,
+    Permission.MANAGE_USERS,
+    Permission.VIEW_REPORTS,
+    Permission.MANAGE_SETTINGS,
+    Permission.MANAGE_ROLES,
+  ],
 };
 
 /**
@@ -41,4 +54,4 @@ export interface User {
   description?: string;
   profileImage?: string;
   twoFactorEnabled: boolean;
-} 
+}

@@ -1,14 +1,14 @@
-"use client"
+'use client';
 
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRight, CreditCard, Globe, Shield } from "lucide-react"
-import { useProgress } from "@/hooks/use-progress"
-import { motion } from "framer-motion"
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { ArrowRight, CreditCard, Globe, Shield } from 'lucide-react';
+import { useProgress } from '@/hooks/use-progress';
+import { motion } from 'framer-motion';
 
 export function WelcomeStep() {
-  const { nextStep } = useProgress()
+  const { nextStep } = useProgress();
 
   // Animation variants
   const containerVariants = {
@@ -19,7 +19,7 @@ export function WelcomeStep() {
         staggerChildren: 0.1,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -30,7 +30,7 @@ export function WelcomeStep() {
         duration: 0.4,
       },
     },
-  }
+  };
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -43,12 +43,12 @@ export function WelcomeStep() {
     },
     hover: {
       y: -5,
-      boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
       transition: {
         duration: 0.2,
       },
     },
-  }
+  };
 
   return (
     <motion.div className="space-y-8" variants={containerVariants} initial="hidden" animate="show">
@@ -59,7 +59,7 @@ export function WelcomeStep() {
             initial={{ scale: 0 }}
             animate={{ scale: 1 }}
             transition={{
-              type: "spring",
+              type: 'spring',
               stiffness: 260,
               damping: 20,
               delay: 0.2,
@@ -76,7 +76,8 @@ export function WelcomeStep() {
         </div>
         <h1 className="text-3xl font-bold tracking-tight">Welcome to PayStell</h1>
         <p className="text-muted-foreground max-w-md mx-auto">
-          Start accepting payments on the Stellar network in just a few minutes. Let&apos;s set up your merchant account.
+          Start accepting payments on the Stellar network in just a few minutes. Let&apos;s set up
+          your merchant account.
         </p>
       </motion.div>
 
@@ -136,7 +137,10 @@ export function WelcomeStep() {
         </motion.div>
       </div>
 
-      <motion.div className="flex flex-col md:flex-row gap-4 justify-center pt-4" variants={itemVariants}>
+      <motion.div
+        className="flex flex-col md:flex-row gap-4 justify-center pt-4"
+        variants={itemVariants}
+      >
         <Button onClick={nextStep} size="lg" className="w-full md:w-auto group">
           Get Started
           <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
@@ -145,12 +149,11 @@ export function WelcomeStep() {
           variant="outline"
           size="lg"
           className="w-full md:w-auto"
-          onClick={() => window.open("https://paystell.com/learn-more", "_blank")}
+          onClick={() => window.open('https://paystell.com/learn-more', '_blank')}
         >
           Learn More
         </Button>
       </motion.div>
     </motion.div>
-  )
+  );
 }
-

@@ -1,9 +1,9 @@
-import { Meta, StoryFn } from "@storybook/react";
-import { useState } from "react";
-import { NewLinkModal } from "./NewLinkModal";
+import { Meta, StoryFn } from '@storybook/react';
+import { useState } from 'react';
+import { NewLinkModal } from './NewLinkModal';
 
 export default {
-  title: "Dashboard/Links/NewLinkModal",
+  title: 'Dashboard/Links/NewLinkModal',
   component: NewLinkModal,
 } as Meta<typeof NewLinkModal>;
 

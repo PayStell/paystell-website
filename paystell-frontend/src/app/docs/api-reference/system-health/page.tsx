@@ -1,15 +1,13 @@
-"use client"
+'use client';
 import CodeExample from '@/components/CodeExample';
 
 export default function SystemHealthPage() {
   return (
     <div className="prose prose-gray max-w-none">
       <h1 className="text-4xl font-bold text-white mb-8">System Health Endpoints</h1>
-      
+
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">General Health Check</h2>
-      <p className="text-gray-300 mb-4">
-        Checks if the API is functioning correctly.
-      </p>
+      <p className="text-gray-300 mb-4">Checks if the API is functioning correctly.</p>
       <CodeExample
         code={`GET /health
 
@@ -23,9 +21,7 @@ Response (200 OK):
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Database Health Check</h2>
-      <p className="text-gray-300 mb-4">
-        Checks the connection to the database.
-      </p>
+      <p className="text-gray-300 mb-4">Checks the connection to the database.</p>
       <CodeExample
         code={`GET /health/db
 
@@ -74,4 +70,4 @@ Error Response (503 Service Unavailable):
       />
     </div>
   );
-} 
+}

@@ -15,14 +15,16 @@ type Story = StoryObj<typeof QRCodeDisplay>;
 
 export const Default: Story = {
   args: {
-    otpAuthUrl: 'otpauth://totp/Paystell:user@example.com?secret=EXAMPLEKEYFORDEMOPURPOSES&issuer=Paystell',
+    otpAuthUrl:
+      'otpauth://totp/Paystell:user@example.com?secret=EXAMPLEKEYFORDEMOPURPOSES&issuer=Paystell',
     secret: 'EXAMPLEKEYFORDEMOPURPOSES',
   },
 };
 
 export const LongSecret: Story = {
   args: {
-    otpAuthUrl: 'otpauth://totp/Paystell:user@example.com?secret=ALONGEXAMPLEKEYFORSTORYBOOKDEMOPURPOSESANDTESTING&issuer=Paystell',
+    otpAuthUrl:
+      'otpauth://totp/Paystell:user@example.com?secret=ALONGEXAMPLEKEYFORSTORYBOOKDEMOPURPOSESANDTESTING&issuer=Paystell',
     secret: 'ALONGEXAMPLEKEYFORSTORYBOOKDEMOPURPOSESANDTESTING',
   },
-}; 
+};

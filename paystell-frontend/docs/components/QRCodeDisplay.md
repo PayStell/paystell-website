@@ -6,8 +6,8 @@ The `QRCodeDisplay` component is responsible for rendering the QR code and secre
 
 ```typescript
 interface QRCodeDisplayProps {
-  otpAuthUrl: string;    // The OTP authentication URL to be encoded in the QR code
-  secret: string;        // The secret key for manual entry
+  otpAuthUrl: string; // The OTP authentication URL to be encoded in the QR code
+  secret: string; // The secret key for manual entry
 }
 ```
 
@@ -39,10 +39,12 @@ function Example() {
 The component uses the following features:
 
 1. QR Code Generation
+
    - Generates a QR code from the provided OTP authentication URL
    - Ensures proper sizing and error correction for reliable scanning
 
 2. Secret Key Display
+
    - Displays the secret key in a clear, readable format
    - Groups characters for easier reading
    - Provides copy functionality
@@ -68,4 +70,4 @@ The component uses the following features:
 
 - QR code generation library
 - Clipboard functionality
-- UI components from the design system 
+- UI components from the design system

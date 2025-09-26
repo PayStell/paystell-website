@@ -1,27 +1,19 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "./card";
-import { Button } from "./button";
+import type { Meta, StoryObj } from '@storybook/react';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from './card';
+import { Button } from './button';
 
 const meta: Meta<typeof Card> = {
-  title: "UI/Card",
+  title: 'UI/Card',
   component: Card,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
     docs: {
       description: {
-        component:
-          "A flexible card component with header, content, and footer sections.",
+        component: 'A flexible card component with header, content, and footer sections.',
       },
     },
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 };
 
 export default meta;
@@ -49,9 +41,7 @@ export const WithContent: Story = {
     <Card className="w-[350px]">
       <CardHeader>
         <CardTitle>Payment Information</CardTitle>
-        <CardDescription>
-          Your payment details and transaction history
-        </CardDescription>
+        <CardDescription>Your payment details and transaction history</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="flex justify-between">
@@ -87,8 +77,7 @@ export const MobileResponsive: Story = {
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground">
-            This card will stack properly on mobile devices and maintain proper
-            spacing.
+            This card will stack properly on mobile devices and maintain proper spacing.
           </p>
         </CardContent>
         <CardFooter>
@@ -99,7 +88,7 @@ export const MobileResponsive: Story = {
   ),
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };
@@ -140,7 +129,7 @@ export const StackedCards: Story = {
   ),
   parameters: {
     viewport: {
-      defaultViewport: "mobile1",
+      defaultViewport: 'mobile1',
     },
   },
 };

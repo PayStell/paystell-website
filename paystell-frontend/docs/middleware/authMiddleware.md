@@ -12,15 +12,15 @@ The `authMiddleware` is a Next.js middleware that provides authentication protec
 ## API Reference
 
 ```typescript
-async function authMiddleware(
-  request: NextRequest
-): Promise<NextResponse | undefined>;
+async function authMiddleware(request: NextRequest): Promise<NextResponse | undefined>;
 ```
 
 ### Parameters
+
 - `request`: The incoming Next.js request object
 
 ### Returns
+
 - `NextResponse`: Error response if authentication fails
 - `undefined`: If authentication succeeds
 
@@ -32,11 +32,11 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function authMiddleware(request: NextRequest) {
   const authHeader = request.headers.get('Authorization');
   const token = authHeader ? authHeader.replace('Bearer ', '') : null;
-  
+
   if (!token) {
     return NextResponse.json(
       { success: false, message: 'Authentication required' },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -53,7 +53,7 @@ export async function POST(request: Request) {
   // Apply authentication middleware
   const authResponse = await authMiddleware(request as any);
   if (authResponse) return authResponse;
-  
+
   // Continue with protected route logic
   // ...
 }
@@ -72,11 +72,13 @@ export async function POST(request: Request) {
 ## Security Considerations
 
 1. **Token Validation**
+
    - Checks for presence of token
    - Validates token format
    - Future: Add token expiration check
 
 2. **Header Processing**
+
    - Supports Bearer token format
    - Case-insensitive header checks
    - Proper string sanitization
@@ -89,11 +91,13 @@ export async function POST(request: Request) {
 ## Best Practices
 
 1. **Usage Guidelines**
+
    - Apply to all protected routes
    - Chain with other middleware as needed
    - Keep token validation logic centralized
 
 2. **Error Handling**
+
    - Clear error messages
    - Proper logging
    - Standard response format
@@ -105,4 +109,4 @@ export async function POST(request: Request) {
 
 ## Dependencies
 
-- next/server for Next.js types and utilities 
+- next/server for Next.js types and utilities

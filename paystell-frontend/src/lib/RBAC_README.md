@@ -19,6 +19,7 @@ The system defines the following roles:
 Each role has a set of specific permissions that define what actions they can perform:
 
 ### Admin Permissions
+
 - View users
 - Create users
 - Edit users
@@ -31,12 +32,14 @@ Each role has a set of specific permissions that define what actions they can pe
 - Manage roles
 
 ### Merchant Permissions
+
 - View transactions
 - Create transactions
 - Manage store
 - View analytics
 
 ### User Permissions
+
 - View transactions
 - Create transactions
 
@@ -51,6 +54,7 @@ Defines the user roles, permissions, and their relationships.
 ### 2. Auth Context (src/lib/context/AuthContext.tsx)
 
 Provides authentication context and role-based functionality throughout the application:
+
 - User authentication state
 - Permission checking
 - Role management
@@ -58,6 +62,7 @@ Provides authentication context and role-based functionality throughout the appl
 ### 3. WithAuth Middleware (src/lib/middleware/withAuth.tsx)
 
 Higher-order component that restricts access to routes based on:
+
 - Authentication status
 - Required roles
 - Required permissions
@@ -76,10 +81,7 @@ Navigation items are filtered based on user roles and permissions.
 
 ```tsx
 // Protect a route that only admins should access
-<WithAuth 
-  requiredRoles={[UserRole.ADMIN]}
-  requiredPermissions={[Permission.MANAGE_ROLES]}
->
+<WithAuth requiredRoles={[UserRole.ADMIN]} requiredPermissions={[Permission.MANAGE_ROLES]}>
   <AdminPage />
 </WithAuth>
 ```
@@ -88,10 +90,7 @@ Navigation items are filtered based on user roles and permissions.
 
 ```tsx
 // Only show content to users with specific permissions
-<RoleBasedGuard
-  requiredPermissions={[Permission.MANAGE_STORE]}
-  fallback={<AccessDeniedMessage />}
->
+<RoleBasedGuard requiredPermissions={[Permission.MANAGE_STORE]} fallback={<AccessDeniedMessage />}>
   <StoreManagementPanel />
 </RoleBasedGuard>
 ```
@@ -117,4 +116,4 @@ The dashboard navigation automatically filters items based on the user's role an
 
 - Dynamic role creation and permission assignment
 - Fine-grained permission system with hierarchical permissions
-- Role-based analytics and reporting 
+- Role-based analytics and reporting

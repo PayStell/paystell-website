@@ -1,6 +1,6 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -8,24 +8,24 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
-import { formatAddress } from "@/lib/utils"
-import { Wallet, AlertTriangle, CheckCircle2 } from "lucide-react"
-import { useState } from "react"
-import { toast } from "sonner"
+} from '@/components/ui/dialog';
+import { formatAddress } from '@/lib/utils';
+import { Wallet, AlertTriangle, CheckCircle2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
 interface ConfirmTransactionModalProps {
-  isOpen: boolean
-  onClose: () => void
-  onConfirm: () => void
-  destination: string
-  amount: string
-  memo?: string
-  usdEquivalent: string | null
-  isSubmitting: boolean
-  sourceAddress: string
-  transactionFee?: string
-  transactionXdr?: string
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  destination: string;
+  amount: string;
+  memo?: string;
+  usdEquivalent: string | null;
+  isSubmitting: boolean;
+  sourceAddress: string;
+  transactionFee?: string;
+  transactionXdr?: string;
 }
 
 export function ConfirmTransactionModal({
@@ -41,14 +41,13 @@ export function ConfirmTransactionModal({
   transactionFee,
   transactionXdr,
 }: ConfirmTransactionModalProps) {
-  const [hasConfirmedTrust, setHasConfirmedTrust] = useState(false)
-
+  const [hasConfirmedTrust, setHasConfirmedTrust] = useState(false);
 
   return (
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) onClose()
+        if (!open) onClose();
       }}
     >
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
@@ -57,7 +56,9 @@ export function ConfirmTransactionModal({
             <AlertTriangle className="h-5 w-5 text-yellow-500" />
             Confirm Transaction
           </DialogTitle>
-          <DialogDescription>Please verify all details before confirming this transaction.</DialogDescription>
+          <DialogDescription>
+            Please verify all details before confirming this transaction.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4 py-4">
@@ -78,9 +79,7 @@ export function ConfirmTransactionModal({
             <div className="flex justify-between items-start">
               <span className="text-sm font-medium text-muted-foreground">From</span>
               <div className="text-right">
-                <p className="font-medium break-all text-sm">
-                  {formatAddress(sourceAddress)}
-                </p>
+                <p className="font-medium break-all text-sm">{formatAddress(sourceAddress)}</p>
                 <p className="text-xs text-muted-foreground">Your Address</p>
               </div>
             </div>
@@ -129,15 +128,17 @@ export function ConfirmTransactionModal({
                   size="sm"
                   className="h-6 px-2 text-xs"
                   onClick={() => {
-                    navigator.clipboard.writeText(transactionXdr)
-                    toast.success("XDR copied to clipboard")
+                    navigator.clipboard.writeText(transactionXdr);
+                    toast.success('XDR copied to clipboard');
                   }}
                 >
                   Copy
                 </Button>
               </div>
               <div className="bg-muted/70 p-3 rounded-md">
-                <p className="text-xs break-all font-mono overflow-x-auto max-h-24 overflow-y-auto">{transactionXdr}</p>
+                <p className="text-xs break-all font-mono overflow-x-auto max-h-24 overflow-y-auto">
+                  {transactionXdr}
+                </p>
                 <p className="text-xs text-muted-foreground mt-1">
                   This is the encoded transaction data that will be signed
                 </p>
@@ -156,8 +157,8 @@ export function ConfirmTransactionModal({
               />
             </div>
             <label htmlFor="trust-confirmation" className="text-sm">
-              I confirm that I trust this recipient and understand that this transaction cannot be reversed once
-              submitted.
+              I confirm that I trust this recipient and understand that this transaction cannot be
+              reversed once submitted.
             </label>
           </div>
         </div>
@@ -166,7 +167,11 @@ export function ConfirmTransactionModal({
           <Button variant="outline" onClick={onClose} className="sm:w-full">
             Cancel
           </Button>
-          <Button onClick={onConfirm} disabled={!hasConfirmedTrust || isSubmitting} className="sm:w-full">
+          <Button
+            onClick={onConfirm}
+            disabled={!hasConfirmedTrust || isSubmitting}
+            className="sm:w-full"
+          >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
                 <span className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent"></span>
@@ -182,5 +187,5 @@ export function ConfirmTransactionModal({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

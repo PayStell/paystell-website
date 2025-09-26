@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { useState } from 'react';
 import CodeExample from './CodeExample';
 
@@ -47,12 +47,10 @@ export default function ApiPlayground({
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6">
       <h3 className="mb-4 text-lg font-semibold">API Playground</h3>
-      
+
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">
-            API Key
-          </label>
+          <label className="block text-sm font-medium text-gray-700">API Key</label>
           <input
             type="password"
             value={apiKey}
@@ -65,9 +63,7 @@ export default function ApiPlayground({
 
         {method !== 'GET' && (
           <div>
-            <label className="block text-sm font-medium text-gray-700">
-              Request Body
-            </label>
+            <label className="block text-sm font-medium text-gray-700">Request Body</label>
             <textarea
               value={requestBody}
               onChange={(e) => setRequestBody(e.target.value)}
@@ -101,4 +97,4 @@ export default function ApiPlayground({
       )}
     </div>
   );
-} 
+}

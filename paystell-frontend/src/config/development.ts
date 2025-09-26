@@ -9,8 +9,8 @@ export const DEV_CONFIG = {
     salesByPeriod: {
       today: 5000,
       thisWeek: 35000,
-      thisMonth: 125000
-    }
+      thisMonth: 125000,
+    },
   },
 
   MOCK_CHART_DATA: [
@@ -25,6 +25,6 @@ export const DEV_CONFIG = {
     { month: 'Sep', desktop: 3000, mobile: 1398 },
     { month: 'Oct', desktop: 2000, mobile: 9800 },
     { month: 'Nov', desktop: 2780, mobile: 3908 },
-    { month: 'Dec', desktop: 1890, mobile: 4800 }
-  ]
-}; 
+    { month: 'Dec', desktop: 1890, mobile: 4800 },
+  ],
+};

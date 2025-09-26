@@ -1,5 +1,5 @@
-import Image from "next/image";
-import Logo_PayStell from "../Images/Logo_PayStell.png";
+import Image from 'next/image';
+import Logo_PayStell from '../Images/Logo_PayStell.png';
 
 export const Footer = () => {
   return (
@@ -8,12 +8,7 @@ export const Footer = () => {
         <div className="flex justify-between items-center px-2 border-t border-gray-300 py-4">
           <div className="flex items-center">
             <p className="text-sm mr-2 text-black">Proudly Powered by</p>
-            <Image
-              src={Logo_PayStell}
-              alt="Powered by Cbiux"
-              width={80}
-              height={80}
-            />
+            <Image src={Logo_PayStell} alt="Powered by Cbiux" width={80} height={80} />
           </div>
           <nav className="flex space-x-4">
             <a href="/terms" className="text-xs text-black hover:underline">

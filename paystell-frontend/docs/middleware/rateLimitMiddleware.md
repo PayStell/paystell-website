@@ -16,16 +16,18 @@ The `rateLimitMiddleware` provides protection against abuse by limiting the numb
 async function rateLimitMiddleware(
   request: NextRequest,
   maxRequests?: number,
-  windowMs?: number
+  windowMs?: number,
 ): Promise<NextResponse | undefined>;
 ```
 
 ### Parameters
+
 - `request`: The incoming Next.js request object
 - `maxRequests`: Maximum number of requests allowed in the time window (default: 5)
 - `windowMs`: Time window in milliseconds (default: 60000 - 1 minute)
 
 ### Returns
+
 - `NextResponse`: Rate limit exceeded response
 - `undefined`: If within rate limits
 
@@ -34,10 +36,13 @@ async function rateLimitMiddleware(
 The middleware uses an in-memory Map to track requests:
 
 ```typescript
-const ipRequestMap = new Map<string, {
-  count: number;
-  resetTime: number;
-}>();
+const ipRequestMap = new Map<
+  string,
+  {
+    count: number;
+    resetTime: number;
+  }
+>();
 ```
 
 ### Rate Limit Headers
@@ -60,13 +65,9 @@ import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
 
 export async function POST(request: Request) {
   // Strict rate limiting: 3 requests per minute
-  const rateLimitResponse = await rateLimitMiddleware(
-    request as any,
-    3,
-    60 * 1000
-  );
+  const rateLimitResponse = await rateLimitMiddleware(request as any, 3, 60 * 1000);
   if (rateLimitResponse) return rateLimitResponse;
-  
+
   // Continue with route logic
   // ...
 }
@@ -86,11 +87,13 @@ When rate limit is exceeded (429 Too Many Requests):
 ## Production Considerations
 
 1. **Storage Options**
+
    - Replace in-memory Map with Redis
    - Use distributed rate limiting
    - Consider cluster-aware solutions
 
 2. **Configuration**
+
    - Environment-based limits
    - Different limits per route
    - IP address validation
@@ -103,11 +106,13 @@ When rate limit is exceeded (429 Too Many Requests):
 ## Best Practices
 
 1. **Rate Limit Design**
+
    - Set appropriate limits
    - Consider user experience
    - Plan for bursts
 
 2. **Error Handling**
+
    - Clear user feedback
    - Proper retry guidance
    - Standard headers
@@ -124,19 +129,22 @@ When rate limit is exceeded (429 Too Many Requests):
 ## Example Configurations
 
 ### Basic Protection
+
 ```typescript
 // 5 requests per minute
 await rateLimitMiddleware(request);
 ```
 
 ### Strict API Limits
+
 ```typescript
 // 2 requests per 5 minutes
 await rateLimitMiddleware(request, 2, 5 * 60 * 1000);
 ```
 
 ### High-Volume Endpoints
+
 ```typescript
 // 100 requests per minute
 await rateLimitMiddleware(request, 100, 60 * 1000);
-``` 
+```

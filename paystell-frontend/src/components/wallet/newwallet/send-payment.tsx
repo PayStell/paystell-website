@@ -4,8 +4,21 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 interface SendPaymentProps {
   onNavigate: (page: string) => void;
@@ -17,7 +30,7 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
     amount: '',
     currency: 'XLM',
     memo: '',
-    fee: '0.00001' // Consider fetching dynamic fees
+    fee: '0.00001', // Consider fetching dynamic fees
   });
   const isValidStellarAddress = (address: string) => {
     return /^G[A-Z0-9]{55}$/.test(address);
@@ -30,7 +43,7 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
   const [isExecuting, setIsExecuting] = useState(false);
 
   const handleSendFormChange = (field: string, value: string) => {
-    setSendForm(prev => ({ ...prev, [field]: value }));
+    setSendForm((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleConfirmTransaction = () => {
@@ -105,7 +118,10 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
             </div>
             <div className="space-y-2">
               <Label htmlFor="currency">Currency</Label>
-              <Select value={sendForm.currency} onValueChange={(value) => handleSendFormChange('currency', value)}>
+              <Select
+                value={sendForm.currency}
+                onValueChange={(value) => handleSendFormChange('currency', value)}
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -135,7 +151,7 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
             </div>
           </div>
 
-                   <Button 
+          <Button
             onClick={handleConfirmTransaction}
             className="w-full"
             disabled={
@@ -166,7 +182,9 @@ export const SendPayment: React.FC<SendPaymentProps> = ({ onNavigate }) => {
               </div>
               <div>
                 <Label className="text-gray-500">Amount:</Label>
-                <div className="font-semibold">{sendForm.amount} {sendForm.currency}</div>
+                <div className="font-semibold">
+                  {sendForm.amount} {sendForm.currency}
+                </div>
               </div>
               <div>
                 <Label className="text-gray-500">Fee:</Label>

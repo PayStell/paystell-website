@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React from "react";
-import { MdCloudUpload } from "react-icons/md";
+import React from 'react';
+import { MdCloudUpload } from 'react-icons/md';
 import Image from 'next/image';
 
 interface ProfileImageUploadProps {
@@ -9,19 +9,16 @@ interface ProfileImageUploadProps {
   onImageUpload: (file: File | null) => void;
 }
 
-const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({
-  previewImage,
-  onImageUpload,
-}) => {
+const ProfileImageUpload: React.FC<ProfileImageUploadProps> = ({ previewImage, onImageUpload }) => {
   return (
     <div className="relative flex flex-col items-center">
       <Image
-          src={previewImage || "/default-profile.png"}
-          alt="Profile Preview"
-          width={160}
-          height={160}
-          className="rounded-full mb-4 object-cover border aspect-square"
-        />
+        src={previewImage || '/default-profile.png'}
+        alt="Profile Preview"
+        width={160}
+        height={160}
+        className="rounded-full mb-4 object-cover border aspect-square"
+      />
       <button
         type="button"
         className="absolute bottom-2 right-1/2 translate-x-1/2 bg-blue-600 text-white p-2 rounded-full hover:bg-blue-700 transition hover:scale-110"

@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState, type ReactNode } from "react";
-import { 
-  MdChevronLeft, 
+import { useState, type ReactNode } from 'react';
+import {
+  MdChevronLeft,
   MdChevronRight,
   MdMoreVert,
   MdShare,
   MdEdit,
-  MdDeleteOutline
-} from "react-icons/md";
-import { Button } from "@/components/ui/button";
+  MdDeleteOutline,
+} from 'react-icons/md';
+import { Button } from '@/components/ui/button';
 import {
   Table,
   TableBody,
@@ -17,37 +17,39 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from '@/components/ui/table';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { EditLinkModal } from "./editLink/EditLinkModal";
-import { DeleteConfirmDialog } from "./DeleteConfirmDialog";
-import { PaymentLink, softDeletePaymentLink } from "@/services/paymentLink.service";
-import { useToast } from "@/components/ui/use-toast";
+} from '@/components/ui/dropdown-menu';
+import { EditLinkModal } from './editLink/EditLinkModal';
+import { DeleteConfirmDialog } from './DeleteConfirmDialog';
+import { PaymentLink, softDeletePaymentLink } from '@/services/paymentLink.service';
+import { useToast } from '@/components/ui/use-toast';
 
 // Temporary Badge replacement until UI components are fixed
-const Badge = ({ 
-  children, 
-  variant = "default", 
-  className = "" 
-}: { 
-  children: ReactNode; 
-  variant?: string; 
+const Badge = ({
+  children,
+  variant = 'default',
+  className = '',
+}: {
+  children: ReactNode;
+  variant?: string;
   className?: string;
 }) => {
   const variantClasses = {
-    default: "bg-blue-100 text-blue-800",
-    destructive: "bg-red-100 text-red-800",
-    secondary: "bg-gray-100 text-gray-800",
-    outline: "border border-gray-200 text-gray-800"
+    default: 'bg-blue-100 text-blue-800',
+    destructive: 'bg-red-100 text-red-800',
+    secondary: 'bg-gray-100 text-gray-800',
+    outline: 'border border-gray-200 text-gray-800',
   };
-  
+
   return (
-    <span className={`px-2.5 py-0.5 text-xs font-medium rounded-md inline-flex items-center ${variantClasses[variant as keyof typeof variantClasses]} ${className}`}>
+    <span
+      className={`px-2.5 py-0.5 text-xs font-medium rounded-md inline-flex items-center ${variantClasses[variant as keyof typeof variantClasses]} ${className}`}
+    >
       {children}
     </span>
   );
@@ -107,15 +109,15 @@ export function PaymentLinksTable({ data, onUpdate, onDelete }: PaymentLinksProp
       await softDeletePaymentLink(link.id);
       onDelete(link.id);
       toast({
-        title: "Success",
-        description: "Payment link deleted successfully",
+        title: 'Success',
+        description: 'Payment link deleted successfully',
       });
     } catch (error) {
-      console.error("Failed to delete payment link:", error);
+      console.error('Failed to delete payment link:', error);
       toast({
-        title: "Error",
-        description: "Failed to delete payment link. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to delete payment link. Please try again.',
+        variant: 'destructive',
       });
     }
   };
@@ -132,10 +134,7 @@ export function PaymentLinksTable({ data, onUpdate, onDelete }: PaymentLinksProp
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               {[5, 10, 20].map((count) => (
-                <DropdownMenuItem
-                  key={count}
-                  onClick={() => handleItemsPerPageChange(count)}
-                >
+                <DropdownMenuItem key={count} onClick={() => handleItemsPerPageChange(count)}>
                   {count} items per page
                 </DropdownMenuItem>
               ))}
@@ -163,9 +162,7 @@ export function PaymentLinksTable({ data, onUpdate, onDelete }: PaymentLinksProp
               <TableCell className="text-center">{item.sku}</TableCell>
               <TableCell className="text-center">{item.price}</TableCell>
               <TableCell className="text-center">
-                <Badge variant={item.state === "active" ? "active" : "default"}>
-                  {item.state}
-                </Badge>
+                <Badge variant={item.state === 'active' ? 'active' : 'default'}>{item.state}</Badge>
               </TableCell>
               <TableCell className="text-center">
                 <div className="flex items-center justify-center gap-2">
@@ -183,7 +180,7 @@ export function PaymentLinksTable({ data, onUpdate, onDelete }: PaymentLinksProp
                         <MdEdit className="h-4 w-4 mr-2" />
                         Edit
                       </DropdownMenuItem>
-                      <DropdownMenuItem 
+                      <DropdownMenuItem
                         onClick={() => setDeletingLink(item)}
                         className="text-destructive"
                       >
@@ -211,7 +208,7 @@ export function PaymentLinksTable({ data, onUpdate, onDelete }: PaymentLinksProp
         {[...Array(totalSteps)].map((_, index) => (
           <Button
             key={`page-${index + 1}`}
-            variant={currentPage === index + 1 ? "default" : "outline"}
+            variant={currentPage === index + 1 ? 'default' : 'outline'}
             className="w-8 h-8 p-0"
             onClick={() => setCurrentPage(index + 1)}
           >

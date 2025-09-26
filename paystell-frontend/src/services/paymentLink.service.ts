@@ -20,7 +20,7 @@ api.interceptors.request.use((config) => {
       url: config.url,
       method: config.method,
       headers: config.headers,
-      baseURL: config.baseURL
+      baseURL: config.baseURL,
     });
   }
   return config;
@@ -36,7 +36,7 @@ api.interceptors.response.use(
         method: error.config?.method,
         status: error.response?.status,
         data: error.response?.data,
-        message: error.message
+        message: error.message,
       });
     }
 
@@ -48,7 +48,7 @@ api.interceptors.response.use(
       window.location.href = '/login';
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export interface CreatePaymentLinkDto {
@@ -61,7 +61,7 @@ export interface CreatePaymentLinkDto {
   /** Required, must be unique, max length 50 characters */
   sku: string;
   /** Required, must be one of: "active", "inactive", "expired" */
-  status: "active" | "inactive" | "expired";
+  status: 'active' | 'inactive' | 'expired';
   /** Optional, max length 500 characters */
   description?: string;
   /** Optional, date string */
@@ -103,7 +103,7 @@ export const createPaymentLink = async (data: CreatePaymentLinkDto): Promise<Pay
           status: error.response?.status,
           data: error.response?.data,
           headers: error.response?.headers,
-          config: error.config
+          config: error.config,
         });
       }
       throw new Error(error.response?.data?.message || 'Failed to create payment link');
@@ -131,7 +131,7 @@ export const getPaymentLinks = async (): Promise<PaginatedResponse<PaymentLink>>
         console.error('Failed to fetch payment links:', {
           status: error.response?.status,
           data: error.response?.data,
-          message: error.message
+          message: error.message,
         });
       }
       if (error.response?.status === 404) {
@@ -140,7 +140,7 @@ export const getPaymentLinks = async (): Promise<PaginatedResponse<PaymentLink>>
           total: 0,
           page: 1,
           limit: 10,
-          totalPages: 0
+          totalPages: 0,
         };
       }
       throw new Error(error.response?.data?.message || 'Failed to fetch payment links');
@@ -149,7 +149,10 @@ export const getPaymentLinks = async (): Promise<PaginatedResponse<PaymentLink>>
   }
 };
 
-export const updatePaymentLink = async (id: string, data: Partial<CreatePaymentLinkDto>): Promise<PaymentLink> => {
+export const updatePaymentLink = async (
+  id: string,
+  data: Partial<CreatePaymentLinkDto>,
+): Promise<PaymentLink> => {
   try {
     if (process.env.NODE_ENV === 'development') {
       console.log('Updating payment link:', { id, data });
@@ -163,7 +166,7 @@ export const updatePaymentLink = async (id: string, data: Partial<CreatePaymentL
           status: error.response?.status,
           data: error.response?.data,
           headers: error.response?.headers,
-          config: error.config
+          config: error.config,
         });
       }
       throw new Error(error.response?.data?.message || 'Failed to update payment link');
@@ -188,7 +191,7 @@ export const softDeletePaymentLink = async (id: string): Promise<void> => {
           status: error.response?.status,
           data: error.response?.data,
           headers: error.response?.headers,
-          config: error.config
+          config: error.config,
         });
       }
       throw new Error(error.response?.data?.message || 'Failed to delete payment link');
@@ -198,4 +201,4 @@ export const softDeletePaymentLink = async (id: string): Promise<void> => {
     }
     throw error;
   }
-}; 
+};

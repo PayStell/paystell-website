@@ -1,4 +1,4 @@
-import type { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import type { Control, FieldErrors, UseFormSetValue } from 'react-hook-form';
 
 interface ProductForm {
   product: {

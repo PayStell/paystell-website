@@ -8,7 +8,7 @@ import { generateSecureSecret } from '@/utils/auth';
 /**
  * Enable Two-Factor Authentication
  * This endpoint generates a QR code and secret for setting up 2FA
- * 
+ *
  * Authentication is now required for this endpoint to ensure security.
  * Rate limiting is implemented to prevent brute force attacks.
  */
@@ -17,17 +17,16 @@ export async function POST(request: NextRequest) {
     // Apply rate limiting middleware first
     const rateLimitResponse = await rateLimitMiddleware(request, 5, 60 * 1000);
     if (rateLimitResponse) return rateLimitResponse;
-    
+
     // Apply authentication middleware
     const authResponse = await authMiddleware(request);
     if (authResponse) return authResponse;
-    
+
     // Generate a secure random secret
     // In a real implementation, this would be stored securely with the user's profile
-    const secretBase32 = process.env.NODE_ENV === 'production' 
-      ? generateSecureSecret()
-      : MOCK_2FA.SECRET_KEY;
-    
+    const secretBase32 =
+      process.env.NODE_ENV === 'production' ? generateSecureSecret() : MOCK_2FA.SECRET_KEY;
+
     try {
       // Create a secret from the base32 string
       const secret = OTPAuth.Secret.fromBase32(secretBase32);
@@ -55,25 +54,25 @@ export async function POST(request: NextRequest) {
       console.error('Error generating OTP components:', innerError);
       const errorMessage = innerError instanceof Error ? innerError.message : 'Unknown error';
       return NextResponse.json(
-        { 
-          success: false, 
-          message: 'Error generating OTP components', 
-          error: errorMessage
+        {
+          success: false,
+          message: 'Error generating OTP components',
+          error: errorMessage,
         },
-        { status: 500 }
+        { status: 500 },
       );
     }
   } catch (error: Error | unknown) {
     console.error('Error enabling 2FA:', error);
     const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-    
+
     return NextResponse.json(
-      { 
-        success: false, 
-        message: 'Failed to enable 2FA', 
-        error: errorMessage 
+      {
+        success: false,
+        message: 'Failed to enable 2FA',
+        error: errorMessage,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
-} 
+}

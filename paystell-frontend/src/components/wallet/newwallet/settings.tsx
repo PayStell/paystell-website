@@ -10,38 +10,38 @@ interface SettingsPageProps {
 export const SettingsPage: React.FC<SettingsPageProps> = ({ onNavigate }) => {
   const settingsCategories = [
     {
-      title: "Merchant Settings",
-      description: "Configure payment methods and merchant setup",
+      title: 'Merchant Settings',
+      description: 'Configure payment methods and merchant setup',
       icon: CreditCard,
       items: [
-        { name: "Configure Payment Methods", action: () => onNavigate('payment-methods') },
-        { name: "Configure Notifications", action: () => onNavigate('notifications') },
-        { name: "Configure API Integration", action: () => onNavigate('api-integration') },
-        { name: "Configure Fees", action: () => onNavigate('fees') }
-      ]
+        { name: 'Configure Payment Methods', action: () => onNavigate('payment-methods') },
+        { name: 'Configure Notifications', action: () => onNavigate('notifications') },
+        { name: 'Configure API Integration', action: () => onNavigate('api-integration') },
+        { name: 'Configure Fees', action: () => onNavigate('fees') },
+      ],
     },
     {
-      title: "Security Settings",
-      description: "Manage your wallet security and authentication",
+      title: 'Security Settings',
+      description: 'Manage your wallet security and authentication',
       icon: Shield,
       items: [
-        { name: "2FA Authentication", action: () => onNavigate('2fa-auth') },
-        { name: "Key Backup", action: () => onNavigate('key-backup') },
-        { name: "Configure PIN", action: () => onNavigate('configure-pin') },
-        { name: "Trusted Devices", action: () => onNavigate('trusted-devices') }
-      ]
+        { name: '2FA Authentication', action: () => onNavigate('2fa-auth') },
+        { name: 'Key Backup', action: () => onNavigate('key-backup') },
+        { name: 'Configure PIN', action: () => onNavigate('configure-pin') },
+        { name: 'Trusted Devices', action: () => onNavigate('trusted-devices') },
+      ],
     },
     {
-      title: "Wallet Settings",
-      description: "General wallet preferences and configuration",
+      title: 'Wallet Settings',
+      description: 'General wallet preferences and configuration',
       icon: Settings,
       items: [
-        { name: "General Preferences", action: () => onNavigate('general') },
-        { name: "Currency Settings", action: () => onNavigate('currency') },
-        { name: "Export Data", action: () => onNavigate('export') },
-        { name: "Account Backup", action: () => onNavigate('backup') }
-      ]
-    }
+        { name: 'General Preferences', action: () => onNavigate('general') },
+        { name: 'Currency Settings', action: () => onNavigate('currency') },
+        { name: 'Export Data', action: () => onNavigate('export') },
+        { name: 'Account Backup', action: () => onNavigate('backup') },
+      ],
+    },
   ];
 
   return (

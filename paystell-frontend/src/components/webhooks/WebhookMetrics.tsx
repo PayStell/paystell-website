@@ -1,18 +1,18 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { WebhookMetrics as WebhookMetricsType } from '@/types/webhook-types';
-import { 
-  PieChart, 
-  Pie, 
-  Cell, 
-  ResponsiveContainer, 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  Legend 
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
 } from 'recharts';
 
 interface WebhookMetricsProps {
@@ -67,9 +67,9 @@ const WebhookMetrics: React.FC<WebhookMetricsProps> = ({ metrics, isLoading }) =
 
   const renderActiveMetricsItems = () => (
     <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-      <MetricCard 
-        title="Active Webhooks" 
-        value={metrics.overall.active} 
+      <MetricCard
+        title="Active Webhooks"
+        value={metrics.overall.active}
         description="Currently active webhook configurations"
         color="bg-blue-50 text-blue-700"
       />
@@ -77,7 +77,13 @@ const WebhookMetrics: React.FC<WebhookMetricsProps> = ({ metrics, isLoading }) =
         title="Success Rate"
         value={formatAsPercentage(metrics.overall.successRate)}
         description="Overall webhook delivery success rate"
-        color={metrics.overall.successRate > 0.9 ? "bg-green-50 text-green-700" : metrics.overall.successRate > 0.7 ? "bg-yellow-50 text-yellow-700" : "bg-red-50 text-red-700"}
+        color={
+          metrics.overall.successRate > 0.9
+            ? 'bg-green-50 text-green-700'
+            : metrics.overall.successRate > 0.7
+              ? 'bg-yellow-50 text-yellow-700'
+              : 'bg-red-50 text-red-700'
+        }
       />
       <MetricCard
         title="Total Deliveries"
@@ -98,9 +104,7 @@ const WebhookMetrics: React.FC<WebhookMetricsProps> = ({ metrics, isLoading }) =
     <Card className="w-full">
       <CardHeader>
         <CardTitle>Webhook Metrics</CardTitle>
-        <CardDescription>
-          Overview of your webhook delivery performance
-        </CardDescription>
+        <CardDescription>Overview of your webhook delivery performance</CardDescription>
       </CardHeader>
       <CardContent>
         {renderActiveMetricsItems()}
@@ -129,9 +133,7 @@ const WebhookMetrics: React.FC<WebhookMetricsProps> = ({ metrics, isLoading }) =
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip 
-                      formatter={(value) => [`${value} deliveries`, 'Count']}
-                    />
+                    <Tooltip formatter={(value) => [`${value} deliveries`, 'Count']} />
                   </PieChart>
                 </ResponsiveContainer>
               </div>
@@ -190,4 +192,4 @@ const MetricCard: React.FC<MetricCardProps> = ({ title, value, description, colo
   </div>
 );
 
-export default WebhookMetrics; 
+export default WebhookMetrics;

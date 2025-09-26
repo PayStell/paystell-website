@@ -1,5 +1,5 @@
-import type { LucideIcon } from "lucide-react";
-import type { Permission, UserRole } from "@/lib/types/user";
+import type { LucideIcon } from 'lucide-react';
+import type { Permission, UserRole } from '@/lib/types/user';
 
 export interface NavItem {
   title: string;

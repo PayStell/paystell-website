@@ -12,9 +12,7 @@ const WebhookSecurity: React.FC = () => {
           <ShieldCheck className="mr-2 h-5 w-5 text-green-600" />
           Webhook Security
         </CardTitle>
-        <CardDescription>
-          Learn how to securely verify webhook events from PayStell
-        </CardDescription>
+        <CardDescription>Learn how to securely verify webhook events from PayStell</CardDescription>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="verification">
@@ -25,35 +23,40 @@ const WebhookSecurity: React.FC = () => {
           </TabsList>
           <TabsContent value="verification" className="mt-6 space-y-4">
             <p>
-              Webhook events sent by PayStell include a signature in the <code>X-PayStell-Signature</code> header.
-              This signature is created using your webhook&apos;s secret key and allows you to verify that the webhook was sent by PayStell.
+              Webhook events sent by PayStell include a signature in the{' '}
+              <code>X-PayStell-Signature</code> header. This signature is created using your
+              webhook&apos;s secret key and allows you to verify that the webhook was sent by
+              PayStell.
             </p>
-            
+
             <h3 className="text-lg font-medium mt-4">Signature Format</h3>
-            <p className="text-sm text-gray-600 mb-2">
-              The signature is formatted as follows:
-            </p>
+            <p className="text-sm text-gray-600 mb-2">The signature is formatted as follows:</p>
             <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
               <code>t=timestamp,v1=signature</code>
             </pre>
-            
+
             <div className="mt-4">
               <ul className="list-disc pl-5 space-y-2 text-sm">
-                <li><strong>timestamp</strong>: Unix timestamp when the signature was generated</li>
-                <li><strong>signature</strong>: HMAC-SHA256 signature of the payload created using your webhook secret</li>
+                <li>
+                  <strong>timestamp</strong>: Unix timestamp when the signature was generated
+                </li>
+                <li>
+                  <strong>signature</strong>: HMAC-SHA256 signature of the payload created using
+                  your webhook secret
+                </li>
               </ul>
             </div>
-            
+
             <Alert className="mt-6">
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Important</AlertTitle>
               <AlertDescription>
-                Always verify the webhook signature before trusting the payload.
-                Be aware that your webhook secret is only shown in full during creation.
+                Always verify the webhook signature before trusting the payload. Be aware that your
+                webhook secret is only shown in full during creation.
               </AlertDescription>
             </Alert>
           </TabsContent>
-          
+
           <TabsContent value="code" className="mt-6 space-y-4">
             <h3 className="text-lg font-medium">Node.js Example</h3>
             <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-sm">
@@ -99,7 +102,7 @@ app.post('/webhook', express.raw({type: 'application/json'}), (req, res) => {
 });
               `}</code>
             </pre>
-            
+
             <h3 className="text-lg font-medium mt-4">Python Example</h3>
             <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto text-sm">
               <code>{`
@@ -148,46 +151,64 @@ def handle_webhook():
               `}</code>
             </pre>
           </TabsContent>
-          
+
           <TabsContent value="practices" className="mt-6 space-y-4">
             <h3 className="text-lg font-medium">Security Best Practices</h3>
             <ul className="list-disc pl-5 space-y-3">
               <li>
                 <strong>Always Verify Signatures</strong>
-                <p className="text-sm text-gray-600">Never process webhooks without verification.</p>
+                <p className="text-sm text-gray-600">
+                  Never process webhooks without verification.
+                </p>
               </li>
               <li>
                 <strong>Use HTTPS Endpoints</strong>
-                <p className="text-sm text-gray-600">Only use HTTPS URLs for your webhook endpoints to ensure payload security in transit.</p>
+                <p className="text-sm text-gray-600">
+                  Only use HTTPS URLs for your webhook endpoints to ensure payload security in
+                  transit.
+                </p>
               </li>
               <li>
                 <strong>Set Appropriate Timeouts</strong>
-                <p className="text-sm text-gray-600">Ensure your webhook endpoint responds quickly (within 5 seconds) to avoid retry scenarios.</p>
+                <p className="text-sm text-gray-600">
+                  Ensure your webhook endpoint responds quickly (within 5 seconds) to avoid retry
+                  scenarios.
+                </p>
               </li>
               <li>
                 <strong>Implement Idempotency</strong>
-                <p className="text-sm text-gray-600">Process webhooks idempotently to handle potential duplicate deliveries.</p>
+                <p className="text-sm text-gray-600">
+                  Process webhooks idempotently to handle potential duplicate deliveries.
+                </p>
               </li>
               <li>
                 <strong>Store Secrets Securely</strong>
-                <p className="text-sm text-gray-600">Never hardcode webhook secrets in your application code. Use environment variables or a secure key management system.</p>
+                <p className="text-sm text-gray-600">
+                  Never hardcode webhook secrets in your application code. Use environment variables
+                  or a secure key management system.
+                </p>
               </li>
               <li>
                 <strong>Use a Dedicated Endpoint</strong>
-                <p className="text-sm text-gray-600">Create a dedicated endpoint for PayStell webhooks, separate from other webhook endpoints.</p>
+                <p className="text-sm text-gray-600">
+                  Create a dedicated endpoint for PayStell webhooks, separate from other webhook
+                  endpoints.
+                </p>
               </li>
               <li>
                 <strong>Log Webhook Activity</strong>
-                <p className="text-sm text-gray-600">Keep detailed logs of webhook requests and processing to help with debugging.</p>
+                <p className="text-sm text-gray-600">
+                  Keep detailed logs of webhook requests and processing to help with debugging.
+                </p>
               </li>
             </ul>
-            
+
             <Alert className="mt-6" variant="destructive">
               <AlertTriangle className="h-4 w-4" />
               <AlertTitle>Security Warning</AlertTitle>
               <AlertDescription>
-                Never expose your webhook secret keys in client-side code or public repositories.
-                If you suspect a key has been compromised, regenerate it immediately.
+                Never expose your webhook secret keys in client-side code or public repositories. If
+                you suspect a key has been compromised, regenerate it immediately.
               </AlertDescription>
             </Alert>
           </TabsContent>
@@ -197,4 +218,4 @@ def handle_webhook():
   );
 };
 
-export default WebhookSecurity; 
+export default WebhookSecurity;

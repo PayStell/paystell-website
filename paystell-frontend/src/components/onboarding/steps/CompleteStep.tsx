@@ -1,10 +1,10 @@
-"use client"
+'use client';
 
-import { Button } from "@/components/ui/button"
-import { CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2 } from "lucide-react"
-import Link from "next/link"
-import { motion } from "framer-motion"
+import { Button } from '@/components/ui/button';
+import { CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { CheckCircle2 } from 'lucide-react';
+import Link from 'next/link';
+import { motion } from 'framer-motion';
 
 interface FormData {
   businessName: string;
@@ -28,7 +28,7 @@ export function CompleteStep({ formData }: SuccessStepProps) {
         delayChildren: 0.3,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -39,20 +39,20 @@ export function CompleteStep({ formData }: SuccessStepProps) {
         duration: 0.5,
       },
     },
-  }
+  };
 
   const checkmarkVariants = {
     hidden: { scale: 0 },
     show: {
       scale: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 260,
         damping: 20,
         delay: 0.1,
       },
     },
-  }
+  };
 
   const listItemVariants = {
     hidden: { opacity: 0, x: -20 },
@@ -63,12 +63,12 @@ export function CompleteStep({ formData }: SuccessStepProps) {
         duration: 0.3,
       },
     },
-  }
+  };
 
   const handleSubmit = () => {
     // Redirect to dashboard
-    window.location.href = "/dashboard"
-  }
+    window.location.href = '/dashboard';
+  };
 
   return (
     <motion.div className="space-y-6" variants={containerVariants} initial="hidden" animate="show">
@@ -105,18 +105,29 @@ export function CompleteStep({ formData }: SuccessStepProps) {
             </motion.div>
             <motion.div variants={listItemVariants}>
               <p className="text-muted-foreground">Accepted Assets:</p>
-              <p className="font-medium">{formData.acceptedAssets?.join(", ") || "XLM"}</p>
+              <p className="font-medium">{formData.acceptedAssets?.join(', ') || 'XLM'}</p>
             </motion.div>
           </div>
         </div>
 
         <div className="bg-muted/50 p-4 rounded-lg">
           <h3 className="font-medium mb-2">Next Steps</h3>
-          <motion.ul className="list-disc list-inside space-y-2 text-sm" variants={containerVariants}>
-            <motion.li variants={listItemVariants}>Access your merchant dashboard to view transactions</motion.li>
-            <motion.li variants={listItemVariants}>Create your first payment link to share with customers</motion.li>
-            <motion.li variants={listItemVariants}>Set up your point-of-sale system if applicable</motion.li>
-            <motion.li variants={listItemVariants}>Customize your payment page with your branding</motion.li>
+          <motion.ul
+            className="list-disc list-inside space-y-2 text-sm"
+            variants={containerVariants}
+          >
+            <motion.li variants={listItemVariants}>
+              Access your merchant dashboard to view transactions
+            </motion.li>
+            <motion.li variants={listItemVariants}>
+              Create your first payment link to share with customers
+            </motion.li>
+            <motion.li variants={listItemVariants}>
+              Set up your point-of-sale system if applicable
+            </motion.li>
+            <motion.li variants={listItemVariants}>
+              Customize your payment page with your branding
+            </motion.li>
           </motion.ul>
         </div>
       </motion.div>
@@ -135,7 +146,7 @@ export function CompleteStep({ formData }: SuccessStepProps) {
               animate={{ x: [0, 5, 0] }}
               transition={{
                 repeat: Number.POSITIVE_INFINITY,
-                repeatType: "mirror",
+                repeatType: 'mirror',
                 duration: 1,
                 repeatDelay: 1,
               }}
@@ -144,6 +155,5 @@ export function CompleteStep({ formData }: SuccessStepProps) {
         </motion.div>
       </CardFooter>
     </motion.div>
-  )
+  );
 }
-

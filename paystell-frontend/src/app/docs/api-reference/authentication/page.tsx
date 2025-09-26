@@ -1,15 +1,13 @@
-"use client"
+'use client';
 import CodeExample from '@/components/CodeExample';
 
 export default function AuthenticationPage() {
   return (
     <div className="prose prose-gray max-w-none">
       <h1 className="text-4xl font-bold text-white mb-8">Authentication Endpoints</h1>
-      
+
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">User Registration</h2>
-      <p className="text-gray-300 mb-4">
-        Creates a new user account.
-      </p>
+      <p className="text-gray-300 mb-4">Creates a new user account.</p>
       <CodeExample
         code={`POST /auth/register
 
@@ -37,9 +35,7 @@ Error Response (400 Bad Request):
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Login</h2>
-      <p className="text-gray-300 mb-4">
-        Authenticates a user and generates JWT tokens.
-      </p>
+      <p className="text-gray-300 mb-4">Authenticates a user and generates JWT tokens.</p>
       <CodeExample
         code={`POST /auth/login
 
@@ -77,9 +73,7 @@ Response if 2FA is enabled (403 Forbidden):
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Refresh Token</h2>
-      <p className="text-gray-300 mb-4">
-        Generates new JWT tokens using a refresh token.
-      </p>
+      <p className="text-gray-300 mb-4">Generates new JWT tokens using a refresh token.</p>
       <CodeExample
         code={`POST /auth/refresh-token
 
@@ -102,9 +96,7 @@ Error Response (401 Unauthorized):
       />
 
       <h2 className="text-2xl font-semibold text-white mt-8 mb-4">Get Profile</h2>
-      <p className="text-gray-300 mb-4">
-        Retrieves the current users profile information.
-      </p>
+      <p className="text-gray-300 mb-4">Retrieves the current users profile information.</p>
       <CodeExample
         code={`GET /auth/profile
 
@@ -128,4 +120,4 @@ Error Response (401 Unauthorized):
       />
     </div>
   );
-} 
+}

@@ -1,27 +1,41 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
-import { PaymentLink, updatePaymentLink } from "@/services/paymentLink.service";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form';
+import { Textarea } from '@/components/ui/textarea';
+import { useToast } from '@/components/ui/use-toast';
+import { PaymentLink, updatePaymentLink } from '@/services/paymentLink.service';
 
 const formSchema = z.object({
-  name: z.string().min(1, "Name is required").max(100),
-  amount: z.number()
-    .min(0, "Amount must be positive")
-    .max(1000000, "Amount exceeds maximum allowed")
-    .refine(val => !isNaN(val) && Number.isFinite(val), "Amount must be a valid number"),
-  currency: z.string().min(1, "Currency is required").max(3),
-  sku: z.string().min(1, "SKU is required").max(50),
-  status: z.enum(["active", "inactive", "expired"]),
+  name: z.string().min(1, 'Name is required').max(100),
+  amount: z
+    .number()
+    .min(0, 'Amount must be positive')
+    .max(1000000, 'Amount exceeds maximum allowed')
+    .refine((val) => !isNaN(val) && Number.isFinite(val), 'Amount must be a valid number'),
+  currency: z.string().min(1, 'Currency is required').max(3),
+  sku: z.string().min(1, 'SKU is required').max(50),
+  status: z.enum(['active', 'inactive', 'expired']),
   description: z.string().max(500).optional(),
 });
 
@@ -44,31 +58,31 @@ export function EditLinkModal({ isOpen, onClose, paymentLink, onUpdate }: EditLi
       name: paymentLink.name,
       amount: paymentLink.amount,
       currency: paymentLink.currency,
-      sku: paymentLink.sku || "",
-      status: paymentLink.status as "active" | "inactive" | "expired",
-      description: paymentLink.description || "",
+      sku: paymentLink.sku || '',
+      status: paymentLink.status as 'active' | 'inactive' | 'expired',
+      description: paymentLink.description || '',
     },
   });
 
   const onSubmit = async (data: FormData) => {
     try {
       setIsSubmitting(true);
-      
+
       const updatedLink = await updatePaymentLink(paymentLink.id, data);
       onUpdate(updatedLink);
-      
+
       toast({
-        title: "Success",
-        description: "Payment link updated successfully",
+        title: 'Success',
+        description: 'Payment link updated successfully',
       });
-      
+
       onClose();
     } catch (error) {
-      console.error("Failed to update payment link:", error);
+      console.error('Failed to update payment link:', error);
       toast({
-        title: "Error",
-        description: "Failed to update payment link. Please try again.",
-        variant: "destructive",
+        title: 'Error',
+        description: 'Failed to update payment link. Please try again.',
+        variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
@@ -122,10 +136,7 @@ export function EditLinkModal({ isOpen, onClose, paymentLink, onUpdate }: EditLi
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Currency</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select currency" />
@@ -161,10 +172,7 @@ export function EditLinkModal({ isOpen, onClose, paymentLink, onUpdate }: EditLi
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Status</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
+                  <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
                         <SelectValue placeholder="Select status" />
@@ -200,7 +208,7 @@ export function EditLinkModal({ isOpen, onClose, paymentLink, onUpdate }: EditLi
                 Cancel
               </Button>
               <Button type="submit" disabled={isSubmitting}>
-                {isSubmitting ? "Updating..." : "Update Link"}
+                {isSubmitting ? 'Updating...' : 'Update Link'}
               </Button>
             </div>
           </form>
@@ -208,4 +216,4 @@ export function EditLinkModal({ isOpen, onClose, paymentLink, onUpdate }: EditLi
       </DialogContent>
     </Dialog>
   );
-} 
+}

@@ -1,15 +1,15 @@
-"use client"
-import { Button } from "@/components/ui/button"
-import { CheckCircle2, ExternalLink, ArrowRight } from "lucide-react"
-import { Card, CardContent } from "@/components/ui/card"
-import { motion } from "framer-motion"
+'use client';
+import { Button } from '@/components/ui/button';
+import { CheckCircle2, ExternalLink, ArrowRight } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 
 interface SuccessStepProps {
   formData: {
-    fullName: string
-    businessName: string
-    [key: string]: unknown
-  }
+    fullName: string;
+    businessName: string;
+    [key: string]: unknown;
+  };
 }
 
 export function SuccessStep({ formData }: SuccessStepProps) {
@@ -22,7 +22,7 @@ export function SuccessStep({ formData }: SuccessStepProps) {
         delayChildren: 0.3,
       },
     },
-  }
+  };
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -33,20 +33,20 @@ export function SuccessStep({ formData }: SuccessStepProps) {
         duration: 0.5,
       },
     },
-  }
+  };
 
   const checkmarkVariants = {
     hidden: { scale: 0 },
     show: {
       scale: 1,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 260,
         damping: 20,
         delay: 0.1,
       },
     },
-  }
+  };
 
   const listItemVariants = {
     hidden: { opacity: 0, x: -20 },
@@ -57,10 +57,15 @@ export function SuccessStep({ formData }: SuccessStepProps) {
         duration: 0.3,
       },
     },
-  }
+  };
 
   return (
-    <motion.div className="space-y-8 text-center" variants={containerVariants} initial="hidden" animate="show">
+    <motion.div
+      className="space-y-8 text-center"
+      variants={containerVariants}
+      initial="hidden"
+      animate="show"
+    >
       <motion.div className="flex justify-center" variants={checkmarkVariants}>
         <div className="rounded-full bg-primary/10 p-3">
           <CheckCircle2 className="h-12 w-12 text-primary" />
@@ -70,8 +75,8 @@ export function SuccessStep({ formData }: SuccessStepProps) {
       <motion.div className="space-y-2" variants={itemVariants}>
         <h1 className="text-3xl font-bold tracking-tight">Setup Complete!</h1>
         <p className="text-muted-foreground max-w-md mx-auto">
-          Congratulations, {formData.fullName}! Your PayStell merchant account for {formData.businessName} has been
-          successfully created.
+          Congratulations, {formData.fullName}! Your PayStell merchant account for{' '}
+          {formData.businessName} has been successfully created.
         </p>
       </motion.div>
 
@@ -80,7 +85,12 @@ export function SuccessStep({ formData }: SuccessStepProps) {
           <CardContent className="pt-6">
             <div className="space-y-4">
               <h3 className="font-medium">Next Steps</h3>
-              <motion.ul className="space-y-3 text-left" variants={containerVariants} initial="hidden" animate="show">
+              <motion.ul
+                className="space-y-3 text-left"
+                variants={containerVariants}
+                initial="hidden"
+                animate="show"
+              >
                 <motion.li className="flex items-start" variants={listItemVariants} custom={0}>
                   <div className="mr-2 mt-0.5 rounded-full bg-primary/10 p-1">
                     <CheckCircle2 className="h-4 w-4 text-primary" />
@@ -111,15 +121,22 @@ export function SuccessStep({ formData }: SuccessStepProps) {
         </Card>
       </motion.div>
 
-      <motion.div className="flex flex-col md:flex-row gap-4 justify-center pt-4" variants={itemVariants}>
-        <Button size="lg" className="w-full md:w-auto group" onClick={() => (window.location.href = "/dashboard")}>
+      <motion.div
+        className="flex flex-col md:flex-row gap-4 justify-center pt-4"
+        variants={itemVariants}
+      >
+        <Button
+          size="lg"
+          className="w-full md:w-auto group"
+          onClick={() => (window.location.href = '/dashboard')}
+        >
           Go to Dashboard
           <motion.span
             initial={{ x: 0 }}
             animate={{ x: [0, 5, 0] }}
             transition={{
               repeat: Number.POSITIVE_INFINITY,
-              repeatType: "mirror",
+              repeatType: 'mirror',
               duration: 1,
               repeatDelay: 1,
             }}
@@ -131,13 +148,12 @@ export function SuccessStep({ formData }: SuccessStepProps) {
           variant="outline"
           size="lg"
           className="w-full md:w-auto group"
-          onClick={() => window.open("https://docs.paystell.com", "_blank")}
+          onClick={() => window.open('https://docs.paystell.com', '_blank')}
         >
           View Documentation
           <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
         </Button>
       </motion.div>
     </motion.div>
-  )
+  );
 }
-

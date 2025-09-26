@@ -56,7 +56,7 @@ class AuthService {
         name: data.name,
         email: data.email,
         password: data.password,
-        role: data.role
+        role: data.role,
       };
       const response = await axios.post(`${API_URL}/auth/register`, formattedData);
       return response.data;
@@ -86,4 +86,4 @@ class AuthService {
   }
 }
 
-export const authService = new AuthService(); 
+export const authService = new AuthService();

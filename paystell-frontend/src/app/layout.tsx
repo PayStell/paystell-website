@@ -7,12 +7,11 @@ import { ThemeProvider } from "next-themes";
 import { WalletProvider } from "@/providers/useWalletProvider";
 import { Toaster } from "@/components/ui/sonner"
 
-
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "PayStell",
-  description: "Payment Platform",
+  title: 'PayStell',
+  description: 'Payment Platform',
 };
 
 export default function RootLayout({

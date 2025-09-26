@@ -1,12 +1,12 @@
-"use client";
-import { Button } from "@/components/ui/button";
-import { formatAddress } from "@/lib/utils";
-import { useWallet } from "@/providers/useWalletProvider";
-import { Check, Copy, Loader2, Wallet } from "lucide-react";
-import { useEffect, useState } from "react";
-import { toast } from "sonner";
+'use client';
+import { Button } from '@/components/ui/button';
+import { formatAddress } from '@/lib/utils';
+import { useWallet } from '@/providers/useWalletProvider';
+import { Check, Copy, Loader2, Wallet } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
-const ConnectWalletButton = ({ className = "" }) => {
+const ConnectWalletButton = ({ className = '' }) => {
   const { state, connectWallet, disconnectWallet } = useWallet();
   const { publicKey, connecting } = state;
 
@@ -17,12 +17,12 @@ const ConnectWalletButton = ({ className = "" }) => {
     const checkConnection = async () => {
       try {
         if (publicKey) {
-          toast.success("Wallet Reconnected", {
-            description: "Welcome back!",
+          toast.success('Wallet Reconnected', {
+            description: 'Welcome back!',
           });
         }
       } catch (error) {
-        console.log("No wallet connected.", error);
+        console.log('No wallet connected.', error);
       } finally {
         setIsChecking(false);
       }
@@ -35,22 +35,22 @@ const ConnectWalletButton = ({ className = "" }) => {
     try {
       await connectWallet();
       if (publicKey) {
-        toast.success("Wallet Connected", {
-          description: "Successfully connected to wallet",
+        toast.success('Wallet Connected', {
+          description: 'Successfully connected to wallet',
         });
       }
     } catch (error) {
       console.log(error);
-      toast.error("Connection Failed", {
-        description: "Failed to connect to the wallet.",
+      toast.error('Connection Failed', {
+        description: 'Failed to connect to the wallet.',
       });
     }
   };
 
   const handleDisconnectWallet = async () => {
     await disconnectWallet();
-    toast.info("Wallet Disconnected", {
-      description: "You have been disconnected.",
+    toast.info('Wallet Disconnected', {
+      description: 'You have been disconnected.',
     });
   };
 
@@ -59,15 +59,15 @@ const ConnectWalletButton = ({ className = "" }) => {
     try {
       await navigator.clipboard.writeText(publicKey);
       setIsCopied(true);
-      toast.success("Address Copied", {
-        description: "Wallet address copied to clipboard",
+      toast.success('Address Copied', {
+        description: 'Wallet address copied to clipboard',
       });
       setTimeout(() => {
         setIsCopied(false);
       }, 2000);
     } catch (error) {
       toast.error(error as string, {
-        description: "Failed to copy address to clipboard",
+        description: 'Failed to copy address to clipboard',
       });
     }
   };
@@ -89,11 +89,7 @@ const ConnectWalletButton = ({ className = "" }) => {
           className={`${className} flex items-center dark:bg-secondary gap-2 cursor-pointer bg-primary text-white`}
         >
           {formatAddress(publicKey)}
-          {isCopied ? (
-            <Check className="h-4 w-4 text-green-500" />
-          ) : (
-            <Copy className="h-4 w-4" />
-          )}
+          {isCopied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
         </Button>
       ) : (
         <Button onClick={handleConnectWallet} className={className}>

@@ -47,7 +47,6 @@ export const DesktopView: Story = {
 export const LoadingState: Story = {
   decorators: [
     (Story) => {
-    
       return <Story />;
     },
   ],
@@ -60,7 +59,7 @@ export const LoadingState: Story = {
 
 export const ErrorState: Story = {
   parameters: {
-    // Add parameters to force loading state  
+    // Add parameters to force loading state
     viewport: {
       defaultViewport: 'mobile1',
     },

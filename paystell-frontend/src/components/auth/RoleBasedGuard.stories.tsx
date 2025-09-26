@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { RoleBasedGuard } from "./RoleBasedGuard";
-import { UserRole, Permission } from "@/lib/types/user";
+import type { Meta, StoryObj } from '@storybook/react';
+import { RoleBasedGuard } from './RoleBasedGuard';
+import { UserRole, Permission } from '@/lib/types/user';
 
 const meta: Meta<typeof RoleBasedGuard> = {
-  title: "Auth/RoleBasedGuard",
+  title: 'Auth/RoleBasedGuard',
   component: RoleBasedGuard,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     requiredRoles: {
-      control: "select",
+      control: 'select',
       options: Object.values(UserRole),
-      description: "Required user roles to view the content",
+      description: 'Required user roles to view the content',
     },
     requiredPermissions: {
-      control: "select",
+      control: 'select',
       options: Object.values(Permission),
-      description: "Required permissions to view the content",
+      description: 'Required permissions to view the content',
     },
   },
   decorators: [
@@ -121,4 +121,4 @@ export const PermissionBased: Story = {
       </div>
     ),
   },
-}; 
+};

@@ -1,8 +1,8 @@
-import { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import axios from "axios";
-import { JWT } from "next-auth/jwt";
-import { Session } from "next-auth";
+import { NextAuthOptions } from 'next-auth';
+import CredentialsProvider from 'next-auth/providers/credentials';
+import axios from 'axios';
+import { JWT } from 'next-auth/jwt';
+import { Session } from 'next-auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -11,28 +11,28 @@ interface Credentials {
   password: string;
 }
 
-declare module "next-auth" {
+declare module 'next-auth' {
   interface Session {
     user: {
       id: string;
       email?: string | null;
       name?: string | null;
       image?: string | null;
-    }
+    };
   }
 }
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: "Credentials",
+      name: 'Credentials',
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" },
+        email: { label: 'Email', type: 'email' },
+        password: { label: 'Password', type: 'password' },
       },
       async authorize(credentials: Credentials | undefined) {
         if (!credentials?.email || !credentials?.password) {
-          throw new Error("Invalid credentials");
+          throw new Error('Invalid credentials');
         }
 
         try {
@@ -51,13 +51,13 @@ export const authOptions: NextAuthOptions = {
 
           return null;
         } catch {
-          throw new Error("Invalid credentials");
+          throw new Error('Invalid credentials');
         }
       },
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: '/login',
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -73,4 +73,4 @@ export const authOptions: NextAuthOptions = {
       return session;
     },
   },
-}; 
+};

@@ -92,4 +92,4 @@ export const AuthForm: React.FC<AuthFormProps> = ({ type, onSubmit, error }) => 
       </button>
     </form>
   );
-}; 
+};

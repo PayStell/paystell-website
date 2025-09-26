@@ -55,4 +55,4 @@ const WebhookStatusBadge: React.FC<WebhookStatusBadgeProps> = ({ status }) => {
   );
 };
 
-export default WebhookStatusBadge; 
+export default WebhookStatusBadge;

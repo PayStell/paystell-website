@@ -9,13 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Dialog,
   DialogContent,
@@ -88,9 +82,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
       <Card>
         <CardHeader>
           <CardTitle>Webhook Delivery Events</CardTitle>
-          <CardDescription>
-            Recent webhook delivery attempts for {webhook.url}
-          </CardDescription>
+          <CardDescription>Recent webhook delivery attempts for {webhook.url}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="rounded-md border">
@@ -123,11 +115,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
                     </TableCell>
                     <TableCell className="text-right">
                       <div className="flex justify-end space-x-2">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => showEventDetails(event)}
-                        >
+                        <Button variant="outline" size="sm" onClick={() => showEventDetails(event)}>
                           Details
                         </Button>
                         {event.status === 'failed' && (
@@ -137,7 +125,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
                             onClick={() => handleRetry(event)}
                             disabled={isRetrying}
                           >
-                            {isRetrying ? "Retrying..." : "Retry"}
+                            {isRetrying ? 'Retrying...' : 'Retry'}
                           </Button>
                         )}
                       </div>
@@ -154,9 +142,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
         <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Webhook Event Details</DialogTitle>
-            <DialogDescription>
-              Event ID: {selectedEvent?.id}
-            </DialogDescription>
+            <DialogDescription>Event ID: {selectedEvent?.id}</DialogDescription>
           </DialogHeader>
 
           {selectedEvent && (
@@ -214,9 +200,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
               {selectedEvent.responseStatusCode && (
                 <div>
                   <h3 className="text-sm font-medium mb-1">Response Status</h3>
-                  <Badge>
-                    {selectedEvent.responseStatusCode}
-                  </Badge>
+                  <Badge>{selectedEvent.responseStatusCode}</Badge>
                 </div>
               )}
 
@@ -249,9 +233,13 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
                     attemptsMade={selectedEvent.attemptsMade}
                     maxAttempts={selectedEvent.maxAttempts}
                     createdAt={new Date(selectedEvent.createdAt)}
-                    completedAt={selectedEvent.completedAt ? new Date(selectedEvent.completedAt) : undefined}
+                    completedAt={
+                      selectedEvent.completedAt ? new Date(selectedEvent.completedAt) : undefined
+                    }
                     updatedAt={new Date(selectedEvent.updatedAt)}
-                    nextRetry={selectedEvent.nextRetry ? new Date(selectedEvent.nextRetry) : undefined}
+                    nextRetry={
+                      selectedEvent.nextRetry ? new Date(selectedEvent.nextRetry) : undefined
+                    }
                     status={selectedEvent.status}
                   />
                 </div>
@@ -285,7 +273,7 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
                 }}
                 disabled={isRetrying}
               >
-                {isRetrying ? "Retrying..." : "Retry Webhook"}
+                {isRetrying ? 'Retrying...' : 'Retry Webhook'}
               </Button>
             )}
           </DialogFooter>
@@ -295,4 +283,4 @@ const WebhookDeliveryEvents: React.FC<WebhookDeliveryEventsProps> = ({
   );
 };
 
-export default WebhookDeliveryEvents; 
+export default WebhookDeliveryEvents;

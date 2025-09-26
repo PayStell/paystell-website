@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Wallet, Home, ArrowRight, Settings, Menu, X, CreditCard } from 'lucide-react';
 
@@ -20,13 +19,13 @@ export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate,
     setIsMobileMenuOpen(false);
   };
 
-  const navigationItems = hasWallet ? [
-    { key: 'dashboard', label: 'Dashboard', icon: Home },
-    { key: 'transactions', label: 'Transactions', icon: CreditCard },
-    { key: 'settings', label: 'Settings', icon: Settings }
-  ] : [
-    { key: 'activate', label: 'Create Wallet', icon: ArrowRight }
-  ];
+  const navigationItems = hasWallet
+    ? [
+        { key: 'dashboard', label: 'Dashboard', icon: Home },
+        { key: 'transactions', label: 'Transactions', icon: CreditCard },
+        { key: 'settings', label: 'Settings', icon: Settings },
+      ]
+    : [{ key: 'activate', label: 'Create Wallet', icon: ArrowRight }];
 
   return (
     <nav className="bg-white shadow-lg border-b">
@@ -34,12 +33,8 @@ export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate,
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center space-x-2">
             <Wallet className="h-8 w-8 text-blue-600" />
-            <span className="text-xl font-bold text-gray-900 hidden sm:block">
-              Stellar Wallet
-            </span>
-            <span className="text-lg font-bold text-gray-900 sm:hidden">
-              Stellar
-            </span>
+            <span className="text-xl font-bold text-gray-900 hidden sm:block">Stellar Wallet</span>
+            <span className="text-lg font-bold text-gray-900 sm:hidden">Stellar</span>
           </div>
 
           {/* Desktop Navigation */}
@@ -66,11 +61,7 @@ export const Navigation: React.FC<NavigationProps> = ({ currentPage, onNavigate,
               className="text-gray-600 hover:text-gray-900 focus:outline-none focus:text-gray-900 p-2"
               aria-label="Toggle mobile menu"
             >
-              {isMobileMenuOpen ? (
-                <X className="h-6 w-6" />
-              ) : (
-                <Menu className="h-6 w-6" />
-              )}
+              {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
             </button>
           </div>
         </div>

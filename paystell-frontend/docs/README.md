@@ -5,14 +5,17 @@ This documentation covers the implementation of Two-Factor Authentication (2FA) 
 ## Table of Contents
 
 ### Components
+
 - [TwoFactorSetup](./components/TwoFactorSetup.md) - Main component for 2FA setup process
 - [QRCodeDisplay](./components/QRCodeDisplay.md) - Component for displaying QR codes and secrets
 - [withAuth](./components/withAuth.md) - HOC for route protection
 
 ### Services
+
 - [twoFactorAuthService](./services/twoFactorAuthService.md) - Service for managing 2FA operations
 
 ### Middleware
+
 - [authMiddleware](./middleware/authMiddleware.md) - Authentication protection for API routes
 - [rateLimitMiddleware](./middleware/rateLimitMiddleware.md) - Rate limiting protection
 
@@ -21,11 +24,13 @@ This documentation covers the implementation of Two-Factor Authentication (2FA) 
 The 2FA implementation follows a layered architecture:
 
 1. **UI Layer**
+
    - React components for user interaction
    - Protected routes using HOC
    - Error handling and user feedback
 
 2. **Service Layer**
+
    - API integration
    - Token management
    - Error handling
@@ -46,28 +51,30 @@ The 2FA implementation follows a layered architecture:
 ## Getting Started
 
 1. **Setup 2FA for a User**
+
    ```typescript
    import { TwoFactorSetup } from '@/components/TwoFactorAuth/TwoFactorSetup';
-   
+
    function TwoFactorPage() {
      return <TwoFactorSetup {...props} />;
    }
-   
+
    export default withAuth(TwoFactorPage);
    ```
 
 2. **Protect an API Route**
+
    ```typescript
    import { authMiddleware } from '@/middleware/authMiddleware';
    import { rateLimitMiddleware } from '@/middleware/rateLimitMiddleware';
-   
+
    export async function POST(request: Request) {
      const rateLimitResponse = await rateLimitMiddleware(request as any);
      if (rateLimitResponse) return rateLimitResponse;
-     
+
      const authResponse = await authMiddleware(request as any);
      if (authResponse) return authResponse;
-     
+
      // Route logic here
    }
    ```
@@ -75,12 +82,14 @@ The 2FA implementation follows a layered architecture:
 ## Best Practices
 
 1. **Security**
+
    - Always use HTTPS
    - Implement proper rate limiting
    - Validate all user input
    - Use secure token storage
 
 2. **User Experience**
+
    - Clear error messages
    - Proper loading states
    - Intuitive setup flow
@@ -106,4 +115,4 @@ When contributing to the 2FA implementation:
 
 - [OTPAuth Documentation](https://github.com/hectorm/otpauth)
 - [Next.js Middleware](https://nextjs.org/docs/middleware)
-- [React TypeScript Guidelines](https://react-typescript-cheatsheet.netlify.app/) 
+- [React TypeScript Guidelines](https://react-typescript-cheatsheet.netlify.app/)

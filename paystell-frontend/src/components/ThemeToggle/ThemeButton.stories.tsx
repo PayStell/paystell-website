@@ -1,8 +1,8 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { ButtonTheme } from "./ThemeButton";
+import { Meta, StoryObj } from '@storybook/react';
+import { ButtonTheme } from './ThemeButton';
 
 const meta: Meta<typeof ButtonTheme> = {
-  title: "Components/ButtonTheme",
+  title: 'Components/ButtonTheme',
   component: ButtonTheme,
 };
 
@@ -15,7 +15,7 @@ const Template: StoryObj<typeof ButtonTheme> = {
 export const LightMode: StoryObj<typeof ButtonTheme> = {
   ...Template,
   args: {
-    theme: "light",
+    theme: 'light',
     onClick: () => {},
   },
 };
@@ -23,7 +23,7 @@ export const LightMode: StoryObj<typeof ButtonTheme> = {
 export const DarkMode: StoryObj<typeof ButtonTheme> = {
   ...Template,
   args: {
-    theme: "dark",
+    theme: 'dark',
     onClick: () => {},
   },
 };

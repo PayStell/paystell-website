@@ -29,12 +29,7 @@ interface WebhookListProps {
   onViewEvents: (webhook: WebhookConfig) => void;
 }
 
-const WebhookList: React.FC<WebhookListProps> = ({
-  webhooks,
-  onRefresh,
-  onEdit,
-  onViewEvents,
-}) => {
+const WebhookList: React.FC<WebhookListProps> = ({ webhooks, onRefresh, onEdit, onViewEvents }) => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [selectedWebhook, setSelectedWebhook] = useState<WebhookConfig | null>(null);
 
@@ -74,7 +69,8 @@ const WebhookList: React.FC<WebhookListProps> = ({
       <div className="flex flex-col items-center justify-center p-8 text-center rounded-lg border border-dashed">
         <h3 className="text-lg font-medium mb-2">No Webhooks Configured</h3>
         <p className="text-sm text-gray-500 mb-4">
-          You haven&apos;t created any webhooks yet. Create one to start receiving event notifications.
+          You haven&apos;t created any webhooks yet. Create one to start receiving event
+          notifications.
         </p>
       </div>
     );
@@ -96,9 +92,7 @@ const WebhookList: React.FC<WebhookListProps> = ({
           <TableBody>
             {webhooks.map((webhook) => (
               <TableRow key={webhook.id}>
-                <TableCell className="font-medium break-all max-w-xs">
-                  {webhook.url}
-                </TableCell>
+                <TableCell className="font-medium break-all max-w-xs">{webhook.url}</TableCell>
                 <TableCell>
                   <WebhookStatusBadge status={webhook.isActive ? 'active' : 'inactive'} />
                 </TableCell>
@@ -113,30 +107,16 @@ const WebhookList: React.FC<WebhookListProps> = ({
                     <span className="text-xs text-gray-500">No events</span>
                   )}
                 </TableCell>
-                <TableCell>
-                  {new Date(webhook.createdAt).toLocaleDateString()}
-                </TableCell>
+                <TableCell>{new Date(webhook.createdAt).toLocaleDateString()}</TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleTest(webhook)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => handleTest(webhook)}>
                       Test
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onViewEvents(webhook)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => onViewEvents(webhook)}>
                       Logs
                     </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => onEdit(webhook)}
-                    >
+                    <Button variant="outline" size="sm" onClick={() => onEdit(webhook)}>
                       Edit
                     </Button>
                     <Button
@@ -165,10 +145,7 @@ const WebhookList: React.FC<WebhookListProps> = ({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <Button
-              onClick={handleDelete}
-              className="bg-red-600 text-white hover:bg-red-700"
-            >
+            <Button onClick={handleDelete} className="bg-red-600 text-white hover:bg-red-700">
               Delete
             </Button>
           </AlertDialogFooter>
@@ -178,4 +155,4 @@ const WebhookList: React.FC<WebhookListProps> = ({
   );
 };
 
-export default WebhookList; 
+export default WebhookList;

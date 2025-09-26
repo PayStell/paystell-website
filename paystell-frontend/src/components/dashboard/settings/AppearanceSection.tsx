@@ -1,4 +1,4 @@
-import { ThemeToggle } from "@/components/ThemeToggle/ThemeToggle";
+import { ThemeToggle } from '@/components/ThemeToggle/ThemeToggle';
 
 const AppearanceSection = () => {
   return (

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import CodeExample from '@/components/CodeExample';
 import ApiPlayground from '@/components/ApiPlayground';
 
@@ -6,27 +6,19 @@ export default function ApiEndpointsPage() {
   return (
     <div className="prose prose-gray max-w-none">
       <h1>API Endpoints</h1>
-      
+
       <p>
-        The PayStell API provides a set of RESTful endpoints for managing payments,
-        customers, and other resources.
+        The PayStell API provides a set of RESTful endpoints for managing payments, customers, and
+        other resources.
       </p>
 
       <h2>Base URL</h2>
       <p>All API requests should be made to:</p>
-      <CodeExample
-        code="https://api.paystell.com/v1"
-        language="text"
-      />
+      <CodeExample code="https://api.paystell.com/v1" language="text" />
 
       <h2>Authentication</h2>
-      <p>
-        All API requests must include your API key in the Authorization header:
-      </p>
-      <CodeExample
-        code={`Authorization: Bearer your_api_key_here`}
-        language="text"
-      />
+      <p>All API requests must include your API key in the Authorization header:</p>
+      <CodeExample code={`Authorization: Bearer your_api_key_here`} language="text" />
 
       <h2>Endpoints</h2>
 
@@ -62,28 +54,16 @@ export default function ApiEndpointsPage() {
 
       <h3>Get Payment</h3>
       <p>Retrieves a payment by ID.</p>
-      <CodeExample
-        code={`GET /payments/{payment_id}`}
-        language="text"
-      />
+      <CodeExample code={`GET /payments/{payment_id}`} language="text" />
       <div className="mt-6">
-        <ApiPlayground
-          endpoint="/payments/pay_123"
-          method="GET"
-        />
+        <ApiPlayground endpoint="/payments/pay_123" method="GET" />
       </div>
 
       <h3>List Payments</h3>
       <p>Retrieves a list of payments.</p>
-      <CodeExample
-        code={`GET /payments?limit=10&offset=0`}
-        language="text"
-      />
+      <CodeExample code={`GET /payments?limit=10&offset=0`} language="text" />
       <div className="mt-6">
-        <ApiPlayground
-          endpoint="/payments?limit=10&offset=0"
-          method="GET"
-        />
+        <ApiPlayground endpoint="/payments?limit=10&offset=0" method="GET" />
       </div>
 
       <h2>Response Format</h2>
@@ -115,4 +95,4 @@ export default function ApiEndpointsPage() {
       />
     </div>
   );
-} 
+}

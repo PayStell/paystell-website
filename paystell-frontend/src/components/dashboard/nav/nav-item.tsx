@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import type { NavItem } from "./types";
-import { navItemVariants } from "./styles";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import type { NavItem } from './types';
+import { navItemVariants } from './styles';
 
 interface NavItemProps {
   item: NavItem;
@@ -24,9 +24,9 @@ export function NavItem({ item, onSelect }: NavItemProps) {
       href={item.href}
       onClick={handleClick}
       className={navItemVariants({
-        variant: isActive ? "active" : "default",
+        variant: isActive ? 'active' : 'default',
       })}
-      aria-current={isActive ? "page" : undefined}
+      aria-current={isActive ? 'page' : undefined}
       aria-label={`Navigate to ${item.title}`}
     >
       <item.icon className="h-4 w-4 flex-shrink-0" aria-hidden="true" />

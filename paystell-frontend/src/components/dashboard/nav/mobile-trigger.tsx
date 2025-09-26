@@ -1,5 +1,5 @@
-import { MdMenu, MdClose } from "react-icons/md";
-import { navStyles } from "./styles";
+import { MdMenu, MdClose } from 'react-icons/md';
+import { navStyles } from './styles';
 
 interface MobileTriggerProps {
   open: boolean;
@@ -12,7 +12,7 @@ export function MobileTrigger({ open, setOpen }: MobileTriggerProps) {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" || e.key === " ") {
+    if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleToggle();
     }
@@ -24,7 +24,7 @@ export function MobileTrigger({ open, setOpen }: MobileTriggerProps) {
       className={`${navStyles.trigger} min-h-[48px] min-w-[48px] flex items-center justify-center touch-manipulation active:scale-95 transition-transform duration-150`}
       onClick={handleToggle}
       onKeyDown={handleKeyDown}
-      aria-label={open ? "Close navigation menu" : "Open navigation menu"}
+      aria-label={open ? 'Close navigation menu' : 'Open navigation menu'}
       aria-expanded={open}
       aria-controls="main-navigation"
     >

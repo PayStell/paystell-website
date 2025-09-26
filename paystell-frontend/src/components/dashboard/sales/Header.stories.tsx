@@ -1,8 +1,8 @@
-import { Meta, StoryFn } from "@storybook/react";
-import Header from "./Header";
+import { Meta, StoryFn } from '@storybook/react';
+import Header from './Header';
 
 export default {
-  title: "Dashboard/Sales/Header",
+  title: 'Dashboard/Sales/Header',
   component: Header,
 } as Meta;
 

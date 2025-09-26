@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
 /**
  * Replay Protection Service
@@ -16,7 +16,7 @@ export class ReplayProtectionService {
    * @returns SHA256 hash of the transaction
    */
   static generateTransactionHash(transactionData: string): string {
-    return crypto.createHash("sha256").update(transactionData).digest("hex");
+    return crypto.createHash('sha256').update(transactionData).digest('hex');
   }
 
   /**
@@ -61,7 +61,7 @@ export class ReplayProtectionService {
       return {
         isValid: false,
         transactionHash,
-        error: "Transaction already processed",
+        error: 'Transaction already processed',
       };
     }
 

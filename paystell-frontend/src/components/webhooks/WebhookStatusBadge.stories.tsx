@@ -41,4 +41,4 @@ export const Pending: Story = {
   args: {
     status: 'pending',
   },
-}; 
+};

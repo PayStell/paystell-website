@@ -190,21 +190,21 @@ npm run storybook
 // Body scroll lock
 useEffect(() => {
   if (isOpen) {
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow = 'hidden';
   } else {
-    document.body.style.overflow = "";
+    document.body.style.overflow = '';
   }
 }, [isOpen]);
 
 // Escape key handling
 useEffect(() => {
   const handleEscape = (e: KeyboardEvent) => {
-    if (e.key === "Escape" && isOpen) {
+    if (e.key === 'Escape' && isOpen) {
       handleMobileNavClose();
     }
   };
-  document.addEventListener("keydown", handleEscape);
-  return () => document.removeEventListener("keydown", handleEscape);
+  document.addEventListener('keydown', handleEscape);
+  return () => document.removeEventListener('keydown', handleEscape);
 }, [isOpen]);
 ```
 

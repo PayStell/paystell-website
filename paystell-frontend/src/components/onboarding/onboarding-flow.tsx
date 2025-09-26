@@ -1,20 +1,20 @@
-"use client"
+'use client';
 
-import { useState } from "react"
-import { WelcomeStep } from "./steps/WelcomeStep"
-import { BasicInfoStep } from "./steps/BasicInfoStep"
-import { BusinessDetailsStep } from "./steps/BusinessDetailsStep"
-import { PaymentDetailsStep } from "./steps/PaymentDetailsStep"
-import { SuccessStep } from "./steps/SuccessStep"
-import { Progress } from "../progress"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { ArrowLeft } from "lucide-react"
-import { ProgressProvider, useProgress } from "@/hooks/use-progress"
-import { AnimatePresence, motion } from "framer-motion"
-import { Toaster } from "sonner"
+import { useState } from 'react';
+import { WelcomeStep } from './steps/WelcomeStep';
+import { BasicInfoStep } from './steps/BasicInfoStep';
+import { BusinessDetailsStep } from './steps/BusinessDetailsStep';
+import { PaymentDetailsStep } from './steps/PaymentDetailsStep';
+import { SuccessStep } from './steps/SuccessStep';
+import { Progress } from '../progress';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { ProgressProvider, useProgress } from '@/hooks/use-progress';
+import { AnimatePresence, motion } from 'framer-motion';
+import { Toaster } from 'sonner';
 
-const TOTAL_STEPS = 5
+const TOTAL_STEPS = 5;
 
 export function OnboardingFlow() {
   return (
@@ -22,45 +22,45 @@ export function OnboardingFlow() {
       <OnboardingFlowContent />
       <Toaster />
     </ProgressProvider>
-  )
+  );
 }
 
 function OnboardingFlowContent() {
-  const { progress, prevStep } = useProgress()
+  const { progress, prevStep } = useProgress();
   const [formData, setFormData] = useState({
-    businessName: "",
-    fullName: "",
-    email: "",
-    phone: "",
-    businessType: "",
-    businessCategory: "",
-    country: "",
-    address: "",
-    taxId: "",
-    stellarAddress: "",
+    businessName: '',
+    fullName: '',
+    email: '',
+    phone: '',
+    businessType: '',
+    businessCategory: '',
+    country: '',
+    address: '',
+    taxId: '',
+    stellarAddress: '',
     acceptTerms: false,
-  })
+  });
 
   const updateFormData = (data: Partial<typeof formData>) => {
-    setFormData((prev) => ({ ...prev, ...data }))
-  }
+    setFormData((prev) => ({ ...prev, ...data }));
+  };
 
   const renderStep = () => {
     switch (progress) {
       case 0:
-        return <WelcomeStep />
+        return <WelcomeStep />;
       case 1:
-        return <BasicInfoStep formData={formData} updateFormData={updateFormData} />
+        return <BasicInfoStep formData={formData} updateFormData={updateFormData} />;
       case 2:
-        return <BusinessDetailsStep formData={formData} updateFormData={updateFormData} />
+        return <BusinessDetailsStep formData={formData} updateFormData={updateFormData} />;
       case 3:
-        return <PaymentDetailsStep formData={formData} updateFormData={updateFormData} />
+        return <PaymentDetailsStep formData={formData} updateFormData={updateFormData} />;
       case 4:
-        return <SuccessStep formData={formData} />
+        return <SuccessStep formData={formData} />;
       default:
-        return <WelcomeStep />
+        return <WelcomeStep />;
     }
-  }
+  };
 
   const pageVariants = {
     initial: {
@@ -72,7 +72,7 @@ function OnboardingFlowContent() {
       y: 0,
       transition: {
         duration: 0.3,
-        ease: "easeOut",
+        ease: 'easeOut',
       },
     },
     exit: {
@@ -82,7 +82,7 @@ function OnboardingFlowContent() {
         duration: 0.2,
       },
     },
-  }
+  };
 
   return (
     <div className="w-full max-w-4xl mx-auto">
@@ -118,6 +118,5 @@ function OnboardingFlowContent() {
         </CardContent>
       </Card>
     </div>
-  )
+  );
 }
-

@@ -1,4 +1,4 @@
-"use client"
+'use client';
 import { useState, useEffect } from 'react';
 import { CheckIcon, ClipboardIcon } from '@heroicons/react/24/outline';
 import Prism from 'prismjs';
@@ -45,4 +45,4 @@ export default function CodeExample({ code, language = 'javascript' }: CodeExamp
       </pre>
     </div>
   );
-} 
+}

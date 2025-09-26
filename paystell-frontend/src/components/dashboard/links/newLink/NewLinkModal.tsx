@@ -1,10 +1,5 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import NewLinkForm from "./NewLinkForm";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import NewLinkForm from './NewLinkForm';
 
 interface NewLinkModalProps {
   isOpen: boolean;
