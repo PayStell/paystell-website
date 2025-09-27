@@ -11,11 +11,13 @@ import { useAuth } from '@/providers/AuthProvider';
 import type { NavItem } from '@/components/dashboard/nav/types';
 import type { Permission, UserRole } from '@/lib/types/user';
 import { useRouter } from 'next/navigation';
+import { usePerformanceMonitor } from '@/lib/performance';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
   const { user, hasPermission, isLoading } = useAuth();
   const router = useRouter();
+  const { endMeasurement } = usePerformanceMonitor('DashboardLayout');
 
   // Debug logging
   useEffect(() => {
@@ -75,6 +77,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   }
 
   console.log('Dashboard Layout: Rendering dashboard with user');
+  
+  // End performance measurement when component is fully rendered
+  useEffect(() => {
+    if (!isLoading && user) {
+      endMeasurement();
+    }
+  }, [isLoading, user, endMeasurement]);
+
   return (
     <div className="flex min-h-screen">
       <Nav

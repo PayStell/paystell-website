@@ -5,6 +5,7 @@ import { AuthProvider } from '@/providers/AuthProvider';
 import { ThemeProvider } from 'next-themes';
 import { WalletProvider } from '@/providers/useWalletProvider';
 import { Toaster } from '@/components/ui/sonner';
+import { PerformanceMonitor } from '@/lib/performance';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,6 +30,18 @@ export default function RootLayout({
             </AuthProvider>
           </WalletProvider>
         </ThemeProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // Initialize performance monitoring
+              if (typeof window !== 'undefined') {
+                const { PerformanceMonitor } = require('@/lib/performance');
+                const monitor = PerformanceMonitor.getInstance();
+                monitor.measureCoreWebVitals();
+              }
+            `,
+          }}
+        />
       </body>
     </html>
   );
