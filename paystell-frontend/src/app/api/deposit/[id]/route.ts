@@ -31,7 +31,7 @@ export async function GET(
     }
 
     // 3. Check if user has access to this deposit
-    if (deposit.address !== session.user.id) {
+    if (deposit.ownerId !== session.user.id) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }
@@ -77,7 +77,7 @@ export async function PUT(
     }
 
     // 3. Check if user has access to this deposit
-    if (existingDeposit.address !== session.user.id) {
+    if (existingDeposit.ownerId !== session.user.id) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }
@@ -135,7 +135,7 @@ export async function DELETE(
     }
 
     // 3. Check if user has access to this deposit
-    if (existingDeposit.address !== session.user.id) {
+    if (existingDeposit.ownerId !== session.user.id) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }

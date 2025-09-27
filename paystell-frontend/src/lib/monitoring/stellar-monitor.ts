@@ -180,6 +180,7 @@ export class StellarMonitor {
    * Create a DepositTransaction from Stellar transaction data
    */
   private createDepositTransaction(tx: Record<string, unknown>, operation: Record<string, unknown>): DepositTransaction {
+    const memo = (tx as { memo?: string | null }).memo ?? undefined;
     return {
       id: `deposit_${tx.hash}`,
       hash: tx.hash as string,
@@ -187,7 +188,7 @@ export class StellarMonitor {
       asset: operation.asset_type === "native" ? "XLM" : operation.asset_code as string,
       from: operation.from as string,
       to: operation.to as string,
-      memo: (operation.memo as string) || undefined,
+      memo,
       status: "completed",
       createdAt: tx.created_at as string,
       confirmedAt: tx.created_at as string,
@@ -275,7 +276,7 @@ export class StellarMonitor {
     return {
       isMonitoring: this.isMonitoring,
       configCount: this.monitoringConfigs.size,
-      addresses: Array.from(this.monitoringConfigs.keys()).map(key => key.split('_')[0]),
+      addresses: Array.from(this.monitoringConfigs.keys()),
     };
   }
 }

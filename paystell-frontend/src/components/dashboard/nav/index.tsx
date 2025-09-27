@@ -6,7 +6,7 @@ import { MobileTrigger } from "./mobile-trigger";
 import { NavItem } from "./nav-item";
 import { navStyles } from "./styles";
 import { Logo } from "@/components/dashboard/nav/Logo";
-import { useMockAuth } from "@/providers/MockAuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 import { useRouter } from "next/navigation";
 import { IoLogOutOutline } from "react-icons/io5";
 import { useEffect, useCallback } from "react";
@@ -19,7 +19,7 @@ export function Nav({
   brand = { title: 'PayStell' },
   ...props
 }: NavProps) {
-  const { logout } = useMockAuth();
+  const { logout } = useAuth();
   const router = useRouter();
 
   const handleMobileNavClose = useCallback(() => onOpenChange(false), [onOpenChange]);

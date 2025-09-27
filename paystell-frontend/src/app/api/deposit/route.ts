@@ -59,10 +59,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 6. Create deposit request
+    // 6. Validate custom address is provided
+    if (!customAddress) {
+      return NextResponse.json(
+        { message: "Deposit address is required" },
+        { status: 400 }
+      );
+    }
+
+    // 7. Create deposit request
     const depositRequest: DepositRequest = {
       id: generateDepositId(),
-      address: customAddress || session.user.id, // Use user ID as fallback
+      ownerId: session.user.id,
+      address: customAddress,
       amount: amount || undefined,
       asset,
       memo: memo || undefined,
@@ -71,7 +80,7 @@ export async function POST(request: NextRequest) {
       expiresAt: calculateDepositExpiration(),
     };
 
-    // 7. Store deposit request
+    // 8. Store deposit request
     depositStore.create(depositRequest.id, depositRequest);
 
     return NextResponse.json({

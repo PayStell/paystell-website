@@ -7,14 +7,14 @@ import { dashboardNavItems } from '@/config/dashboard/nav';
 import { useState, useMemo, useEffect } from 'react';
 import { cn } from '@/lib/utils';
 import { Logo } from '@/components/dashboard/nav/Logo';
-import { useMockAuth } from '@/providers/MockAuthProvider';
+import { useAuth } from '@/providers/AuthProvider';
 import type { NavItem } from '@/components/dashboard/nav/types';
 import type { Permission, UserRole } from '@/lib/types/user';
 import { useRouter } from 'next/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  const { user, hasPermission, isLoading } = useMockAuth();
+  const { user, hasPermission, isLoading } = useAuth();
   const router = useRouter();
 
   // Debug logging

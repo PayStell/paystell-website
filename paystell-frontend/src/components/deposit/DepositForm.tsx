@@ -59,6 +59,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
 
       const deposit: DepositRequest = {
         id: generateDepositId(),
+        ownerId: "mock-user", // This will be replaced by the API
         address: depositAddress,
         amount: formData.amount || undefined,
         asset: formData.asset,

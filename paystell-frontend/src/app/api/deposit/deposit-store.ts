@@ -34,6 +34,6 @@ export const depositStore = {
 
   getByUser: (userId: string) => {
     return Array.from(depositRequests.values())
-      .filter(deposit => deposit.address === userId);
+      .filter(deposit => deposit.ownerId === userId);
   }
 };

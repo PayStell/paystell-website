@@ -232,12 +232,17 @@ export class TransactionQueue {
    * Get queue status
    */
   public getStatus(): QueueStatus {
+    const pendingItems = this.queue.filter(item => !this.processing.has(item.id));
+    const processingCount = this.processing.size;
+    const completedCount = this.completed.length;
+    const failedCount = this.failed.length;
+
     return {
-      pending: this.queue.length,
-      processing: this.processing.size,
-      completed: this.completed.length,
-      failed: this.failed.length,
-      total: this.queue.length + this.processing.size + this.completed.length + this.failed.length,
+      pending: pendingItems.length,
+      processing: processingCount,
+      completed: completedCount,
+      failed: failedCount,
+      total: pendingItems.length + processingCount + completedCount + failedCount,
     };
   }
 

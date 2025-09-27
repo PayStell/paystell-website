@@ -1,5 +1,6 @@
 export interface DepositRequest {
   id: string;
+  ownerId: string;
   address: string;
   amount?: string;
   asset: string;
