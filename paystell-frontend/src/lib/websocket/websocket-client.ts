@@ -51,6 +51,7 @@ export class WebSocketClient {
   private isConnected = false;
   private eventCallbacks: Map<string, WebSocketEventCallback[]> = new Map();
   private pingInterval: NodeJS.Timeout | null = null;
+  private reconnectTimeout: NodeJS.Timeout | null = null;
   private shouldReconnect = true;
 
   constructor(url: string) {

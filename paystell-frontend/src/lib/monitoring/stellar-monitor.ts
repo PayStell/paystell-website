@@ -120,7 +120,7 @@ export class StellarMonitor {
       // Only process payment operations
       if (tx.operation_count !== 1) return;
 
-      const operations = await tx.operations();
+      const operations = await (tx as { operations(): Promise<{ records: Record<string, unknown>[] }> }).operations();
       if (operations.records.length === 0) return;
 
       const operation = operations.records[0];
@@ -159,12 +159,12 @@ export class StellarMonitor {
     }
 
     // Check minimum amount
-    if (config.minAmount && parseFloat(operation.amount) < parseFloat(config.minAmount)) {
+    if (config.minAmount && parseFloat(operation.amount as string) < parseFloat(config.minAmount)) {
       return false;
     }
 
     // Check maximum amount
-    if (config.maxAmount && parseFloat(operation.amount) > parseFloat(config.maxAmount)) {
+    if (config.maxAmount && parseFloat(operation.amount as string) > parseFloat(config.maxAmount)) {
       return false;
     }
 
@@ -182,17 +182,17 @@ export class StellarMonitor {
   private createDepositTransaction(tx: Record<string, unknown>, operation: Record<string, unknown>): DepositTransaction {
     return {
       id: `deposit_${tx.hash}`,
-      hash: tx.hash,
-      amount: operation.amount,
-      asset: operation.asset_type === "native" ? "XLM" : operation.asset_code,
-      from: operation.from,
-      to: operation.to,
-      memo: operation.memo || undefined,
+      hash: tx.hash as string,
+      amount: operation.amount as string,
+      asset: operation.asset_type === "native" ? "XLM" : operation.asset_code as string,
+      from: operation.from as string,
+      to: operation.to as string,
+      memo: (operation.memo as string) || undefined,
       status: "completed",
-      createdAt: tx.created_at,
-      confirmedAt: tx.created_at,
-      ledger: tx.ledger,
-      fee: tx.fee_charged,
+      createdAt: tx.created_at as string,
+      confirmedAt: tx.created_at as string,
+      ledger: tx.ledger as number,
+      fee: tx.fee_charged as string,
     };
   }
 

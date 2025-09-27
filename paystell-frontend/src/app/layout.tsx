@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { AuthProvider } from "@/providers/AuthProvider";
 import { MockAuthProvider } from "@/providers/MockAuthProvider";
 import { ThemeProvider } from "next-themes";
 import { WalletProvider } from "@/providers/useWalletProvider";
