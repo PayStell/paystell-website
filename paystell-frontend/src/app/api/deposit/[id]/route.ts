@@ -3,9 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import { DepositRequest } from "@/lib/types/deposit";
 
-// In-memory store for deposit requests
-// In production, use a database
-const depositRequests = new Map<string, DepositRequest>();
+import { depositStore } from "../deposit-store";
 
 export async function GET(
   request: NextRequest,
@@ -24,7 +22,7 @@ export async function GET(
     const { id } = params;
 
     // 2. Get deposit request
-    const deposit = depositRequests.get(id);
+    const deposit = depositStore.get(id);
     if (!deposit) {
       return NextResponse.json(
         { message: "Deposit request not found" },
@@ -70,7 +68,7 @@ export async function PUT(
     const updates = await request.json();
 
     // 2. Get existing deposit request
-    const existingDeposit = depositRequests.get(id);
+    const existingDeposit = depositStore.get(id);
     if (!existingDeposit) {
       return NextResponse.json(
         { message: "Deposit request not found" },
@@ -97,12 +95,7 @@ export async function PUT(
     }
 
     // 5. Update deposit request
-    const updatedDeposit: DepositRequest = {
-      ...existingDeposit,
-      ...validUpdates,
-    };
-
-    depositRequests.set(id, updatedDeposit);
+    const updatedDeposit = depositStore.update(id, validUpdates);
 
     return NextResponse.json({
       success: true,
@@ -133,7 +126,7 @@ export async function DELETE(
     const { id } = params;
 
     // 2. Get existing deposit request
-    const existingDeposit = depositRequests.get(id);
+    const existingDeposit = depositStore.get(id);
     if (!existingDeposit) {
       return NextResponse.json(
         { message: "Deposit request not found" },
@@ -150,7 +143,7 @@ export async function DELETE(
     }
 
     // 4. Delete deposit request
-    depositRequests.delete(id);
+    depositStore.delete(id);
 
     return NextResponse.json({
       success: true,

@@ -51,7 +51,7 @@ export class WebSocketClient {
   private isConnected = false;
   private eventCallbacks: Map<string, WebSocketEventCallback[]> = new Map();
   private pingInterval: NodeJS.Timeout | null = null;
-  private reconnectTimeout: NodeJS.Timeout | null = null;
+  private shouldReconnect = true;
 
   constructor(url: string) {
     this.url = url;
@@ -68,6 +68,7 @@ export class WebSocketClient {
       }
 
       this.isConnecting = true;
+      this.shouldReconnect = true;
 
       try {
         this.ws = new WebSocket(this.url);
@@ -95,7 +96,9 @@ export class WebSocketClient {
           this.isConnected = false;
           this.isConnecting = false;
           this.stopPing();
-          this.handleReconnect();
+          if (this.shouldReconnect) {
+            this.handleReconnect();
+          }
         };
 
         this.ws.onerror = (error) => {
@@ -114,6 +117,7 @@ export class WebSocketClient {
    * Disconnect from WebSocket server
    */
   public disconnect(): void {
+    this.shouldReconnect = false;
     this.stopPing();
     this.clearReconnectTimeout();
     
@@ -224,6 +228,9 @@ export class WebSocketClient {
    * Handle reconnection logic
    */
   private handleReconnect(): void {
+    if (!this.shouldReconnect) {
+      return;
+    }
     if (this.reconnectAttempts >= this.maxReconnectAttempts) {
       console.error('Max reconnection attempts reached');
       return;

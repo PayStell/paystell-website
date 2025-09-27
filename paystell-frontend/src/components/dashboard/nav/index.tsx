@@ -20,8 +20,7 @@ export function Nav({
   brand = { title: 'PayStell' },
   ...props
 }: NavProps) {
-  // Use mock auth for testing - switch to useAuth() for production
-  const { logout } = useMockAuth();
+  const { logout } = useAuth();
   const router = useRouter();
 
   const handleMobileNavClose = useCallback(() => onOpenChange(false), [onOpenChange]);

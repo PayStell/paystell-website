@@ -30,7 +30,7 @@ export type QueueEventType = 'item_added' | 'item_processing' | 'item_completed'
 
 export interface QueueEvent {
   type: QueueEventType;
-  item: QueueItem;
+  item: QueueItem | null;
   timestamp: number;
 }
 
@@ -281,7 +281,7 @@ export class TransactionQueue {
     this.processing.clear();
     this.completed = [];
     this.failed = [];
-    this.emitEvent('queue_cleared', {} as QueueItem);
+    this.emitEvent('queue_cleared', null);
   }
 
   /**
@@ -353,7 +353,7 @@ export class TransactionQueue {
   /**
    * Emit a queue event
    */
-  private emitEvent(eventType: QueueEventType, item: QueueItem): void {
+  private emitEvent(eventType: QueueEventType, item: QueueItem | null): void {
     const event: QueueEvent = {
       type: eventType,
       item,

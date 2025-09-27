@@ -10,7 +10,7 @@ import { WebSocketStatus } from "@/components/websocket/WebSocketStatus";
 import { useWalletStore } from "@/lib/wallet/wallet-store";
 
 export default function DepositPage() {
-  const { isConnected, publicKey } = useWalletStore();
+  const { isConnected, publicKey, connectWallet, connecting, error } = useWalletStore();
   const [activeTab, setActiveTab] = useState("deposit");
 
   // Initialize monitoring for connected wallet
@@ -31,14 +31,14 @@ export default function DepositPage() {
             Please connect your Stellar wallet to access deposit features
           </p>
           <button
-            onClick={() => useWalletStore.getState().connectWallet()}
-            disabled={useWalletStore.getState().connecting}
+            onClick={connectWallet}
+            disabled={connecting}
             className="bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {useWalletStore.getState().connecting ? "Connecting..." : "Connect Wallet"}
+            {connecting ? "Connecting..." : "Connect Wallet"}
           </button>
-          {useWalletStore.getState().error && (
-            <p className="text-red-500 text-sm">{useWalletStore.getState().error}</p>
+          {error && (
+            <p className="text-red-500 text-sm">{error}</p>
           )}
         </div>
       </div>

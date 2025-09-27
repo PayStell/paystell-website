@@ -5,9 +5,7 @@ import { DepositRequest } from "@/lib/types/deposit";
 import { generateDepositId, calculateDepositExpiration, isValidStellarAddress } from "@/lib/deposit/deposit-utils";
 import { paymentRateLimit } from "@/middleware/rateLimit";
 
-// In-memory store for deposit requests
-// In production, use a database
-const depositRequests = new Map<string, DepositRequest>();
+import { depositStore } from "./deposit-store";
 
 export async function POST(request: NextRequest) {
   try {
@@ -74,7 +72,7 @@ export async function POST(request: NextRequest) {
     };
 
     // 7. Store deposit request
-    depositRequests.set(depositRequest.id, depositRequest);
+    depositStore.create(depositRequest.id, depositRequest);
 
     return NextResponse.json({
       success: true,
@@ -100,19 +98,28 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const userId = searchParams.get("userId");
+    const requestedUserId = searchParams.get("userId");
     const status = searchParams.get("status");
 
-    // 2. Get deposits for user
-    let userDeposits = Array.from(depositRequests.values())
-      .filter(deposit => deposit.address === session.user.id || deposit.address === userId);
+    // 2. Security check - prevent access to other users' deposits
+    if (requestedUserId && requestedUserId !== session.user.id) {
+      return NextResponse.json(
+        { message: "Access denied" },
+        { status: 403 }
+      );
+    }
 
-    // 3. Filter by status if provided
+    const targetAddress = requestedUserId ?? session.user.id;
+
+    // 3. Get deposits for user
+    let userDeposits = depositStore.getByUser(targetAddress);
+
+    // 4. Filter by status if provided
     if (status) {
       userDeposits = userDeposits.filter(deposit => deposit.status === status);
     }
 
-    // 4. Sort by creation date (newest first)
+    // 5. Sort by creation date (newest first)
     userDeposits.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
     return NextResponse.json({

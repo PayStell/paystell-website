@@ -89,7 +89,7 @@ describe('DepositFlow', () => {
 
     render(<DepositFlow />);
 
-    expect(screen.getByDisplayValue(publicKey)).toBeInTheDocument();
+    expect(screen.getByText(publicKey)).toBeInTheDocument();
   });
 
   it('should show supported assets', () => {

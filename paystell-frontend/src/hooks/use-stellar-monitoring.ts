@@ -71,12 +71,20 @@ export function useStellarMonitoring() {
   // Handle new transaction
   const handleNewTransaction = useCallback((transaction: DepositTransaction) => {
     // Add to transaction list
+    let alreadyHandled = false;
     setTransactions(prev => {
       const exists = prev.some(t => t.hash === transaction.hash);
-      if (exists) return prev;
+      if (exists) {
+        alreadyHandled = true;
+        return prev;
+      }
       
       return [transaction, ...prev].slice(0, 100); // Keep last 100
     });
+
+    if (alreadyHandled) {
+      return;
+    }
 
     // Create optimistic transaction
     const optimisticTx = createDepositTransaction(
@@ -152,7 +160,7 @@ export function useStellarMonitoring() {
   // Check if address is being monitored
   const isAddressMonitored = useCallback((address: string, asset: string) => {
     const key = `${address}_${asset}`;
-    return monitoringStatus.addresses.includes(address);
+    return monitoringStatus.addresses.includes(key);
   }, [monitoringStatus.addresses]);
 
   // Get all monitored addresses

@@ -4,9 +4,9 @@ import { authOptions } from "@/lib/auth";
 import { DepositMonitoringConfig } from "@/lib/types/deposit";
 import { isValidStellarAddress } from "@/lib/deposit/deposit-utils";
 
-// In-memory store for monitoring configurations
+// In-memory store for monitoring configurations per user
 // In production, use a database
-const monitoringConfigs = new Map<string, DepositMonitoringConfig>();
+const monitoringConfigs = new Map<string, Map<string, DepositMonitoringConfig>>();
 
 export async function POST(request: NextRequest) {
   try {
@@ -77,9 +77,15 @@ export async function POST(request: NextRequest) {
       memo: memo || undefined,
     };
 
-    // 7. Store monitoring configuration
+    // 7. Store monitoring configuration per user
+    const userId = session.user.id;
     const key = `${address}_${asset}`;
-    monitoringConfigs.set(key, config);
+    
+    if (!monitoringConfigs.has(userId)) {
+      monitoringConfigs.set(userId, new Map());
+    }
+    
+    monitoringConfigs.get(userId)!.set(key, config);
 
     return NextResponse.json({
       success: true,
@@ -109,8 +115,10 @@ export async function GET(request: NextRequest) {
     const address = searchParams.get("address");
     const asset = searchParams.get("asset");
 
-    // 2. Get monitoring configurations
-    let configs = Array.from(monitoringConfigs.values());
+    // 2. Get monitoring configurations for this user only
+    const userId = session.user.id;
+    const userConfigs = monitoringConfigs.get(userId) || new Map();
+    let configs = Array.from(userConfigs.values());
 
     // 3. Filter by address if provided
     if (address) {
@@ -158,9 +166,19 @@ export async function DELETE(request: NextRequest) {
       );
     }
 
-    // 3. Remove monitoring configuration
+    // 3. Remove monitoring configuration for this user only
+    const userId = session.user.id;
     const key = `${address}_${asset}`;
-    const deleted = monitoringConfigs.delete(key);
+    
+    const userConfigs = monitoringConfigs.get(userId);
+    if (!userConfigs) {
+      return NextResponse.json(
+        { message: "Monitoring configuration not found" },
+        { status: 404 }
+      );
+    }
+    
+    const deleted = userConfigs.delete(key);
 
     if (!deleted) {
       return NextResponse.json(

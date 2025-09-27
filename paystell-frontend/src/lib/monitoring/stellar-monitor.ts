@@ -10,7 +10,7 @@ export class StellarMonitor {
   private monitoringConfigs: Map<string, DepositMonitoringConfig> = new Map();
   private pollingInterval: NodeJS.Timeout | null = null;
   private isMonitoring = false;
-  private lastCursor: string | null = null;
+  private lastCursors: Map<string, string | null> = new Map();
   private callbacks: Map<string, (transaction: DepositTransaction) => void> = new Map();
 
   constructor() {
@@ -89,8 +89,9 @@ export class StellarMonitor {
         .order("desc")
         .limit(10);
 
-      if (this.lastCursor) {
-        builder.cursor(this.lastCursor);
+      const lastCursor = this.lastCursors.get(address);
+      if (lastCursor) {
+        builder.cursor(lastCursor);
       }
 
       const response = await builder.call();
@@ -102,7 +103,9 @@ export class StellarMonitor {
 
       // Update cursor for next check
       if (transactions.length > 0) {
-        this.lastCursor = transactions[0].paging_token;
+        this.lastCursors.set(address, transactions[0].paging_token);
+      } else {
+        this.lastCursors.set(address, this.lastCursors.get(address) ?? null);
       }
     } catch (error) {
       console.error(`Error checking transactions for address ${address}:`, error);
@@ -131,7 +134,8 @@ export class StellarMonitor {
         .filter(([key]) => key.startsWith(`${address}_`));
 
       for (const [key, config] of configs) {
-        if (this.matchesMonitoringCriteria(operation, config)) {
+        const txMemo = (tx as { memo?: string | null }).memo ?? null;
+        if (this.matchesMonitoringCriteria(operation, config, txMemo)) {
           const depositTransaction = this.createDepositTransaction(tx, operation);
           await this.handleDepositTransaction(depositTransaction, key);
         }
@@ -144,7 +148,11 @@ export class StellarMonitor {
   /**
    * Check if a transaction matches monitoring criteria
    */
-  private matchesMonitoringCriteria(operation: Record<string, unknown>, config: DepositMonitoringConfig): boolean {
+  private matchesMonitoringCriteria(
+    operation: Record<string, unknown>,
+    config: DepositMonitoringConfig,
+    txMemo?: string | null,
+  ): boolean {
     // Check asset
     if (config.asset !== "native" && operation.asset_code !== config.asset) {
       return false;
@@ -161,7 +169,7 @@ export class StellarMonitor {
     }
 
     // Check memo
-    if (config.memo && operation.memo !== config.memo) {
+    if (config.memo && txMemo !== config.memo) {
       return false;
     }
 

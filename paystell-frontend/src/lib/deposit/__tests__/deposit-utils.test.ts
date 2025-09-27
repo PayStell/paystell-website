@@ -84,7 +84,7 @@ describe('deposit-utils', () => {
 
   describe('isValidStellarAddress', () => {
     it('should validate correct Stellar addresses', () => {
-      const validAddress = 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      const validAddress = 'GBRPYHIL2CVI3VCNJ3UBJLYSDQ4C5SA66PBUZP6N2ZED6OIZ44QYAQZ6';
       expect(isValidStellarAddress(validAddress)).toBe(true);
     });
 

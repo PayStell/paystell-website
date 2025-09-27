@@ -56,31 +56,44 @@ export function useOptimisticTransactions() {
     return transaction;
   }, [addTransaction]);
 
+  const resolveSourceQueue = useCallback((id: string): "pending" | "processing" | "completed" | "failed" | null => {
+    const currentQueue = useOptimisticStore.getState().queue;
+    if (currentQueue.pending.some((tx) => tx.id === id)) return "pending";
+    if (currentQueue.processing.some((tx) => tx.id === id)) return "processing";
+    if (currentQueue.completed.some((tx) => tx.id === id)) return "completed";
+    if (currentQueue.failed.some((tx) => tx.id === id)) return "failed";
+    return null;
+  }, []);
+
   const confirmTransaction = useCallback((id: string, transactionHash: string) => {
+    const source = resolveSourceQueue(id);
+
     updateTransaction(id, {
       status: "confirmed",
       transactionHash,
     });
-    
-    const transaction = getTransaction(id);
-    if (transaction) {
-      moveTransaction(id, "pending", "completed");
-      toast.success("Transaction confirmed");
+
+    if (source && source !== "completed") {
+      moveTransaction(id, source, "completed");
     }
-  }, [updateTransaction, getTransaction, moveTransaction]);
+
+    toast.success("Transaction confirmed");
+  }, [resolveSourceQueue, updateTransaction, moveTransaction]);
 
   const failTransaction = useCallback((id: string, error: string) => {
+    const source = resolveSourceQueue(id);
+
     updateTransaction(id, {
       status: "failed",
       error,
     });
-    
-    const transaction = getTransaction(id);
-    if (transaction) {
-      moveTransaction(id, "pending", "failed");
-      toast.error(`Transaction failed: ${error}`);
+
+    if (source && source !== "failed") {
+      moveTransaction(id, source, "failed");
     }
-  }, [updateTransaction, getTransaction, moveTransaction]);
+
+    toast.error(`Transaction failed: ${error}`);
+  }, [resolveSourceQueue, updateTransaction, moveTransaction]);
 
   const retryTransaction = useCallback((id: string) => {
     const transaction = getTransaction(id);

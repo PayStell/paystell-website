@@ -15,8 +15,7 @@ import { useRouter } from 'next/navigation';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isNavOpen, setIsNavOpen] = useState(false);
-  // Use mock auth for testing - switch to useAuth() for production
-  const { user, hasPermission, isLoading } = useMockAuth();
+  const { user, hasPermission, isLoading } = useAuth();
   const router = useRouter();
 
   // Debug logging
