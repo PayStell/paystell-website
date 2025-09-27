@@ -1,15 +1,15 @@
 'use client';
 
-import { cn } from '@/lib/utils';
-import type { NavProps } from './types';
-import { MobileTrigger } from './mobile-trigger';
-import { NavItem } from './nav-item';
-import { navStyles } from './styles';
-import { Logo } from '@/components/dashboard/nav/Logo';
-import { useAuth } from '@/providers/AuthProvider';
-import { useRouter } from 'next/navigation';
-import { IoLogOutOutline } from 'react-icons/io5';
-import { useEffect, useCallback } from 'react';
+import { cn } from "@/lib/utils";
+import type { NavProps } from "./types";
+import { MobileTrigger } from "./mobile-trigger";
+import { NavItem } from "./nav-item";
+import { navStyles } from "./styles";
+import { Logo } from "@/components/dashboard/nav/Logo";
+import { useAuth } from "@/providers/AuthProvider";
+import { useRouter } from "next/navigation";
+import { IoLogOutOutline } from "react-icons/io5";
+import { useEffect, useCallback } from "react";
 
 export function Nav({
   items,
