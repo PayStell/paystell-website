@@ -40,7 +40,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!isConnected || !publicKey) {
+    if (!formData.useCustomAddress && (!isConnected || !publicKey)) {
       toast.error("Please connect your wallet first");
       return;
     }
@@ -52,7 +52,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
         ? formData.customAddress 
         : publicKey;
 
-      if (!isValidStellarAddress(depositAddress)) {
+      if (!depositAddress || !isValidStellarAddress(depositAddress)) {
         toast.error("Invalid Stellar address");
         return;
       }
@@ -197,7 +197,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
           <div className="flex gap-2 pt-4">
             <Button
               type="submit"
-              disabled={isCreating || !isConnected}
+              disabled={isCreating || (!formData.useCustomAddress && !isConnected)}
               className="flex-1"
             >
               {isCreating ? (

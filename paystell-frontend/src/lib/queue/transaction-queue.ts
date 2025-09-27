@@ -130,7 +130,7 @@ export class TransactionQueue {
     // Update transaction with hash
     if (transactionHash) {
       item.transaction.transactionHash = transactionHash;
-      item.transaction.status = 'confirmed';
+      item.transaction.status = 'completed';
     }
 
     // Move to completed

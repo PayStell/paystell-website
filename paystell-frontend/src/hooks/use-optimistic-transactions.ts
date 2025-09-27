@@ -69,7 +69,7 @@ export function useOptimisticTransactions() {
     const source = resolveSourceQueue(id);
 
     updateTransaction(id, {
-      status: "confirmed",
+      status: "completed",
       transactionHash,
     });
 
@@ -120,7 +120,7 @@ export function useOptimisticTransactions() {
   }, [getTransactionsByStatus]);
 
   const getConfirmedTransactions = useCallback(() => {
-    return getTransactionsByStatus("confirmed");
+    return getTransactionsByStatus("completed");
   }, [getTransactionsByStatus]);
 
   const getFailedTransactions = useCallback(() => {

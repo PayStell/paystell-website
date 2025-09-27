@@ -2,17 +2,17 @@
 
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { OptimisticTransaction, TransactionQueue } from "@/lib/types/deposit";
+import { OptimisticTransaction, TransactionQueueSummary } from "@/lib/types/deposit";
 
 interface OptimisticState {
-  queue: TransactionQueue;
+  queue: TransactionQueueSummary;
   isProcessing: boolean;
   
   // Actions
   addTransaction: (transaction: OptimisticTransaction) => void;
   updateTransaction: (id: string, updates: Partial<OptimisticTransaction>) => void;
   removeTransaction: (id: string) => void;
-  moveTransaction: (id: string, from: keyof TransactionQueue, to: keyof TransactionQueue) => void;
+  moveTransaction: (id: string, from: keyof TransactionQueueSummary, to: keyof TransactionQueueSummary) => void;
   processQueue: () => Promise<void>;
   clearCompleted: () => void;
   clearFailed: () => void;
@@ -72,7 +72,7 @@ export const useOptimisticStore = create<OptimisticState>()(
         });
       },
 
-      moveTransaction: (id: string, from: keyof TransactionQueue, to: keyof TransactionQueue) => {
+      moveTransaction: (id: string, from: keyof TransactionQueueSummary, to: keyof TransactionQueueSummary) => {
         set((state) => {
           const transaction = state.queue[from].find((tx) => tx.id === id);
           if (!transaction) return state;
@@ -113,7 +113,7 @@ export const useOptimisticStore = create<OptimisticState>()(
 
               if (isSuccess) {
                 get().updateTransaction(transaction.id, {
-                  status: "confirmed",
+                  status: "completed",
                   transactionHash: `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                 });
                 get().moveTransaction(transaction.id, "processing", "completed");

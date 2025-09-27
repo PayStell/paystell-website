@@ -86,7 +86,7 @@ export class StellarMonitor {
     try {
       const builder = server.transactions()
         .forAccount(address)
-        .order("desc")
+        .order("asc")
         .limit(10);
 
       const lastCursor = this.lastCursors.get(address);
@@ -103,7 +103,7 @@ export class StellarMonitor {
 
       // Update cursor for next check
       if (transactions.length > 0) {
-        this.lastCursors.set(address, transactions[0].paging_token);
+        this.lastCursors.set(address, transactions[transactions.length - 1].paging_token);
       } else {
         this.lastCursors.set(address, this.lastCursors.get(address) ?? null);
       }

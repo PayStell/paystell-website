@@ -51,7 +51,7 @@ export function OptimisticTransactionList({ className }: OptimisticTransactionLi
     switch (status) {
       case 'pending':
         return <Clock className="h-4 w-4 text-yellow-500" />;
-      case 'confirmed':
+      case 'completed':
         return <CheckCircle className="h-4 w-4 text-green-500" />;
       case 'failed':
         return <XCircle className="h-4 w-4 text-red-500" />;
@@ -61,11 +61,11 @@ export function OptimisticTransactionList({ className }: OptimisticTransactionLi
   };
 
   const getStatusBadge = (status: OptimisticTransaction['status']) => {
-    const colorMap = {
-      pending: "bg-yellow-100 text-yellow-800",
-      confirmed: "bg-green-100 text-green-800",
-      failed: "bg-red-100 text-red-800",
-    };
+  const colorMap = {
+    pending: "bg-yellow-100 text-yellow-800",
+    completed: "bg-green-100 text-green-800",
+    failed: "bg-red-100 text-red-800",
+  };
 
     return (
       <Badge className={colorMap[status]}>

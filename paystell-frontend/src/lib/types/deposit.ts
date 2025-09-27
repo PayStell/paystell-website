@@ -41,13 +41,13 @@ export interface OptimisticTransaction {
   type: 'deposit' | 'withdraw';
   amount: string;
   asset: string;
-  status: 'pending' | 'confirmed' | 'failed';
+  status: 'pending' | 'completed' | 'failed';
   timestamp: number;
   transactionHash?: string;
   error?: string;
 }
 
-export interface TransactionQueue {
+export interface TransactionQueueSummary {
   pending: OptimisticTransaction[];
   processing: OptimisticTransaction[];
   completed: OptimisticTransaction[];
