@@ -4,7 +4,7 @@ import type { FieldValues, UseFormReturn } from 'react-hook-form';
 /**
  * Represents the possible states of a step in the stepper workflow
  */
-export enum StepState {
+export enum StepLifecycle {
   /** Step is waiting to be started */
   PENDING = 'pending',
   /** Step is currently active and being processed */
@@ -16,9 +16,9 @@ export enum StepState {
 }
 
 /**
- * Type alias for step status values
+ * Union type for step status values
  */
-export type StepStatus = `${StepState}`;
+export type StepStatus = 'pending' | 'in_progress' | 'completed' | 'error';
 
 /**
  * Interface representing the internal state of a step

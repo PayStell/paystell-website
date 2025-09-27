@@ -471,6 +471,10 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
               transaction.currentStep = 0;
               transaction.error = undefined;
               transaction.updatedAt = new Date().toISOString();
+
+              // Extend the transaction's expiry time when retrying
+              const flowConfig = FLOW_CONFIGS[transaction.flow];
+              transaction.expiresAt = new Date(Date.now() + flowConfig.timeout).toISOString();
             }
 
             state.retryQueue = state.retryQueue.filter((txId: string) => txId !== id);
@@ -657,13 +661,22 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
         // Cleanup
         cleanup: () => {
           set((state) => {
-            // Remove expired transactions from retry queue
+            // Handle expired active transaction
             const now = Date.now();
             if (state.activeTransaction?.expiresAt) {
               const expiresAt = new Date(state.activeTransaction.expiresAt).getTime();
               if (now > expiresAt) {
+                // Mark as expired
                 state.activeTransaction.state = 'EXPIRED';
+
+                // Push a copy to history
+                state.history.unshift({ ...state.activeTransaction });
+
+                // Remove from retry queue
                 state.retryQueue = state.retryQueue.filter((id: string) => id !== state.activeTransaction?.id);
+
+                // Clear active transaction
+                state.activeTransaction = undefined;
               }
             }
 
@@ -680,12 +693,76 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
       })),
       {
         name: 'transaction-store',
-        partialize: (state) => ({
-          history: state.history.slice(0, 50), // Persist only recent history
-          flowConfigs: state.flowConfigs,
-          defaultPriority: state.defaultPriority,
-          autoRetry: state.autoRetry,
-        }),
+        version: 1, // Add version for migration
+        migrate: (persistedState: any, version: number) => {
+          // Migration for version 0 -> 1: redact PII from legacy persisted data
+          if (version === 0 && persistedState?.history) {
+            persistedState.history = persistedState.history.slice(0, 20).map((transaction: any) => ({
+              ...transaction,
+              // Redact legacy PII fields
+              sourceAccount: transaction.sourceAccount ? `${transaction.sourceAccount.slice(0, 4)}***` : undefined,
+              destinationAccount: transaction.destinationAccount ? `${transaction.destinationAccount.slice(0, 4)}***` : undefined,
+              memo: undefined, // Remove memo entirely
+              metadata: undefined, // Remove metadata
+              error: transaction.error ? {
+                type: transaction.error.type,
+                code: transaction.error.code,
+                message: transaction.error.message,
+                severity: transaction.error.severity,
+                timestamp: transaction.error.timestamp,
+              } : undefined,
+            }));
+          }
+          return persistedState;
+        },
+        partialize: (state) => {
+          // Config flag to disable history persistence (opt-out by default)
+          const persistHistory = process.env.NEXT_PUBLIC_PERSIST_TRANSACTION_HISTORY !== 'false';
+
+          if (!persistHistory) {
+            return {
+              flowConfigs: state.flowConfigs,
+              defaultPriority: state.defaultPriority,
+              autoRetry: state.autoRetry,
+            };
+          }
+
+          // Redact PII from transaction history
+          const redactedHistory = state.history.slice(0, 20).map(transaction => ({
+            id: transaction.id,
+            type: transaction.type,
+            state: transaction.state,
+            amount: transaction.amount,
+            asset: transaction.asset,
+            // Redact sensitive address information
+            sourceAccount: transaction.sourceAccount ? `${transaction.sourceAccount.slice(0, 4)}***` : undefined,
+            destinationAccount: transaction.destinationAccount ? `${transaction.destinationAccount.slice(0, 4)}***` : undefined,
+            // Omit memo entirely for privacy
+            fee: transaction.fee,
+            hash: transaction.hash,
+            ledger: transaction.ledger,
+            createdAt: transaction.createdAt,
+            updatedAt: transaction.updatedAt,
+            completedAt: transaction.completedAt,
+            expiresAt: transaction.expiresAt,
+            error: transaction.error ? {
+              type: transaction.error.type,
+              code: transaction.error.code,
+              message: transaction.error.message,
+              severity: transaction.error.severity,
+              timestamp: transaction.error.timestamp,
+              // Omit error context which may contain PII
+            } : undefined,
+            // Omit metadata which might contain sensitive data
+          }));
+
+          return {
+            history: redactedHistory,
+            flowConfigs: state.flowConfigs,
+            defaultPriority: state.defaultPriority,
+            autoRetry: state.autoRetry,
+          };
+        },
       }
     ),
     { name: 'transaction-store' }

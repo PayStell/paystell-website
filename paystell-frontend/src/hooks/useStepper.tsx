@@ -1,7 +1,7 @@
 'use client';
 
 import type React from 'react';
-import { createContext, useContext, useState, useCallback, useMemo } from 'react';
+import { createContext, useContext, useState, useCallback, useMemo, useEffect } from 'react';
 import type { FieldValues, UseFormReturn } from 'react-hook-form';
 
 export type StepStatus = 'pending' | 'in_progress' | 'completed' | 'error';
@@ -39,6 +39,7 @@ interface StepperContextType<TFormData extends FieldValues = FieldValues> {
   nextStep: () => Promise<boolean>;
   previousStep: () => void;
   goToStep: (stepId: string) => boolean;
+  skipStep: () => Promise<boolean>;
 
   // Step management
   updateStepStatus: (stepId: string, status: StepStatus, error?: string) => void;
@@ -66,6 +67,7 @@ export interface StepperProviderProps<TFormData extends FieldValues = FieldValue
   onStepChange?: (currentStep: StepConfig<TFormData>, previousStep: StepConfig<TFormData> | null) => void;
   onComplete?: (formData: TFormData) => void;
   formData?: TFormData;
+  allowBackNavigation?: boolean;
 }
 
 export function StepperProvider<TFormData extends FieldValues = FieldValues>({
@@ -75,6 +77,7 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
   onStepChange,
   onComplete,
   formData,
+  allowBackNavigation = true,
 }: StepperProviderProps<TFormData>) {
   const [currentStepIndex, setCurrentStepIndex] = useState(() => {
     if (initialStepId) {
@@ -112,6 +115,20 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
 
   const currentStep = visibleSteps[currentStepIndex] || null;
   const totalSteps = visibleSteps.length;
+
+  // Keep current index aligned with visible steps
+  const currentStepId = currentStep?.id;
+  useEffect(() => {
+    if (!visibleSteps.length) return;
+    const idxById = currentStepId
+      ? visibleSteps.findIndex(s => s.id === currentStepId)
+      : 0;
+    const nextIdx =
+      idxById >= 0 ? idxById : Math.min(currentStepIndex, visibleSteps.length - 1);
+    if (nextIdx !== currentStepIndex) {
+      setCurrentStepIndex(nextIdx);
+    }
+  }, [visibleSteps, currentStepId, currentStepIndex]);
 
   const updateStepStatus = useCallback((stepId: string, status: StepStatus, error?: string) => {
     setStepStates(prev => ({
@@ -202,16 +219,52 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
     return false;
   }, [currentStep, currentStepIndex, totalSteps, visibleSteps, validateCurrentStep, updateStepStatus, onStepChange, onComplete, formData]);
 
+  const skipStep = useCallback(async (): Promise<boolean> => {
+    if (!currentStep) return false;
+
+    try {
+      // Mark the current step as completed
+      updateStepStatus(currentStep.id, 'completed');
+
+      const nextIndex = currentStepIndex + 1;
+      if (nextIndex < totalSteps) {
+        const previousStep = currentStep;
+        setCurrentStepIndex(nextIndex);
+
+        // Update next step status to in_progress
+        const nextStepId = visibleSteps[nextIndex].id;
+        updateStepStatus(nextStepId, 'in_progress');
+
+        // Trigger callback
+        if (onStepChange) {
+          onStepChange(visibleSteps[nextIndex], previousStep);
+        }
+
+        // Scroll to top
+        window.scrollTo(0, 0);
+        return true;
+      } else if (nextIndex === totalSteps && onComplete && formData) {
+        // All steps completed
+        onComplete(formData);
+        return true;
+      }
+
+      return false;
+    } catch (error) {
+      // If an error occurs, set the current step back to error state
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      updateStepStatus(currentStep.id, 'error', errorMessage);
+      return false;
+    }
+  }, [currentStep, currentStepIndex, totalSteps, visibleSteps, updateStepStatus, onStepChange, onComplete, formData]);
+
   const previousStep = useCallback(() => {
-    if (currentStepIndex > 0) {
+    if (allowBackNavigation && currentStepIndex > 0) {
       const previousStep = currentStep;
       const newIndex = currentStepIndex - 1;
       setCurrentStepIndex(newIndex);
 
       // Update step statuses
-      if (currentStep) {
-        updateStepStatus(currentStep.id, 'pending');
-      }
       updateStepStatus(visibleSteps[newIndex].id, 'in_progress');
 
       // Trigger callback
@@ -222,7 +275,7 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
       // Scroll to top
       window.scrollTo(0, 0);
     }
-  }, [currentStepIndex, currentStep, visibleSteps, updateStepStatus, onStepChange]);
+  }, [allowBackNavigation, currentStepIndex, currentStep, visibleSteps, updateStepStatus, onStepChange]);
 
   const isStepAccessible = useCallback((stepId: string): boolean => {
     const stepIndex = visibleSteps.findIndex(step => step.id === stepId);
@@ -231,7 +284,10 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
     // Current step is always accessible
     if (stepIndex === currentStepIndex) return true;
 
-    // Previous steps are accessible if they exist
+    // Check if trying to go backward when back navigation is disabled
+    if (!allowBackNavigation && stepIndex < currentStepIndex) return false;
+
+    // Previous steps are accessible if they exist (and back navigation is allowed)
     if (stepIndex < currentStepIndex) return true;
 
     // Next steps are accessible only if all previous steps are completed or skippable
@@ -244,7 +300,7 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
     }
 
     return true;
-  }, [visibleSteps, currentStepIndex, stepStates]);
+  }, [allowBackNavigation, visibleSteps, currentStepIndex, stepStates]);
 
   const goToStep = useCallback((stepId: string): boolean => {
     const stepIndex = visibleSteps.findIndex(step => step.id === stepId);
@@ -258,9 +314,6 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
     setCurrentStepIndex(stepIndex);
 
     // Update step statuses
-    if (currentStep) {
-      updateStepStatus(currentStep.id, 'pending');
-    }
     updateStepStatus(stepId, 'in_progress');
 
     // Trigger callback
@@ -274,10 +327,12 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
   }, [visibleSteps, currentStep, updateStepStatus, onStepChange, isStepAccessible]);
 
   const completedSteps = useMemo(() => {
+    // Only count completed steps that are visible
+    const visibleStepIds = visibleSteps.map(step => step.id);
     return Object.keys(stepStates).filter(stepId =>
-      stepStates[stepId].status === 'completed'
+      stepStates[stepId].status === 'completed' && visibleStepIds.includes(stepId)
     );
-  }, [stepStates]);
+  }, [stepStates, visibleSteps]);
 
   const isStepCompleted = useCallback((stepId: string): boolean => {
     return stepStates[stepId]?.status === 'completed';
@@ -288,8 +343,8 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
   }, [currentStepIndex, totalSteps]);
 
   const canGoPrevious = useMemo(() => {
-    return currentStepIndex > 0;
-  }, [currentStepIndex]);
+    return allowBackNavigation && currentStepIndex > 0;
+  }, [allowBackNavigation, currentStepIndex]);
 
   const getProgress = useCallback((): number => {
     if (totalSteps === 0) return 0;
@@ -306,6 +361,7 @@ export function StepperProvider<TFormData extends FieldValues = FieldValues>({
     nextStep,
     previousStep,
     goToStep,
+    skipStep,
     updateStepStatus,
     updateStepData,
     validateCurrentStep,

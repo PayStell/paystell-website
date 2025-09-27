@@ -270,7 +270,7 @@ const TransactionFlowContent: React.FC = () => {
       </div>
 
       {/* Stepper Progress */}
-      <Stepper />
+      <Stepper showProgress={true} allowBackNavigation={true} />
 
       {/* Current Step Content */}
       <Card className="min-h-[400px]">
@@ -290,11 +290,13 @@ const TransactionFlowContent: React.FC = () => {
       {/* Navigation */}
       <StepNavigation
         showBackButton={canGoPrevious}
-        showNextButton={canGoNext || isLastStep}
+        showNextButton={isLastStep ? false : canGoNext}
         nextLabel={isLastStep ? 'Complete' : 'Continue'}
-        onCustomAction={isLastStep ? undefined : handleNext}
-        customActionLabel={isLastStep ? undefined : 'Continue'}
-        customActionVariant="default"
+        {...(!isLastStep && {
+          onCustomAction: handleNext,
+          customActionLabel: 'Continue',
+          customActionVariant: 'default' as const
+        })}
       />
 
       {/* Progress Stats */}
@@ -449,6 +451,7 @@ export const TransactionFlowExample: React.FC = () => {
           console.log('Transaction completed with data:', data);
           setIsFlowActive(false);
         }}
+        allowBackNavigation={true}
       >
         <TransactionFlowContent />
 

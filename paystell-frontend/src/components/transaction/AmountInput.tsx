@@ -47,8 +47,16 @@ export function AmountInput({
   xlmBalance: propXlmBalance,
   ...props
 }: AmountInputProps) {
-  const { state: stellarState } = useStellar();
-  const { balances, xlmPrice: hookXlmPrice } = stellarState;
+  // Try to read from Stellar context; fall back to props when not mounted
+  let balances: { asset_type: string; balance: string }[] = [];
+  let hookXlmPrice: number | undefined;
+  try {
+    const { state } = useStellar();
+    balances = state.balances;
+    hookXlmPrice = state.xlmPrice;
+  } catch {
+    // Outside StellarProvider: rely on propXlmPrice/propXlmBalance
+  }
 
   const [usdEquivalent, setUsdEquivalent] = useState<string | null>(null);
   const [isValidAmount, setIsValidAmount] = useState(true);

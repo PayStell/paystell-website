@@ -6,11 +6,19 @@ import { useStepper } from '@/hooks/useStepper';
 import { cn } from '@/lib/utils';
 import type { StepperProps } from '@/types/stepper';
 
+// Helper function to safely calculate progress percentage
+const getProgressPercentage = (currentStepIndex: number, totalSteps: number): number => {
+  if (totalSteps <= 1) return 0;
+  return (currentStepIndex / Math.max(1, totalSteps - 1)) * 100;
+};
+
 export function Stepper({
   className,
   variant = 'default',
   size = 'md',
   showStepNumbers = true,
+  showProgress = true,
+  allowBackNavigation = true,
 }: Omit<StepperProps, 'steps'>) {
   const {
     steps,
@@ -50,7 +58,7 @@ export function Stepper({
   const progressVariants = {
     initial: { width: 0 },
     animate: {
-      width: `${((currentStepIndex) / (steps.length - 1)) * 100}%`,
+      width: `${getProgressPercentage(currentStepIndex, steps.length)}%`,
       transition: { duration: 0.5, ease: 'easeOut' },
     },
   };
@@ -120,20 +128,24 @@ export function Stepper({
   if (variant === 'minimal') {
     return (
       <div className={cn('mb-6', className)}>
-        <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-          <span>Step {currentStepIndex + 1} of {steps.length}</span>
-          <span>{Math.round(getProgress())}%</span>
-        </div>
-        <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
-          <motion.div
-            className="bg-primary h-full rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${getProgress()}%` }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          />
-        </div>
+        {showProgress && (
+          <>
+            <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
+              <span>Step {currentStepIndex + 1} of {steps.length}</span>
+              <span>{Math.round(getProgress())}%</span>
+            </div>
+            <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
+              <motion.div
+                className="bg-primary h-full rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${getProgress()}%` }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+              />
+            </div>
+          </>
+        )}
         {steps[currentStepIndex] && (
-          <div className="mt-3">
+          <div className={cn(showProgress ? 'mt-3' : '')}>
             <h3 className="font-semibold text-foreground">{steps[currentStepIndex].title}</h3>
             {steps[currentStepIndex].description && (
               <p className="text-sm text-muted-foreground mt-1">
@@ -151,14 +163,19 @@ export function Stepper({
       {/* Desktop stepper */}
       <div className="hidden md:flex items-center justify-between relative w-full">
         {/* Progress line */}
-        <div className={`absolute top-${parseInt(currentSize.circle.split(' ')[1]) / 2} left-0 w-full h-[2px] bg-muted`}>
-          <motion.div
-            className="h-full bg-primary"
-            variants={progressVariants}
-            initial="initial"
-            animate="animate"
-          />
-        </div>
+        {showProgress && (
+          <div
+            className="absolute left-0 w-full h-[2px] bg-muted"
+            style={{ top: `${parseInt(currentSize.circle.split(' ')[1]) / 2}px` }}
+          >
+            <motion.div
+              className="h-full bg-primary"
+              variants={progressVariants}
+              initial="initial"
+              animate="animate"
+            />
+          </div>
+        )}
 
         {/* Steps */}
         {steps.map((step, index) => {
@@ -207,23 +224,27 @@ export function Stepper({
 
       {/* Mobile stepper */}
       <div className="md:hidden space-y-3">
-        <div className="flex items-center justify-between">
-          <span className={cn(currentSize.text, 'font-medium')}>
-            Step {currentStepIndex + 1} of {steps.length}
-          </span>
-          <span className={cn(currentSize.text, 'font-medium text-muted-foreground')}>
-            {steps[currentStepIndex]?.title}
-          </span>
-        </div>
+        {showProgress && (
+          <>
+            <div className="flex items-center justify-between">
+              <span className={cn(currentSize.text, 'font-medium')}>
+                Step {currentStepIndex + 1} of {steps.length}
+              </span>
+              <span className={cn(currentSize.text, 'font-medium text-muted-foreground')}>
+                {steps[currentStepIndex]?.title}
+              </span>
+            </div>
 
-        <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
-          <motion.div
-            className="bg-primary h-full rounded-full"
-            initial={{ width: 0 }}
-            animate={{ width: `${getProgress()}%` }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          />
-        </div>
+            <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
+              <motion.div
+                className="bg-primary h-full rounded-full"
+                initial={{ width: 0 }}
+                animate={{ width: `${getProgress()}%` }}
+                transition={{ duration: 0.5, ease: 'easeOut' }}
+              />
+            </div>
+          </>
+        )}
 
         {steps[currentStepIndex]?.description && (
           <p className="text-sm text-muted-foreground">

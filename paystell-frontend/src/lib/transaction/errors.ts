@@ -185,7 +185,7 @@ const ERROR_MESSAGES: Record<TransactionErrorCode, {
   INVALID_MEMO: {
     title: 'Invalid Memo',
     message: 'The transaction memo is invalid.',
-    details: 'Memo must be less than 28 characters for text memos.',
+    details: 'Memo must be at most 28 bytes when UTF-8 encoded.',
   },
   INVALID_FEE: {
     title: 'Invalid Fee',
@@ -227,7 +227,7 @@ const ERROR_MESSAGES: Record<TransactionErrorCode, {
   BELOW_MINIMUM_BALANCE: {
     title: 'Below Minimum Balance',
     message: 'This transaction would leave your account below the minimum balance.',
-    details: 'Stellar accounts must maintain a minimum balance of 1 XLM.',
+    details: 'Stellar accounts must maintain a minimum balance based on the current network base reserve and subentries. Use getMinimumBalanceErrorMessage() for the exact amount.',
   },
   TRUST_LINE_MISSING: {
     title: 'Trust Line Missing',
@@ -663,6 +663,27 @@ const RECOVERY_ACTIONS: Record<TransactionErrorCode, RecoveryAction[]> = {
 };
 
 /**
+ * Generate minimum balance error message with dynamic calculation
+ */
+export function getMinimumBalanceErrorMessage(
+  baseReserve: number = 0.5, // Default Stellar base reserve
+  numSubentries: number = 0
+): {
+  title: string;
+  message: string;
+  details: string;
+} {
+  const minBalance = (2 + numSubentries) * baseReserve;
+  const formattedBalance = minBalance.toFixed(7).replace(/\.?0+$/, ''); // Remove trailing zeros
+
+  return {
+    title: 'Below Minimum Balance',
+    message: 'This transaction would leave your account below the minimum balance.',
+    details: `Stellar accounts must maintain a minimum balance of ${formattedBalance} XLM based on the current base reserve and subentries.`
+  };
+}
+
+/**
  * Create a standardized transaction error
  */
 export function createTransactionError(
@@ -696,14 +717,14 @@ export function createTransactionError(
  */
 function getErrorTypeFromCode(code: TransactionErrorCode): TransactionErrorType {
   if (code.startsWith('WALLET_')) return 'WALLET_ERROR';
+  if (code.includes('INSUFFICIENT')) return 'INSUFFICIENT_FUNDS_ERROR';
+  if (code.includes('FEE')) return 'FEE_ERROR';
   if (code.includes('ACCOUNT') || code.includes('BALANCE') || code.includes('TRUST')) return 'ACCOUNT_ERROR';
   if (code.includes('NETWORK') || code.includes('SUBMISSION') || code.includes('RATE')) return 'NETWORK_ERROR';
   if (code.includes('INVALID') || code.includes('TOO_')) return 'VALIDATION_ERROR';
-  if (code.includes('INSUFFICIENT')) return 'INSUFFICIENT_FUNDS_ERROR';
   if (code.includes('USER_') || code.includes('SIGNING')) return 'USER_REJECTION_ERROR';
   if (code.includes('VERIFICATION') || code.includes('CONFIRMATION')) return 'VERIFICATION_ERROR';
   if (code.includes('TIMEOUT')) return 'TIMEOUT_ERROR';
-  if (code.includes('FEE')) return 'FEE_ERROR';
   if (code.includes('MEMO')) return 'MEMO_ERROR';
   if (code.includes('DESTINATION')) return 'DESTINATION_ERROR';
   if (code.includes('SEQUENCE')) return 'SEQUENCE_ERROR';
@@ -757,8 +778,8 @@ export function handleTransactionError(
       message: error.message,
       details: error.stack,
     });
-  } else if (typeof error === 'object' && error !== null && 'code' in error) {
-    transactionError = error as TransactionError;
+  } else if (isTransactionError(error)) {
+    transactionError = error;
   } else {
     transactionError = createTransactionError('UNKNOWN_ERROR', context, {
       message: String(error),
@@ -769,9 +790,37 @@ export function handleTransactionError(
   showErrorToast(transactionError);
 
   // Log error for debugging
-  console.error('Transaction error:', transactionError);
+  logTransactionError(transactionError);
 
   return transactionError;
+}
+
+/**
+ * Safely log transaction errors with environment-based filtering
+ */
+function logTransactionError(error: TransactionError): void {
+  const isProduction = process.env.NODE_ENV === 'production';
+
+  if (isProduction) {
+    // In production, only log sanitized, non-sensitive fields
+    const sanitizedError = {
+      code: error.code,
+      type: error.type,
+      severity: error.severity,
+      timestamp: error.timestamp,
+      // Anonymize any IDs by masking them
+      context: error.context ? {
+        ...error.context,
+        sourceAccount: error.context.sourceAccount ? error.context.sourceAccount.slice(0, 4) + '***' : undefined,
+        destinationAccount: error.context.destinationAccount ? error.context.destinationAccount.slice(0, 4) + '***' : undefined,
+        transactionId: error.context.transactionId ? error.context.transactionId.slice(0, 8) + '***' : undefined,
+      } : undefined,
+    };
+    console.error('Transaction error:', sanitizedError);
+  } else {
+    // In development, log full error for debugging
+    console.error('Transaction error:', error);
+  }
 }
 
 /**
@@ -781,12 +830,24 @@ function mapErrorMessageToCode(message: string): TransactionErrorCode {
   const lowerMessage = message.toLowerCase();
 
   if (lowerMessage.includes('wallet not connected')) return 'WALLET_NOT_CONNECTED';
-  if (lowerMessage.includes('user cancelled') || lowerMessage.includes('user denied')) return 'USER_CANCELLED';
+  if (lowerMessage.includes('user cancelled') || lowerMessage.includes('user denied') || lowerMessage.includes('user rejected')) return 'USER_CANCELLED';
   if (lowerMessage.includes('insufficient')) return 'INSUFFICIENT_BALANCE';
   if (lowerMessage.includes('timeout')) return 'TIMEOUT';
   if (lowerMessage.includes('network')) return 'NETWORK_UNAVAILABLE';
   if (lowerMessage.includes('sequence')) return 'SEQUENCE_NUMBER_ERROR';
-  if (lowerMessage.includes('fee')) return 'FEE_TOO_LOW';
+
+  // More specific fee error classification
+  if (lowerMessage.includes('fee')) {
+    if (lowerMessage.includes('too low') || lowerMessage.includes('low') || lowerMessage.includes('insufficient fee') || lowerMessage.includes('fee insufficient')) {
+      return 'FEE_TOO_LOW';
+    }
+    if (lowerMessage.includes('too high') || lowerMessage.includes('high')) {
+      return 'FEE_TOO_HIGH';
+    }
+    // Generic fee error if we can't determine the specific type
+    return 'INVALID_FEE';
+  }
+
   if (lowerMessage.includes('destination')) return 'INVALID_DESTINATION';
   if (lowerMessage.includes('signing')) return 'SIGNING_FAILED';
 
@@ -797,16 +858,38 @@ function mapErrorMessageToCode(message: string): TransactionErrorCode {
  * Show error toast notification based on error severity
  */
 function showErrorToast(error: TransactionError) {
-  const errorInfo = ERROR_MESSAGES[error.code];
+  // Fallback to UNKNOWN_ERROR if the error code is not found
+  const errorInfo = ERROR_MESSAGES[error.code] || ERROR_MESSAGES.UNKNOWN_ERROR;
   const duration = error.severity === 'critical' ? 10000 : error.severity === 'high' ? 7000 : 5000;
+
+  // Build action that prefers href navigation over callback
+  let action: { label: string; onClick: () => void } | undefined;
+  const recoveryAction = error.recoveryActions?.[0];
+
+  if (recoveryAction) {
+    action = {
+      label: recoveryAction.buttonText,
+      onClick: () => {
+        if (recoveryAction.href) {
+          // Prefer href navigation
+          if (typeof window !== 'undefined') {
+            if (window.location) {
+              window.location.assign(recoveryAction.href);
+            }
+          }
+        } else if (recoveryAction.callback) {
+          // Fallback to callback
+          recoveryAction.callback();
+        }
+        // If neither href nor callback exist, this is a noop
+      },
+    };
+  }
 
   toast.error(errorInfo.title, {
     description: error.message,
     duration,
-    action: error.recoveryActions?.[0] ? {
-      label: error.recoveryActions[0].buttonText,
-      onClick: error.recoveryActions[0].callback || (() => {}),
-    } : undefined,
+    action,
   });
 }
 
@@ -840,4 +923,16 @@ export function isRetryableError(error: TransactionError): boolean {
  */
 export function isRecoverableError(error: TransactionError): boolean {
   return error.recoverable;
+}
+
+/**
+ * Type guard to safely check if an unknown value is a TransactionError
+ */
+export function isTransactionError(v: unknown): v is TransactionError {
+  return (
+    typeof v === 'object' &&
+    v !== null &&
+    typeof (v as any).code === 'string' &&
+    typeof (v as any).message === 'string'
+  );
 }

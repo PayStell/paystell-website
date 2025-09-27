@@ -48,6 +48,7 @@ export function StepNavigation({
     canGoPrevious,
     nextStep,
     previousStep,
+    skipStep,
     currentStep,
     currentStepIndex,
     totalSteps,
@@ -89,7 +90,7 @@ export function StepNavigation({
 
     setIsNavigating(true);
     try {
-      await nextStep();
+      await skipStep();
     } catch (error) {
       console.error('Skip error:', error);
     } finally {
@@ -144,6 +145,7 @@ export function StepNavigation({
 
     return (
       <Button
+        type="button"
         variant="outline"
         size={size}
         onClick={handlePrevious}
@@ -169,6 +171,7 @@ export function StepNavigation({
 
     return (
       <Button
+        type="button"
         size={size}
         onClick={handleNext}
         disabled={isDisabled}
@@ -193,6 +196,7 @@ export function StepNavigation({
 
     return (
       <Button
+        type="button"
         variant="ghost"
         size={size}
         onClick={handleSkip}
@@ -210,6 +214,7 @@ export function StepNavigation({
 
     return (
       <Button
+        type="button"
         variant={customActionVariant}
         size={size}
         onClick={handleCustomAction}
@@ -225,6 +230,7 @@ export function StepNavigation({
 
     return (
       <Button
+        type="button"
         variant="secondary"
         size={size}
         onClick={handleValidate}
@@ -317,6 +323,7 @@ export function CustomStepButton({
 
   return (
     <Button
+      type="button"
       variant={variant}
       size={size}
       onClick={handleClick}

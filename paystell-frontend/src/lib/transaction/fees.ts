@@ -145,7 +145,8 @@ export async function getNetworkFeeStats(): Promise<NetworkFeeStats> {
     return {
       min: feeStats.min_accepted_fee,
       max: feeStats.max_fee.max,
-      median: feeStats.fee_charged.median,
+      // Horizon exposes p50 for median; fallback to mode if p50 absent
+      median: feeStats.fee_charged.p50 ?? feeStats.fee_charged.mode,
       recommended: feeStats.fee_charged.p95, // 95th percentile for reliable confirmation
       lastUpdated: new Date(),
     };
@@ -212,18 +213,17 @@ export async function calculateFee(
   }
 
   // Apply fee bump multiplier
-  let totalFee = Math.ceil(Number(baseFee) * totalComplexity * feeBumpMultiplier).toString();
+  const bumpedFeeNum = Math.ceil(Number(baseFee) * totalComplexity * feeBumpMultiplier);
 
   // Ensure minimum fee
   const minTotalFee = Number(DEFAULT_FEES.MIN_BASE_FEE) * operationCount;
-  if (Number(totalFee) < minTotalFee) {
-    totalFee = minTotalFee.toString();
-  }
 
-  // Apply maximum fee limit if specified
-  if (maxFee && Number(totalFee) > Number(maxFee)) {
-    totalFee = maxFee;
-  }
+  // Calculate max total fee (scale maxFee by operation count if provided, otherwise use Infinity)
+  const maxTotalFeeOrInfinity = maxFee ? Number(maxFee) * operationCount : Infinity;
+
+  // Clamp the bumped fee between min and max limits
+  const totalFeeNum = Math.min(Math.max(bumpedFeeNum, minTotalFee), maxTotalFeeOrInfinity);
+  const totalFee = totalFeeNum.toString();
 
   // Convert to XLM (1 XLM = 10,000,000 stroops)
   const totalFeeXlm = (Number(totalFee) / 10_000_000).toFixed(7);

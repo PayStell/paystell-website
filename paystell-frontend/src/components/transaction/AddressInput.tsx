@@ -35,6 +35,7 @@ interface AddressInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   error?: string;
   disabled?: boolean;
   placeholder?: string;
+  network?: string;
 }
 
 // Stellar address validation regex
@@ -87,6 +88,7 @@ export function AddressInput({
   error,
   disabled = false,
   placeholder = 'G... or name*domain.com',
+  network = 'testnet',
   ...props
 }: AddressInputProps) {
   const [isValid, setIsValid] = useState(false);
@@ -135,12 +137,11 @@ export function AddressInput({
     // Invalid format
     setIsValid(false);
     setAddressType(null);
-    if (allowFederation) {
-      setValidationError('Enter a valid Stellar address (G...) or federation address (name*domain.com)');
-    } else {
-      setValidationError('Enter a valid Stellar address starting with G');
-    }
-    onValidationChange?.(false, validationError || undefined);
+    const errorMessage = allowFederation
+      ? 'Enter a valid Stellar address (G...) or federation address (name*domain.com)'
+      : 'Enter a valid Stellar address starting with G';
+    setValidationError(errorMessage);
+    onValidationChange?.(false, errorMessage);
   }, [value, allowFederation, onValidationChange, validationError]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -313,7 +314,10 @@ export function AddressInput({
               variant="ghost"
               size="sm"
               className="h-6 text-xs text-muted-foreground hover:text-foreground"
-              onClick={() => window.open(`https://stellar.expert/explorer/testnet/account/${value}`, '_blank')}
+              onClick={() => {
+                const net = (typeof network === 'string' ? network : 'testnet') === 'mainnet' ? 'public' : 'testnet';
+                window.open(`https://stellar.expert/explorer/${net}/account/${value}`, '_blank', 'noopener,noreferrer');
+              }}
             >
               <ExternalLink className="h-3 w-3 mr-1" />
               View on Explorer
@@ -348,6 +352,7 @@ interface AddressDisplayProps {
   showExplorer?: boolean;
   className?: string;
   size?: 'sm' | 'md' | 'lg';
+  network?: string;
 }
 
 export function AddressDisplay({
@@ -358,6 +363,7 @@ export function AddressDisplay({
   showExplorer = true,
   className,
   size = 'md',
+  network = 'testnet',
 }: AddressDisplayProps) {
   const [copied, setCopied] = useState(false);
 
@@ -415,7 +421,10 @@ export function AddressDisplay({
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => window.open(`https://stellar.expert/explorer/testnet/account/${address}`, '_blank')}
+            onClick={() => {
+              const net = (typeof network === 'string' ? network : 'testnet') === 'mainnet' ? 'public' : 'testnet';
+              window.open(`https://stellar.expert/explorer/${net}/account/${address}`, '_blank', 'noopener,noreferrer');
+            }}
             className="h-8 w-8 p-0"
           >
             <ExternalLink className="h-4 w-4" />

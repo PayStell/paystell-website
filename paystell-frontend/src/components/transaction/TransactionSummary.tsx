@@ -43,6 +43,7 @@ interface TransactionSummaryProps {
   isConfirming?: boolean;
   className?: string;
   variant?: 'default' | 'confirmation' | 'preview';
+  network?: string;
 }
 
 export function TransactionSummary({
@@ -56,6 +57,7 @@ export function TransactionSummary({
   isConfirming = false,
   className,
   variant = 'default',
+  network = 'testnet',
 }: TransactionSummaryProps) {
   const [feeEstimation, setFeeEstimation] = useState<FeeEstimation | null>(null);
   const [copied, setCopied] = useState(false);
@@ -149,6 +151,7 @@ export function TransactionSummary({
                 showCopy={true}
                 showExplorer={true}
                 size="sm"
+                network={network}
               />
             </div>
 
@@ -161,6 +164,7 @@ export function TransactionSummary({
                 showCopy={true}
                 showExplorer={true}
                 size="sm"
+                network={network}
               />
             </div>
           </div>
