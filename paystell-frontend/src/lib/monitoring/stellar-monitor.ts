@@ -3,8 +3,8 @@
 import { Horizon, Networks } from "@stellar/stellar-sdk";
 import { DepositTransaction, DepositMonitoringConfig } from "@/lib/types/deposit";
 
-// Initialize Horizon server for testnet
-const server = new Horizon.Server("https://horizon-testnet.stellar.org");
+// Initialize Horizon server (default to testnet; allow override via env)
+const server = new Horizon.Server(process.env.NEXT_PUBLIC_HORIZON_URL ?? "https://horizon-testnet.stellar.org");
 
 export class StellarMonitor {
   private monitoringConfigs: Map<string, DepositMonitoringConfig> = new Map();
@@ -117,27 +117,23 @@ export class StellarMonitor {
    */
   private async processTransaction(tx: Record<string, unknown>, address: string) {
     try {
-      // Only process payment operations
-      if (tx.operation_count !== 1) return;
-
       const operations = await (tx as { operations(): Promise<{ records: Record<string, unknown>[] }> }).operations();
       if (operations.records.length === 0) return;
-
-      const operation = operations.records[0];
-      if (operation.type !== "payment") return;
-
-      // Check if this is an incoming payment
-      if (operation.to !== address) return;
 
       // Get monitoring configs for this address
       const configs = Array.from(this.monitoringConfigs.entries())
         .filter(([key]) => key.startsWith(`${address}_`));
 
-      for (const [key, config] of configs) {
-        const txMemo = (tx as { memo?: string | null }).memo ?? null;
-        if (this.matchesMonitoringCriteria(operation, config, txMemo)) {
-          const depositTransaction = this.createDepositTransaction(tx, operation);
-          await this.handleDepositTransaction(depositTransaction, key);
+      for (const operation of operations.records) {
+        if (operation.type !== "payment") continue;
+        // Incoming payment only
+        if (operation.to !== address) continue;
+        for (const [key, config] of configs) {
+          const txMemo = (tx as { memo?: string | null }).memo ?? null;
+          if (this.matchesMonitoringCriteria(operation, config, txMemo)) {
+            const depositTransaction = this.createDepositTransaction(tx, operation);
+            await this.handleDepositTransaction(depositTransaction, key);
+          }
         }
       }
     } catch (error) {
@@ -153,10 +149,10 @@ export class StellarMonitor {
     config: DepositMonitoringConfig,
     txMemo?: string | null,
   ): boolean {
-    // Check asset
-    if (config.asset !== "native" && operation.asset_code !== config.asset) {
-      return false;
-    }
+    // Check asset (normalize native <-> XLM)
+    const normalize = (s: string) => (s.toUpperCase() === "NATIVE" ? "XLM" : s.toUpperCase());
+    const opAsset = operation.asset_type === "native" ? "XLM" : String(operation.asset_code ?? "").toUpperCase();
+    if (normalize(config.asset) !== opAsset) return false;
 
     // Check minimum amount
     if (config.minAmount && parseFloat(operation.amount as string) < parseFloat(config.minAmount)) {
@@ -202,23 +198,23 @@ export class StellarMonitor {
    */
   private async handleDepositTransaction(transaction: DepositTransaction, configKey: string) {
     try {
-      // Check if we've already processed this transaction
-      const existing = localStorage.getItem(`processed_${transaction.hash}`);
-      if (existing) return;
-
-      // Mark as processed
-      localStorage.setItem(`processed_${transaction.hash}`, JSON.stringify(transaction));
-
-      // Call the callback if it exists
-      const callback = this.callbacks.get(configKey);
-      if (callback) {
-        callback(transaction);
+      // Deliver callback once per config
+      const deliveredKey = `delivered_${configKey}_${transaction.hash}`;
+      const alreadyDelivered = localStorage.getItem(deliveredKey);
+      if (!alreadyDelivered) {
+        const callback = this.callbacks.get(configKey);
+        if (callback) callback(transaction);
+        localStorage.setItem(deliveredKey, "1");
       }
 
-      // Store in transaction history
-      this.storeTransaction(transaction);
-
-      console.log("New deposit transaction detected:", transaction);
+      // Persist/store once per tx
+      const processedKey = `processed_${transaction.hash}`;
+      const alreadyProcessed = localStorage.getItem(processedKey);
+      if (!alreadyProcessed) {
+        localStorage.setItem(processedKey, JSON.stringify({ hash: transaction.hash, at: Date.now() }));
+        this.storeTransaction(transaction);
+        console.log("New deposit transaction detected:", transaction);
+      }
     } catch (error) {
       console.error("Error handling deposit transaction:", error);
     }
