@@ -1,10 +1,19 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Balance from '@/components/dashboard/balance';
 import Activity, { UserActivity } from '@/components/dashboard/activity';
 import LoadingSkeleton from '@/components/ui/LoadingSkeleton';
-import { StellarAnalytics } from '@/components/dashboard/analytics/StellarAnalytics';
+
+// Dynamic import for heavy analytics component
+const StellarAnalytics = dynamic(
+  () => import('@/components/dashboard/analytics/StellarAnalyticsLazy'),
+  {
+    loading: () => <LoadingSkeleton type="chart" height="300px" width="100%" />,
+    ssr: false,
+  }
+);
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);

@@ -11,7 +11,10 @@
     "prettier:fix": "prettier --write .",
     "type-check": "tsc --noEmit",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "analyze": "ANALYZE=true next build",
+    "analyze:server": "BUNDLE_ANALYZE=server next build",
+    "analyze:browser": "BUNDLE_ANALYZE=browser next build"
   },
   "dependencies": {
     "@creit.tech/stellar-wallets-kit": "^1.7.3",
@@ -96,6 +99,7 @@
     "msw": "^2.7.3",
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
-    "typescript": "5.8.2"
+    "typescript": "5.8.2",
+    "webpack-bundle-analyzer": "^4.10.1"
   }
 }

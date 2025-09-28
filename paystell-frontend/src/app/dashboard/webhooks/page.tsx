@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { toast } from 'sonner';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -12,17 +13,39 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import WebhookList from '@/components/webhooks/WebhookList';
-import WebhookForm from '@/components/webhooks/WebhookForm';
-import WebhookDeliveryEvents from '@/components/webhooks/WebhookDeliveryEvents';
-import WebhookMetrics from '@/components/webhooks/WebhookMetrics';
-import WebhookSecurity from '@/components/webhooks/WebhookSecurity';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   WebhookConfig,
   WebhookDeliveryEvent,
   WebhookMetrics as WebhookMetricsType,
 } from '@/types/webhook-types';
 import { fetchWebhooks, fetchWebhookEvents, fetchWebhookMetrics } from '@/services/webhook.service';
+
+// Dynamic imports for heavy webhook components
+const WebhookList = dynamic(() => import('@/components/webhooks/WebhookList'), {
+  loading: () => <Skeleton className="h-64 w-full" />,
+  ssr: false,
+});
+
+const WebhookForm = dynamic(() => import('@/components/webhooks/WebhookForm'), {
+  loading: () => <Skeleton className="h-96 w-full" />,
+  ssr: false,
+});
+
+const WebhookDeliveryEvents = dynamic(() => import('@/components/webhooks/WebhookDeliveryEvents'), {
+  loading: () => <Skeleton className="h-64 w-full" />,
+  ssr: false,
+});
+
+const WebhookMetrics = dynamic(() => import('@/components/webhooks/WebhookMetrics'), {
+  loading: () => <Skeleton className="h-64 w-full" />,
+  ssr: false,
+});
+
+const WebhookSecurity = dynamic(() => import('@/components/webhooks/WebhookSecurity'), {
+  loading: () => <Skeleton className="h-64 w-full" />,
+  ssr: false,
+});
 
 const WebhooksPage: React.FC = () => {
   const [webhooks, setWebhooks] = useState<WebhookConfig[]>([]);
