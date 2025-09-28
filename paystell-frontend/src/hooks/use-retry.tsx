@@ -15,7 +15,7 @@ interface RetryState {
   lastError: Error | null;
 }
 
-export function useRetry<T extends any[], R>(
+export function useRetry<T extends unknown[], R>(
   fn: (...args: T) => Promise<R>,
   options: RetryOptions = {},
 ) {
