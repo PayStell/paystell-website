@@ -1,5 +1,6 @@
 'use client';
 
+import React, { memo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatPrice } from '@/lib/utils';
@@ -12,7 +13,7 @@ interface BalanceProps {
   currency?: string;
 }
 
-const Balance = ({ title = 'Available', balance, lastBalance, currency = 'USD' }: BalanceProps) => {
+const Balance = memo(({ title = 'Available', balance, lastBalance, currency = 'USD' }: BalanceProps) => {
   // @TODO implement withdraw
   const handleWithdraw = () => {
     console.log('withdraw clicked');
@@ -48,5 +49,9 @@ const Balance = ({ title = 'Available', balance, lastBalance, currency = 'USD' }
     </Card>
   );
 };
+
+});
+
+Balance.displayName = 'Balance';
 
 export default Balance;

@@ -12,6 +12,11 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'PayStell',
   description: 'Payment Platform',
+  other: {
+    'preload': '/api/auth/session',
+    'dns-prefetch': '//fonts.googleapis.com',
+    'preconnect': '//fonts.gstatic.com',
+  },
 };
 
 export default function RootLayout({
@@ -21,6 +26,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        {/* Preload critical resources */}
+        <link rel="preload" href="/fonts/GeistVF.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+        <link rel="preload" href="/fonts/GeistMonoVF.woff" as="font" type="font/woff" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+        <link rel="preconnect" href="//fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preload critical API endpoints */}
+        <link rel="preload" href="/api/auth/session" as="fetch" crossOrigin="anonymous" />
+      </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
           <WalletProvider>
@@ -38,6 +52,24 @@ export default function RootLayout({
                 const { PerformanceMonitor } = require('@/lib/performance');
                 const monitor = PerformanceMonitor.getInstance();
                 monitor.measureCoreWebVitals();
+              }
+            `,
+          }}
+        />
+        {/* Service Worker Registration */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              if ('serviceWorker' in navigator) {
+                window.addEventListener('load', () => {
+                  navigator.serviceWorker.register('/sw.js')
+                    .then((registration) => {
+                      console.log('SW registered: ', registration);
+                    })
+                    .catch((registrationError) => {
+                      console.log('SW registration failed: ', registrationError);
+                    });
+                });
               }
             `,
           }}
