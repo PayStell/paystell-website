@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 'use client';
 
 import { useState } from 'react';
@@ -5,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { RetryExample } from '@/components/RetryExample';
 import { useOffline } from '@/hooks/use-offline';
-import { AlertTriangle, Wifi, WifiOff } from 'lucide-react';
+import { AlertTriangle } from 'lucide-react';
 
 // Component that throws an error for testing
 function ErrorThrowingComponent() {
@@ -50,14 +51,7 @@ export default function ErrorTestPage() {
       {/* Offline Status */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            {isOffline ? (
-              <WifiOff className="w-5 h-5 text-red-500" />
-            ) : (
-              <Wifi className="w-5 h-5 text-green-500" />
-            )}
-            Connection Status
-          </CardTitle>
+          <CardTitle className="flex items-center gap-2">Connection Status</CardTitle>
         </CardHeader>
         <CardContent>
           <p className={isOffline ? 'text-red-600' : 'text-green-600'}>
@@ -90,10 +84,12 @@ export default function ErrorTestPage() {
         </CardHeader>
         <CardContent className="space-y-2">
           <p>
-            1. <strong>Error Boundary:</strong> Click "Throw Error" to see the error fallback UI
+            1. <strong>Error Boundary:</strong> Click &quot;Throw Error&quot; to see the error
+            fallback UI
           </p>
           <p>
-            2. <strong>Retry Logic:</strong> Click "Fetch User Data" to test retry with backoff
+            2. <strong>Retry Logic:</strong> Click &quot;Fetch User Data&quot; to test retry with
+            backoff
           </p>
           <p>
             3. <strong>Offline Detection:</strong> Disconnect your internet to see offline banner

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { AlertTriangle, RefreshCw, Home, ArrowLeft, Bug } from 'lucide-react';
+import { AlertTriangle, RefreshCw, Home, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface ErrorFallbackProps {
@@ -97,7 +97,6 @@ export function ErrorFallback({ error, retry }: ErrorFallbackProps) {
                 size="sm"
                 className="w-full text-gray-500"
               >
-                <Bug className="w-4 h-4 mr-2" />
                 {showDetails ? 'Hide' : 'Show'} Error Details
               </Button>
 
