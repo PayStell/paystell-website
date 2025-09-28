@@ -7,8 +7,13 @@ import { safeAsync, categorizeError } from '@/utils/error-prevention';
 import { toast } from 'sonner';
 
 // Example: How to use error handling in a real component
+interface ExampleData {
+  success: boolean;
+  data: string;
+}
+
 export function ErrorHandlingExample() {
-  const [data, setData] = useState<any>(null);
+  const [data, setData] = useState<ExampleData | null>(null);
   const [loading, setLoading] = useState(false);
 
   // Example API call with retry logic
@@ -39,7 +44,7 @@ export function ErrorHandlingExample() {
       { success: false, data: 'Operation failed' }, // fallback
       (error) => {
         // Error handler
-        const { type, severity, userMessage } = categorizeError(error);
+        const { userMessage } = categorizeError(error);
         toast.error(userMessage);
         console.error('Operation failed:', error);
       },
