@@ -1,5 +1,5 @@
-import { Home, Link, HandCoins, Settings, Users, ShieldCheck, ShoppingBag } from 'lucide-react';
-import { Permission, UserRole } from '@/lib/types/user';
+import { Home, Link, HandCoins, Settings, Users, ShieldCheck, ShoppingBag, Download } from "lucide-react";
+import { Permission, UserRole } from "@/lib/types/user";
 
 // Common navigation items for all users
 export const commonNavItems = [
@@ -28,6 +28,12 @@ export const transactionNavItems = [
     href: '/dashboard/sales',
     icon: HandCoins,
     requiredPermissions: [Permission.VIEW_PAYMENTS],
+  },
+  {
+    title: "Deposit",
+    href: "/dashboard/deposit",
+    icon: Download,
+    requiredPermissions: [Permission.CREATE_PAYMENT],
   },
 ];
 
