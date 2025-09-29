@@ -473,8 +473,9 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
               transaction.updatedAt = new Date().toISOString();
 
               // Extend the transaction's expiry time when retrying
+              const transactionType = transaction.type as TransactionType;
               const flowConfig =
-                state.flowConfigs[transaction.type] ?? DEFAULT_FLOW_CONFIGS[transaction.type];
+                state.flowConfigs[transactionType] ?? DEFAULT_FLOW_CONFIGS[transactionType];
               const timeout = flowConfig?.timeout ?? 30000;
               transaction.expiresAt = new Date(Date.now() + timeout).toISOString();
             }
@@ -700,21 +701,27 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
           // Migration for version 0 -> 1: redact PII from legacy persisted data
           const state = persistedState as Record<string, unknown>;
           if (version === 0 && state?.history && Array.isArray(state.history)) {
-            state.history = state.history.slice(0, 20).map((transaction: Record<string, unknown>) => ({
-              ...transaction,
-              // Redact legacy PII fields
-              sourceAccount: transaction.sourceAccount ? `${transaction.sourceAccount.slice(0, 4)}***` : undefined,
-              destinationAccount: transaction.destinationAccount ? `${transaction.destinationAccount.slice(0, 4)}***` : undefined,
-              memo: undefined, // Remove memo entirely
-              metadata: undefined, // Remove metadata
-              error: transaction.error ? {
-                type: transaction.error.type,
-                code: transaction.error.code,
-                message: transaction.error.message,
-                severity: transaction.error.severity,
-                timestamp: transaction.error.timestamp,
-              } : undefined,
-            }));
+            state.history = state.history.slice(0, 20).map((transaction: Record<string, unknown>) => {
+              const sourceAccount = transaction.sourceAccount as string | undefined;
+              const destinationAccount = transaction.destinationAccount as string | undefined;
+              const error = transaction.error as { type?: string; code?: string; message?: string; severity?: string; timestamp?: string } | undefined;
+
+              return {
+                ...transaction,
+                // Redact legacy PII fields
+                sourceAccount: sourceAccount ? `${sourceAccount.slice(0, 4)}***` : undefined,
+                destinationAccount: destinationAccount ? `${destinationAccount.slice(0, 4)}***` : undefined,
+                memo: undefined, // Remove memo entirely
+                metadata: undefined, // Remove metadata
+                error: error ? {
+                  type: error.type,
+                  code: error.code,
+                  message: error.message,
+                  severity: error.severity,
+                  timestamp: error.timestamp,
+                } : undefined,
+              };
+            });
           }
           return persistedState;
         },

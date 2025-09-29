@@ -63,6 +63,7 @@ describe('deposit-utils', () => {
     it('should generate QR data for a deposit request', () => {
       const deposit: DepositRequest = {
         id: 'deposit_123',
+        ownerId: 'user_123',
         address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         amount: '10.5',
         asset: 'XLM',
@@ -125,6 +126,7 @@ describe('deposit-utils', () => {
     it('should detect expired deposits', () => {
       const expiredDeposit: DepositRequest = {
         id: 'deposit_123',
+        ownerId: 'user_123',
         address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         asset: 'XLM',
         status: 'pending',
@@ -139,6 +141,7 @@ describe('deposit-utils', () => {
       const futureDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
       const activeDeposit: DepositRequest = {
         id: 'deposit_123',
+        ownerId: 'user_123',
         address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         asset: 'XLM',
         status: 'pending',
