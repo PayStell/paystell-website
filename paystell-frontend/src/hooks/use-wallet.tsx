@@ -126,7 +126,7 @@ type StellarContextType = {
   goToPrevPage: () => void;
 };
 
-const StellarContext = createContext<StellarContextType | null>(null);
+export const StellarContext = createContext<StellarContextType | null>(null);
 
 // Helper function to enhance payment operations with direction and counterparty
 const enhancePaymentOperations = (

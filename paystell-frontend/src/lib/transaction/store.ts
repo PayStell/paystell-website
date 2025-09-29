@@ -473,8 +473,10 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
               transaction.updatedAt = new Date().toISOString();
 
               // Extend the transaction's expiry time when retrying
-              const flowConfig = FLOW_CONFIGS[transaction.flow];
-              transaction.expiresAt = new Date(Date.now() + flowConfig.timeout).toISOString();
+              const flowConfig =
+                state.flowConfigs[transaction.type] ?? DEFAULT_FLOW_CONFIGS[transaction.type];
+              const timeout = flowConfig?.timeout ?? 30000;
+              transaction.expiresAt = new Date(Date.now() + timeout).toISOString();
             }
 
             state.retryQueue = state.retryQueue.filter((txId: string) => txId !== id);

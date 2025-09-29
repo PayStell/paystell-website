@@ -69,8 +69,10 @@ export function TransactionSummary({
     currency = 'XLM',
     memo,
     fee,
-    network = 'testnet',
+    network: transactionNetwork = 'testnet',
   } = transaction;
+
+  const resolvedNetwork = transactionNetwork ?? network;
 
   // Calculate USD values
   const amountUsd = xlmPrice ? (Number(amount) * xlmPrice).toFixed(2) : null;
@@ -151,7 +153,7 @@ export function TransactionSummary({
                 showCopy={true}
                 showExplorer={true}
                 size="sm"
-                network={network}
+                network={resolvedNetwork}
               />
             </div>
 
@@ -164,7 +166,7 @@ export function TransactionSummary({
                 showCopy={true}
                 showExplorer={true}
                 size="sm"
-                network={network}
+                network={resolvedNetwork}
               />
             </div>
           </div>
@@ -283,10 +285,10 @@ export function TransactionSummary({
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>Network</span>
               <div className="flex items-center space-x-2">
-                <Badge variant={network === 'mainnet' ? 'default' : 'secondary'}>
-                  {network === 'mainnet' ? 'Mainnet' : 'Testnet'}
+                <Badge variant={resolvedNetwork === 'mainnet' ? 'default' : 'secondary'}>
+                  {resolvedNetwork === 'mainnet' ? 'Mainnet' : 'Testnet'}
                 </Badge>
-                {network === 'testnet' && (
+                {resolvedNetwork === 'testnet' && (
                   <div className="flex items-center space-x-1 text-yellow-600">
                     <AlertTriangle className="h-3 w-3" />
                     <span className="text-xs">Test Network</span>

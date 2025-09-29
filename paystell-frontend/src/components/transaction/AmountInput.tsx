@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Wallet, DollarSign } from 'lucide-react';
 import { cn, formatAmount } from '@/lib/utils';
-import { useStellar } from '@/hooks/use-wallet';
+import { StellarContext } from '@/hooks/use-wallet';
 
 interface AmountInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
   value?: string;
@@ -47,16 +47,10 @@ export function AmountInput({
   xlmBalance: propXlmBalance,
   ...props
 }: AmountInputProps) {
-  // Try to read from Stellar context; fall back to props when not mounted
-  let balances: { asset_type: string; balance: string }[] = [];
-  let hookXlmPrice: number | undefined;
-  try {
-    const { state } = useStellar();
-    balances = state.balances;
-    hookXlmPrice = state.xlmPrice;
-  } catch {
-    // Outside StellarProvider: rely on propXlmPrice/propXlmBalance
-  }
+  // Safely read from Stellar context; fall back to props when not mounted
+  const stellarContext = useContext(StellarContext);
+  const balances = stellarContext?.state.balances || [];
+  const hookXlmPrice = stellarContext?.state.xlmPrice;
 
   const [usdEquivalent, setUsdEquivalent] = useState<string | null>(null);
   const [isValidAmount, setIsValidAmount] = useState(true);
