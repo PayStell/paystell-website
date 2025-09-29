@@ -696,10 +696,11 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
       {
         name: 'transaction-store',
         version: 1, // Add version for migration
-        migrate: (persistedState: any, version: number) => {
+        migrate: (persistedState: unknown, version: number) => {
           // Migration for version 0 -> 1: redact PII from legacy persisted data
-          if (version === 0 && persistedState?.history) {
-            persistedState.history = persistedState.history.slice(0, 20).map((transaction: any) => ({
+          const state = persistedState as Record<string, unknown>;
+          if (version === 0 && state?.history && Array.isArray(state.history)) {
+            state.history = state.history.slice(0, 20).map((transaction: Record<string, unknown>) => ({
               ...transaction,
               // Redact legacy PII fields
               sourceAccount: transaction.sourceAccount ? `${transaction.sourceAccount.slice(0, 4)}***` : undefined,

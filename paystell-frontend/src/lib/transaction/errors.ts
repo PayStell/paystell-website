@@ -932,7 +932,7 @@ export function isTransactionError(v: unknown): v is TransactionError {
   return (
     typeof v === 'object' &&
     v !== null &&
-    typeof (v as any).code === 'string' &&
-    typeof (v as any).message === 'string'
+    typeof (v as Record<string, unknown>).code === 'string' &&
+    typeof (v as Record<string, unknown>).message === 'string'
   );
 }

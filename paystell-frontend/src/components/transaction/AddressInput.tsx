@@ -13,7 +13,7 @@ import {
   QrCode,
   Copy,
   Check,
-  Bookmark,
+  Star,
   User,
   ExternalLink,
   AlertCircle
@@ -247,13 +247,13 @@ export function AddressInput({
                   className="h-6 w-6 p-0"
                   disabled={disabled}
                 >
-                  <Bookmark className="h-3 w-3" />
+                  <Star className="h-3 w-3" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-80" align="end">
                 <div className="space-y-4">
                   <div className="flex items-center space-x-2">
-                    <Bookmark className="h-4 w-4" />
+                    <Star className="h-4 w-4" />
                     <h4 className="font-medium">Address Book</h4>
                   </div>
 
