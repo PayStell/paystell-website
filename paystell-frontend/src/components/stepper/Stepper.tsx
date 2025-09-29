@@ -52,6 +52,13 @@ export function Stepper({
     },
   };
 
+  // Circle height mapping in pixels for progress line positioning
+  const sizeCirclePx = {
+    sm: 32,
+    md: 40,
+    lg: 48,
+  };
+
   const currentSize = sizeClasses[size];
 
   // Animation variants
@@ -166,7 +173,7 @@ export function Stepper({
         {showProgress && (
           <div
             className="absolute left-0 w-full h-[2px] bg-muted"
-            style={{ top: `${parseInt(currentSize.circle.split(' ')[1]) / 2}px` }}
+            style={{ top: `${sizeCirclePx[size] / 2}px` }}
           >
             <motion.div
               className="h-full bg-primary"

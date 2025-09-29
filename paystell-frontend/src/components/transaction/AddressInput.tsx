@@ -315,8 +315,9 @@ export function AddressInput({
               size="sm"
               className="h-6 text-xs text-muted-foreground hover:text-foreground"
               onClick={() => {
-                const net = (typeof network === 'string' ? network : 'testnet') === 'mainnet' ? 'public' : 'testnet';
-                window.open(`https://stellar.expert/explorer/${net}/account/${value}`, '_blank', 'noopener,noreferrer');
+                const net = typeof network === 'string' ? network.toLowerCase() : 'testnet';
+                const explorerNet = net === 'public' || net === 'mainnet' ? 'public' : 'testnet';
+                window.open(`https://stellar.expert/explorer/${explorerNet}/account/${value}`, '_blank', 'noopener,noreferrer');
               }}
             >
               <ExternalLink className="h-3 w-3 mr-1" />
@@ -422,8 +423,9 @@ export function AddressDisplay({
             variant="ghost"
             size="sm"
             onClick={() => {
-              const net = (typeof network === 'string' ? network : 'testnet') === 'mainnet' ? 'public' : 'testnet';
-              window.open(`https://stellar.expert/explorer/${net}/account/${address}`, '_blank', 'noopener,noreferrer');
+              const net = typeof network === 'string' ? network.toLowerCase() : 'testnet';
+              const explorerNet = net === 'public' || net === 'mainnet' ? 'public' : 'testnet';
+              window.open(`https://stellar.expert/explorer/${explorerNet}/account/${address}`, '_blank', 'noopener,noreferrer');
             }}
             className="h-8 w-8 p-0"
           >
