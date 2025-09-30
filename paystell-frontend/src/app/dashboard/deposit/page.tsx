@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { DepositFlow } from "@/components/deposit/DepositFlow";
-import { OptimisticTransactionList } from "@/components/optimistic/OptimisticTransactionList";
-import { TransactionMonitor } from "@/components/monitoring/TransactionMonitor";
-import { TransactionQueueManager } from "@/components/queue/TransactionQueueManager";
-import { WebSocketStatus } from "@/components/websocket/WebSocketStatus";
-import { useWalletStore } from "@/lib/wallet/wallet-store";
+import { useState, useEffect } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { DepositFlow } from '@/components/deposit/DepositFlow';
+import { OptimisticTransactionList } from '@/components/optimistic/OptimisticTransactionList';
+import { TransactionMonitor } from '@/components/monitoring/TransactionMonitor';
+import { TransactionQueueManager } from '@/components/queue/TransactionQueueManager';
+import { WebSocketStatus } from '@/components/websocket/WebSocketStatus';
+import { useWalletStore } from '@/lib/wallet/wallet-store';
 
 export default function DepositPage() {
   const { isConnected, publicKey, connectWallet, connecting, error } = useWalletStore();
-  const [activeTab, setActiveTab] = useState("deposit");
+  const [activeTab, setActiveTab] = useState('deposit');
 
   // Initialize monitoring for connected wallet
   useEffect(() => {
@@ -35,11 +35,9 @@ export default function DepositPage() {
             disabled={connecting}
             className="bg-primary text-primary-foreground px-6 py-3 rounded-lg hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            {connecting ? "Connecting..." : "Connect Wallet"}
+            {connecting ? 'Connecting...' : 'Connect Wallet'}
           </button>
-          {error && (
-            <p className="text-red-500 text-sm">{error}</p>
-          )}
+          {error && <p className="text-red-500 text-sm">{error}</p>}
         </div>
       </div>
     );

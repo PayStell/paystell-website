@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { OptimisticTransaction } from "@/lib/types/deposit";
+import { OptimisticTransaction } from '@/lib/types/deposit';
 
 export interface QueueConfig {
   maxRetries: number;
@@ -26,7 +26,13 @@ export interface QueueStatus {
   total: number;
 }
 
-export type QueueEventType = 'item_added' | 'item_processing' | 'item_completed' | 'item_failed' | 'item_retry' | 'queue_cleared';
+export type QueueEventType =
+  | 'item_added'
+  | 'item_processing'
+  | 'item_completed'
+  | 'item_failed'
+  | 'item_retry'
+  | 'queue_cleared';
 
 export interface QueueEvent {
   type: QueueEventType;
@@ -74,7 +80,7 @@ export class TransactionQueue {
 
     this.queue.push(item);
     this.emitEvent('item_added', item);
-    
+
     return item.id;
   }
 
@@ -82,13 +88,13 @@ export class TransactionQueue {
    * Remove an item from the queue
    */
   public remove(id: string): boolean {
-    const index = this.queue.findIndex(item => item.id === id);
+    const index = this.queue.findIndex((item) => item.id === id);
     if (index === -1) return false;
 
     const item = this.queue[index];
     this.queue.splice(index, 1);
     this.processing.delete(id);
-    
+
     return true;
   }
 
@@ -98,9 +104,8 @@ export class TransactionQueue {
   public getNext(): QueueItem | null {
     // Find the next item that's not being processed and is ready for retry
     const now = Date.now();
-    const item = this.queue.find(item => 
-      !this.processing.has(item.id) && 
-      (!item.nextRetry || item.nextRetry <= now)
+    const item = this.queue.find(
+      (item) => !this.processing.has(item.id) && (!item.nextRetry || item.nextRetry <= now),
     );
 
     return item || null;
@@ -110,13 +115,13 @@ export class TransactionQueue {
    * Mark an item as processing
    */
   public markProcessing(id: string): boolean {
-    const item = this.queue.find(item => item.id === id);
+    const item = this.queue.find((item) => item.id === id);
     if (!item) return false;
 
     this.processing.add(id);
     item.lastAttempt = Date.now();
     this.emitEvent('item_processing', item);
-    
+
     return true;
   }
 
@@ -124,7 +129,7 @@ export class TransactionQueue {
    * Mark an item as completed
    */
   public markCompleted(id: string, transactionHash?: string): boolean {
-    const item = this.queue.find(item => item.id === id);
+    const item = this.queue.find((item) => item.id === id);
     if (!item) return false;
 
     // Update transaction with hash
@@ -134,10 +139,10 @@ export class TransactionQueue {
     }
 
     // Move to completed
-    this.queue = this.queue.filter(item => item.id !== id);
+    this.queue = this.queue.filter((item) => item.id !== id);
     this.processing.delete(id);
     this.completed.push(item);
-    
+
     this.emitEvent('item_completed', item);
     return true;
   }
@@ -146,7 +151,7 @@ export class TransactionQueue {
    * Mark an item as failed
    */
   public markFailed(id: string, error: string): boolean {
-    const item = this.queue.find(item => item.id === id);
+    const item = this.queue.find((item) => item.id === id);
     if (!item) return false;
 
     item.transaction.status = 'failed';
@@ -160,12 +165,12 @@ export class TransactionQueue {
       this.emitEvent('item_retry', item);
     } else {
       // Move to failed
-      this.queue = this.queue.filter(queueItem => queueItem.id !== id);
+      this.queue = this.queue.filter((queueItem) => queueItem.id !== id);
       this.processing.delete(id);
       this.failed.push(item);
       this.emitEvent('item_failed', item);
     }
-    
+
     return true;
   }
 
@@ -174,7 +179,7 @@ export class TransactionQueue {
    */
   public startProcessing(): void {
     if (this.isProcessing) return;
-    
+
     this.isProcessing = true;
     this.processingInterval = setInterval(() => {
       this.processNext();
@@ -201,10 +206,10 @@ export class TransactionQueue {
 
     try {
       this.markProcessing(item.id);
-      
+
       // Simulate processing
       await this.processItem(item);
-      
+
       // Mark as completed
       this.markCompleted(item.id, `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`);
     } catch (error) {
@@ -218,11 +223,11 @@ export class TransactionQueue {
    */
   private async processItem(item: QueueItem): Promise<void> {
     // Simulate processing delay
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+
     // Simulate success/failure (90% success rate)
     const isSuccess = Math.random() > 0.1;
-    
+
     if (!isSuccess) {
       throw new Error('Simulated processing failure');
     }
@@ -232,7 +237,7 @@ export class TransactionQueue {
    * Get queue status
    */
   public getStatus(): QueueStatus {
-    const pendingItems = this.queue.filter(item => !this.processing.has(item.id));
+    const pendingItems = this.queue.filter((item) => !this.processing.has(item.id));
     const processingCount = this.processing.size;
     const completedCount = this.completed.length;
     const failedCount = this.failed.length;
@@ -271,11 +276,7 @@ export class TransactionQueue {
    * Get all items
    */
   public getAllItems(): QueueItem[] {
-    return [
-      ...this.queue,
-      ...this.completed,
-      ...this.failed,
-    ];
+    return [...this.queue, ...this.completed, ...this.failed];
   }
 
   /**
@@ -307,7 +308,7 @@ export class TransactionQueue {
    * Retry a failed item
    */
   public retry(id: string): boolean {
-    const item = this.failed.find(item => item.id === id);
+    const item = this.failed.find((item) => item.id === id);
     if (!item) return false;
 
     // Reset item
@@ -318,7 +319,7 @@ export class TransactionQueue {
     item.transaction.error = undefined;
 
     // Move back to queue
-    this.failed = this.failed.filter(failedItem => failedItem.id !== id);
+    this.failed = this.failed.filter((failedItem) => failedItem.id !== id);
     this.queue.push(item);
 
     return true;
@@ -329,7 +330,7 @@ export class TransactionQueue {
    */
   public getItem(id: string): QueueItem | null {
     const allItems = this.getAllItems();
-    return allItems.find(item => item.id === id) || null;
+    return allItems.find((item) => item.id === id) || null;
   }
 
   /**
@@ -367,7 +368,7 @@ export class TransactionQueue {
 
     const handlers = this.eventHandlers.get(eventType);
     if (handlers) {
-      handlers.forEach(handler => {
+      handlers.forEach((handler) => {
         try {
           handler(event);
         } catch (error) {

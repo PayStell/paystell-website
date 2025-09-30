@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { ProgressProvider, useProgress } from '@/hooks/use-progress';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence, motion, Variants } from 'framer-motion';
 import { Toaster } from 'sonner';
 
 const TOTAL_STEPS = 5;
@@ -62,7 +62,7 @@ function OnboardingFlowContent() {
     }
   };
 
-  const pageVariants = {
+  const pageVariants: Variants = {
     initial: {
       opacity: 0,
       y: 10,
@@ -72,7 +72,7 @@ function OnboardingFlowContent() {
       y: 0,
       transition: {
         duration: 0.3,
-        ease: 'easeOut',
+        ease: 'easeInOut',
       },
     },
     exit: {

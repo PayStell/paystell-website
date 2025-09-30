@@ -1,18 +1,28 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { Download, QrCode } from "lucide-react";
-import { DepositRequest } from "@/lib/types/deposit";
-import { generateDepositId, calculateDepositExpiration, isValidStellarAddress } from "@/lib/deposit/deposit-utils";
-import { useWalletStore } from "@/lib/wallet/wallet-store";
-import { toast } from "sonner";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Switch } from '@/components/ui/switch';
+import { Download, QrCode } from 'lucide-react';
+import { DepositRequest } from '@/lib/types/deposit';
+import {
+  generateDepositId,
+  calculateDepositExpiration,
+  isValidStellarAddress,
+} from '@/lib/deposit/deposit-utils';
+import { useWalletStore } from '@/lib/wallet/wallet-store';
+import { toast } from 'sonner';
 
 interface DepositFormProps {
   onCreateDeposit: (deposit: DepositRequest) => void;
@@ -21,74 +31,72 @@ interface DepositFormProps {
 }
 
 const SUPPORTED_ASSETS = [
-  { value: "XLM", label: "Stellar Lumens (XLM)" },
-  { value: "USDC", label: "USD Coin (USDC)" },
-  { value: "USDT", label: "Tether (USDT)" },
+  { value: 'XLM', label: 'Stellar Lumens (XLM)' },
+  { value: 'USDC', label: 'USD Coin (USDC)' },
+  { value: 'USDT', label: 'Tether (USDT)' },
 ];
 
 export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFormProps) {
   const { publicKey, isConnected } = useWalletStore();
   const [formData, setFormData] = useState({
-    amount: "",
-    asset: "XLM",
-    memo: "",
-    customAddress: "",
+    amount: '',
+    asset: 'XLM',
+    memo: '',
+    customAddress: '',
     useCustomAddress: false,
   });
   const [isCreating, setIsCreating] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!formData.useCustomAddress && (!isConnected || !publicKey)) {
-      toast.error("Please connect your wallet first");
+      toast.error('Please connect your wallet first');
       return;
     }
 
     setIsCreating(true);
 
     try {
-      const depositAddress = formData.useCustomAddress 
-        ? formData.customAddress 
-        : publicKey;
+      const depositAddress = formData.useCustomAddress ? formData.customAddress : publicKey;
 
       if (!depositAddress || !isValidStellarAddress(depositAddress)) {
-        toast.error("Invalid Stellar address");
+        toast.error('Invalid Stellar address');
         return;
       }
 
       const deposit: DepositRequest = {
         id: generateDepositId(),
-        ownerId: "mock-user", // This will be replaced by the API
+        ownerId: 'mock-user', // This will be replaced by the API
         address: depositAddress,
         amount: formData.amount || undefined,
         asset: formData.asset,
         memo: formData.memo || undefined,
-        status: "pending",
+        status: 'pending',
         createdAt: new Date().toISOString(),
         expiresAt: calculateDepositExpiration(),
       };
 
       onCreateDeposit(deposit);
-      
+
       // Reset form
       setFormData({
-        amount: "",
-        asset: "XLM",
-        memo: "",
-        customAddress: "",
+        amount: '',
+        asset: 'XLM',
+        memo: '',
+        customAddress: '',
         useCustomAddress: false,
       });
     } catch (error) {
-      console.error("Error creating deposit:", error);
-      toast.error("Failed to create deposit request");
+      console.error('Error creating deposit:', error);
+      toast.error('Failed to create deposit request');
     } finally {
       setIsCreating(false);
     }
   };
 
   const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
       [field]: value,
     }));
@@ -109,7 +117,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
             <Label htmlFor="asset">Asset</Label>
             <Select
               value={formData.asset}
-              onValueChange={(value) => handleInputChange("asset", value)}
+              onValueChange={(value) => handleInputChange('asset', value)}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select asset" />
@@ -132,13 +140,11 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
               type="number"
               placeholder="Enter amount"
               value={formData.amount}
-              onChange={(e) => handleInputChange("amount", e.target.value)}
+              onChange={(e) => handleInputChange('amount', e.target.value)}
               step="0.0000001"
               min="0"
             />
-            <p className="text-xs text-muted-foreground">
-              Leave empty to allow any amount
-            </p>
+            <p className="text-xs text-muted-foreground">Leave empty to allow any amount</p>
           </div>
 
           {/* Memo Input */}
@@ -148,7 +154,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
               id="memo"
               placeholder="Enter memo"
               value={formData.memo}
-              onChange={(e) => handleInputChange("memo", e.target.value)}
+              onChange={(e) => handleInputChange('memo', e.target.value)}
               rows={2}
             />
           </div>
@@ -158,7 +164,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
             <Switch
               id="use-custom-address"
               checked={formData.useCustomAddress}
-              onCheckedChange={(checked) => handleInputChange("useCustomAddress", checked)}
+              onCheckedChange={(checked) => handleInputChange('useCustomAddress', checked)}
             />
             <Label htmlFor="use-custom-address">Use custom address</Label>
           </div>
@@ -172,7 +178,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
                 type="text"
                 placeholder="Enter Stellar address"
                 value={formData.customAddress}
-                onChange={(e) => handleInputChange("customAddress", e.target.value)}
+                onChange={(e) => handleInputChange('customAddress', e.target.value)}
                 className="font-mono"
               />
             </div>
@@ -182,14 +188,8 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
           {!formData.useCustomAddress && isConnected && publicKey && (
             <div className="space-y-2">
               <Label>Deposit Address</Label>
-              <Input
-                value={publicKey}
-                readOnly
-                className="font-mono text-sm"
-              />
-              <p className="text-xs text-muted-foreground">
-                Using your connected wallet address
-              </p>
+              <Input value={publicKey} readOnly className="font-mono text-sm" />
+              <p className="text-xs text-muted-foreground">Using your connected wallet address</p>
             </div>
           )}
 
@@ -213,11 +213,7 @@ export function DepositForm({ onCreateDeposit, onCancel, className }: DepositFor
               )}
             </Button>
             {onCancel && (
-              <Button
-                type="button"
-                variant="outline"
-                onClick={onCancel}
-              >
+              <Button type="button" variant="outline" onClick={onCancel}>
                 Cancel
               </Button>
             )}

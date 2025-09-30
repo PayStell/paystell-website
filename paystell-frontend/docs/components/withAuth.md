@@ -44,13 +44,11 @@ function withAuth<P extends object>(
 ## Implementation Details
 
 1. **Authentication Check**
-
    - Verifies the presence of an authentication token in localStorage
    - Redirects to login page if no token is found
    - Maintains authentication state using React hooks
 
 2. **Loading State**
-
    - Displays a loading spinner during authentication check
    - Prevents content flash for unauthenticated users
 
@@ -92,13 +90,11 @@ export default withAuth(DashboardPage);
 ## Best Practices
 
 1. **Usage Guidelines**
-
    - Apply to components that require authentication
    - Use at the page level for route protection
    - Combine with role-based access control when needed
 
 2. **Performance Considerations**
-
    - Minimal impact on component rendering
    - Efficient token checking
    - Smart caching of authentication state

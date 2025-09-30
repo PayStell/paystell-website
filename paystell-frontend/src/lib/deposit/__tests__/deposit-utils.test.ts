@@ -24,9 +24,11 @@ describe('deposit-utils', () => {
       };
 
       const uri = generateDepositURI(qrData);
-      
+
       expect(uri).toContain('web+stellar:pay?');
-      expect(uri).toContain('destination=GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+      expect(uri).toContain(
+        'destination=GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      );
       expect(uri).toContain('asset_code=XLM');
       expect(uri).toContain('amount=10.5');
       expect(uri).toContain('memo=Test%20payment');
@@ -41,7 +43,7 @@ describe('deposit-utils', () => {
       };
 
       const uri = generateDepositURI(qrData);
-      
+
       expect(uri).toContain('asset_code=XLM');
     });
 
@@ -52,7 +54,7 @@ describe('deposit-utils', () => {
       };
 
       const uri = generateDepositURI(qrData);
-      
+
       expect(uri).toContain('asset_code=USDC');
       expect(uri).not.toContain('amount=');
       expect(uri).not.toContain('memo=');
@@ -63,6 +65,7 @@ describe('deposit-utils', () => {
     it('should generate QR data for a deposit request', () => {
       const deposit: DepositRequest = {
         id: 'deposit_123',
+        ownerId: 'user_123',
         address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         amount: '10.5',
         asset: 'XLM',
@@ -73,9 +76,11 @@ describe('deposit-utils', () => {
       };
 
       const qrData = generateDepositQRData(deposit);
-      
+
       expect(qrData).toContain('web+stellar:pay?');
-      expect(qrData).toContain('destination=GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ');
+      expect(qrData).toContain(
+        'destination=GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      );
       expect(qrData).toContain('asset_code=XLM');
       expect(qrData).toContain('amount=10.5');
       expect(qrData).toContain('memo=Test%20memo');
@@ -98,7 +103,7 @@ describe('deposit-utils', () => {
         'not-an-address',
       ];
 
-      invalidAddresses.forEach(address => {
+      invalidAddresses.forEach((address) => {
         expect(isValidStellarAddress(address)).toBe(false);
       });
     });
@@ -125,6 +130,7 @@ describe('deposit-utils', () => {
     it('should detect expired deposits', () => {
       const expiredDeposit: DepositRequest = {
         id: 'deposit_123',
+        ownerId: 'user_123',
         address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         asset: 'XLM',
         status: 'pending',
@@ -139,6 +145,7 @@ describe('deposit-utils', () => {
       const futureDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
       const activeDeposit: DepositRequest = {
         id: 'deposit_123',
+        ownerId: 'user_123',
         address: 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ',
         asset: 'XLM',
         status: 'pending',
@@ -172,7 +179,7 @@ describe('deposit-utils', () => {
     it('should generate unique deposit IDs', () => {
       const id1 = generateDepositId();
       const id2 = generateDepositId();
-      
+
       expect(id1).not.toBe(id2);
       expect(id1).toMatch(/^deposit_\d+_[a-z0-9]+$/);
       expect(id2).toMatch(/^deposit_\d+_[a-z0-9]+$/);
@@ -183,9 +190,9 @@ describe('deposit-utils', () => {
     it('should calculate expiration 24 hours from now', () => {
       const now = new Date();
       const expiration = new Date(calculateDepositExpiration());
-      
+
       const diffInHours = (expiration.getTime() - now.getTime()) / (1000 * 60 * 60);
-      
+
       expect(diffInHours).toBeCloseTo(24, 0);
     });
   });

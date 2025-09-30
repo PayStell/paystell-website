@@ -24,13 +24,11 @@ This documentation covers the implementation of Two-Factor Authentication (2FA) 
 The 2FA implementation follows a layered architecture:
 
 1. **UI Layer**
-
    - React components for user interaction
    - Protected routes using HOC
    - Error handling and user feedback
 
 2. **Service Layer**
-
    - API integration
    - Token management
    - Error handling
@@ -82,14 +80,12 @@ The 2FA implementation follows a layered architecture:
 ## Best Practices
 
 1. **Security**
-
    - Always use HTTPS
    - Implement proper rate limiting
    - Validate all user input
    - Use secure token storage
 
 2. **User Experience**
-
    - Clear error messages
    - Proper loading states
    - Intuitive setup flow

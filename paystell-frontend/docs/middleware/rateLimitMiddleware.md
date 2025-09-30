@@ -87,13 +87,11 @@ When rate limit is exceeded (429 Too Many Requests):
 ## Production Considerations
 
 1. **Storage Options**
-
    - Replace in-memory Map with Redis
    - Use distributed rate limiting
    - Consider cluster-aware solutions
 
 2. **Configuration**
-
    - Environment-based limits
    - Different limits per route
    - IP address validation
@@ -106,13 +104,11 @@ When rate limit is exceeded (429 Too Many Requests):
 ## Best Practices
 
 1. **Rate Limit Design**
-
    - Set appropriate limits
    - Consider user experience
    - Plan for bursts
 
 2. **Error Handling**
-
    - Clear user feedback
    - Proper retry guidance
    - Standard headers

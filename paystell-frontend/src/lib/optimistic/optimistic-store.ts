@@ -1,18 +1,22 @@
-"use client";
+'use client';
 
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
-import { OptimisticTransaction, TransactionQueueSummary } from "@/lib/types/deposit";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { OptimisticTransaction, TransactionQueueSummary } from '@/lib/types/deposit';
 
 interface OptimisticState {
   queue: TransactionQueueSummary;
   isProcessing: boolean;
-  
+
   // Actions
   addTransaction: (transaction: OptimisticTransaction) => void;
   updateTransaction: (id: string, updates: Partial<OptimisticTransaction>) => void;
   removeTransaction: (id: string) => void;
-  moveTransaction: (id: string, from: keyof TransactionQueueSummary, to: keyof TransactionQueueSummary) => void;
+  moveTransaction: (
+    id: string,
+    from: keyof TransactionQueueSummary,
+    to: keyof TransactionQueueSummary,
+  ) => void;
   processQueue: () => Promise<void>;
   clearCompleted: () => void;
   clearFailed: () => void;
@@ -72,7 +76,11 @@ export const useOptimisticStore = create<OptimisticState>()(
         });
       },
 
-      moveTransaction: (id: string, from: keyof TransactionQueueSummary, to: keyof TransactionQueueSummary) => {
+      moveTransaction: (
+        id: string,
+        from: keyof TransactionQueueSummary,
+        to: keyof TransactionQueueSummary,
+      ) => {
         set((state) => {
           const transaction = state.queue[from].find((tx) => tx.id === id);
           if (!transaction) return state;
@@ -102,7 +110,7 @@ export const useOptimisticStore = create<OptimisticState>()(
 
           for (const transaction of pendingTransactions) {
             // Move to processing
-            get().moveTransaction(transaction.id, "pending", "processing");
+            get().moveTransaction(transaction.id, 'pending', 'processing');
 
             try {
               // Simulate processing delay
@@ -113,23 +121,23 @@ export const useOptimisticStore = create<OptimisticState>()(
 
               if (isSuccess) {
                 get().updateTransaction(transaction.id, {
-                  status: "completed",
+                  status: 'completed',
                   transactionHash: `tx_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
                 });
-                get().moveTransaction(transaction.id, "processing", "completed");
+                get().moveTransaction(transaction.id, 'processing', 'completed');
               } else {
                 get().updateTransaction(transaction.id, {
-                  status: "failed",
-                  error: "Transaction failed to confirm",
+                  status: 'failed',
+                  error: 'Transaction failed to confirm',
                 });
-                get().moveTransaction(transaction.id, "processing", "failed");
+                get().moveTransaction(transaction.id, 'processing', 'failed');
               }
             } catch (error) {
               get().updateTransaction(transaction.id, {
-                status: "failed",
-                error: error instanceof Error ? error.message : "Unknown error",
+                status: 'failed',
+                error: error instanceof Error ? error.message : 'Unknown error',
               });
-              get().moveTransaction(transaction.id, "processing", "failed");
+              get().moveTransaction(transaction.id, 'processing', 'failed');
             }
           }
         } finally {
@@ -178,10 +186,10 @@ export const useOptimisticStore = create<OptimisticState>()(
       },
     }),
     {
-      name: "optimistic-transactions",
+      name: 'optimistic-transactions',
       partialize: (state) => ({
         queue: state.queue,
       }),
-    }
-  )
+    },
+  ),
 );

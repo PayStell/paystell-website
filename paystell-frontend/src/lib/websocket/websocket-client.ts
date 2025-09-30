@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { DepositTransaction, OptimisticTransaction } from "@/lib/types/deposit";
+import { DepositTransaction, OptimisticTransaction } from '@/lib/types/deposit';
 
 export interface WebSocketMessage {
   type: 'transaction' | 'deposit' | 'balance' | 'error' | 'ping' | 'pong';
@@ -121,12 +121,12 @@ export class WebSocketClient {
     this.shouldReconnect = false;
     this.stopPing();
     this.clearReconnectTimeout();
-    
+
     if (this.ws) {
       this.ws.close(1000, 'Client disconnect');
       this.ws = null;
     }
-    
+
     this.isConnected = false;
     this.isConnecting = false;
   }
@@ -203,7 +203,7 @@ export class WebSocketClient {
     // Call registered callbacks
     const callbacks = this.eventCallbacks.get(message.type);
     if (callbacks) {
-      callbacks.forEach(callback => {
+      callbacks.forEach((callback) => {
         try {
           callback(message);
         } catch (error) {
@@ -215,7 +215,7 @@ export class WebSocketClient {
     // Call general callbacks
     const generalCallbacks = this.eventCallbacks.get('*');
     if (generalCallbacks) {
-      generalCallbacks.forEach(callback => {
+      generalCallbacks.forEach((callback) => {
         try {
           callback(message);
         } catch (error) {
@@ -243,7 +243,7 @@ export class WebSocketClient {
     console.log(`Attempting to reconnect in ${delay}ms (attempt ${this.reconnectAttempts})`);
 
     this.reconnectTimeout = setTimeout(() => {
-      this.connect().catch(error => {
+      this.connect().catch((error) => {
         console.error('Reconnection failed:', error);
       });
     }, delay);
@@ -281,5 +281,5 @@ export class WebSocketClient {
 
 // Create a singleton instance
 export const websocketClient = new WebSocketClient(
-  process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3001'
+  process.env.NEXT_PUBLIC_WEBSOCKET_URL || 'ws://localhost:3001',
 );

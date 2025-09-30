@@ -1,36 +1,28 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { 
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { 
-  Eye, 
-  MoreVertical, 
-  ExternalLink, 
-  Copy, 
-  Trash2,
-  RefreshCw,
-  EyeOff
-} from "lucide-react";
-import { useStellarMonitoring } from "@/hooks/use-stellar-monitoring";
-import { DepositTransaction } from "@/lib/types/deposit";
-import { toast } from "sonner";
+} from '@/components/ui/dropdown-menu';
+import { Eye, MoreVertical, ExternalLink, Copy, Trash2, RefreshCw, EyeOff } from 'lucide-react';
+import { useStellarMonitoring } from '@/hooks/use-stellar-monitoring';
+import { DepositTransaction } from '@/lib/types/deposit';
+import { toast } from 'sonner';
 
 interface TransactionMonitorProps {
   className?: string;
@@ -60,15 +52,15 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
   const handleCopyAddress = async (address: string) => {
     try {
       await navigator.clipboard.writeText(address);
-      toast.success("Address copied to clipboard");
+      toast.success('Address copied to clipboard');
     } catch (error) {
-      toast.error("Failed to copy address");
+      toast.error('Failed to copy address');
     }
   };
 
   const handleViewOnExplorer = (hash: string) => {
     const explorerUrl = `https://stellar.expert/explorer/testnet/tx/${hash}`;
-    window.open(explorerUrl, "_blank");
+    window.open(explorerUrl, '_blank');
   };
 
   const handleStartMonitoring = (address: string, asset: string) => {
@@ -80,34 +72,34 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
   };
 
   const handleClearHistory = () => {
-    if (confirm("Are you sure you want to clear all transaction history?")) {
+    if (confirm('Are you sure you want to clear all transaction history?')) {
       clearTransactionHistory();
     }
   };
 
   const getStatusBadge = (status: string) => {
     const colorMap = {
-      completed: "bg-green-100 text-green-800",
-      pending: "bg-yellow-100 text-yellow-800",
-      failed: "bg-red-100 text-red-800",
+      completed: 'bg-green-100 text-green-800',
+      pending: 'bg-yellow-100 text-yellow-800',
+      failed: 'bg-red-100 text-red-800',
     };
 
     return (
-      <Badge className={colorMap[status as keyof typeof colorMap] || "bg-gray-100 text-gray-800"}>
+      <Badge className={colorMap[status as keyof typeof colorMap] || 'bg-gray-100 text-gray-800'}>
         {status}
       </Badge>
     );
   };
 
-  const filteredTransactions = showAllTransactions 
-    ? transactions 
-    : selectedAddress 
+  const filteredTransactions = showAllTransactions
+    ? transactions
+    : selectedAddress
       ? getTransactionsForAddress(selectedAddress)
       : transactions;
 
   const recentTransactions = getRecentTransactions(24);
-  const totalXLM = getTotalReceived("XLM");
-  const totalUSDC = getTotalReceived("USDC");
+  const totalXLM = getTotalReceived('XLM');
+  const totalUSDC = getTotalReceived('USDC');
 
   return (
     <Card className={className}>
@@ -118,18 +110,10 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
             Transaction Monitor
           </CardTitle>
           <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={refreshTransactions}
-            >
+            <Button variant="outline" size="sm" onClick={refreshTransactions}>
               <RefreshCw className="h-4 w-4" />
             </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleClearHistory}
-            >
+            <Button variant="outline" size="sm" onClick={handleClearHistory}>
               <Trash2 className="h-4 w-4" />
             </Button>
           </div>
@@ -139,12 +123,9 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
         {/* Monitoring Status */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex items-center space-x-2">
-            <Switch
-              checked={isMonitoring}
-              disabled
-            />
+            <Switch checked={isMonitoring} disabled />
             <span className="text-sm">
-              {isMonitoring ? "Monitoring Active" : "Monitoring Inactive"}
+              {isMonitoring ? 'Monitoring Active' : 'Monitoring Inactive'}
             </span>
           </div>
           <div className="text-sm text-muted-foreground">
@@ -183,7 +164,7 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
             <label className="text-sm font-medium">Filter by Address</label>
             <div className="flex flex-wrap gap-2">
               <Button
-                variant={showAllTransactions ? "default" : "outline"}
+                variant={showAllTransactions ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => {
                   setShowAllTransactions(true);
@@ -195,7 +176,7 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
               {monitoringStatus.addresses.map((address) => (
                 <Button
                   key={address}
-                  variant={selectedAddress === address ? "default" : "outline"}
+                  variant={selectedAddress === address ? 'default' : 'outline'}
                   size="sm"
                   onClick={() => {
                     setSelectedAddress(address);
@@ -215,10 +196,7 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
             <h3 className="text-lg font-semibold">Recent Transactions</h3>
             <div className="flex items-center space-x-2">
               <span className="text-sm text-muted-foreground">Show all</span>
-              <Switch
-                checked={showAllTransactions}
-                onCheckedChange={setShowAllTransactions}
-              />
+              <Switch checked={showAllTransactions} onCheckedChange={setShowAllTransactions} />
             </div>
           </div>
 
@@ -248,9 +226,7 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
                     <TableCell className="font-mono text-sm">
                       {transaction.hash.slice(0, 8)}...{transaction.hash.slice(-8)}
                     </TableCell>
-                    <TableCell className="font-mono">
-                      {transaction.amount}
-                    </TableCell>
+                    <TableCell className="font-mono">{transaction.amount}</TableCell>
                     <TableCell>{transaction.asset}</TableCell>
                     <TableCell className="font-mono text-sm">
                       {transaction.from.slice(0, 8)}...{transaction.from.slice(-8)}
@@ -258,12 +234,8 @@ export function TransactionMonitor({ className }: TransactionMonitorProps) {
                     <TableCell className="font-mono text-sm">
                       {transaction.to.slice(0, 8)}...{transaction.to.slice(-8)}
                     </TableCell>
-                    <TableCell>
-                      {getStatusBadge(transaction.status)}
-                    </TableCell>
-                    <TableCell className="text-sm">
-                      {formatDate(transaction.createdAt)}
-                    </TableCell>
+                    <TableCell>{getStatusBadge(transaction.status)}</TableCell>
+                    <TableCell className="text-sm">{formatDate(transaction.createdAt)}</TableCell>
                     <TableCell>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>

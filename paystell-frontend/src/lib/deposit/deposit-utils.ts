@@ -1,4 +1,4 @@
-import { DepositQRData, DepositRequest } from "@/lib/types/deposit";
+import { DepositQRData, DepositRequest } from '@/lib/types/deposit';
 
 /**
  * Generate Stellar payment URI for deposits
@@ -7,24 +7,24 @@ import { DepositQRData, DepositRequest } from "@/lib/types/deposit";
 export function generateDepositURI(data: DepositQRData): string {
   const params = new URLSearchParams({
     destination: data.address,
-    asset_code: data.asset === "native" ? "XLM" : data.asset,
+    asset_code: data.asset === 'native' ? 'XLM' : data.asset,
   });
 
   if (data.amount) {
-    params.append("amount", data.amount);
+    params.append('amount', data.amount);
   }
 
   if (data.memo) {
-    params.append("memo", data.memo);
-    params.append("memo_type", "text");
+    params.append('memo', data.memo);
+    params.append('memo_type', 'text');
   }
 
   if (data.label) {
-    params.append("label", data.label);
+    params.append('label', data.label);
   }
 
   if (data.message) {
-    params.append("message", data.message);
+    params.append('message', data.message);
   }
 
   return `web+stellar:pay?${params.toString()}`;
@@ -61,13 +61,13 @@ export function isValidStellarAddress(address: string): boolean {
  */
 export function formatDepositAmount(amount: string, asset: string): string {
   const numAmount = parseFloat(amount);
-  if (isNaN(numAmount)) return "0";
-  
+  if (isNaN(numAmount)) return '0';
+
   // Format with appropriate decimal places
-  if (asset === "XLM" || asset === "native") {
+  if (asset === 'XLM' || asset === 'native') {
     return numAmount.toFixed(7);
   }
-  
+
   return numAmount.toFixed(2);
 }
 

@@ -70,12 +70,14 @@ describe('DepositFlow', () => {
     render(<DepositFlow />);
 
     expect(screen.getByText('Connect Your Wallet')).toBeInTheDocument();
-    expect(screen.getByText('Please connect your Stellar wallet to create deposit requests')).toBeInTheDocument();
+    expect(
+      screen.getByText('Please connect your Stellar wallet to create deposit requests'),
+    ).toBeInTheDocument();
   });
 
   it('should display wallet address when connected', () => {
     const publicKey = 'GABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    
+
     mockUseWalletStore.mockReturnValue({
       isConnected: true,
       publicKey,

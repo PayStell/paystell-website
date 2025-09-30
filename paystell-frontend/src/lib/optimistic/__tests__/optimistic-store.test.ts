@@ -62,14 +62,14 @@ describe('optimistic-store', () => {
 
       // Update transaction
       useOptimisticStore.getState().updateTransaction('test_123', {
-        status: 'confirmed',
+        status: 'completed',
         transactionHash: 'tx_hash_123',
       });
 
       const state = useOptimisticStore.getState();
       const updatedTransaction = state.queue.pending[0];
-      
-      expect(updatedTransaction.status).toBe('confirmed');
+
+      expect(updatedTransaction.status).toBe('completed');
       expect(updatedTransaction.transactionHash).toBe('tx_hash_123');
     });
   });
@@ -113,7 +113,7 @@ describe('optimistic-store', () => {
 
       // Move transaction
       useOptimisticStore.getState().moveTransaction('test_123', 'pending', 'completed');
-      
+
       const state = useOptimisticStore.getState();
       expect(state.queue.pending).toHaveLength(0);
       expect(state.queue.completed).toHaveLength(1);
@@ -171,7 +171,7 @@ describe('optimistic-store', () => {
         type: 'deposit',
         amount: '20.0',
         asset: 'XLM',
-        status: 'confirmed',
+        status: 'completed',
         timestamp: Date.now(),
       };
 
@@ -186,10 +186,12 @@ describe('optimistic-store', () => {
       expect(pendingTransactions).toContainEqual(transaction1);
       expect(pendingTransactions).toContainEqual(transaction2);
 
-      // Get confirmed transactions
-      const confirmedTransactions = useOptimisticStore.getState().getTransactionsByStatus('confirmed');
-      expect(confirmedTransactions).toHaveLength(1);
-      expect(confirmedTransactions).toContainEqual(transaction3);
+      // Get completed transactions
+      const completedTransactions = useOptimisticStore
+        .getState()
+        .getTransactionsByStatus('completed');
+      expect(completedTransactions).toHaveLength(1);
+      expect(completedTransactions).toContainEqual(transaction3);
     });
   });
 
@@ -200,7 +202,7 @@ describe('optimistic-store', () => {
         type: 'deposit',
         amount: '10.5',
         asset: 'XLM',
-        status: 'confirmed',
+        status: 'completed',
         timestamp: Date.now(),
       };
 

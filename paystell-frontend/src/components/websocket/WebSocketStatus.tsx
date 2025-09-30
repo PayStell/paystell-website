@@ -1,32 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Radio, 
-  X, 
-  RefreshCw, 
-  AlertCircle, 
-  CheckCircle, 
-  Clock 
-} from "lucide-react";
-import { useWebSocket } from "@/hooks/use-websocket";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Radio, X, RefreshCw, AlertCircle, CheckCircle, Clock } from 'lucide-react';
+import { useWebSocket } from '@/hooks/use-websocket';
+import { toast } from 'sonner';
 
 interface WebSocketStatusProps {
   className?: string;
 }
 
 export function WebSocketStatus({ className }: WebSocketStatusProps) {
-  const {
-    isConnected,
-    isConnecting,
-    reconnectAttempts,
-    lastMessage,
-    getConnectionStatus,
-  } = useWebSocket();
+  const { isConnected, isConnecting, reconnectAttempts, lastMessage, getConnectionStatus } =
+    useWebSocket();
 
   const [status, setStatus] = useState({
     isConnected: false,
@@ -50,59 +38,59 @@ export function WebSocketStatus({ className }: WebSocketStatusProps) {
     if (isConnecting) {
       return <RefreshCw className="h-4 w-4 animate-spin text-yellow-500" />;
     }
-    
+
     if (isConnected) {
       return <CheckCircle className="h-4 w-4 text-green-500" />;
     }
-    
+
     if (reconnectAttempts > 0) {
       return <AlertCircle className="h-4 w-4 text-orange-500" />;
     }
-    
+
     return <X className="h-4 w-4 text-red-500" />;
   };
 
   const getStatusText = () => {
     if (isConnecting) {
-      return "Connecting...";
+      return 'Connecting...';
     }
-    
+
     if (isConnected) {
-      return "Connected";
+      return 'Connected';
     }
-    
+
     if (reconnectAttempts > 0) {
       return `Reconnecting (${reconnectAttempts})`;
     }
-    
-    return "Disconnected";
+
+    return 'Disconnected';
   };
 
   const getStatusBadge = () => {
     if (isConnected) {
       return <Badge className="bg-green-100 text-green-800">Online</Badge>;
     }
-    
+
     if (isConnecting) {
       return <Badge className="bg-yellow-100 text-yellow-800">Connecting</Badge>;
     }
-    
+
     if (reconnectAttempts > 0) {
       return <Badge className="bg-orange-100 text-orange-800">Reconnecting</Badge>;
     }
-    
+
     return <Badge className="bg-red-100 text-red-800">Offline</Badge>;
   };
 
   const formatLastMessage = () => {
-    if (!lastMessage) return "No messages";
-    
+    if (!lastMessage) return 'No messages';
+
     const time = new Date(lastMessage.timestamp).toLocaleTimeString();
     return `${lastMessage.type} at ${time}`;
   };
 
   const handleRefresh = () => {
-    toast.info("WebSocket status refreshed");
+    toast.info('WebSocket status refreshed');
   };
 
   return (
@@ -113,11 +101,7 @@ export function WebSocketStatus({ className }: WebSocketStatusProps) {
             <Radio className="h-5 w-5" />
             WebSocket Status
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleRefresh}
-          >
+          <Button variant="outline" size="sm" onClick={handleRefresh}>
             <RefreshCw className="h-4 w-4" />
           </Button>
         </CardTitle>
@@ -136,21 +120,17 @@ export function WebSocketStatus({ className }: WebSocketStatusProps) {
         <div className="space-y-2 text-sm text-muted-foreground">
           <div className="flex justify-between">
             <span>Status:</span>
-            <span className="font-mono">
-              {isConnected ? "CONNECTED" : "DISCONNECTED"}
-            </span>
+            <span className="font-mono">{isConnected ? 'CONNECTED' : 'DISCONNECTED'}</span>
           </div>
-          
+
           <div className="flex justify-between">
             <span>Reconnect Attempts:</span>
             <span className="font-mono">{reconnectAttempts}</span>
           </div>
-          
+
           <div className="flex justify-between">
             <span>Last Message:</span>
-            <span className="font-mono text-xs">
-              {formatLastMessage()}
-            </span>
+            <span className="font-mono text-xs">{formatLastMessage()}</span>
           </div>
         </div>
 

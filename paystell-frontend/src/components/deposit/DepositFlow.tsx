@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Download, Clock, QrCode } from "lucide-react";
-import { DepositForm } from "./DepositForm";
-import { DepositQRCode } from "./DepositQRCode";
-import { DepositHistory } from "./DepositHistory";
-import { DepositRequest, DepositTransaction } from "@/lib/types/deposit";
-import { useWalletStore } from "@/lib/wallet/wallet-store";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowLeft, Download, Clock, QrCode } from 'lucide-react';
+import { DepositForm } from './DepositForm';
+import { DepositQRCode } from './DepositQRCode';
+import { DepositHistory } from './DepositHistory';
+import { DepositRequest, DepositTransaction } from '@/lib/types/deposit';
+import { useWalletStore } from '@/lib/wallet/wallet-store';
+import { toast } from 'sonner';
 
 interface DepositFlowProps {
   className?: string;
@@ -31,41 +31,41 @@ export function DepositFlow({ className }: DepositFlowProps) {
 
   const loadDeposits = () => {
     try {
-      const stored = localStorage.getItem("paystell_deposits");
+      const stored = localStorage.getItem('paystell_deposits');
       if (stored) {
         setDeposits(JSON.parse(stored));
       }
     } catch (error) {
-      console.error("Error loading deposits:", error);
+      console.error('Error loading deposits:', error);
     }
   };
 
   const loadTransactions = () => {
     try {
-      const stored = localStorage.getItem("paystell_deposit_transactions");
+      const stored = localStorage.getItem('paystell_deposit_transactions');
       if (stored) {
         setTransactions(JSON.parse(stored));
       }
     } catch (error) {
-      console.error("Error loading transactions:", error);
+      console.error('Error loading transactions:', error);
     }
   };
 
   const saveDeposits = (newDeposits: DepositRequest[]) => {
     try {
-      localStorage.setItem("paystell_deposits", JSON.stringify(newDeposits));
+      localStorage.setItem('paystell_deposits', JSON.stringify(newDeposits));
       setDeposits(newDeposits);
     } catch (error) {
-      console.error("Error saving deposits:", error);
+      console.error('Error saving deposits:', error);
     }
   };
 
   const saveTransactions = (newTransactions: DepositTransaction[]) => {
     try {
-      localStorage.setItem("paystell_deposit_transactions", JSON.stringify(newTransactions));
+      localStorage.setItem('paystell_deposit_transactions', JSON.stringify(newTransactions));
       setTransactions(newTransactions);
     } catch (error) {
-      console.error("Error saving transactions:", error);
+      console.error('Error saving transactions:', error);
     }
   };
 
@@ -73,7 +73,7 @@ export function DepositFlow({ className }: DepositFlowProps) {
     const newDeposits = [...deposits, deposit];
     saveDeposits(newDeposits);
     setActiveDeposit(deposit);
-    toast.success("Deposit request created successfully");
+    toast.success('Deposit request created successfully');
   };
 
   const handleViewDeposit = (deposit: DepositRequest) => {
@@ -84,12 +84,12 @@ export function DepositFlow({ className }: DepositFlowProps) {
     setIsLoading(true);
     try {
       // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       loadDeposits();
       loadTransactions();
-      toast.success("Data refreshed");
+      toast.success('Data refreshed');
     } catch (error) {
-      toast.error("Failed to refresh data");
+      toast.error('Failed to refresh data');
     } finally {
       setIsLoading(false);
     }
@@ -121,28 +121,19 @@ export function DepositFlow({ className }: DepositFlowProps) {
     return (
       <div className={className}>
         <div className="flex items-center gap-4 mb-6">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleBackToForm}
-          >
+          <Button variant="outline" size="sm" onClick={handleBackToForm}>
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back
           </Button>
           <div>
             <h2 className="text-xl font-semibold">Deposit Request</h2>
-            <p className="text-sm text-muted-foreground">
-              ID: {activeDeposit.id}
-            </p>
+            <p className="text-sm text-muted-foreground">ID: {activeDeposit.id}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <DepositQRCode
-            deposit={activeDeposit}
-            onRefresh={handleRefresh}
-          />
-          
+          <DepositQRCode deposit={activeDeposit} onRefresh={handleRefresh} />
+
           <Card>
             <CardHeader>
               <CardTitle>Deposit Instructions</CardTitle>
@@ -206,10 +197,8 @@ export function DepositFlow({ className }: DepositFlowProps) {
 
         <TabsContent value="create" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <DepositForm
-              onCreateDeposit={handleCreateDeposit}
-            />
-            
+            <DepositForm onCreateDeposit={handleCreateDeposit} />
+
             <Card>
               <CardHeader>
                 <CardTitle>Quick Deposit</CardTitle>
@@ -218,26 +207,26 @@ export function DepositFlow({ className }: DepositFlowProps) {
                 <div className="space-y-2">
                   <h4 className="font-medium">Your Wallet Address</h4>
                   <div className="p-3 bg-muted rounded-lg">
-                    <code className="text-sm font-mono break-all">
-                      {publicKey}
-                    </code>
+                    <code className="text-sm font-mono break-all">{publicKey}</code>
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <h4 className="font-medium">Supported Assets</h4>
                   <div className="flex flex-wrap gap-2">
                     <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-sm">XLM</span>
-                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">USDC</span>
-                    <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm">USDT</span>
+                    <span className="px-2 py-1 bg-green-100 text-green-800 rounded text-sm">
+                      USDC
+                    </span>
+                    <span className="px-2 py-1 bg-purple-100 text-purple-800 rounded text-sm">
+                      USDT
+                    </span>
                   </div>
                 </div>
 
                 <div className="space-y-2">
                   <h4 className="font-medium">Network</h4>
-                  <p className="text-sm text-muted-foreground">
-                    Stellar Testnet
-                  </p>
+                  <p className="text-sm text-muted-foreground">Stellar Testnet</p>
                 </div>
               </CardContent>
             </Card>

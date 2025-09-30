@@ -26,7 +26,7 @@ describe('TransactionQueue', () => {
 
       const id = queue.add(transaction);
       expect(id).toBe('test_123');
-      
+
       const queueItems = queue.getQueue();
       expect(queueItems).toHaveLength(1);
       expect(queueItems[0].transaction).toEqual(transaction);
@@ -98,7 +98,7 @@ describe('TransactionQueue', () => {
 
       queue.add(transaction);
       const nextItem = queue.getNext();
-      
+
       expect(nextItem).toBeDefined();
       expect(nextItem?.transaction).toEqual(transaction);
     });
@@ -120,7 +120,7 @@ describe('TransactionQueue', () => {
 
       queue.add(transaction);
       queue.markProcessing('test_123');
-      
+
       const nextItem = queue.getNext();
       expect(nextItem).toBeNull();
     });
@@ -139,7 +139,7 @@ describe('TransactionQueue', () => {
 
       queue.add(transaction);
       const marked = queue.markProcessing('test_123');
-      
+
       expect(marked).toBe(true);
       expect(queue.getStatus().processing).toBe(1);
     });
@@ -163,13 +163,13 @@ describe('TransactionQueue', () => {
 
       queue.add(transaction);
       queue.markProcessing('test_123');
-      
+
       const completed = queue.markCompleted('test_123', 'tx_hash_123');
-      
+
       expect(completed).toBe(true);
       expect(queue.getStatus().completed).toBe(1);
       expect(queue.getStatus().processing).toBe(0);
-      
+
       const completedItems = queue.getCompleted();
       expect(completedItems[0].transaction.transactionHash).toBe('tx_hash_123');
       expect(completedItems[0].transaction.status).toBe('confirmed');
@@ -189,13 +189,13 @@ describe('TransactionQueue', () => {
 
       queue.add(transaction);
       queue.markProcessing('test_123');
-      
+
       const failed = queue.markFailed('test_123', 'Test error');
-      
+
       expect(failed).toBe(true);
       expect(queue.getStatus().failed).toBe(0);
       expect(queue.getStatus().processing).toBe(0);
-      
+
       const queueItems = queue.getQueue();
       expect(queueItems[0].retries).toBe(1);
       expect(queueItems[0].transaction.error).toBe('Test error');
@@ -212,13 +212,13 @@ describe('TransactionQueue', () => {
       };
 
       queue.add(transaction);
-      
+
       // Fail 3 times (max retries)
       for (let i = 0; i < 3; i++) {
         queue.markProcessing('test_123');
         queue.markFailed('test_123', 'Test error');
       }
-      
+
       expect(queue.getStatus().failed).toBe(1);
       expect(queue.getStatus().pending).toBe(0);
     });
@@ -238,7 +238,7 @@ describe('TransactionQueue', () => {
       queue.add(transaction);
       queue.markProcessing('test_123');
       queue.markCompleted('test_123', 'tx_hash_123');
-      
+
       const status = queue.getStatus();
       expect(status.pending).toBe(0);
       expect(status.processing).toBe(0);
@@ -262,9 +262,9 @@ describe('TransactionQueue', () => {
       queue.add(transaction);
       queue.markProcessing('test_123');
       queue.markCompleted('test_123', 'tx_hash_123');
-      
+
       queue.clear();
-      
+
       const status = queue.getStatus();
       expect(status.total).toBe(0);
     });
@@ -288,14 +288,14 @@ describe('TransactionQueue', () => {
       queue.markFailed('test_123', 'Test error');
       queue.markFailed('test_123', 'Test error');
       queue.markFailed('test_123', 'Test error');
-      
+
       expect(queue.getStatus().failed).toBe(1);
-      
+
       const retried = queue.retry('test_123');
       expect(retried).toBe(true);
       expect(queue.getStatus().failed).toBe(0);
       expect(queue.getStatus().pending).toBe(1);
-      
+
       const queueItems = queue.getQueue();
       expect(queueItems[0].retries).toBe(0);
       expect(queueItems[0].transaction.status).toBe('pending');
@@ -316,7 +316,7 @@ describe('TransactionQueue', () => {
 
       queue.add(transaction);
       const item = queue.getItem('test_123');
-      
+
       expect(item).toBeDefined();
       expect(item?.transaction).toEqual(transaction);
     });
@@ -342,7 +342,7 @@ describe('TransactionQueue', () => {
       };
 
       queue.add(transaction);
-      
+
       expect(eventHandler).toHaveBeenCalledWith({
         type: 'item_added',
         item: expect.objectContaining({

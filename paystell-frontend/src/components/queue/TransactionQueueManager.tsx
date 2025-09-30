@@ -1,36 +1,36 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableHead, 
-  TableHeader, 
-  TableRow 
-} from "@/components/ui/table";
-import { 
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table';
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { 
-  MoreVertical, 
-  ChevronRight, 
-  ChevronDown, 
-  Trash2, 
+} from '@/components/ui/dropdown-menu';
+import {
+  MoreVertical,
+  ChevronRight,
+  ChevronDown,
+  Trash2,
   RefreshCw,
   CheckCircle,
   XCircle,
   Clock,
-  AlertCircle
-} from "lucide-react";
-import { transactionQueue, QueueItem, QueueEvent } from "@/lib/queue/transaction-queue";
-import { toast } from "sonner";
+  AlertCircle,
+} from 'lucide-react';
+import { transactionQueue, QueueItem, QueueEvent } from '@/lib/queue/transaction-queue';
+import { toast } from 'sonner';
 
 interface TransactionQueueManagerProps {
   className?: string;
@@ -54,7 +54,7 @@ export function TransactionQueueManager({ className }: TransactionQueueManagerPr
   // Handle queue events
   const handleQueueEvent = (event: QueueEvent) => {
     updateQueueData();
-    
+
     switch (event.type) {
       case 'item_added':
         toast.success('Transaction added to queue');
@@ -116,13 +116,13 @@ export function TransactionQueueManager({ className }: TransactionQueueManagerPr
 
   const getStatusBadge = (status: string) => {
     const colorMap = {
-      pending: "bg-yellow-100 text-yellow-800",
-      confirmed: "bg-green-100 text-green-800",
-      failed: "bg-red-100 text-red-800",
+      pending: 'bg-yellow-100 text-yellow-800',
+      confirmed: 'bg-green-100 text-green-800',
+      failed: 'bg-red-100 text-red-800',
     };
 
     return (
-      <Badge className={colorMap[status as keyof typeof colorMap] || "bg-gray-100 text-gray-800"}>
+      <Badge className={colorMap[status as keyof typeof colorMap] || 'bg-gray-100 text-gray-800'}>
         {getStatusIcon(status)} {status}
       </Badge>
     );
@@ -191,29 +191,17 @@ export function TransactionQueueManager({ className }: TransactionQueueManagerPr
           </CardTitle>
           <div className="flex items-center gap-2">
             {isProcessing ? (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleStopProcessing}
-              >
+              <Button variant="outline" size="sm" onClick={handleStopProcessing}>
                 <ChevronDown className="h-4 w-4 mr-2" />
                 Stop
               </Button>
             ) : (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleStartProcessing}
-              >
+              <Button variant="outline" size="sm" onClick={handleStartProcessing}>
                 <ChevronRight className="h-4 w-4 mr-2" />
                 Start
               </Button>
             )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={updateQueueData}
-            >
+            <Button variant="outline" size="sm" onClick={updateQueueData}>
               <RefreshCw className="h-4 w-4" />
             </Button>
           </div>
@@ -270,12 +258,12 @@ export function TransactionQueueManager({ className }: TransactionQueueManagerPr
         </div>
 
         {/* Queue Items Table */}
-          {allItems.length === 0 ? (
-            <div className="text-center py-8 text-muted-foreground">
-              <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No items in queue</p>
-              <p className="text-sm">Transactions will appear here when added to the queue</p>
-            </div>
+        {allItems.length === 0 ? (
+          <div className="text-center py-8 text-muted-foreground">
+            <Clock className="h-12 w-12 mx-auto mb-4 opacity-50" />
+            <p>No items in queue</p>
+            <p className="text-sm">Transactions will appear here when added to the queue</p>
+          </div>
         ) : (
           <Table>
             <TableHeader>
@@ -293,34 +281,22 @@ export function TransactionQueueManager({ className }: TransactionQueueManagerPr
             <TableBody>
               {allItems.map((item) => (
                 <TableRow key={item.id}>
-                  <TableCell className="font-mono text-sm">
-                    {item.id.slice(-8)}
-                  </TableCell>
+                  <TableCell className="font-mono text-sm">{item.id.slice(-8)}</TableCell>
                   <TableCell>
-                    <Badge variant="outline">
-                      {item.transaction.type}
-                    </Badge>
+                    <Badge variant="outline">{item.transaction.type}</Badge>
                   </TableCell>
-                  <TableCell className="font-mono">
-                    {item.transaction.amount}
-                  </TableCell>
+                  <TableCell className="font-mono">{item.transaction.amount}</TableCell>
                   <TableCell>{item.transaction.asset}</TableCell>
+                  <TableCell>{getStatusBadge(item.transaction.status)}</TableCell>
                   <TableCell>
-                    {getStatusBadge(item.transaction.status)}
+                    <Badge variant="outline">{item.retries}</Badge>
                   </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">
-                      {item.retries}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-sm">
-                    {formatDate(item.createdAt)}
-                  </TableCell>
+                  <TableCell className="text-sm">{formatDate(item.createdAt)}</TableCell>
                   <TableCell>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="ghost" size="sm">
-                            <MoreVertical className="h-4 w-4" />
+                          <MoreVertical className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end">
@@ -330,7 +306,7 @@ export function TransactionQueueManager({ className }: TransactionQueueManagerPr
                             Retry
                           </DropdownMenuItem>
                         )}
-                        <DropdownMenuItem 
+                        <DropdownMenuItem
                           onClick={() => handleRemoveItem(item.id)}
                           className="text-red-600"
                         >

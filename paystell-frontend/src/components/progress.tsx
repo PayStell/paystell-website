@@ -2,7 +2,7 @@
 
 import { CheckCircle2 } from 'lucide-react';
 import { useProgress } from '@/hooks/use-progress';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 export function Progress() {
   const { progress, totalSteps, goToStep, getPercentage } = useProgress();
@@ -10,15 +10,15 @@ export function Progress() {
   const steps = ['Basic Information', 'Business Details', 'Payment Setup', 'Complete'];
 
   // Animation variants
-  const progressVariants = {
+  const progressVariants: Variants = {
     initial: { width: 0 },
     animate: {
       width: `${getPercentage()}%`,
-      transition: { duration: 0.5, ease: 'easeOut' },
+      transition: { duration: 0.5, ease: 'easeOut' as const },
     },
   };
 
-  const stepVariants = {
+  const stepVariants: Variants = {
     inactive: { scale: 1 },
     active: {
       scale: [1, 1.1, 1],
@@ -38,7 +38,7 @@ export function Progress() {
             className="h-full bg-primary"
             initial={{ width: 0 }}
             animate={{ width: `${((progress - 1) / (steps.length - 1)) * 100}%` }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
+            transition={{ duration: 0.5, ease: 'easeOut' as const }}
           />
         </div>
         {steps.map((step, index) => {

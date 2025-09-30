@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { CheckCircle2 } from 'lucide-react';
 import Link from 'next/link';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 interface FormData {
   businessName: string;
@@ -19,7 +19,7 @@ interface SuccessStepProps {
 }
 
 export function CompleteStep({ formData }: SuccessStepProps) {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -30,7 +30,7 @@ export function CompleteStep({ formData }: SuccessStepProps) {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     show: {
       opacity: 1,
@@ -41,7 +41,7 @@ export function CompleteStep({ formData }: SuccessStepProps) {
     },
   };
 
-  const checkmarkVariants = {
+  const checkmarkVariants: Variants = {
     hidden: { scale: 0 },
     show: {
       scale: 1,
@@ -54,7 +54,7 @@ export function CompleteStep({ formData }: SuccessStepProps) {
     },
   };
 
-  const listItemVariants = {
+  const listItemVariants: Variants = {
     hidden: { opacity: 0, x: -20 },
     show: {
       opacity: 1,
