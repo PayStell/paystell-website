@@ -53,7 +53,7 @@
     "framer-motion": "^12.5.0",
     "hi-base32": "^0.5.1",
     "icons": "^1.0.0",
-    "lucide": "^0.507.0",
+    "lucide": "^0.544.0",
     "lucide-react": "^0.544.0",
     "next": "^14.2.33",
     "next-auth": "^4.24.11",
@@ -96,7 +96,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/storybook__react": "^4.0.2",
-    "@vitest/ui": "^1.6.0",
+    "@vitest/ui": "^3.2.4",
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "14.2.17",
@@ -105,6 +105,6 @@
     "postcss": "^8.5.3",
     "tailwindcss": "^3.4.17",
     "typescript": "5.8.2",
-    "vitest": "^1.6.0"
+    "vitest": "^3.2.4"
   }
 }

@@ -66,7 +66,7 @@ export function Stepper({
     initial: { width: 0 },
     animate: {
       width: `${getProgressPercentage(currentStepIndex, steps.length)}%`,
-      transition: { duration: 0.5, ease: 'easeOut' },
+      transition: { duration: 0.5, ease: 'easeOut' as const },
     },
   };
 
@@ -146,7 +146,7 @@ export function Stepper({
                 className="bg-primary h-full rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${getProgress()}%` }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
+                transition={{ duration: 0.5, ease: 'easeOut' as const }}
               />
             </div>
           </>
@@ -247,7 +247,7 @@ export function Stepper({
                 className="bg-primary h-full rounded-full"
                 initial={{ width: 0 }}
                 animate={{ width: `${getProgress()}%` }}
-                transition={{ duration: 0.5, ease: 'easeOut' }}
+                transition={{ duration: 0.5, ease: 'easeOut' as const }}
               />
             </div>
           </>

@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
 import { useStepper } from '@/hooks/useStepper';
 import { cn } from '@/lib/utils';
 import { Alert, AlertDescription } from '@/components/ui/alert';
@@ -16,7 +16,7 @@ interface StepContentProps {
   loadingText?: string;
 }
 
-const contentVariants = {
+const contentVariants: Variants = {
   initial: {
     opacity: 0,
     x: 20,
@@ -28,7 +28,7 @@ const contentVariants = {
     scale: 1,
     transition: {
       duration: 0.3,
-      ease: 'easeOut',
+      ease: 'easeOut' as const,
     },
   },
   exit: {
@@ -37,12 +37,12 @@ const contentVariants = {
     scale: 0.95,
     transition: {
       duration: 0.2,
-      ease: 'easeIn',
+      ease: 'easeIn' as const,
     },
   },
 };
 
-const errorVariants = {
+const errorVariants: Variants = {
   initial: {
     opacity: 0,
     y: -10,
@@ -54,7 +54,7 @@ const errorVariants = {
     scale: 1,
     transition: {
       duration: 0.2,
-      ease: 'easeOut',
+      ease: 'easeOut' as const,
     },
   },
   exit: {
@@ -63,12 +63,12 @@ const errorVariants = {
     scale: 0.95,
     transition: {
       duration: 0.15,
-      ease: 'easeIn',
+      ease: 'easeIn' as const,
     },
   },
 };
 
-const loadingVariants = {
+const loadingVariants: Variants = {
   initial: {
     opacity: 0,
   },
