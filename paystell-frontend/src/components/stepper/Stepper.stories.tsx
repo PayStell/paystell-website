@@ -108,7 +108,8 @@ const meta: Meta<typeof Stepper> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A flexible stepper component that displays progress through multi-step flows. Supports different variants, sizes, and step configurations.',
+        component:
+          'A flexible stepper component that displays progress through multi-step flows. Supports different variants, sizes, and step configurations.',
       },
     },
   },
@@ -142,7 +143,7 @@ type Story = StoryObj<typeof Stepper>;
 const StepperWrapper = ({
   steps,
   children,
-  initialStepId
+  initialStepId,
 }: {
   steps: StepConfig[];
   children: React.ReactNode;

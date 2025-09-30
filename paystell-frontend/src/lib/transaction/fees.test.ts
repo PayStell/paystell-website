@@ -175,7 +175,7 @@ describe('Fee Calculation', () => {
       const result = await estimateComplexTransactionFee(operations, 0.12);
 
       expect(result.operationFees).toHaveLength(3);
-      expect(result.operationFees.map(op => op.type)).toEqual(operations);
+      expect(result.operationFees.map((op) => op.type)).toEqual(operations);
     });
 
     it('should apply priority multiplier correctly', async () => {
@@ -305,7 +305,7 @@ describe('Fee Calculation', () => {
 
       expect(result.operationFees).toHaveLength(2);
       // Should default to 'payment' operations
-      expect(result.operationFees.every(op => op.type === 'payment')).toBe(true);
+      expect(result.operationFees.every((op) => op.type === 'payment')).toBe(true);
     });
 
     it('should handle partial operation types array', async () => {
@@ -316,7 +316,7 @@ describe('Fee Calculation', () => {
 
       expect(result.operationFees).toHaveLength(3);
       // Should use first type for all operations
-      expect(result.operationFees.every(op => op.type === 'changeTrust')).toBe(true);
+      expect(result.operationFees.every((op) => op.type === 'changeTrust')).toBe(true);
     });
 
     it('should handle very large multipliers', async () => {

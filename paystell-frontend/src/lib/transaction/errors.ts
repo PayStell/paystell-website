@@ -134,11 +134,14 @@ export interface TransactionErrorContext {
 /**
  * User-friendly error messages mapping
  */
-const ERROR_MESSAGES: Record<TransactionErrorCode, {
-  title: string;
-  message: string;
-  details?: string;
-}> = {
+const ERROR_MESSAGES: Record<
+  TransactionErrorCode,
+  {
+    title: string;
+    message: string;
+    details?: string;
+  }
+> = {
   // Wallet errors
   WALLET_NOT_CONNECTED: {
     title: 'Wallet Not Connected',
@@ -227,7 +230,8 @@ const ERROR_MESSAGES: Record<TransactionErrorCode, {
   BELOW_MINIMUM_BALANCE: {
     title: 'Below Minimum Balance',
     message: 'This transaction would leave your account below the minimum balance.',
-    details: 'Stellar accounts must maintain a minimum balance based on the current network base reserve and subentries. Use getMinimumBalanceErrorMessage() for the exact amount.',
+    details:
+      'Stellar accounts must maintain a minimum balance based on the current network base reserve and subentries. Use getMinimumBalanceErrorMessage() for the exact amount.',
   },
   TRUST_LINE_MISSING: {
     title: 'Trust Line Missing',
@@ -444,222 +448,276 @@ const RECOVERY_ACTIONS: Record<TransactionErrorCode, RecoveryAction[]> = {
     },
   ],
   // Default action for errors without specific recovery actions
-  WALLET_DISCONNECTED: [{
-    id: 'reconnect',
-    label: 'Reconnect',
-    description: 'Reconnect your wallet',
-    actionType: 'reconnect',
-    buttonText: 'Reconnect',
-    primary: true,
-  }],
-  WALLET_LOCKED: [{
-    id: 'unlock_wallet',
-    label: 'Unlock Wallet',
-    description: 'Unlock your wallet and try again',
-    actionType: 'manual',
-    buttonText: 'Unlock Wallet',
-    primary: true,
-  }],
-  WALLET_PERMISSION_DENIED: [{
-    id: 'grant_permission',
-    label: 'Grant Permission',
-    description: 'Allow access in your wallet settings',
-    actionType: 'manual',
-    buttonText: 'Grant Permission',
-    primary: true,
-  }],
-  INVALID_AMOUNT: [{
-    id: 'fix_amount',
-    label: 'Fix Amount',
-    description: 'Enter a valid amount',
-    actionType: 'manual',
-    buttonText: 'Fix Amount',
-    primary: true,
-  }],
-  INVALID_MEMO: [{
-    id: 'fix_memo',
-    label: 'Fix Memo',
-    description: 'Enter a valid memo',
-    actionType: 'manual',
-    buttonText: 'Fix Memo',
-    primary: true,
-  }],
-  INVALID_FEE: [{
-    id: 'fix_fee',
-    label: 'Fix Fee',
-    description: 'Use a reasonable fee amount',
-    actionType: 'manual',
-    buttonText: 'Fix Fee',
-    primary: true,
-  }],
-  TRANSACTION_BUILD_FAILED: [{
-    id: 'retry_build',
-    label: 'Retry',
-    description: 'Try building the transaction again',
-    actionType: 'retry',
-    buttonText: 'Retry',
-    primary: true,
-  }],
-  TRANSACTION_TOO_LARGE: [{
-    id: 'simplify_transaction',
-    label: 'Simplify',
-    description: 'Reduce transaction complexity',
-    actionType: 'manual',
-    buttonText: 'Simplify',
-    primary: true,
-  }],
-  SOURCE_ACCOUNT_NOT_FOUND: [{
-    id: 'fund_account',
-    label: 'Fund Account',
-    description: 'Fund your account with XLM',
-    actionType: 'manual',
-    buttonText: 'Fund Account',
-    primary: true,
-  }],
-  DESTINATION_ACCOUNT_NOT_FOUND: [{
-    id: 'notify_recipient',
-    label: 'Notify Recipient',
-    description: 'Ask recipient to activate their account',
-    actionType: 'manual',
-    buttonText: 'Continue Anyway',
-    primary: true,
-  }],
-  ACCOUNT_NOT_FUNDED: [{
-    id: 'fund_account',
-    label: 'Fund Account',
-    description: 'Add at least 1 XLM to activate',
-    actionType: 'manual',
-    buttonText: 'Fund Account',
-    primary: true,
-  }],
-  BELOW_MINIMUM_BALANCE: [{
-    id: 'adjust_amount',
-    label: 'Adjust Amount',
-    description: 'Leave at least 1 XLM in account',
-    actionType: 'manual',
-    buttonText: 'Adjust Amount',
-    primary: true,
-  }],
-  TRUST_LINE_MISSING: [{
-    id: 'add_trustline',
-    label: 'Add Trust Line',
-    description: 'Establish trust line for this asset',
-    actionType: 'manual',
-    buttonText: 'Add Trust Line',
-    primary: true,
-  }],
-  TRUST_LINE_NOT_AUTHORIZED: [{
-    id: 'contact_issuer',
-    label: 'Contact Issuer',
-    description: 'Contact the asset issuer for authorization',
-    actionType: 'contact_support',
-    buttonText: 'Contact Issuer',
-    primary: true,
-  }],
-  SUBMISSION_FAILED: [{
-    id: 'retry_submission',
-    label: 'Retry',
-    description: 'Try submitting again',
-    actionType: 'retry',
-    buttonText: 'Retry',
-    primary: true,
-  }],
-  TRANSACTION_REJECTED: [{
-    id: 'check_details',
-    label: 'Check Details',
-    description: 'Verify transaction details',
-    actionType: 'manual',
-    buttonText: 'Check Details',
-    primary: true,
-  }],
-  SEQUENCE_NUMBER_ERROR: [{
-    id: 'retry_transaction',
-    label: 'Retry',
-    description: 'Retry with updated sequence',
-    actionType: 'retry',
-    buttonText: 'Retry',
-    primary: true,
-  }],
-  FEE_TOO_HIGH: [{
-    id: 'reduce_fee',
-    label: 'Reduce Fee',
-    description: 'Use a lower fee amount',
-    actionType: 'manual',
-    buttonText: 'Reduce Fee',
-    primary: true,
-  }],
-  TIMEOUT: [{
-    id: 'retry_timeout',
-    label: 'Retry',
-    description: 'Try the transaction again',
-    actionType: 'retry',
-    buttonText: 'Retry',
-    primary: true,
-  }],
-  RATE_LIMITED: [{
-    id: 'wait_retry',
-    label: 'Wait and Retry',
-    description: 'Wait a moment before retrying',
-    actionType: 'retry',
-    buttonText: 'Retry',
-    primary: true,
-  }],
-  USER_CANCELLED: [{
-    id: 'start_over',
-    label: 'Start Over',
-    description: 'Begin the transaction again',
-    actionType: 'retry',
-    buttonText: 'Start Over',
-    primary: true,
-  }],
-  SIGNING_FAILED: [{
-    id: 'retry_signing',
-    label: 'Retry',
-    description: 'Try signing again',
-    actionType: 'retry',
-    buttonText: 'Retry',
-    primary: true,
-  }],
-  VERIFICATION_FAILED: [{
-    id: 'check_history',
-    label: 'Check History',
-    description: 'Check your transaction history',
-    actionType: 'manual',
-    buttonText: 'Check History',
-    primary: true,
-  }],
-  CONFIRMATION_TIMEOUT: [{
-    id: 'check_status',
-    label: 'Check Status',
-    description: 'Check if transaction was processed',
-    actionType: 'manual',
-    buttonText: 'Check Status',
-    primary: true,
-  }],
-  UNEXPECTED_TRANSACTION_RESULT: [{
-    id: 'contact_support',
-    label: 'Contact Support',
-    description: 'Get help with this issue',
-    actionType: 'contact_support',
-    buttonText: 'Contact Support',
-    primary: true,
-  }],
-  UNKNOWN_ERROR: [{
-    id: 'retry_unknown',
-    label: 'Retry',
-    description: 'Try the operation again',
-    actionType: 'retry',
-    buttonText: 'Retry',
-    primary: true,
-  }],
-  INTERNAL_ERROR: [{
-    id: 'contact_support',
-    label: 'Contact Support',
-    description: 'Report this issue to support',
-    actionType: 'contact_support',
-    buttonText: 'Contact Support',
-    primary: true,
-  }],
+  WALLET_DISCONNECTED: [
+    {
+      id: 'reconnect',
+      label: 'Reconnect',
+      description: 'Reconnect your wallet',
+      actionType: 'reconnect',
+      buttonText: 'Reconnect',
+      primary: true,
+    },
+  ],
+  WALLET_LOCKED: [
+    {
+      id: 'unlock_wallet',
+      label: 'Unlock Wallet',
+      description: 'Unlock your wallet and try again',
+      actionType: 'manual',
+      buttonText: 'Unlock Wallet',
+      primary: true,
+    },
+  ],
+  WALLET_PERMISSION_DENIED: [
+    {
+      id: 'grant_permission',
+      label: 'Grant Permission',
+      description: 'Allow access in your wallet settings',
+      actionType: 'manual',
+      buttonText: 'Grant Permission',
+      primary: true,
+    },
+  ],
+  INVALID_AMOUNT: [
+    {
+      id: 'fix_amount',
+      label: 'Fix Amount',
+      description: 'Enter a valid amount',
+      actionType: 'manual',
+      buttonText: 'Fix Amount',
+      primary: true,
+    },
+  ],
+  INVALID_MEMO: [
+    {
+      id: 'fix_memo',
+      label: 'Fix Memo',
+      description: 'Enter a valid memo',
+      actionType: 'manual',
+      buttonText: 'Fix Memo',
+      primary: true,
+    },
+  ],
+  INVALID_FEE: [
+    {
+      id: 'fix_fee',
+      label: 'Fix Fee',
+      description: 'Use a reasonable fee amount',
+      actionType: 'manual',
+      buttonText: 'Fix Fee',
+      primary: true,
+    },
+  ],
+  TRANSACTION_BUILD_FAILED: [
+    {
+      id: 'retry_build',
+      label: 'Retry',
+      description: 'Try building the transaction again',
+      actionType: 'retry',
+      buttonText: 'Retry',
+      primary: true,
+    },
+  ],
+  TRANSACTION_TOO_LARGE: [
+    {
+      id: 'simplify_transaction',
+      label: 'Simplify',
+      description: 'Reduce transaction complexity',
+      actionType: 'manual',
+      buttonText: 'Simplify',
+      primary: true,
+    },
+  ],
+  SOURCE_ACCOUNT_NOT_FOUND: [
+    {
+      id: 'fund_account',
+      label: 'Fund Account',
+      description: 'Fund your account with XLM',
+      actionType: 'manual',
+      buttonText: 'Fund Account',
+      primary: true,
+    },
+  ],
+  DESTINATION_ACCOUNT_NOT_FOUND: [
+    {
+      id: 'notify_recipient',
+      label: 'Notify Recipient',
+      description: 'Ask recipient to activate their account',
+      actionType: 'manual',
+      buttonText: 'Continue Anyway',
+      primary: true,
+    },
+  ],
+  ACCOUNT_NOT_FUNDED: [
+    {
+      id: 'fund_account',
+      label: 'Fund Account',
+      description: 'Add at least 1 XLM to activate',
+      actionType: 'manual',
+      buttonText: 'Fund Account',
+      primary: true,
+    },
+  ],
+  BELOW_MINIMUM_BALANCE: [
+    {
+      id: 'adjust_amount',
+      label: 'Adjust Amount',
+      description: 'Leave at least 1 XLM in account',
+      actionType: 'manual',
+      buttonText: 'Adjust Amount',
+      primary: true,
+    },
+  ],
+  TRUST_LINE_MISSING: [
+    {
+      id: 'add_trustline',
+      label: 'Add Trust Line',
+      description: 'Establish trust line for this asset',
+      actionType: 'manual',
+      buttonText: 'Add Trust Line',
+      primary: true,
+    },
+  ],
+  TRUST_LINE_NOT_AUTHORIZED: [
+    {
+      id: 'contact_issuer',
+      label: 'Contact Issuer',
+      description: 'Contact the asset issuer for authorization',
+      actionType: 'contact_support',
+      buttonText: 'Contact Issuer',
+      primary: true,
+    },
+  ],
+  SUBMISSION_FAILED: [
+    {
+      id: 'retry_submission',
+      label: 'Retry',
+      description: 'Try submitting again',
+      actionType: 'retry',
+      buttonText: 'Retry',
+      primary: true,
+    },
+  ],
+  TRANSACTION_REJECTED: [
+    {
+      id: 'check_details',
+      label: 'Check Details',
+      description: 'Verify transaction details',
+      actionType: 'manual',
+      buttonText: 'Check Details',
+      primary: true,
+    },
+  ],
+  SEQUENCE_NUMBER_ERROR: [
+    {
+      id: 'retry_transaction',
+      label: 'Retry',
+      description: 'Retry with updated sequence',
+      actionType: 'retry',
+      buttonText: 'Retry',
+      primary: true,
+    },
+  ],
+  FEE_TOO_HIGH: [
+    {
+      id: 'reduce_fee',
+      label: 'Reduce Fee',
+      description: 'Use a lower fee amount',
+      actionType: 'manual',
+      buttonText: 'Reduce Fee',
+      primary: true,
+    },
+  ],
+  TIMEOUT: [
+    {
+      id: 'retry_timeout',
+      label: 'Retry',
+      description: 'Try the transaction again',
+      actionType: 'retry',
+      buttonText: 'Retry',
+      primary: true,
+    },
+  ],
+  RATE_LIMITED: [
+    {
+      id: 'wait_retry',
+      label: 'Wait and Retry',
+      description: 'Wait a moment before retrying',
+      actionType: 'retry',
+      buttonText: 'Retry',
+      primary: true,
+    },
+  ],
+  USER_CANCELLED: [
+    {
+      id: 'start_over',
+      label: 'Start Over',
+      description: 'Begin the transaction again',
+      actionType: 'retry',
+      buttonText: 'Start Over',
+      primary: true,
+    },
+  ],
+  SIGNING_FAILED: [
+    {
+      id: 'retry_signing',
+      label: 'Retry',
+      description: 'Try signing again',
+      actionType: 'retry',
+      buttonText: 'Retry',
+      primary: true,
+    },
+  ],
+  VERIFICATION_FAILED: [
+    {
+      id: 'check_history',
+      label: 'Check History',
+      description: 'Check your transaction history',
+      actionType: 'manual',
+      buttonText: 'Check History',
+      primary: true,
+    },
+  ],
+  CONFIRMATION_TIMEOUT: [
+    {
+      id: 'check_status',
+      label: 'Check Status',
+      description: 'Check if transaction was processed',
+      actionType: 'manual',
+      buttonText: 'Check Status',
+      primary: true,
+    },
+  ],
+  UNEXPECTED_TRANSACTION_RESULT: [
+    {
+      id: 'contact_support',
+      label: 'Contact Support',
+      description: 'Get help with this issue',
+      actionType: 'contact_support',
+      buttonText: 'Contact Support',
+      primary: true,
+    },
+  ],
+  UNKNOWN_ERROR: [
+    {
+      id: 'retry_unknown',
+      label: 'Retry',
+      description: 'Try the operation again',
+      actionType: 'retry',
+      buttonText: 'Retry',
+      primary: true,
+    },
+  ],
+  INTERNAL_ERROR: [
+    {
+      id: 'contact_support',
+      label: 'Contact Support',
+      description: 'Report this issue to support',
+      actionType: 'contact_support',
+      buttonText: 'Contact Support',
+      primary: true,
+    },
+  ],
 };
 
 /**
@@ -667,7 +725,7 @@ const RECOVERY_ACTIONS: Record<TransactionErrorCode, RecoveryAction[]> = {
  */
 export function getMinimumBalanceErrorMessage(
   baseReserve: number = 0.5, // Default Stellar base reserve
-  numSubentries: number = 0
+  numSubentries: number = 0,
 ): {
   title: string;
   message: string;
@@ -679,7 +737,7 @@ export function getMinimumBalanceErrorMessage(
   return {
     title: 'Below Minimum Balance',
     message: 'This transaction would leave your account below the minimum balance.',
-    details: `Stellar accounts must maintain a minimum balance of ${formattedBalance} XLM based on the current base reserve and subentries.`
+    details: `Stellar accounts must maintain a minimum balance of ${formattedBalance} XLM based on the current base reserve and subentries.`,
   };
 }
 
@@ -689,7 +747,7 @@ export function getMinimumBalanceErrorMessage(
 export function createTransactionError(
   code: TransactionErrorCode,
   context?: TransactionErrorContext,
-  overrides?: Partial<TransactionError>
+  overrides?: Partial<TransactionError>,
 ): TransactionError {
   const errorInfo = ERROR_MESSAGES[code];
   const recoveryActions = RECOVERY_ACTIONS[code] || [];
@@ -703,7 +761,7 @@ export function createTransactionError(
     message: errorInfo.message,
     details: errorInfo.details,
     recoverable: recoveryActions.length > 0,
-    retryable: recoveryActions.some(action => action.actionType === 'retry'),
+    retryable: recoveryActions.some((action) => action.actionType === 'retry'),
     recoveryActions,
     context,
     timestamp: new Date(),
@@ -719,8 +777,10 @@ function getErrorTypeFromCode(code: TransactionErrorCode): TransactionErrorType 
   if (code.startsWith('WALLET_')) return 'WALLET_ERROR';
   if (code.includes('INSUFFICIENT')) return 'INSUFFICIENT_FUNDS_ERROR';
   if (code.includes('FEE')) return 'FEE_ERROR';
-  if (code.includes('ACCOUNT') || code.includes('BALANCE') || code.includes('TRUST')) return 'ACCOUNT_ERROR';
-  if (code.includes('NETWORK') || code.includes('SUBMISSION') || code.includes('RATE')) return 'NETWORK_ERROR';
+  if (code.includes('ACCOUNT') || code.includes('BALANCE') || code.includes('TRUST'))
+    return 'ACCOUNT_ERROR';
+  if (code.includes('NETWORK') || code.includes('SUBMISSION') || code.includes('RATE'))
+    return 'NETWORK_ERROR';
   if (code.includes('INVALID') || code.includes('TOO_')) return 'VALIDATION_ERROR';
   if (code.includes('USER_') || code.includes('SIGNING')) return 'USER_REJECTION_ERROR';
   if (code.includes('VERIFICATION') || code.includes('CONFIRMATION')) return 'VERIFICATION_ERROR';
@@ -767,7 +827,7 @@ function getErrorSeverity(code: TransactionErrorCode): 'low' | 'medium' | 'high'
  */
 export function handleTransactionError(
   error: TransactionError | Error | unknown,
-  context?: TransactionErrorContext
+  context?: TransactionErrorContext,
 ): TransactionError {
   let transactionError: TransactionError;
 
@@ -809,12 +869,20 @@ function logTransactionError(error: TransactionError): void {
       severity: error.severity,
       timestamp: error.timestamp,
       // Anonymize any IDs by masking them
-      context: error.context ? {
-        ...error.context,
-        sourceAccount: error.context.sourceAccount ? error.context.sourceAccount.slice(0, 4) + '***' : undefined,
-        destinationAccount: error.context.destinationAccount ? error.context.destinationAccount.slice(0, 4) + '***' : undefined,
-        transactionId: error.context.transactionId ? error.context.transactionId.slice(0, 8) + '***' : undefined,
-      } : undefined,
+      context: error.context
+        ? {
+            ...error.context,
+            sourceAccount: error.context.sourceAccount
+              ? error.context.sourceAccount.slice(0, 4) + '***'
+              : undefined,
+            destinationAccount: error.context.destinationAccount
+              ? error.context.destinationAccount.slice(0, 4) + '***'
+              : undefined,
+            transactionId: error.context.transactionId
+              ? error.context.transactionId.slice(0, 8) + '***'
+              : undefined,
+          }
+        : undefined,
     };
     console.error('Transaction error:', sanitizedError);
   } else {
@@ -830,7 +898,12 @@ function mapErrorMessageToCode(message: string): TransactionErrorCode {
   const lowerMessage = message.toLowerCase();
 
   if (lowerMessage.includes('wallet not connected')) return 'WALLET_NOT_CONNECTED';
-  if (lowerMessage.includes('user cancelled') || lowerMessage.includes('user denied') || lowerMessage.includes('user rejected')) return 'USER_CANCELLED';
+  if (
+    lowerMessage.includes('user cancelled') ||
+    lowerMessage.includes('user denied') ||
+    lowerMessage.includes('user rejected')
+  )
+    return 'USER_CANCELLED';
   if (lowerMessage.includes('insufficient')) return 'INSUFFICIENT_BALANCE';
   if (lowerMessage.includes('timeout')) return 'TIMEOUT';
   if (lowerMessage.includes('network')) return 'NETWORK_UNAVAILABLE';
@@ -838,7 +911,12 @@ function mapErrorMessageToCode(message: string): TransactionErrorCode {
 
   // More specific fee error classification
   if (lowerMessage.includes('fee')) {
-    if (lowerMessage.includes('too low') || lowerMessage.includes('low') || lowerMessage.includes('insufficient fee') || lowerMessage.includes('fee insufficient')) {
+    if (
+      lowerMessage.includes('too low') ||
+      lowerMessage.includes('low') ||
+      lowerMessage.includes('insufficient fee') ||
+      lowerMessage.includes('fee insufficient')
+    ) {
       return 'FEE_TOO_LOW';
     }
     if (lowerMessage.includes('too high') || lowerMessage.includes('high')) {
@@ -915,7 +993,11 @@ export function getRecoveryActions(code: TransactionErrorCode): RecoveryAction[]
  * Check if an error is retryable
  */
 export function isRetryableError(error: TransactionError): boolean {
-  return error.retryable || error.recoveryActions?.some(action => action.actionType === 'retry') || false;
+  return (
+    error.retryable ||
+    error.recoveryActions?.some((action) => action.actionType === 'retry') ||
+    false
+  );
 }
 
 /**

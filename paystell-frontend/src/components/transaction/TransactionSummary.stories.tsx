@@ -9,7 +9,8 @@ const meta: Meta<typeof TransactionSummary> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A comprehensive transaction summary component that displays transaction details, fees, and confirmation UI for Stellar transactions.',
+        component:
+          'A comprehensive transaction summary component that displays transaction details, fees, and confirmation UI for Stellar transactions.',
       },
     },
   },
@@ -239,11 +240,7 @@ export const AllVariants: Story = {
     <div className="space-y-8">
       <div>
         <h3 className="text-lg font-medium mb-4">Default Variant</h3>
-        <TransactionSummary
-          transaction={sampleTransaction}
-          xlmPrice={0.12}
-          variant="default"
-        />
+        <TransactionSummary transaction={sampleTransaction} xlmPrice={0.12} variant="default" />
       </div>
 
       <div>
@@ -260,11 +257,7 @@ export const AllVariants: Story = {
 
       <div>
         <h3 className="text-lg font-medium mb-4">Preview Variant</h3>
-        <TransactionSummary
-          transaction={sampleTransaction}
-          xlmPrice={0.12}
-          variant="preview"
-        />
+        <TransactionSummary transaction={sampleTransaction} xlmPrice={0.12} variant="preview" />
       </div>
     </div>
   ),
@@ -370,11 +363,7 @@ export const CompleteFlow: Story = {
     <div className="space-y-8">
       <div>
         <h3 className="text-lg font-medium mb-4">1. Transaction Preview</h3>
-        <TransactionSummary
-          transaction={sampleTransaction}
-          xlmPrice={0.12}
-          variant="preview"
-        />
+        <TransactionSummary transaction={sampleTransaction} xlmPrice={0.12} variant="preview" />
       </div>
 
       <div>

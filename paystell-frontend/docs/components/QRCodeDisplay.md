@@ -39,12 +39,10 @@ function Example() {
 The component uses the following features:
 
 1. QR Code Generation
-
    - Generates a QR code from the provided OTP authentication URL
    - Ensures proper sizing and error correction for reliable scanning
 
 2. Secret Key Display
-
    - Displays the secret key in a clear, readable format
    - Groups characters for easier reading
    - Provides copy functionality

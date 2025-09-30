@@ -25,7 +25,14 @@ export type TransactionState =
 /**
  * Transaction types supported by the system
  */
-export type TransactionType = 'payment' | 'deposit' | 'withdraw' | 'transfer' | 'swap' | 'trust_line' | 'account_merge';
+export type TransactionType =
+  | 'payment'
+  | 'deposit'
+  | 'withdraw'
+  | 'transfer'
+  | 'swap'
+  | 'trust_line'
+  | 'account_merge';
 
 /**
  * Transaction priority levels
@@ -140,7 +147,11 @@ interface TransactionStoreState {
  */
 interface TransactionStoreActions {
   // Transaction lifecycle
-  startTransaction: (type: TransactionType, stepData: TransactionStepData, config?: Partial<TransactionFlowConfig>) => string;
+  startTransaction: (
+    type: TransactionType,
+    stepData: TransactionStepData,
+    config?: Partial<TransactionFlowConfig>,
+  ) => string;
   updateTransaction: (id: string, updates: Partial<ActiveTransaction>) => void;
   updateTransactionState: (id: string, state: TransactionState) => void;
   updateTransactionStep: (id: string, step: number) => void;
@@ -394,7 +405,11 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
               transaction.updatedAt = new Date().toISOString();
 
               // Add to retry queue if retryable and auto-retry is enabled
-              if (transactionError.retryable && state.autoRetry && transaction.retryCount < transaction.maxRetries) {
+              if (
+                transactionError.retryable &&
+                state.autoRetry &&
+                transaction.retryCount < transaction.maxRetries
+              ) {
                 state.retryQueue.push(id);
               } else {
                 // Move to history
@@ -509,7 +524,8 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
             });
           } catch (error) {
             set((state) => {
-              state.historyError = error instanceof Error ? error.message : 'Failed to load history';
+              state.historyError =
+                error instanceof Error ? error.message : 'Failed to load history';
               state.historyLoading = false;
             });
           }
@@ -553,7 +569,7 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
 
           for (const id of retryQueue) {
             // Add delay between retries
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            await new Promise((resolve) => setTimeout(resolve, 1000));
             retryTransaction(id);
           }
         },
@@ -622,17 +638,17 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
             }
 
             const total = allTransactions.length;
-            const completed = allTransactions.filter(tx => tx.state === 'COMPLETED').length;
-            const failed = allTransactions.filter(tx => tx.state === 'FAILED').length;
-            const pending = allTransactions.filter(tx =>
-              !['COMPLETED', 'FAILED', 'CANCELLED'].includes(tx.state)
+            const completed = allTransactions.filter((tx) => tx.state === 'COMPLETED').length;
+            const failed = allTransactions.filter((tx) => tx.state === 'FAILED').length;
+            const pending = allTransactions.filter(
+              (tx) => !['COMPLETED', 'FAILED', 'CANCELLED'].includes(tx.state),
             ).length;
 
             const successRate = total > 0 ? (completed / total) * 100 : 0;
 
             // Calculate average duration for completed transactions
-            const completedTransactions = allTransactions.filter(tx =>
-              tx.state === 'COMPLETED' && tx.completedAt
+            const completedTransactions = allTransactions.filter(
+              (tx) => tx.state === 'COMPLETED' && tx.completedAt,
             );
 
             let averageDuration = 0;
@@ -645,9 +661,8 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
               averageDuration = totalDuration / completedTransactions.length / 1000; // in seconds
             }
 
-            const lastActivity = allTransactions.length > 0
-              ? allTransactions[0].updatedAt
-              : undefined;
+            const lastActivity =
+              allTransactions.length > 0 ? allTransactions[0].updatedAt : undefined;
 
             state.stats = {
               total,
@@ -676,7 +691,9 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
                 state.history.unshift({ ...state.activeTransaction });
 
                 // Remove from retry queue
-                state.retryQueue = state.retryQueue.filter((id: string) => id !== state.activeTransaction?.id);
+                state.retryQueue = state.retryQueue.filter(
+                  (id: string) => id !== state.activeTransaction?.id,
+                );
 
                 // Clear active transaction
                 state.activeTransaction = undefined;
@@ -701,27 +718,41 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
           // Migration for version 0 -> 1: redact PII from legacy persisted data
           const state = persistedState as Record<string, unknown>;
           if (version === 0 && state?.history && Array.isArray(state.history)) {
-            state.history = state.history.slice(0, 20).map((transaction: Record<string, unknown>) => {
-              const sourceAccount = transaction.sourceAccount as string | undefined;
-              const destinationAccount = transaction.destinationAccount as string | undefined;
-              const error = transaction.error as { type?: string; code?: string; message?: string; severity?: string; timestamp?: string } | undefined;
+            state.history = state.history
+              .slice(0, 20)
+              .map((transaction: Record<string, unknown>) => {
+                const sourceAccount = transaction.sourceAccount as string | undefined;
+                const destinationAccount = transaction.destinationAccount as string | undefined;
+                const error = transaction.error as
+                  | {
+                      type?: string;
+                      code?: string;
+                      message?: string;
+                      severity?: string;
+                      timestamp?: string;
+                    }
+                  | undefined;
 
-              return {
-                ...transaction,
-                // Redact legacy PII fields
-                sourceAccount: sourceAccount ? `${sourceAccount.slice(0, 4)}***` : undefined,
-                destinationAccount: destinationAccount ? `${destinationAccount.slice(0, 4)}***` : undefined,
-                memo: undefined, // Remove memo entirely
-                metadata: undefined, // Remove metadata
-                error: error ? {
-                  type: error.type,
-                  code: error.code,
-                  message: error.message,
-                  severity: error.severity,
-                  timestamp: error.timestamp,
-                } : undefined,
-              };
-            });
+                return {
+                  ...transaction,
+                  // Redact legacy PII fields
+                  sourceAccount: sourceAccount ? `${sourceAccount.slice(0, 4)}***` : undefined,
+                  destinationAccount: destinationAccount
+                    ? `${destinationAccount.slice(0, 4)}***`
+                    : undefined,
+                  memo: undefined, // Remove memo entirely
+                  metadata: undefined, // Remove metadata
+                  error: error
+                    ? {
+                        type: error.type,
+                        code: error.code,
+                        message: error.message,
+                        severity: error.severity,
+                        timestamp: error.timestamp,
+                      }
+                    : undefined,
+                };
+              });
           }
           return persistedState;
         },
@@ -738,15 +769,19 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
           }
 
           // Redact PII from transaction history
-          const redactedHistory = state.history.slice(0, 20).map(transaction => ({
+          const redactedHistory = state.history.slice(0, 20).map((transaction) => ({
             id: transaction.id,
             type: transaction.type,
             state: transaction.state,
             amount: transaction.amount,
             asset: transaction.asset,
             // Redact sensitive address information
-            sourceAccount: transaction.sourceAccount ? `${transaction.sourceAccount.slice(0, 4)}***` : undefined,
-            destinationAccount: transaction.destinationAccount ? `${transaction.destinationAccount.slice(0, 4)}***` : undefined,
+            sourceAccount: transaction.sourceAccount
+              ? `${transaction.sourceAccount.slice(0, 4)}***`
+              : undefined,
+            destinationAccount: transaction.destinationAccount
+              ? `${transaction.destinationAccount.slice(0, 4)}***`
+              : undefined,
             // Omit memo entirely for privacy
             fee: transaction.fee,
             hash: transaction.hash,
@@ -755,14 +790,16 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
             updatedAt: transaction.updatedAt,
             completedAt: transaction.completedAt,
             expiresAt: transaction.expiresAt,
-            error: transaction.error ? {
-              type: transaction.error.type,
-              code: transaction.error.code,
-              message: transaction.error.message,
-              severity: transaction.error.severity,
-              timestamp: transaction.error.timestamp,
-              // Omit error context which may contain PII
-            } : undefined,
+            error: transaction.error
+              ? {
+                  type: transaction.error.type,
+                  code: transaction.error.code,
+                  message: transaction.error.message,
+                  severity: transaction.error.severity,
+                  timestamp: transaction.error.timestamp,
+                  // Omit error context which may contain PII
+                }
+              : undefined,
             // Omit metadata which might contain sensitive data
           }));
 
@@ -773,10 +810,10 @@ export const useTransactionStore = create<TransactionStoreState & TransactionSto
             autoRetry: state.autoRetry,
           };
         },
-      }
+      },
     ),
-    { name: 'transaction-store' }
-  )
+    { name: 'transaction-store' },
+  ),
 );
 
 /**

@@ -9,7 +9,8 @@ const meta: Meta<typeof AddressInput> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A specialized input component for Stellar addresses with validation, address book integration, and QR code scanning support.',
+        component:
+          'A specialized input component for Stellar addresses with validation, address book integration, and QR code scanning support.',
       },
     },
   },
@@ -177,7 +178,8 @@ export const FederationDisabled: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'AddressInput with federation addresses disabled - federation addresses will show as invalid.',
+        story:
+          'AddressInput with federation addresses disabled - federation addresses will show as invalid.',
       },
     },
   },
@@ -221,9 +223,7 @@ export const ValidationStates: Story = {
 
       <div>
         <h3 className="text-sm font-medium mb-2">Empty (No Validation)</h3>
-        <InteractiveWrapper
-          placeholder="G... or name*domain.com"
-        />
+        <InteractiveWrapper placeholder="G... or name*domain.com" />
       </div>
     </div>
   ),

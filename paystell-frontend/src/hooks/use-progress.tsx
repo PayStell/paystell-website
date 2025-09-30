@@ -37,9 +37,7 @@ export function ProgressProvider({
 
   return (
     <StepperProvider steps={stepConfigs} initialStepId={initialStepId}>
-      <ProgressProviderContent>
-        {children}
-      </ProgressProviderContent>
+      <ProgressProviderContent>{children}</ProgressProviderContent>
     </StepperProvider>
   );
 }
@@ -69,11 +67,7 @@ function ProgressProviderContent({ children }: { children: React.ReactNode }) {
     getPercentage: stepper.getProgress,
   };
 
-  return (
-    <ProgressContext.Provider value={contextValue}>
-      {children}
-    </ProgressContext.Provider>
-  );
+  return <ProgressContext.Provider value={contextValue}>{children}</ProgressContext.Provider>;
 }
 
 export function useProgress() {

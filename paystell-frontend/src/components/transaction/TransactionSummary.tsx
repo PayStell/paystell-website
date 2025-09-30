@@ -48,7 +48,7 @@ export interface TransactionData {
   currency?: string;
   memo?: string;
   fee?: string;
-  network?: 'testnet' | 'mainnet';
+  network?: 'testnet' | 'mainnet' | 'public';
 }
 
 interface TransactionSummaryProps {
@@ -212,14 +212,14 @@ export function TransactionSummary({
             <div>
               <h4 className="text-sm font-medium text-muted-foreground mb-1">Memo</h4>
               <div className="flex items-center space-x-2">
-                <p className="text-sm bg-muted p-2 rounded border flex-1 font-mono">
-                  {memo}
-                </p>
+                <p className="text-sm bg-muted p-2 rounded border flex-1 font-mono">{memo}</p>
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => handleCopy(memo, 'Memo')}
                   className="h-8 w-8 p-0"
+                  aria-label={copied ? 'Memo copied' : 'Copy memo'}
+                  title={copied ? 'Memo copied' : 'Copy memo'}
                 >
                   {copied ? (
                     <Check className="h-3 w-3 text-green-500" />
@@ -244,15 +244,15 @@ export function TransactionSummary({
                     variant="ghost"
                     size="sm"
                     className="h-4 w-4 p-0 rounded-full border"
+                    aria-label="View fee details"
+                    title="View fee details"
                   >
                     <Info className="h-3 w-3" />
                   </Button>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium text-destructive">{finalFeeXlm}</p>
-                  {finalFeeUsd && (
-                    <p className="text-xs text-muted-foreground">≈ {finalFeeUsd}</p>
-                  )}
+                  {finalFeeUsd && <p className="text-xs text-muted-foreground">≈ {finalFeeUsd}</p>}
                 </div>
               </div>
 
@@ -267,8 +267,8 @@ export function TransactionSummary({
                       feeEstimation.congestionLevel === 'low'
                         ? 'default'
                         : feeEstimation.congestionLevel === 'medium'
-                        ? 'secondary'
-                        : 'destructive'
+                          ? 'secondary'
+                          : 'destructive'
                     }
                     className="text-xs"
                   >
@@ -286,11 +286,12 @@ export function TransactionSummary({
           <div className="flex justify-between items-center">
             <h3 className="text-base font-semibold">Total Amount</h3>
             <div className="text-right">
-              <p className="text-2xl font-bold">{formatAmount(totalAmount, 7)} {currency}</p>
+              <p className="text-2xl font-bold">
+                {formatAmount(totalAmount, 7)} {currency}
+              </p>
               {totalUsd && (
                 <p className="text-sm text-muted-foreground flex items-center justify-end">
-                  <DollarSign className="h-3 w-3 mr-1" />
-                  ≈ ${totalUsd} USD
+                  <DollarSign className="h-3 w-3 mr-1" />≈ ${totalUsd} USD
                 </p>
               )}
             </div>
@@ -304,8 +305,16 @@ export function TransactionSummary({
             <div className="flex items-center justify-between text-sm text-muted-foreground">
               <span>Network</span>
               <div className="flex items-center space-x-2">
-                <Badge variant={resolvedNetwork === 'mainnet' ? 'default' : 'secondary'}>
-                  {resolvedNetwork === 'mainnet' ? 'Mainnet' : 'Testnet'}
+                <Badge
+                  variant={
+                    resolvedNetwork === 'mainnet' || resolvedNetwork === 'public'
+                      ? 'default'
+                      : 'secondary'
+                  }
+                >
+                  {resolvedNetwork === 'mainnet' || resolvedNetwork === 'public'
+                    ? 'Mainnet'
+                    : 'Testnet'}
                 </Badge>
                 {resolvedNetwork === 'testnet' && (
                   <div className="flex items-center space-x-1 text-yellow-600">
@@ -347,11 +356,7 @@ export function TransactionSummary({
                 </Button>
               )}
               {onConfirm && (
-                <Button
-                  onClick={onConfirm}
-                  disabled={isConfirming}
-                  className="flex-1"
-                >
+                <Button onClick={onConfirm} disabled={isConfirming} className="flex-1">
                   {isConfirming ? 'Confirming...' : 'Confirm Transaction'}
                 </Button>
               )}
@@ -388,9 +393,7 @@ export function QuickSummary({
           <p className="font-medium">
             {formatAmount(amount, 2)} {currency}
           </p>
-          {usdValue && (
-            <p className="text-xs text-muted-foreground">≈ ${usdValue} USD</p>
-          )}
+          {usdValue && <p className="text-xs text-muted-foreground">≈ ${usdValue} USD</p>}
         </div>
       </div>
       <div className="text-right">

@@ -59,7 +59,10 @@ export interface StepConfig<TFormData extends FieldValues = FieldValues> {
    * @param formMethods - React Hook Form methods if available
    * @returns Promise or boolean indicating if validation passed
    */
-  validate?: (formData: TFormData, formMethods?: UseFormReturn<TFormData>) => Promise<boolean> | boolean;
+  validate?: (
+    formData: TFormData,
+    formMethods?: UseFormReturn<TFormData>,
+  ) => Promise<boolean> | boolean;
 
   /** Whether this step can be skipped if validation fails */
   canSkip?: boolean;
@@ -97,7 +100,10 @@ export interface StepperProps<TFormData extends FieldValues = FieldValues> {
   initialStepId?: string;
 
   /** Callback triggered when the current step changes */
-  onStepChange?: (currentStep: StepConfig<TFormData>, previousStep: StepConfig<TFormData> | null) => void;
+  onStepChange?: (
+    currentStep: StepConfig<TFormData>,
+    previousStep: StepConfig<TFormData> | null,
+  ) => void;
 
   /** Callback triggered when all steps are completed */
   onComplete?: (formData: TFormData) => void;
@@ -229,7 +235,8 @@ export interface StepperNavigation {
  * Hook return type for useStepper
  * @template TFormData - Type of form data being managed
  */
-export interface StepperHookReturn<TFormData extends FieldValues = FieldValues> extends StepperNavigation {
+export interface StepperHookReturn<TFormData extends FieldValues = FieldValues>
+  extends StepperNavigation {
   /** Array of configured steps */
   steps: StepConfig<TFormData>[];
 

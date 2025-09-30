@@ -9,7 +9,8 @@ const meta: Meta<typeof AmountInput> = {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A specialized input component for transaction amounts with real-time USD conversion, validation, and max button functionality.',
+        component:
+          'A specialized input component for transaction amounts with real-time USD conversion, validation, and max button functionality.',
       },
     },
   },
@@ -186,11 +187,7 @@ export const ValidationStates: Story = {
     <div className="space-y-6">
       <div>
         <h3 className="text-sm font-medium mb-2">Valid Amount</h3>
-        <InteractiveWrapper
-          initialValue="100.50"
-          xlmPrice={0.12}
-          xlmBalance={1000.5}
-        />
+        <InteractiveWrapper initialValue="100.50" xlmPrice={0.12} xlmBalance={1000.5} />
       </div>
 
       <div>
@@ -205,19 +202,12 @@ export const ValidationStates: Story = {
 
       <div>
         <h3 className="text-sm font-medium mb-2">No Balance</h3>
-        <InteractiveWrapper
-          xlmPrice={0.12}
-          xlmBalance={0}
-          error="No balance available"
-        />
+        <InteractiveWrapper xlmPrice={0.12} xlmBalance={0} error="No balance available" />
       </div>
 
       <div>
         <h3 className="text-sm font-medium mb-2">No Price Data</h3>
-        <InteractiveWrapper
-          initialValue="50.00"
-          xlmBalance={1000.5}
-        />
+        <InteractiveWrapper initialValue="50.00" xlmBalance={1000.5} />
       </div>
     </div>
   ),
@@ -235,11 +225,7 @@ export const DifferentSizes: Story = {
     <div className="space-y-6">
       <div>
         <h3 className="text-sm font-medium mb-2">Default Size</h3>
-        <InteractiveWrapper
-          initialValue="100.50"
-          xlmPrice={0.12}
-          xlmBalance={1000.5}
-        />
+        <InteractiveWrapper initialValue="100.50" xlmPrice={0.12} xlmBalance={1000.5} />
       </div>
 
       <div>
@@ -288,41 +274,22 @@ export const DisplayComponent: Story = {
     <div className="space-y-6">
       <div>
         <h3 className="text-sm font-medium mb-2">Small Display</h3>
-        <AmountDisplay
-          amount="250.75"
-          currency="XLM"
-          usdValue="30.09"
-          size="sm"
-        />
+        <AmountDisplay amount="250.75" currency="XLM" usdValue="30.09" size="sm" />
       </div>
 
       <div>
         <h3 className="text-sm font-medium mb-2">Medium Display</h3>
-        <AmountDisplay
-          amount="1500.00"
-          currency="XLM"
-          usdValue="180.00"
-          size="md"
-        />
+        <AmountDisplay amount="1500.00" currency="XLM" usdValue="180.00" size="md" />
       </div>
 
       <div>
         <h3 className="text-sm font-medium mb-2">Large Display</h3>
-        <AmountDisplay
-          amount="500.25"
-          currency="USDC"
-          usdValue="500.25"
-          size="lg"
-        />
+        <AmountDisplay amount="500.25" currency="USDC" usdValue="500.25" size="lg" />
       </div>
 
       <div>
         <h3 className="text-sm font-medium mb-2">Without USD</h3>
-        <AmountDisplay
-          amount="100.50"
-          currency="XLM"
-          showUsd={false}
-        />
+        <AmountDisplay amount="100.50" currency="XLM" showUsd={false} />
       </div>
     </div>
   ),

@@ -163,11 +163,7 @@ export function StepNavigation({
 
     const isDisabled = disabled || isNavigating || isStepLoading || (!canGoNext && !isLastStep);
     const showLoading = isNavigating || isStepLoading;
-    const buttonLabel = showLoading
-      ? loadingLabel
-      : isLastStep
-        ? completeLabel
-        : nextLabel;
+    const buttonLabel = showLoading ? loadingLabel : isLastStep ? completeLabel : nextLabel;
 
     return (
       <Button
@@ -237,9 +233,7 @@ export function StepNavigation({
         disabled={disabled || isValidating || isStepLoading}
         className="gap-2"
       >
-        {isValidating ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : null}
+        {isValidating ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
         Validate
       </Button>
     );
@@ -277,9 +271,7 @@ export function StepNavigationGroup({
   };
 
   return (
-    <div className={cn('flex items-center', spacingClasses[spacing], className)}>
-      {children}
-    </div>
+    <div className={cn('flex items-center', spacingClasses[spacing], className)}>{children}</div>
   );
 }
 
@@ -330,9 +322,7 @@ export function CustomStepButton({
       disabled={disabled || isLoading || isStepLoading}
       className={cn('gap-2', className)}
     >
-      {(isLoading || isStepLoading) && (
-        <Loader2 className="h-4 w-4 animate-spin" />
-      )}
+      {(isLoading || isStepLoading) && <Loader2 className="h-4 w-4 animate-spin" />}
       {children}
     </Button>
   );

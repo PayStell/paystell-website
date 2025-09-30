@@ -138,7 +138,9 @@ export function Stepper({
         {showProgress && (
           <>
             <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-              <span>Step {currentStepIndex + 1} of {steps.length}</span>
+              <span>
+                Step {currentStepIndex + 1} of {steps.length}
+              </span>
               <span>{Math.round(getProgress())}%</span>
             </div>
             <div className="w-full bg-muted h-2 rounded-full overflow-hidden">
@@ -189,7 +191,10 @@ export function Stepper({
           const status = getStepStatus(index, step.id);
 
           return (
-            <div key={step.id} className={cn('flex flex-col items-center relative z-10', currentSize.spacing)}>
+            <div
+              key={step.id}
+              className={cn('flex flex-col items-center relative z-10', currentSize.spacing)}
+            >
               <motion.div
                 className={getStepClasses(status)}
                 variants={stepVariants}
@@ -215,9 +220,7 @@ export function Stepper({
               </motion.div>
 
               <div className="text-center max-w-[120px]">
-                <span className={getStepTextClasses(status)}>
-                  {step.title}
-                </span>
+                <span className={getStepTextClasses(status)}>{step.title}</span>
                 {step.description && (
                   <p className="text-xs text-muted-foreground mt-1 line-clamp-2">
                     {step.description}
@@ -254,9 +257,7 @@ export function Stepper({
         )}
 
         {steps[currentStepIndex]?.description && (
-          <p className="text-sm text-muted-foreground">
-            {steps[currentStepIndex].description}
-          </p>
+          <p className="text-sm text-muted-foreground">{steps[currentStepIndex].description}</p>
         )}
       </div>
     </div>

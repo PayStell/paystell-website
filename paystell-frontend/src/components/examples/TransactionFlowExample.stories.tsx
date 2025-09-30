@@ -8,7 +8,8 @@ const meta: Meta<typeof TransactionFlowExample> = {
     layout: 'fullscreen',
     docs: {
       description: {
-        component: 'A complete example demonstrating the integration of stepper, transaction components, and state management for a wallet transaction flow.',
+        component:
+          'A complete example demonstrating the integration of stepper, transaction components, and state management for a wallet transaction flow.',
       },
     },
   },
@@ -22,7 +23,8 @@ export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Complete transaction flow example showcasing all stepper and transaction components working together.',
+        story:
+          'Complete transaction flow example showcasing all stepper and transaction components working together.',
       },
     },
   },

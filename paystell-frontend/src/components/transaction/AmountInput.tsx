@@ -27,7 +27,8 @@ const DollarSign = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-interface AmountInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
+interface AmountInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
   value?: string;
   initialValue?: string;
   onChange?: (value: string) => void;
@@ -84,10 +85,12 @@ export function AmountInput({
 
   // Use provided prices/balances or fallback to hook values
   const xlmPrice = propXlmPrice ?? hookXlmPrice;
-  const xlmBalance = propXlmBalance ?? (() => {
-    const xlmBalanceData = balances.find((asset) => asset.asset_type === 'native');
-    return xlmBalanceData ? Number(xlmBalanceData.balance) : 0;
-  })();
+  const xlmBalance =
+    propXlmBalance ??
+    (() => {
+      const xlmBalanceData = balances.find((asset) => asset.asset_type === 'native');
+      return xlmBalanceData ? Number(xlmBalanceData.balance) : 0;
+    })();
 
   // Calculate USD equivalent when amount or price changes
   useEffect(() => {
@@ -113,7 +116,8 @@ export function AmountInput({
         onValueChange(value, null);
       }
     }
-  }, [value, xlmPrice, onValueChange]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, xlmPrice]);
 
   // Validate amount format
   useEffect(() => {
@@ -195,7 +199,7 @@ export function AmountInput({
             'pr-20',
             hasError && 'border-destructive focus-visible:border-destructive',
             showUsdConversion && usdEquivalent && 'pr-32',
-            inputClassName
+            inputClassName,
           )}
           {...props}
         />
@@ -240,16 +244,12 @@ export function AmountInput({
 
         {/* USD equivalent as additional info */}
         {showUsdConversion && value && Number(value) > 0 && usdEquivalent && (
-          <span className="text-xs text-muted-foreground">
-            ≈ ${usdEquivalent} USD
-          </span>
+          <span className="text-xs text-muted-foreground">≈ ${usdEquivalent} USD</span>
         )}
       </div>
 
       {/* Error message */}
-      {error && (
-        <p className="text-xs text-destructive mt-1">{error}</p>
-      )}
+      {error && <p className="text-xs text-destructive mt-1">{error}</p>}
 
       {!isValidAmount && !error && value && (
         <p className="text-xs text-destructive mt-1">
@@ -295,9 +295,7 @@ export function AmountDisplay({
         {formatAmount(amount, 7)} {currency}
       </div>
       {showUsd && usdValue && (
-        <div className={cn('text-muted-foreground', usdSizeClasses[size])}>
-          ≈ ${usdValue} USD
-        </div>
+        <div className={cn('text-muted-foreground', usdSizeClasses[size])}>≈ ${usdValue} USD</div>
       )}
     </div>
   );

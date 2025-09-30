@@ -113,7 +113,7 @@ describe('optimistic-store', () => {
 
       // Move transaction
       useOptimisticStore.getState().moveTransaction('test_123', 'pending', 'completed');
-      
+
       const state = useOptimisticStore.getState();
       expect(state.queue.pending).toHaveLength(0);
       expect(state.queue.completed).toHaveLength(1);
@@ -187,7 +187,9 @@ describe('optimistic-store', () => {
       expect(pendingTransactions).toContainEqual(transaction2);
 
       // Get completed transactions
-      const completedTransactions = useOptimisticStore.getState().getTransactionsByStatus('completed');
+      const completedTransactions = useOptimisticStore
+        .getState()
+        .getTransactionsByStatus('completed');
       expect(completedTransactions).toHaveLength(1);
       expect(completedTransactions).toContainEqual(transaction3);
     });

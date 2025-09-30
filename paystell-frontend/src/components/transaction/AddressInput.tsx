@@ -4,19 +4,8 @@ import React, { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-import {
-  QrCode,
-  Copy,
-  Check,
-  User,
-  ExternalLink,
-  AlertCircle
-} from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { QrCode, Copy, Check, User, ExternalLink, AlertCircle } from 'lucide-react';
 import { cn, formatAddress } from '@/lib/utils';
 import { toast } from 'sonner';
 
@@ -39,7 +28,8 @@ const Star = ({ className, ...props }: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-interface AddressInputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
+interface AddressInputProps
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'size'> {
   value?: string;
   initialValue?: string;
   onChange?: (value: string) => void;
@@ -75,7 +65,7 @@ const mockAddressBook: AddressBookEntry[] = [
     name: 'John Doe',
     address: 'GCKFBEIYTKP74Q7PI54HDBLYCAUVKNUIOHOJ7YBQGGP7FVPWHRKL2WNN',
     type: 'personal',
-    note: 'Friend from college'
+    note: 'Friend from college',
   },
   {
     id: '2',
@@ -88,7 +78,7 @@ const mockAddressBook: AddressBookEntry[] = [
     name: 'Exchange Wallet',
     address: 'GAUZ3NGML7ANPF27YAEWTEYEPTVXHDZM3Y6KNNQJZW54TQQ5GDKJL7SQ',
     type: 'exchange',
-    note: 'Binance withdrawal address'
+    note: 'Binance withdrawal address',
   },
 ];
 
@@ -202,6 +192,7 @@ export function AddressInput({
   };
 
   const hasError = error || (!isValid && value.trim() && validationError);
+  const errorMessageId = 'address-input-error';
 
   return (
     <div className={cn('space-y-2', className)}>
@@ -212,11 +203,13 @@ export function AddressInput({
           onChange={handleInputChange}
           disabled={disabled}
           placeholder={placeholder}
+          aria-invalid={!!hasError}
+          aria-describedby={showValidation ? errorMessageId : undefined}
           className={cn(
             'pr-24',
             hasError && 'border-destructive focus-visible:border-destructive',
             showValidation && 'pr-32',
-            inputClassName
+            inputClassName,
           )}
           {...props}
         />
@@ -233,12 +226,10 @@ export function AddressInput({
               onClick={handleCopy}
               className="h-6 w-6 p-0"
               disabled={disabled}
+              aria-label="Copy address"
+              title="Copy address"
             >
-              {copied ? (
-                <Check className="h-3 w-3 text-green-500" />
-              ) : (
-                <Copy className="h-3 w-3" />
-              )}
+              {copied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
             </Button>
           )}
 
@@ -250,6 +241,8 @@ export function AddressInput({
               onClick={handleQrScan}
               className="h-6 w-6 p-0"
               disabled={disabled}
+              aria-label="Scan QR code"
+              title="Scan QR code"
             >
               <QrCode className="h-3 w-3" />
             </Button>
@@ -264,6 +257,8 @@ export function AddressInput({
                   size="sm"
                   className="h-6 w-6 p-0"
                   disabled={disabled}
+                  aria-label="Open address book"
+                  title="Open address book"
                 >
                   <Star className="h-3 w-3" />
                 </Button>
@@ -279,6 +274,7 @@ export function AddressInput({
                     {mockAddressBook.map((entry) => (
                       <button
                         key={entry.id}
+                        type="button"
                         onClick={() => handleAddressSelect(entry.address)}
                         className="w-full text-left p-3 rounded-md border hover:bg-muted transition-colors"
                       >
@@ -297,7 +293,10 @@ export function AddressInput({
                               )}
                             </div>
                           </div>
-                          <Badge variant={entry.type === 'personal' ? 'default' : 'secondary'} className="text-xs">
+                          <Badge
+                            variant={entry.type === 'personal' ? 'default' : 'secondary'}
+                            className="text-xs"
+                          >
                             {entry.type}
                           </Badge>
                         </div>
@@ -322,7 +321,10 @@ export function AddressInput({
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           {addressType && (
-            <Badge variant={addressType === 'stellar' ? 'default' : 'secondary'} className="text-xs">
+            <Badge
+              variant={addressType === 'stellar' ? 'default' : 'secondary'}
+              className="text-xs"
+            >
               {addressType === 'stellar' ? 'Stellar Address' : 'Federation Address'}
             </Badge>
           )}
@@ -335,7 +337,11 @@ export function AddressInput({
               onClick={() => {
                 const net = typeof network === 'string' ? network.toLowerCase() : 'testnet';
                 const explorerNet = net === 'public' || net === 'mainnet' ? 'public' : 'testnet';
-                window.open(`https://stellar.expert/explorer/${explorerNet}/account/${value}`, '_blank', 'noopener,noreferrer');
+                window.open(
+                  `https://stellar.expert/explorer/${explorerNet}/account/${value}`,
+                  '_blank',
+                  'noopener,noreferrer',
+                );
               }}
             >
               <ExternalLink className="h-3 w-3 mr-1" />
@@ -345,19 +351,21 @@ export function AddressInput({
         </div>
 
         {value && isValid && (
-          <span className="text-xs text-muted-foreground">
-            {formatAddress(value)}
-          </span>
+          <span className="text-xs text-muted-foreground">{formatAddress(value)}</span>
         )}
       </div>
 
       {/* Error message */}
       {error && (
-        <p className="text-xs text-destructive mt-1">{error}</p>
+        <p id={errorMessageId} className="text-xs text-destructive mt-1">
+          {error}
+        </p>
       )}
 
       {!error && validationError && value.trim() && (
-        <p className="text-xs text-destructive mt-1">{validationError}</p>
+        <p id={errorMessageId} className="text-xs text-destructive mt-1">
+          {validationError}
+        </p>
       )}
     </div>
   );
@@ -407,12 +415,10 @@ export function AddressDisplay({
   return (
     <div className={cn('flex items-center justify-between', className)}>
       <div className="min-w-0 flex-1">
-        {name && (
-          <div className={cn('font-medium', sizeClasses[size])}>
-            {name}
-          </div>
-        )}
-        <div className={cn('text-muted-foreground font-mono', size === 'sm' ? 'text-xs' : 'text-sm')}>
+        {name && <div className={cn('font-medium', sizeClasses[size])}>{name}</div>}
+        <div
+          className={cn('text-muted-foreground font-mono', size === 'sm' ? 'text-xs' : 'text-sm')}
+        >
           {formatAddress(address)}
         </div>
         <Badge variant={type === 'stellar' ? 'default' : 'secondary'} className="text-xs mt-1">
@@ -422,17 +428,8 @@ export function AddressDisplay({
 
       <div className="flex items-center space-x-1 ml-2">
         {showCopy && (
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={handleCopy}
-            className="h-8 w-8 p-0"
-          >
-            {copied ? (
-              <Check className="h-4 w-4 text-green-500" />
-            ) : (
-              <Copy className="h-4 w-4" />
-            )}
+          <Button variant="ghost" size="sm" onClick={handleCopy} className="h-8 w-8 p-0">
+            {copied ? <Check className="h-4 w-4 text-green-500" /> : <Copy className="h-4 w-4" />}
           </Button>
         )}
 
@@ -443,7 +440,11 @@ export function AddressDisplay({
             onClick={() => {
               const net = typeof network === 'string' ? network.toLowerCase() : 'testnet';
               const explorerNet = net === 'public' || net === 'mainnet' ? 'public' : 'testnet';
-              window.open(`https://stellar.expert/explorer/${explorerNet}/account/${address}`, '_blank', 'noopener,noreferrer');
+              window.open(
+                `https://stellar.expert/explorer/${explorerNet}/account/${address}`,
+                '_blank',
+                'noopener,noreferrer',
+              );
             }}
             className="h-8 w-8 p-0"
           >

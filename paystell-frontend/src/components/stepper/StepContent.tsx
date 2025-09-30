@@ -161,13 +161,9 @@ export function StepContent({
               <div className="space-y-4">
                 {/* Step Header */}
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-semibold tracking-tight">
-                    {currentStep.title}
-                  </h2>
+                  <h2 className="text-2xl font-semibold tracking-tight">{currentStep.title}</h2>
                   {currentStep.description && (
-                    <p className="text-muted-foreground">
-                      {currentStep.description}
-                    </p>
+                    <p className="text-muted-foreground">{currentStep.description}</p>
                   )}
                 </div>
 
@@ -203,21 +199,11 @@ export function StepLayout({
     <div className={cn('space-y-6', className)}>
       {(title || description) && (
         <div className={cn('space-y-2', headerClassName)}>
-          {title && (
-            <h2 className="text-2xl font-semibold tracking-tight">
-              {title}
-            </h2>
-          )}
-          {description && (
-            <p className="text-muted-foreground">
-              {description}
-            </p>
-          )}
+          {title && <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>}
+          {description && <p className="text-muted-foreground">{description}</p>}
         </div>
       )}
-      <div className="space-y-4">
-        {children}
-      </div>
+      <div className="space-y-4">{children}</div>
     </div>
   );
 }
@@ -247,11 +233,7 @@ export function StepSection({
               {required && <span className="text-destructive ml-1">*</span>}
             </h3>
           )}
-          {description && (
-            <p className="text-sm text-muted-foreground">
-              {description}
-            </p>
-          )}
+          {description && <p className="text-sm text-muted-foreground">{description}</p>}
         </div>
       )}
       {children}

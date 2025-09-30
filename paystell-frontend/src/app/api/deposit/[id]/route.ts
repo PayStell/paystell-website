@@ -1,22 +1,16 @@
-import { NextResponse, NextRequest } from "next/server";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
-import { DepositRequest } from "@/lib/types/deposit";
+import { NextResponse, NextRequest } from 'next/server';
+import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
+import { DepositRequest } from '@/lib/types/deposit';
 
-import { depositStore } from "../deposit-store";
+import { depositStore } from '../deposit-store';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 1. Authentication check
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json(
-        { message: "Authentication required" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: 'Authentication required' }, { status: 401 });
     }
 
     const { id } = params;
@@ -24,18 +18,12 @@ export async function GET(
     // 2. Get deposit request
     const deposit = depositStore.get(id);
     if (!deposit) {
-      return NextResponse.json(
-        { message: "Deposit request not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: 'Deposit request not found' }, { status: 404 });
     }
 
     // 3. Check if user has access to this deposit
     if (deposit.ownerId !== session.user.id) {
-      return NextResponse.json(
-        { message: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: 'Access denied' }, { status: 403 });
     }
 
     return NextResponse.json({
@@ -43,25 +31,18 @@ export async function GET(
       deposit,
     });
   } catch (error: unknown) {
-    console.error("Deposit retrieval error:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to retrieve deposit";
+    console.error('Deposit retrieval error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to retrieve deposit';
     return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 1. Authentication check
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json(
-        { message: "Authentication required" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: 'Authentication required' }, { status: 401 });
     }
 
     const { id } = params;
@@ -70,22 +51,16 @@ export async function PUT(
     // 2. Get existing deposit request
     const existingDeposit = depositStore.get(id);
     if (!existingDeposit) {
-      return NextResponse.json(
-        { message: "Deposit request not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: 'Deposit request not found' }, { status: 404 });
     }
 
     // 3. Check if user has access to this deposit
     if (existingDeposit.ownerId !== session.user.id) {
-      return NextResponse.json(
-        { message: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: 'Access denied' }, { status: 403 });
     }
 
     // 4. Validate updates
-    const allowedUpdates = ["status", "transactionHash", "confirmedAt"];
+    const allowedUpdates = ['status', 'transactionHash', 'confirmedAt'];
     const validUpdates: Partial<DepositRequest> = {};
 
     for (const [key, value] of Object.entries(updates)) {
@@ -102,25 +77,18 @@ export async function PUT(
       deposit: updatedDeposit,
     });
   } catch (error: unknown) {
-    console.error("Deposit update error:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to update deposit";
+    console.error('Deposit update error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to update deposit';
     return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
   try {
     // 1. Authentication check
     const session = await getServerSession(authOptions);
     if (!session?.user) {
-      return NextResponse.json(
-        { message: "Authentication required" },
-        { status: 401 }
-      );
+      return NextResponse.json({ message: 'Authentication required' }, { status: 401 });
     }
 
     const { id } = params;
@@ -128,18 +96,12 @@ export async function DELETE(
     // 2. Get existing deposit request
     const existingDeposit = depositStore.get(id);
     if (!existingDeposit) {
-      return NextResponse.json(
-        { message: "Deposit request not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: 'Deposit request not found' }, { status: 404 });
     }
 
     // 3. Check if user has access to this deposit
     if (existingDeposit.ownerId !== session.user.id) {
-      return NextResponse.json(
-        { message: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ message: 'Access denied' }, { status: 403 });
     }
 
     // 4. Delete deposit request
@@ -147,12 +109,11 @@ export async function DELETE(
 
     return NextResponse.json({
       success: true,
-      message: "Deposit request deleted",
+      message: 'Deposit request deleted',
     });
   } catch (error: unknown) {
-    console.error("Deposit deletion error:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to delete deposit";
+    console.error('Deposit deletion error:', error);
+    const errorMessage = error instanceof Error ? error.message : 'Failed to delete deposit';
     return NextResponse.json({ message: errorMessage }, { status: 500 });
   }
 }

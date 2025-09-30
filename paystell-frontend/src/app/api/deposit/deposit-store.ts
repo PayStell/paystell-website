@@ -1,4 +1,4 @@
-import { DepositRequest } from "@/lib/types/deposit";
+import { DepositRequest } from '@/lib/types/deposit';
 
 // Shared in-memory store for deposit requests
 // In production, use a database
@@ -18,7 +18,7 @@ export const depositStore = {
   update: (id: string, updates: Partial<DepositRequest>) => {
     const existing = depositRequests.get(id);
     if (!existing) return null;
-    
+
     const updated = { ...existing, ...updates };
     depositRequests.set(id, updated);
     return updated;
@@ -33,7 +33,6 @@ export const depositStore = {
   },
 
   getByUser: (userId: string) => {
-    return Array.from(depositRequests.values())
-      .filter(deposit => deposit.ownerId === userId);
-  }
+    return Array.from(depositRequests.values()).filter((deposit) => deposit.ownerId === userId);
+  },
 };

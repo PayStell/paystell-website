@@ -72,13 +72,11 @@ export async function POST(request: Request) {
 ## Security Considerations
 
 1. **Token Validation**
-
    - Checks for presence of token
    - Validates token format
    - Future: Add token expiration check
 
 2. **Header Processing**
-
    - Supports Bearer token format
    - Case-insensitive header checks
    - Proper string sanitization
@@ -91,13 +89,11 @@ export async function POST(request: Request) {
 ## Best Practices
 
 1. **Usage Guidelines**
-
    - Apply to all protected routes
    - Chain with other middleware as needed
    - Keep token validation logic centralized
 
 2. **Error Handling**
-
    - Clear error messages
    - Proper logging
    - Standard response format

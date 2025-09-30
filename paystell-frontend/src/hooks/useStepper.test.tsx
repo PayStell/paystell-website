@@ -56,7 +56,7 @@ const mockStepsWithConditions: StepConfig[] = [
 
 const createWrapper = (
   steps: StepConfig[] = mockSteps,
-  props: Partial<React.ComponentProps<typeof StepperProvider>> = {}
+  props: Partial<React.ComponentProps<typeof StepperProvider>> = {},
 ) => {
   const Wrapper = ({ children }: { children: React.ReactNode }) => (
     <StepperProvider steps={steps} {...props}>
@@ -328,7 +328,11 @@ describe('useStepper', () => {
 
       // All steps should be included
       expect(result.current.totalSteps).toBe(3);
-      expect(result.current.steps.map((s: StepConfig) => s.id)).toEqual(['step1', 'step2', 'step3']);
+      expect(result.current.steps.map((s: StepConfig) => s.id)).toEqual([
+        'step1',
+        'step2',
+        'step3',
+      ]);
     });
   });
 
@@ -346,7 +350,7 @@ describe('useStepper', () => {
 
       expect(onStepChange).toHaveBeenCalledWith(
         expect.objectContaining({ id: 'step2' }),
-        expect.objectContaining({ id: 'step1' })
+        expect.objectContaining({ id: 'step1' }),
       );
     });
 

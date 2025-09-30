@@ -6,14 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Textarea } from '@/components/ui/textarea';
-import {
-  Wallet,
-  ArrowRight,
-  CheckCircle,
-  AlertCircle,
-  RefreshCw,
-  User,
-} from 'lucide-react';
+import { Wallet, ArrowRight, CheckCircle, AlertCircle, RefreshCw, User } from 'lucide-react';
 
 // Import our stepper components
 import { StepperProvider, useStepper } from '@/hooks/useStepper';
@@ -44,9 +37,7 @@ const AmountStep: React.FC = () => {
       <div className="space-y-6">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Enter Amount</h2>
-          <p className="text-muted-foreground mt-2">
-            How much XLM would you like to send?
-          </p>
+          <p className="text-muted-foreground mt-2">How much XLM would you like to send?</p>
         </div>
 
         <div className="max-w-md mx-auto">
@@ -86,9 +77,7 @@ const DestinationStep: React.FC = () => {
       <div className="space-y-6">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Destination Address</h2>
-          <p className="text-muted-foreground mt-2">
-            Who are you sending XLM to?
-          </p>
+          <p className="text-muted-foreground mt-2">Who are you sending XLM to?</p>
         </div>
 
         <div className="max-w-md mx-auto">
@@ -121,9 +110,7 @@ const MemoStep: React.FC = () => {
       <div className="space-y-6">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Add a Memo</h2>
-          <p className="text-muted-foreground mt-2">
-            Optional: Add a note to your transaction
-          </p>
+          <p className="text-muted-foreground mt-2">Optional: Add a note to your transaction</p>
         </div>
 
         <div className="max-w-md mx-auto">
@@ -136,16 +123,12 @@ const MemoStep: React.FC = () => {
               maxLength={28}
               className="resize-none"
             />
-            <div className="text-xs text-muted-foreground text-right">
-              {memo.length}/28
-            </div>
+            <div className="text-xs text-muted-foreground text-right">{memo.length}/28</div>
           </div>
         </div>
 
         <div className="text-center">
-          <Badge variant="secondary">
-            {memo ? 'Memo Added' : 'No Memo (Optional)'}
-          </Badge>
+          <Badge variant="secondary">{memo ? 'Memo Added' : 'No Memo (Optional)'}</Badge>
         </div>
       </div>
     </StepContent>
@@ -174,7 +157,7 @@ const ReviewStep: React.FC = () => {
 
     try {
       // Simulate transaction processing
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       setIsCompleted(true);
     } catch (error) {
       handleTransactionError(error);
@@ -215,9 +198,7 @@ const ReviewStep: React.FC = () => {
       <div className="space-y-6">
         <div className="text-center">
           <h2 className="text-2xl font-semibold">Review Transaction</h2>
-          <p className="text-muted-foreground mt-2">
-            Please review the details before sending
-          </p>
+          <p className="text-muted-foreground mt-2">Please review the details before sending</p>
         </div>
 
         <TransactionSummary
@@ -238,14 +219,8 @@ const ReviewStep: React.FC = () => {
  * Main Transaction Flow Component
  */
 const TransactionFlowContent: React.FC = () => {
-  const {
-    currentStepIndex,
-    totalSteps,
-    canGoNext,
-    canGoPrevious,
-    nextStep,
-    currentStep,
-  } = useStepper();
+  const { currentStepIndex, totalSteps, canGoNext, canGoPrevious, nextStep, currentStep } =
+    useStepper();
 
   const handleNext = async () => {
     try {
@@ -282,9 +257,7 @@ const TransactionFlowContent: React.FC = () => {
             <span>{currentStep?.title}</span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          {/* Step content is rendered by the step component itself */}
-        </CardContent>
+        <CardContent>{/* Step content is rendered by the step component itself */}</CardContent>
       </Card>
 
       {/* Navigation */}
@@ -295,14 +268,16 @@ const TransactionFlowContent: React.FC = () => {
         {...(!isLastStep && {
           onCustomAction: handleNext,
           customActionLabel: 'Continue',
-          customActionVariant: 'default' as const
+          customActionVariant: 'default' as const,
         })}
       />
 
       {/* Progress Stats */}
       <div className="text-center">
         <div className="flex justify-center space-x-4 text-sm text-muted-foreground">
-          <span>Step {currentStepIndex + 1} of {totalSteps}</span>
+          <span>
+            Step {currentStepIndex + 1} of {totalSteps}
+          </span>
           <span>•</span>
           <span>{Math.round(((currentStepIndex + 1) / totalSteps) * 100)}% Complete</span>
         </div>
@@ -372,8 +347,8 @@ export const TransactionFlowExample: React.FC = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-muted-foreground">
-              This example demonstrates a complete transaction flow using the stepper
-              components with validation, error handling, and mobile responsiveness.
+              This example demonstrates a complete transaction flow using the stepper components
+              with validation, error handling, and mobile responsiveness.
             </p>
 
             <div className="space-y-4">
@@ -463,19 +438,11 @@ export const TransactionFlowExample: React.FC = () => {
             </CardHeader>
             <CardContent className="space-y-3">
               <div className="flex flex-wrap gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsFlowActive(false)}
-                >
+                <Button variant="outline" size="sm" onClick={() => setIsFlowActive(false)}>
                   <ArrowRight className="w-4 h-4 mr-2" />
                   Back to Demo
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => window.location.reload()}
-                >
+                <Button variant="outline" size="sm" onClick={() => window.location.reload()}>
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Reset Flow
                 </Button>

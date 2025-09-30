@@ -2,7 +2,6 @@
 
 import { server } from '@/lib/wallet/stellar-service';
 
-
 /**
  * Types of Stellar operations that affect fee calculation
  */
@@ -140,7 +139,7 @@ export async function getNetworkFeeStats(): Promise<NetworkFeeStats> {
   try {
     // Get recent fee stats from Horizon
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const feeStats = await server.feeStats() as any;
+    const feeStats = (await server.feeStats()) as any;
 
     return {
       min: feeStats.min_accepted_fee,
@@ -169,7 +168,7 @@ export async function getNetworkFeeStats(): Promise<NetworkFeeStats> {
  */
 export async function calculateFee(
   options: FeeCalculationOptions = {},
-  xlmPrice?: number
+  xlmPrice?: number,
 ): Promise<FeeEstimation> {
   const {
     operationCount = 1,
@@ -255,7 +254,7 @@ export async function calculateFee(
  */
 export async function estimatePaymentFee(
   xlmPrice?: number,
-  priority: 'low' | 'medium' | 'high' = 'medium'
+  priority: 'low' | 'medium' | 'high' = 'medium',
 ): Promise<FeeEstimation> {
   const feeBumpMultiplier = {
     low: 1,
@@ -263,12 +262,15 @@ export async function estimatePaymentFee(
     high: 3,
   }[priority];
 
-  return calculateFee({
-    operationCount: 1,
-    operationTypes: ['payment'],
-    useNetworkFee: true,
-    feeBumpMultiplier,
-  }, xlmPrice);
+  return calculateFee(
+    {
+      operationCount: 1,
+      operationTypes: ['payment'],
+      useNetworkFee: true,
+      feeBumpMultiplier,
+    },
+    xlmPrice,
+  );
 }
 
 /**
@@ -277,7 +279,7 @@ export async function estimatePaymentFee(
 export async function estimateComplexTransactionFee(
   operations: OperationType[],
   xlmPrice?: number,
-  priority: 'low' | 'medium' | 'high' = 'medium'
+  priority: 'low' | 'medium' | 'high' = 'medium',
 ): Promise<FeeEstimation> {
   const feeBumpMultiplier = {
     low: 1,
@@ -285,12 +287,15 @@ export async function estimateComplexTransactionFee(
     high: 3,
   }[priority];
 
-  return calculateFee({
-    operationCount: operations.length,
-    operationTypes: operations,
-    useNetworkFee: true,
-    feeBumpMultiplier,
-  }, xlmPrice);
+  return calculateFee(
+    {
+      operationCount: operations.length,
+      operationTypes: operations,
+      useNetworkFee: true,
+      feeBumpMultiplier,
+    },
+    xlmPrice,
+  );
 }
 
 /**
@@ -303,27 +308,18 @@ export function formatFee(
     precision?: number;
     inUsd?: boolean;
     xlmPrice?: number;
-  } = {}
+  } = {},
 ): string {
-  const {
-    includeUnit = true,
-    precision = 7,
-    inUsd = false,
-    xlmPrice,
-  } = options;
+  const { includeUnit = true, precision = 7, inUsd = false, xlmPrice } = options;
 
   const feeInXlm = Number(feeInStroops) / 10_000_000;
 
   if (inUsd && xlmPrice) {
     const feeInUsdValue = feeInXlm * xlmPrice;
-    return includeUnit
-      ? `$${feeInUsdValue.toFixed(4)} USD`
-      : feeInUsdValue.toFixed(4);
+    return includeUnit ? `$${feeInUsdValue.toFixed(4)} USD` : feeInUsdValue.toFixed(4);
   }
 
-  return includeUnit
-    ? `${feeInXlm.toFixed(precision)} XLM`
-    : feeInXlm.toFixed(precision);
+  return includeUnit ? `${feeInXlm.toFixed(precision)} XLM` : feeInXlm.toFixed(precision);
 }
 
 /**
@@ -360,7 +356,7 @@ function getEstimatedConfirmationTime(congestionLevel: 'low' | 'medium' | 'high'
  */
 export function validateFee(
   feeInStroops: string,
-  operationCount: number = 1
+  operationCount: number = 1,
 ): {
   isValid: boolean;
   error?: string;

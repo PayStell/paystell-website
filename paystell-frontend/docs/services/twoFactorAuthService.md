@@ -84,18 +84,15 @@ async function disableTwoFactorAuth(): Promise<{
 All functions implement comprehensive error handling:
 
 1. **Network Errors**
-
    - Connection issues
    - Server errors
    - Timeout handling
 
 2. **Authentication Errors**
-
    - Token missing or invalid
    - Session expired
 
 3. **Rate Limiting**
-
    - Too many attempts
    - Proper retry-after handling
 
@@ -145,13 +142,11 @@ try {
 ## Security Considerations
 
 1. **Token Management**
-
    - Secure storage in localStorage
    - Proper token validation
    - Token expiration handling
 
 2. **Rate Limiting**
-
    - Prevents brute force attacks
    - Configurable limits
    - Clear user feedback
