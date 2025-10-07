@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { QrCode, Copy, Download, RefreshCw } from "lucide-react";
-import { QRCodeSVG } from "qrcode.react";
-import { toast } from "sonner";
-import { DepositRequest } from "@/lib/types/deposit";
-import { generateDepositQRData, formatDepositAmount } from "@/lib/deposit/deposit-utils";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { QrCode, Copy, Download, RefreshCw } from 'lucide-react';
+import { QRCodeSVG } from 'qrcode.react';
+import { toast } from 'sonner';
+import { DepositRequest } from '@/lib/types/deposit';
+import { generateDepositQRData, formatDepositAmount } from '@/lib/deposit/deposit-utils';
 
 interface DepositQRCodeProps {
   deposit: DepositRequest;
@@ -18,14 +18,14 @@ interface DepositQRCodeProps {
   className?: string;
 }
 
-export function DepositQRCode({ 
-  deposit, 
-  onRefresh, 
+export function DepositQRCode({
+  deposit,
+  onRefresh,
   onAmountChange,
-  className 
+  className,
 }: DepositQRCodeProps) {
   const [showQR, setShowQR] = useState(true);
-  const [customAmount, setCustomAmount] = useState(deposit.amount || "");
+  const [customAmount, setCustomAmount] = useState(deposit.amount || '');
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const qrData = generateDepositQRData({
@@ -36,18 +36,18 @@ export function DepositQRCode({
   const handleCopyAddress = async () => {
     try {
       await navigator.clipboard.writeText(deposit.address);
-      toast.success("Address copied to clipboard");
+      toast.success('Address copied to clipboard');
     } catch (error) {
-      toast.error("Failed to copy address");
+      toast.error('Failed to copy address');
     }
   };
 
   const handleCopyQRData = async () => {
     try {
       await navigator.clipboard.writeText(qrData);
-      toast.success("Payment URI copied to clipboard");
+      toast.success('Payment URI copied to clipboard');
     } catch (error) {
-      toast.error("Failed to copy payment URI");
+      toast.error('Failed to copy payment URI');
     }
   };
 
@@ -89,21 +89,12 @@ export function DepositQRCode({
           </div>
           <div className="flex gap-2">
             {onRefresh && (
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleRefresh}
-                disabled={isRefreshing}
-              >
+              <Button variant="outline" size="sm" onClick={handleRefresh} disabled={isRefreshing}>
                 <RefreshCw className={`h-4 w-4 ${isRefreshing ? 'animate-spin' : ''}`} />
               </Button>
             )}
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setShowQR(!showQR)}
-            >
-              {showQR ? "Hide" : "Show"} QR
+            <Button variant="outline" size="sm" onClick={() => setShowQR(!showQR)}>
+              {showQR ? 'Hide' : 'Show'} QR
             </Button>
           </div>
         </CardTitle>
@@ -121,38 +112,22 @@ export function DepositQRCode({
             step="0.0000001"
             min="0"
           />
-          <p className="text-xs text-muted-foreground">
-            Leave empty to allow any amount
-          </p>
+          <p className="text-xs text-muted-foreground">Leave empty to allow any amount</p>
         </div>
 
         {/* QR Code Display */}
         {showQR && (
           <div className="flex flex-col items-center space-y-4">
             <div className="p-4 bg-white rounded-lg border-2 border-dashed border-gray-200">
-              <QRCodeSVG
-                value={qrData}
-                size={200}
-                level="M"
-                includeMargin
-                className="mx-auto"
-              />
+              <QRCodeSVG value={qrData} size={200} level="M" includeMargin className="mx-auto" />
             </div>
-            
+
             <div className="flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleCopyQRData}
-              >
+              <Button variant="outline" size="sm" onClick={handleCopyQRData}>
                 <Copy className="h-4 w-4 mr-2" />
                 Copy URI
               </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleDownloadQR}
-              >
+              <Button variant="outline" size="sm" onClick={handleDownloadQR}>
                 <Download className="h-4 w-4 mr-2" />
                 Download
               </Button>
@@ -164,16 +139,8 @@ export function DepositQRCode({
         <div className="space-y-2">
           <Label>Deposit Address</Label>
           <div className="flex items-center gap-2">
-            <Input
-              value={deposit.address}
-              readOnly
-              className="font-mono text-sm"
-            />
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleCopyAddress}
-            >
+            <Input value={deposit.address} readOnly className="font-mono text-sm" />
+            <Button variant="outline" size="sm" onClick={handleCopyAddress}>
               <Copy className="h-4 w-4" />
             </Button>
           </div>
@@ -183,9 +150,7 @@ export function DepositQRCode({
         <div className="space-y-2">
           <Label>Payment URI</Label>
           <div className="p-3 bg-muted rounded-lg">
-            <code className="text-xs font-mono break-all text-muted-foreground">
-              {qrData}
-            </code>
+            <code className="text-xs font-mono break-all text-muted-foreground">{qrData}</code>
           </div>
         </div>
 

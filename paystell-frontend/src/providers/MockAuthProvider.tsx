@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { Permission } from "@/lib/types/user";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Permission } from '@/lib/types/user';
 
 interface MockUser {
   id: number;
@@ -19,12 +19,7 @@ interface MockAuthContextType {
   token: string | null;
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
-  register: (
-    name: string,
-    email: string,
-    password: string,
-    role: string
-  ) => Promise<void>;
+  register: (name: string, email: string, password: string, role: string) => Promise<void>;
   logout: () => Promise<void>;
   loading: boolean;
   isLoading: boolean;
@@ -33,9 +28,7 @@ interface MockAuthContextType {
 
 const MockAuthContext = createContext<MockAuthContextType | undefined>(undefined);
 
-export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
+export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<MockUser | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -44,8 +37,8 @@ export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // Simulate checking for stored auth data
     const checkAuth = () => {
       try {
-        const storedToken = localStorage.getItem("mock_token");
-        const storedUser = localStorage.getItem("mock_user");
+        const storedToken = localStorage.getItem('mock_token');
+        const storedUser = localStorage.getItem('mock_user');
 
         if (storedToken && storedUser) {
           const parsedUser = JSON.parse(storedUser);
@@ -53,13 +46,13 @@ export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({
           setUser(parsedUser);
         }
       } catch (error) {
-        console.error("Error checking mock auth:", error);
+        console.error('Error checking mock auth:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       checkAuth();
     } else {
       setLoading(false);
@@ -70,29 +63,24 @@ export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({
     // Mock login - accept any credentials
     const mockUser: MockUser = {
       id: 1,
-      name: "Test User",
+      name: 'Test User',
       email: email,
-      role: "user",
+      role: 'user',
       isEmailVerified: true,
       isWalletVerified: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
 
-    const mockToken = "mock_jwt_token_" + Date.now();
+    const mockToken = 'mock_jwt_token_' + Date.now();
 
     setToken(mockToken);
     setUser(mockUser);
-    localStorage.setItem("mock_token", mockToken);
-    localStorage.setItem("mock_user", JSON.stringify(mockUser));
+    localStorage.setItem('mock_token', mockToken);
+    localStorage.setItem('mock_user', JSON.stringify(mockUser));
   };
 
-  const register = async (
-    name: string,
-    email: string,
-    password: string,
-    role: string
-  ) => {
+  const register = async (name: string, email: string, password: string, role: string) => {
     // Mock registration
     const mockUser: MockUser = {
       id: 1,
@@ -105,19 +93,19 @@ export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({
       updatedAt: new Date(),
     };
 
-    const mockToken = "mock_jwt_token_" + Date.now();
+    const mockToken = 'mock_jwt_token_' + Date.now();
 
     setToken(mockToken);
     setUser(mockUser);
-    localStorage.setItem("mock_token", mockToken);
-    localStorage.setItem("mock_user", JSON.stringify(mockUser));
+    localStorage.setItem('mock_token', mockToken);
+    localStorage.setItem('mock_user', JSON.stringify(mockUser));
   };
 
   const logout = async () => {
     setToken(null);
     setUser(null);
-    localStorage.removeItem("mock_token");
-    localStorage.removeItem("mock_user");
+    localStorage.removeItem('mock_token');
+    localStorage.removeItem('mock_user');
   };
 
   return (
@@ -145,7 +133,7 @@ export const MockAuthProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useMockAuth = () => {
   const context = useContext(MockAuthContext);
   if (context === undefined) {
-    throw new Error("useMockAuth must be used within a MockAuthProvider");
+    throw new Error('useMockAuth must be used within a MockAuthProvider');
   }
   return context;
 };

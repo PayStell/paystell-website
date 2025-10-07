@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { CheckCircle2, ExternalLink, ArrowRight } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 
 interface SuccessStepProps {
   formData: {
@@ -13,7 +13,7 @@ interface SuccessStepProps {
 }
 
 export function SuccessStep({ formData }: SuccessStepProps) {
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -24,7 +24,7 @@ export function SuccessStep({ formData }: SuccessStepProps) {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     show: {
       opacity: 1,
@@ -35,7 +35,7 @@ export function SuccessStep({ formData }: SuccessStepProps) {
     },
   };
 
-  const checkmarkVariants = {
+  const checkmarkVariants: Variants = {
     hidden: { scale: 0 },
     show: {
       scale: 1,
@@ -48,7 +48,7 @@ export function SuccessStep({ formData }: SuccessStepProps) {
     },
   };
 
-  const listItemVariants = {
+  const listItemVariants: Variants = {
     hidden: { opacity: 0, x: -20 },
     show: {
       opacity: 1,

@@ -1,10 +1,12 @@
-"use client";
+'use client';
 
-import { Horizon, Networks } from "@stellar/stellar-sdk";
-import { DepositTransaction, DepositMonitoringConfig } from "@/lib/types/deposit";
+import { Horizon, Networks } from '@stellar/stellar-sdk';
+import { DepositTransaction, DepositMonitoringConfig } from '@/lib/types/deposit';
 
 // Initialize Horizon server (default to testnet; allow override via env)
-const server = new Horizon.Server(process.env.NEXT_PUBLIC_HORIZON_URL ?? "https://horizon-testnet.stellar.org");
+const server = new Horizon.Server(
+  process.env.NEXT_PUBLIC_HORIZON_URL ?? 'https://horizon-testnet.stellar.org',
+);
 
 export class StellarMonitor {
   private monitoringConfigs: Map<string, DepositMonitoringConfig> = new Map();
@@ -22,7 +24,7 @@ export class StellarMonitor {
    */
   private startMonitoring() {
     if (this.isMonitoring) return;
-    
+
     this.isMonitoring = true;
     this.pollingInterval = setInterval(() => {
       this.checkForNewTransactions();
@@ -46,7 +48,7 @@ export class StellarMonitor {
   public addMonitoring(config: DepositMonitoringConfig) {
     const key = `${config.address}_${config.asset}`;
     this.monitoringConfigs.set(key, config);
-    
+
     if (config.callback) {
       this.callbacks.set(key, config.callback);
     }
@@ -68,14 +70,14 @@ export class StellarMonitor {
     try {
       // Get all unique addresses being monitored
       const addresses = Array.from(this.monitoringConfigs.keys())
-        .map(key => key.split('_')[0])
+        .map((key) => key.split('_')[0])
         .filter((address, index, self) => self.indexOf(address) === index);
 
       for (const address of addresses) {
         await this.checkAddressTransactions(address);
       }
     } catch (error) {
-      console.error("Error checking for new transactions:", error);
+      console.error('Error checking for new transactions:', error);
     }
   }
 
@@ -84,10 +86,7 @@ export class StellarMonitor {
    */
   private async checkAddressTransactions(address: string) {
     try {
-      const builder = server.transactions()
-        .forAccount(address)
-        .order("asc")
-        .limit(10);
+      const builder = server.transactions().forAccount(address).order('asc').limit(10);
 
       const lastCursor = this.lastCursors.get(address);
       if (lastCursor) {
@@ -117,15 +116,18 @@ export class StellarMonitor {
    */
   private async processTransaction(tx: Record<string, unknown>, address: string) {
     try {
-      const operations = await (tx as { operations(): Promise<{ records: Record<string, unknown>[] }> }).operations();
+      const operations = await (
+        tx as { operations(): Promise<{ records: Record<string, unknown>[] }> }
+      ).operations();
       if (operations.records.length === 0) return;
 
       // Get monitoring configs for this address
-      const configs = Array.from(this.monitoringConfigs.entries())
-        .filter(([key]) => key.startsWith(`${address}_`));
+      const configs = Array.from(this.monitoringConfigs.entries()).filter(([key]) =>
+        key.startsWith(`${address}_`),
+      );
 
       for (const operation of operations.records) {
-        if (operation.type !== "payment") continue;
+        if (operation.type !== 'payment') continue;
         // Incoming payment only
         if (operation.to !== address) continue;
         for (const [key, config] of configs) {
@@ -137,7 +139,7 @@ export class StellarMonitor {
         }
       }
     } catch (error) {
-      console.error("Error processing transaction:", error);
+      console.error('Error processing transaction:', error);
     }
   }
 
@@ -150,8 +152,9 @@ export class StellarMonitor {
     txMemo?: string | null,
   ): boolean {
     // Check asset (normalize native <-> XLM)
-    const normalize = (s: string) => (s.toUpperCase() === "NATIVE" ? "XLM" : s.toUpperCase());
-    const opAsset = operation.asset_type === "native" ? "XLM" : String(operation.asset_code ?? "").toUpperCase();
+    const normalize = (s: string) => (s.toUpperCase() === 'NATIVE' ? 'XLM' : s.toUpperCase());
+    const opAsset =
+      operation.asset_type === 'native' ? 'XLM' : String(operation.asset_code ?? '').toUpperCase();
     if (normalize(config.asset) !== opAsset) return false;
 
     // Check minimum amount
@@ -175,17 +178,20 @@ export class StellarMonitor {
   /**
    * Create a DepositTransaction from Stellar transaction data
    */
-  private createDepositTransaction(tx: Record<string, unknown>, operation: Record<string, unknown>): DepositTransaction {
+  private createDepositTransaction(
+    tx: Record<string, unknown>,
+    operation: Record<string, unknown>,
+  ): DepositTransaction {
     const memo = (tx as { memo?: string | null }).memo ?? undefined;
     return {
       id: `deposit_${tx.hash}`,
       hash: tx.hash as string,
       amount: operation.amount as string,
-      asset: operation.asset_type === "native" ? "XLM" : operation.asset_code as string,
+      asset: operation.asset_type === 'native' ? 'XLM' : (operation.asset_code as string),
       from: operation.from as string,
       to: operation.to as string,
       memo,
-      status: "completed",
+      status: 'completed',
       createdAt: tx.created_at as string,
       confirmedAt: tx.created_at as string,
       ledger: tx.ledger as number,
@@ -204,19 +210,22 @@ export class StellarMonitor {
       if (!alreadyDelivered) {
         const callback = this.callbacks.get(configKey);
         if (callback) callback(transaction);
-        localStorage.setItem(deliveredKey, "1");
+        localStorage.setItem(deliveredKey, '1');
       }
 
       // Persist/store once per tx
       const processedKey = `processed_${transaction.hash}`;
       const alreadyProcessed = localStorage.getItem(processedKey);
       if (!alreadyProcessed) {
-        localStorage.setItem(processedKey, JSON.stringify({ hash: transaction.hash, at: Date.now() }));
+        localStorage.setItem(
+          processedKey,
+          JSON.stringify({ hash: transaction.hash, at: Date.now() }),
+        );
         this.storeTransaction(transaction);
-        console.log("New deposit transaction detected:", transaction);
+        console.log('New deposit transaction detected:', transaction);
       }
     } catch (error) {
-      console.error("Error handling deposit transaction:", error);
+      console.error('Error handling deposit transaction:', error);
     }
   }
 
@@ -225,23 +234,23 @@ export class StellarMonitor {
    */
   private storeTransaction(transaction: DepositTransaction) {
     try {
-      const stored = localStorage.getItem("paystell_deposit_transactions");
+      const stored = localStorage.getItem('paystell_deposit_transactions');
       const transactions = stored ? JSON.parse(stored) : [];
-      
+
       // Check if transaction already exists
       const exists = transactions.some((t: DepositTransaction) => t.hash === transaction.hash);
       if (exists) return;
 
       transactions.unshift(transaction);
-      
+
       // Keep only last 100 transactions
       if (transactions.length > 100) {
         transactions.splice(100);
       }
 
-      localStorage.setItem("paystell_deposit_transactions", JSON.stringify(transactions));
+      localStorage.setItem('paystell_deposit_transactions', JSON.stringify(transactions));
     } catch (error) {
-      console.error("Error storing transaction:", error);
+      console.error('Error storing transaction:', error);
     }
   }
 
@@ -250,10 +259,10 @@ export class StellarMonitor {
    */
   public getTransactionHistory(): DepositTransaction[] {
     try {
-      const stored = localStorage.getItem("paystell_deposit_transactions");
+      const stored = localStorage.getItem('paystell_deposit_transactions');
       return stored ? JSON.parse(stored) : [];
     } catch (error) {
-      console.error("Error getting transaction history:", error);
+      console.error('Error getting transaction history:', error);
       return [];
     }
   }
@@ -262,7 +271,7 @@ export class StellarMonitor {
    * Clear transaction history
    */
   public clearTransactionHistory() {
-    localStorage.removeItem("paystell_deposit_transactions");
+    localStorage.removeItem('paystell_deposit_transactions');
   }
 
   /**

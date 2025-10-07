@@ -29,7 +29,7 @@ api.interceptors.response.use(
       window.location.href = '/login';
     }
     return Promise.reject(error);
-  }
+  },
 );
 
 export interface CreateDepositRequest {
@@ -67,7 +67,9 @@ export interface MonitoringResponse {
   message?: string;
 }
 
-export const createDepositRequest = async (data: CreateDepositRequest): Promise<DepositResponse> => {
+export const createDepositRequest = async (
+  data: CreateDepositRequest,
+): Promise<DepositResponse> => {
   try {
     const response = await api.post('/api/deposit', data);
     return response.data;
@@ -79,12 +81,15 @@ export const createDepositRequest = async (data: CreateDepositRequest): Promise<
   }
 };
 
-export const getDepositRequests = async (userId?: string, status?: string): Promise<DepositsResponse> => {
+export const getDepositRequests = async (
+  userId?: string,
+  status?: string,
+): Promise<DepositsResponse> => {
   try {
     const params = new URLSearchParams();
     if (userId) params.append('userId', userId);
     if (status) params.append('status', status);
-    
+
     const response = await api.get(`/api/deposit?${params.toString()}`);
     return response.data;
   } catch (error) {
@@ -107,7 +112,10 @@ export const getDepositRequest = async (id: string): Promise<DepositResponse> =>
   }
 };
 
-export const updateDepositRequest = async (id: string, updates: Record<string, unknown>): Promise<DepositResponse> => {
+export const updateDepositRequest = async (
+  id: string,
+  updates: Record<string, unknown>,
+): Promise<DepositResponse> => {
   try {
     const response = await api.put(`/api/deposit/${id}`, updates);
     return response.data;
@@ -143,12 +151,15 @@ export const startMonitoring = async (config: MonitoringConfig): Promise<Monitor
   }
 };
 
-export const getMonitoringConfigs = async (address?: string, asset?: string): Promise<MonitoringResponse> => {
+export const getMonitoringConfigs = async (
+  address?: string,
+  asset?: string,
+): Promise<MonitoringResponse> => {
   try {
     const params = new URLSearchParams();
     if (address) params.append('address', address);
     if (asset) params.append('asset', asset);
-    
+
     const response = await api.get(`/api/deposit/monitor?${params.toString()}`);
     return response.data;
   } catch (error) {
@@ -159,12 +170,15 @@ export const getMonitoringConfigs = async (address?: string, asset?: string): Pr
   }
 };
 
-export const stopMonitoring = async (address: string, asset: string): Promise<MonitoringResponse> => {
+export const stopMonitoring = async (
+  address: string,
+  asset: string,
+): Promise<MonitoringResponse> => {
   try {
     const params = new URLSearchParams();
     params.append('address', address);
     params.append('asset', asset);
-    
+
     const response = await api.delete(`/api/deposit/monitor?${params.toString()}`);
     return response.data;
   } catch (error) {
