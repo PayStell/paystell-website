@@ -7,28 +7,15 @@ import { useState, useEffect } from 'react';
 import ProfileForm from '@/components/dashboard/settings/ProfileForm';
 import WalletVerificationSection from '@/components/dashboard/settings/WalletVerificationSection';
 import AppearanceSection from '@/components/dashboard/settings/AppearanceSection';
-import { useWallet } from '@/providers/useWalletProvider';
 import { useAuth } from '@/providers/AuthProvider';
 import { toast } from 'sonner';
 
 const SettingsScreen: React.FC = () => {
-  const { state } = useWallet();
-  const { publicKey } = state;
   const { user: userData } = useAuth();
 
-  // Use auth data for verification status, with local state as fallback
-  const [localWalletVerified, setLocalWalletVerified] = useState(false);
-  // const [verifiedWalletAddress, setVerifiedWalletAddress] = useState<string | null>(null)
-
   const isEmailVerified = userData?.isEmailVerified ?? false;
-  const isWalletVerified = userData?.isWalletVerified ?? localWalletVerified;
+  const isWalletVerified = userData?.isWalletVerified ?? false;
   const userId = userData?.id;
-  useEffect(() => {
-    if (userData?.isWalletVerified) {
-      setLocalWalletVerified(userData.isWalletVerified);
-      // setVerifiedWalletAddress(publicKey || null)
-    }
-  }, [userData, publicKey]);
 
   const handleProfileSubmit = (data: {
     name: string;
@@ -39,22 +26,12 @@ const SettingsScreen: React.FC = () => {
   };
 
   const handleVerificationComplete = async (/*walletAddress: string*/) => {
-    setLocalWalletVerified(true);
-    // setVerifiedWalletAddress(walletAddress)
-
     toast.success('Wallet Verified', {
-      description:
-        'Your wallet has been successfully verified! Please refresh the page to see updated status.',
+      description: 'Your wallet has been successfully verified! Page will refresh in 3 seconds.',
     });
 
     setTimeout(() => {
-      toast.info('Refresh Needed', {
-        description: 'Please refresh the page to see your updated verification status.',
-        action: {
-          label: 'Refresh',
-          onClick: () => window.location.reload(),
-        },
-      });
+      window.location.reload();
     }, 3000);
   };
 

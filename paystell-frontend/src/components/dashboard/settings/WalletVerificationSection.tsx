@@ -34,9 +34,6 @@ const WalletVerificationSection = ({
     setIsVerificationOpen(false);
     setIsWalletVerified(true);
     onVerificationComplete?.(walletAddress);
-    toast.success('Wallet Verified', {
-      description: 'Your wallet has been successfully verified!',
-    });
   };
 
   const handleVerificationError = (error: string) => {
@@ -101,6 +98,7 @@ const WalletVerificationSection = ({
                     onVerificationComplete={handleVerificationComplete}
                     onVerificationError={handleVerificationError}
                     userId={userId}
+                    showCard={false}
                   />
                 </DialogContent>
               </Dialog>
