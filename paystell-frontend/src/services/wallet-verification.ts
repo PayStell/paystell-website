@@ -6,15 +6,12 @@ export interface InitiateWalletVerificationRequest {
 }
 
 export interface InitiateWalletVerificationResponse {
-  id: string;
+  id: number;
   userId: number;
   walletAddress: string;
   verificationToken: string;
-  verificationCode: string;
-  status: string;
   expiresAt: string;
-  createdAt: string;
-  updatedAt: string;
+  status: string;
 }
 
 export interface VerifyWalletRequest {
@@ -24,6 +21,7 @@ export interface VerifyWalletRequest {
 
 export interface VerifyWalletResponse {
   success: boolean;
+  message?: string;
 }
 
 export interface ApiErrorResponse {

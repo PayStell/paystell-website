@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import {
@@ -17,13 +17,17 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
+import { useWallet } from '@/providers/useWalletProvider';
+import { walletVerificationAPI } from '@/services/wallet-verification';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 const STAGES = {
   CONNECT: 'connect',
-  SIGN: 'sign',
-  EMAIL: 'email',
+  INITIATING: 'initiating',
+  OTP: 'otp',
   CONFIRMED: 'confirmed',
   ERROR: 'error',
 };
@@ -65,13 +69,12 @@ const VerificationStep = ({
       </div>
       <div className="flex-1">
         <h3
-          className={`font-medium ${
-            currentStep === numberlabel
-              ? 'text-blue-500'
-              : status === 'completed'
-                ? 'text-foreground'
-                : 'text-secondary-foreground'
-          }`}
+          className={`font-medium ${currentStep === numberlabel
+            ? 'text-blue-500'
+            : status === 'completed'
+              ? 'text-foreground'
+              : 'text-secondary-foreground'
+            }`}
         >
           {title}
         </h3>
@@ -111,40 +114,91 @@ interface WalletVerificationProps {
   onVerificationComplete?: (walletAddress: string) => void;
   onVerificationError?: (error: string) => void;
   userId?: number;
+  showCard?: boolean;
 }
 
 const WalletVerification = ({
   onVerificationComplete,
   onVerificationError,
   userId,
+  showCard = true,
 }: WalletVerificationProps) => {
+  const { state, connectWallet } = useWallet();
+  const { isConnected, publicKey } = state;
+
   const [stage, setStage] = useState(STAGES.CONNECT);
   const [isLoading, setIsLoading] = useState(false);
-  const [, setSelectedWallet] = useState<string | null>(null);
   const [isWalletDialogOpen, setIsWalletDialogOpen] = useState(false);
-  const [isSignDialogOpen, setIsSignDialogOpen] = useState(false);
+  const [verificationToken, setVerificationToken] = useState<string | null>(null);
+  const [code, setCode] = useState('');
+  const [error, setError] = useState<string | null>(null);
 
-  const mockProcess = async (nextStage: string) => {
+  useEffect(() => {
+    if (stage === STAGES.CONNECT && isConnected && publicKey) {
+    }
+  }, [isConnected, publicKey, stage]);
+
+  const handleConnect = async () => {
     setIsLoading(true);
+    setError(null);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      setStage(nextStage);
-
-      // Call completion callback when verification is confirmed
-      if (nextStage === STAGES.CONFIRMED) {
-        onVerificationComplete?.('MOCK_WALLET_ADDRESS_' + userId);
-      }
-    } catch (error) {
-      onVerificationError?.(error instanceof Error ? error.message : 'Verification failed');
+      await connectWallet();
+      setIsWalletDialogOpen(false);
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to connect wallet';
+      setError(msg);
+      toast.error(msg);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const selectWallet = (wallet: string) => {
-    setSelectedWallet(wallet);
-    setIsWalletDialogOpen(false);
-    mockProcess(STAGES.SIGN);
+  const handleInitiate = async () => {
+    if (!publicKey || !userId) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await walletVerificationAPI.initiateVerification({
+        userId,
+        walletAddress: publicKey,
+      });
+      setVerificationToken(response.verificationToken);
+      localStorage.setItem('wallet_verification_token', response.verificationToken);
+      setStage(STAGES.OTP);
+      toast.success('Verification code sent to your email');
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to initiate verification';
+      setError(msg);
+      toast.error(msg);
+      onVerificationError?.(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleVerify = async () => {
+    if (!verificationToken || !code) return;
+    setIsLoading(true);
+    setError(null);
+    try {
+      const response = await walletVerificationAPI.verifyWallet({
+        token: verificationToken,
+        code,
+      });
+      if (response.success) {
+        setStage(STAGES.CONFIRMED);
+        onVerificationComplete?.(publicKey || '');
+        localStorage.removeItem('wallet_verification_token');
+      } else {
+        throw new Error(response.message || 'Verification failed');
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Failed to verify wallet';
+      setError(msg);
+      toast.error(msg);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const steps = [
@@ -152,18 +206,18 @@ const WalletVerification = ({
       numberlabel: 1,
       title: 'Connect Wallet',
       description: 'Connect your Stellar wallet to begin the verification process.',
-      status: stage !== STAGES.CONNECT ? 'completed' : 'pending',
+      status: isConnected ? 'completed' : 'pending',
     },
     {
       numberlabel: 2,
-      title: 'Sign Message',
-      description: 'Sign a message to verify wallet ownership',
-      status: stage === STAGES.EMAIL || stage === STAGES.CONFIRMED ? 'completed' : 'pending',
+      title: 'Initiate Verification',
+      description: 'Request a verification code to be sent to your email.',
+      status: stage === STAGES.OTP || stage === STAGES.CONFIRMED ? 'completed' : 'pending',
     },
     {
       numberlabel: 3,
       title: 'Email Verification',
-      description: 'Verify your wallet through your registered email.',
+      description: 'Enter the code sent to your registered email.',
       status: stage === STAGES.CONFIRMED ? 'completed' : 'pending',
     },
   ];
@@ -176,119 +230,89 @@ const WalletVerification = ({
         </Button>
       );
     }
-    switch (stage) {
-      case STAGES.CONNECT:
-        return (
-          <>
-            <Dialog open={isWalletDialogOpen} onOpenChange={setIsWalletDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="w-full">
-                  <MdAccountBalanceWallet className="w-4 h-4 mr-2" /> Connect Wallet
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <DialogTitle className="text-xl font-semibold">Connect Your Wallet</DialogTitle>
-                  <p className="text-card-foreground text-sm mt-1">
-                    Choose a wallet to connect with our service
-                  </p>
-                </DialogHeader>
-                <div className="mt-6">
-                  <WalletOption
-                    name="Stellar Wallet"
-                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-blue-500" />}
-                    onClick={() => selectWallet('Stellar Wallet')}
-                  />
-                  <WalletOption
-                    name="Freighter"
-                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-purple-500" />}
-                    onClick={() => selectWallet('Freighter')}
-                  />
-                  <WalletOption
-                    name="LOBSTR"
-                    icon={<MdAccountBalanceWallet className="w-5 h-5 text-orange-500" />}
-                    onClick={() => selectWallet('LOBSTR')}
-                  />
-                  <p className="text-xs text-muted-foreground text-center mt-4">
-                    By connecting a wallet, you agree to our Terms of Service
-                  </p>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </>
-        );
-      case STAGES.SIGN:
-        return (
-          <>
-            <Dialog open={isSignDialogOpen} onOpenChange={setIsSignDialogOpen}>
-              <DialogTrigger asChild>
-                <Button className="w-full">
-                  <MdKey className="w-4 h-4 mr-2" /> Sign Message
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="sm:max-w-md">
-                <DialogHeader>
-                  <div className="flex items-center gap-2">
-                    <MdShield className="w-5 h-5 text-blue-500" />
-                    <DialogTitle className="text-xl font-semibold">Sign Message</DialogTitle>
-                  </div>
-                  <p className="text-card-foreground text-sm mt-1">
-                    Verify ownership of your wallet by signing this message
-                  </p>
-                </DialogHeader>
 
-                <div className="my-6 space-y-4">
-                  <div className="bg-muted p-4 rounded-lg border border-border">
-                    <h4 className="text-sm font-medium text-muted-foreground mb-2">
-                      Message to sign:
-                    </h4>
-                    <p className="text-sm text-card-foreground font-mono bg-card p-3 rounded border border-border">
-                      Verify wallet ownership for account registration at{' '}
-                      {new Date().toISOString().split('T')[0]}
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-2 text-sm text-amber-foreground bg-amber p-3 rounded-lg">
-                    <MdWarning className="w-4 h-4 mt-0.5" />
-                    <p>
-                      This signature request will not trigger any blockchain transaction or incur
-                      any fees.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row gap-3">
-                  <Button
-                    variant="outline"
-                    className="sm:w-full"
-                    onClick={() => setIsSignDialogOpen(false)}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    className="sm:w-full"
-                    onClick={() => {
-                      setIsSignDialogOpen(false);
-                      mockProcess(STAGES.EMAIL);
-                    }}
-                  >
-                    Sign Message
-                  </Button>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </>
-        );
-      case STAGES.EMAIL:
-        return (
-          <Button onClick={() => mockProcess(STAGES.CONFIRMED)} className="w-full">
-            <MdMail className="w-4 h-4 mr-2" /> Check Email
+    if (!isConnected) {
+      return (
+        <div className="space-y-4">
+          <p className="text-sm text-center text-muted-foreground mb-4">
+            A Stellar wallet connection is required to proceed.
+          </p>
+          <Button className="w-full" onClick={handleConnect}>
+            <MdAccountBalanceWallet className="w-4 h-4 mr-2" /> Connect Wallet
           </Button>
-        );
-      default:
-        return null;
+        </div>
+      );
     }
+
+    if (stage === STAGES.CONNECT) {
+      return (
+        <Button className="w-full" onClick={handleInitiate}>
+          <MdShield className="w-4 h-4 mr-2" /> Verify Wallet Ownership
+        </Button>
+      );
+    }
+
+    if (stage === STAGES.OTP) {
+      return (
+        <div className="space-y-4 w-full">
+          <div className="space-y-2">
+            <Label htmlFor="code">Verification Code</Label>
+            <Input
+              id="code"
+              placeholder="Enter 6-digit code"
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              className="text-center tracking-widest text-lg font-bold"
+              maxLength={6}
+            />
+          </div>
+          <Button className="w-full" onClick={handleVerify} disabled={code.length < 6}>
+            <MdCheckCircle className="w-4 h-4 mr-2" /> Verify Code
+          </Button>
+          <Button variant="ghost" className="w-full text-xs" onClick={() => setStage(STAGES.CONNECT)}>
+            Change Wallet or Restart
+          </Button>
+        </div>
+      );
+    }
+
+    if (stage === STAGES.CONFIRMED) {
+      return (
+        <div className="text-center p-4 bg-green/10 rounded-lg border border-green/20">
+          <MdCheckCircle className="w-12 h-12 text-green-500 mx-auto mb-2" />
+          <h3 className="text-lg font-semibold text-green-700">Wallet Verified!</h3>
+          <p className="text-sm text-green-600">Your wallet has been successfully linked.</p>
+        </div>
+      );
+    }
+
+    return null;
   };
+
+  const content = (
+    <>
+      {error && (
+        <div className="p-3 bg-destructive/10 text-destructive text-sm rounded-lg flex items-center gap-2">
+          <MdWarning className="w-4 h-4" />
+          {error}
+        </div>
+      )}
+      <div className="space-y-6">
+        {steps.map((step) => (
+          <VerificationStep
+            key={step.numberlabel}
+            currentStep={stage === STAGES.OTP ? 3 : isConnected ? 2 : 1}
+            {...step}
+          />
+        ))}
+      </div>
+      <div className="mt-6">{renderActionButton()}</div>
+    </>
+  );
+
+  if (!showCard) {
+    return <div className="w-full space-y-6">{content}</div>;
+  }
 
   return (
     <Card className="w-full max-w-lg px-5 mx-auto">
@@ -298,16 +322,7 @@ const WalletVerification = ({
           Complete these steps to verify your wallet
         </p>
       </CardHeader>
-      <CardContent className="space-y-6">
-        {steps.map((step) => (
-          <VerificationStep
-            key={step.numberlabel}
-            currentStep={steps.findIndex((s) => s.status !== 'completed') + 1}
-            {...step}
-          />
-        ))}
-        {renderActionButton()}
-      </CardContent>
+      <CardContent className="space-y-6">{content}</CardContent>
     </Card>
   );
 };
